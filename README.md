@@ -6,7 +6,7 @@ Planned Changes:
 * Adding starters to following routes for increased availability:
   * Treeko: Petalburg Woods at 5% (Why?: Earliest Forest)
   * Torchic: Route 116 at 5% (Why?: Earliest route without any water other than 101)
-  * Mudkip: Route 103 at 5% (Why?: Earliest river route, also oted as "Water's Edge" pokemon by FRLG pokedex)
+  * Mudkip: Route 103 at 5% (Why?: Earliest river route, also noted as "Water's Edge" pokemon by FRLG pokedex)
 * Grovyle and Sceptile with added Dragon Type (Feel free to fork and revert files to base if you don't want Dragon Typing!)
 * Buff Signature Moves:
   * Leaf Blade:
