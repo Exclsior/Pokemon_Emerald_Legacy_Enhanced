@@ -1,3 +1,33 @@
+# Pokémon Emerald Legacy - Starters Enhanced
+
+An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
+
+Planned Changes:
+* Adding starters to following routes for increased availability:
+  * Treeko: Petalburg Woods at 5% (Why?: Earliest Forest)
+  * Torchic: Route 116 at 5% (Why?: Earliest route without any water other than 101)
+  * Mudkip: Route 103 at 5% (Why?: Earliest river route, also oted as "Water's Edge" pokemon by FRLG pokedex)
+* Grovyle and Sceptile with added Dragon Type (Feel free to fork and revert files to base if you don't want Dragon Typing!)
+* Buff Signature Moves:
+  * Leaf Blade:
+    * Retain Legacy Buffs
+    * Battle Power increase to 95
+    * Able to be used as Cut outside of battle
+  * Blaze Kick:
+    * Retain Legacy Buffs
+    * Battle Power increase to 95
+    * Able to be used as Rock Smash outside of battle
+  * Muddy Water:
+    * Retain Legacy Buffs
+    * Battle Power increase to 95
+    * Able to be used as Surf outside of battle
+
+Changes being considered:
+* Dragon Type to Physical
+  * With potential slight rework of Sceptile's stats to support the split type STAB*
+* (Very far in future) Adding a user option at start of New Game to enable to disable Treeko line Dragon Typing
+* Remove the requirement for a HM move to have to be learned by a pokemon to be used outside of battle
+
 # Pokémon Emerald Legacy
 
 Emerald Legacy is meant to serve as a finale to the trio of planned projects in the Legacy Trilogy led by [TheSmithPlays](https://www.youtube.com/@smithplayspokemon). It is made using the [Pokémon Emerald Disassembly](https://github.com/pret/pokeemerald) made by the [Pret](https://pret.github.io/) team. This game is focused on refining a game that is considered a classic by many people into a nostalgic but improved experience with 20+ years of hindsight. Emerald is a great game with a ton of flaws when you use that experience to really look at it under a lens. Terrible pokemon pool, Weird team building choices, A great story idea executed poorly, baffling rival decisions, and one of the worst E4s. This game with all of these problems manages to shrug them off with memorable dex additions, fantastic gym leader ace choices, abilities, no more stat xp, Battle frontier, original ideas to the series, and overall a solid game. The Legacy Project aims to take what is good in a game and improve it while bringing its flaws up to that same level. 
