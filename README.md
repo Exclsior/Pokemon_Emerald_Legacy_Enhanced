@@ -2,7 +2,7 @@
 
 An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
 
-Implemented Changes:
+### Implemented Changes:
 * Added starters to following routes for increased availability:
   * Treeko:
     * Location: Petalburg Woods
@@ -30,10 +30,36 @@ Implemented Changes:
     * Retain Legacy Buffs
     * Battle Power increase to 95
     * Accuracy increase to 100
+  * Grovyle and Sceptile with added Dragon Type (Feel free to fork and revert files to base if you don't want Dragon Typing!)
+  * Starter Level-up moves updated (changes compared to Emerald Legacy only):
+    * Grovyle:
+      * Lvl 16: Twister
+      * Lvl 19: Razor Leaf
+      * Lvl 34: Dragon Breath
+      * Lvl 37: Leaf Blade (in case of evolution cancellation)
+      * Lvl 45: Dragon Claw
+    * Sceptile:
+      * Lvl  1: Crunch (Treeko Egg Move, for relearning)
+      * Lvl 16: Twister
+      * Lvl 19: Razor Leaf
+      * Lvl 34: Dragon Breath
+    * Combusken:
+      * Lvl 37: Blaze Kick (in case of evolution cancellation)
+      * Lvl 41: Sky Uppercut
+      * Lvl 55: Hi Jump Kick
+    * Blaziken:
+      * Lvl  1: Rock Slide (Torchic Egg Move, for relearning)
+    * Marshtomp:
+      * Lvl 37: Muddy Water (in case of evolution cancellation)
+      * Lvl 40: Protect
+      * Lvl 43: Earthquake
+      * Lvl 45: Hydro Pump
+      * Lvl 50: Endeavor
+    * Swampert:
+      * Lvl  1: Ice Ball (Mudkip Egg Move, for relearning)
 
 
-Planned Changes:
-* Grovyle and Sceptile with added Dragon Type (Feel free to fork and revert files to base if you don't want Dragon Typing!)
+### Planned Changes:
 * Buff Signature Moves:
   * Leaf Blade:
     * Able to be used as Cut outside of battle
@@ -42,7 +68,7 @@ Planned Changes:
   * Muddy Water:
     * Able to be used as Surf outside of battle
 
-Changes being considered:
+### Changes being considered:
 * Dragon Type to Physical
   * With potential slight rework of Sceptile's stats to support the split type STAB*
 * (Very far in future) Adding a user option at start of New Game to enable to disable Treeko line Dragon Typing
