@@ -2,24 +2,44 @@
 
 An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
 
-Planned Changes:
-* Adding starters to following routes for increased availability:
-  * Treeko: Petalburg Woods at 5% (Why?: Earliest Forest)
-  * Torchic: Route 116 at 5% (Why?: Earliest route without any water other than 101)
-  * Mudkip: Route 103 at 5% (Why?: Earliest river route, also noted as "Water's Edge" pokemon by FRLG pokedex)
-* Grovyle and Sceptile with added Dragon Type (Feel free to fork and revert files to base if you don't want Dragon Typing!)
-* Buff Signature Moves:
+Implemented Changes:
+* Added starters to following routes for increased availability:
+  * Treeko:
+    * Location: Petalburg Woods
+    * Encounter Rate: 5% at level 7
+    * Why?: Earliest Forest
+    * Removed encounter: Shroomish at level 7 (Shroomish at level 5 remains)
+  * Torchic:
+    * Location: Route 116
+    * Encounter Rate: 5% at level 8
+    * Why?: Earliest route without any water other than 101
+    * Removed encounter: Tailow at level 8 (Taillow at levels 6, 7 and 10 remain)
+  * Mudkip:
+    * Location: Route 103
+    * Encounter Rate: 4% at level 4, 1% at level 5
+    * Why?: Earliest river route, also noted as "Water's Edge" pokemon by FRLG pokedex
+    * Reduced encounter: Wingull at levels 2 and 3 (Encounter percentage only reduced)
+* Buffed Signature Moves:
   * Leaf Blade:
     * Retain Legacy Buffs
     * Battle Power increase to 95
-    * Able to be used as Cut outside of battle
   * Blaze Kick:
     * Retain Legacy Buffs
     * Battle Power increase to 95
-    * Able to be used as Rock Smash outside of battle
   * Muddy Water:
     * Retain Legacy Buffs
     * Battle Power increase to 95
+    * Accuracy increase to 100
+
+
+Planned Changes:
+* Grovyle and Sceptile with added Dragon Type (Feel free to fork and revert files to base if you don't want Dragon Typing!)
+* Buff Signature Moves:
+  * Leaf Blade:
+    * Able to be used as Cut outside of battle
+  * Blaze Kick:
+    * Able to be used as Rock Smash outside of battle
+  * Muddy Water:
     * Able to be used as Surf outside of battle
 
 Changes being considered:

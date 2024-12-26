@@ -3890,7 +3890,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BLAZE_KICK] =
     {
         .effect = EFFECT_BLAZE_KICK,
-        .power = 80,
+        .power = 95,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 15,
@@ -4293,9 +4293,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_MUDDY_WATER] =
     {
         .effect = EFFECT_SPEED_DOWN_HIT,
-        .power = 85,
+        .power = 95,
         .type = TYPE_WATER,
-        .accuracy = 95,
+        .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 50,
         .target = MOVE_TARGET_BOTH,
@@ -4527,7 +4527,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_LEAF_BLADE] =
     {
         .effect = EFFECT_LEAF_BLADE,
-        .power = 80,
+        .power = 95,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 15,

@@ -574,14 +574,14 @@
                 "species": "SPECIES_WINGULL"
               },
               {
-                "min_level": 3,
-                "max_level": 3,
-                "species": "SPECIES_WINGULL"
+                "min_level": 4,
+                "max_level": 4,
+                "species": "SPECIES_MUDKIP"
               },
               {
-                "min_level": 2,
-                "max_level": 2,
-                "species": "SPECIES_WINGULL"
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_MUDKIP"
               },
               {
                 "min_level": 4,
@@ -728,14 +728,14 @@
                 "species": "SPECIES_WINGULL"
               },
               {
-                "min_level": 3,
-                "max_level": 3,
-                "species": "SPECIES_WINGULL"
+                "min_level": 4,
+                "max_level": 4,
+                "species": "SPECIES_MUDKIP"
               },
               {
-                "min_level": 2,
-                "max_level": 2,
-                "species": "SPECIES_WINGULL"
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_MUDKIP"
               },
               {
                 "min_level": 4,
@@ -2522,7 +2522,7 @@
               {
                 "min_level": 8,
                 "max_level": 8,
-                "species": "SPECIES_TAILLOW"
+                "species": "SPECIES_TORCHIC"
               },
               {
                 "min_level": 8,
@@ -2591,7 +2591,7 @@
               {
                 "min_level": 8,
                 "max_level": 8,
-                "species": "SPECIES_TAILLOW"
+                "species": "SPECIES_TORCHIC"
               },
               {
                 "min_level": 8,
@@ -3211,7 +3211,7 @@
               {
                 "min_level": 7,
                 "max_level": 7,
-                "species": "SPECIES_SHROOMISH"
+                "species": "SPECIES_TREECKO"
               },
               {
                 "min_level": 6,
@@ -3280,7 +3280,7 @@
               {
                 "min_level": 7,
                 "max_level": 7,
-                "species": "SPECIES_SHROOMISH"
+                "species": "SPECIES_TREECKO"
               },
               {
                 "min_level": 6,
