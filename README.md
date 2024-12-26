@@ -57,7 +57,15 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
       * Lvl 50: Endeavor
     * Swampert:
       * Lvl  1: Ice Ball (Mudkip Egg Move, for relearning)
-
+  * Dragon Type changed to Physical (Note, other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile)
+  * Grovyle and Sceptile Stats reworked slightly due to change for Dragon Type changed to Physical (compared to Emerald Legacy):
+    * Grovyle:
+      * Base Attack Increased by 5
+      * Base Special Attack Decreased by 5
+    * Sceptile:
+      * Base Attack Increased by 10
+      * Base Special Attack Decreased by 5
+      * Base Special Defence Decreased by 5
 
 ### Planned Changes:
 * Buff Signature Moves:
@@ -69,8 +77,6 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Able to be used as Surf outside of battle
 
 ### Changes being considered:
-* Dragon Type to Physical
-  * With potential slight rework of Sceptile's stats to support the split type STAB*
 * (Very far in future) Adding a user option at start of New Game to enable to disable Treeko line Dragon Typing
 * Remove the requirement for a HM move to have to be learned by a pokemon to be used outside of battle
 
