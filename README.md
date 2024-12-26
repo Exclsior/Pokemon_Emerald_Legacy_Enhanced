@@ -35,14 +35,14 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Grovyle:
       * Lvl 16: Twister
       * Lvl 19: Razor Leaf
-      * Lvl 34: Dragon Breath
+      * Lvl 34: Dragonbreath
       * Lvl 37: Leaf Blade (in case of evolution cancellation)
       * Lvl 45: Dragon Claw
     * Sceptile:
       * Lvl  1: Crunch (Treeko Egg Move, for relearning)
       * Lvl 16: Twister
       * Lvl 19: Razor Leaf
-      * Lvl 34: Dragon Breath
+      * Lvl 34: Dragonbreath
     * Combusken:
       * Lvl 37: Blaze Kick (in case of evolution cancellation)
       * Lvl 41: Sky Uppercut
@@ -57,7 +57,8 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
       * Lvl 50: Endeavor
     * Swampert:
       * Lvl  1: Ice Ball (Mudkip Egg Move, for relearning)
-  * Dragon Type changed to Physical (Note, other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile)
+  * Dragon Type changed to Physical
+    ***Note**: Other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile as noted below.
   * Grovyle and Sceptile Stats reworked slightly due to change for Dragon Type changed to Physical (compared to Emerald Legacy):
     * Grovyle:
       * Base Attack Increased by 5
@@ -66,6 +67,8 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
       * Base Attack Increased by 10
       * Base Special Attack Decreased by 5
       * Base Special Defence Decreased by 5
+    ***Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
+  * Giga Drain TM added to Battle Frontier Mart
 
 ### Planned Changes:
 * Buff Signature Moves:
@@ -77,7 +80,7 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Able to be used as Surf outside of battle
 
 ### Changes being considered:
-* (Very far in future) Adding a user option at start of New Game to enable to disable Treeko line Dragon Typing
+* (Very far in future) Adding a user option at start of New Game to enable to enable/disable Treeko line Dragon Typing changes.
 * Remove the requirement for a HM move to have to be learned by a pokemon to be used outside of battle
 
 # Pokémon Emerald Legacy
