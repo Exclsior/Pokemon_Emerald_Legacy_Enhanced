@@ -58,7 +58,7 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Swampert:
       * Lvl  1: Ice Ball (Mudkip Egg Move, for relearning)
   * Dragon Type changed to Physical
-    ***Note**: Other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile as noted below.
+    * **Note**: Other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile as noted below.
   * Grovyle and Sceptile Stats reworked slightly due to change for Dragon Type changed to Physical (compared to Emerald Legacy):
     * Grovyle:
       * Base Attack Increased by 5
@@ -67,7 +67,7 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
       * Base Attack Increased by 10
       * Base Special Attack Decreased by 5
       * Base Special Defence Decreased by 5
-    ***Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
+    * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
   * Giga Drain TM added to Battle Frontier Mart
 
 ### Planned Changes:
