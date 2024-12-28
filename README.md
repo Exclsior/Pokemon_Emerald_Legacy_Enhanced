@@ -1,6 +1,6 @@
 # Pokémon Emerald Legacy - Starters Enhanced
 
-An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
+An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game. A few other quality of life features have been included in this version not directly related to the Starters.
 
 ### Implemented Changes:
 * Added starters to following routes for increased availability:
@@ -69,6 +69,7 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Base Special Defence Decreased by 5
   * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
 * Giga Drain TM added to Battle Frontier Mart
+* Beldum, Metang and Metagross Catch Rates increased to 45 to match other psuedo-legendaries.
 * Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
   * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
   * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
@@ -84,7 +85,6 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
   * Muddy Water:
     * Able to be used as Surf outside of battle
 * (Very far in future) Adding a user option at start of New Game to enable to enable/disable Treeko line Dragon Typing changes.
-* Remove the requirement for a HM move to have to be learned by a pokemon to be used outside of battle
 
 # Pokémon Emerald Legacy
 
