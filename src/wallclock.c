@@ -860,7 +860,15 @@ static void Task_SetClock_HandleConfirmInput(u8 taskId)
 
 static void Task_SetClock_Confirmed(u8 taskId)
 {
-    RtcInitLocalTimeOffset(gTasks[taskId].tHours, gTasks[taskId].tMinutes);
+    if (FlagGet(FLAG_SET_WALL_CLOCK))
+    {
+        RtcCalcLocalTimeOffset(gLocalTime.days, gTasks[taskId].tHours, gTasks[taskId].tMinutes, 0);
+        gSaveBlock2Ptr->lastBerryTreeUpdate = gLocalTime;
+    }
+    else
+    {
+        RtcInitLocalTimeOffset(gTasks[taskId].tHours, gTasks[taskId].tMinutes);
+    }
 
     if ((!FlagGet(FLAG_BATTLED_CELEBI)) && FlagGet(FLAG_IS_CHAMPION))
     {

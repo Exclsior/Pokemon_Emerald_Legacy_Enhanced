@@ -19,7 +19,8 @@ BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize::
 	goto_if_eq VAR_TEMP_2, EXCHANGE_CORNER_DECOR1_CLERK, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseDecor1
 	goto_if_eq VAR_TEMP_2, EXCHANGE_CORNER_DECOR2_CLERK, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseDecor2
 	goto_if_eq VAR_TEMP_2, EXCHANGE_CORNER_VITAMIN_CLERK, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin
-	goto BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	goto_if_eq VAR_TEMP_2, EXCHANGE_CORNER_HOLD_ITEM_CLERK, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_ChooseBerry
 	end
 
 BattleFrontier_ExchangeServiceCorner_EventScript_TryGivePrize::
@@ -57,8 +58,9 @@ BattleFrontier_ExchangeServiceCorner_EventScript_TryGiveItem::
 	playse SE_SHOP
 	msgbox BattleFrontier_ExchangeServiceCorner_Text_HereIsYourPrize, MSGBOX_DEFAULT
 	goto_if_eq VAR_TEMP_2, EXCHANGE_CORNER_VITAMIN_CLERK, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin
-	goto BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
-	end
+	goto_if_eq VAR_TEMP_2, EXCHANGE_CORNER_HOLD_ITEM_CLERK, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_ChooseBerry
+end
 
 BattleFrontier_ExchangeServiceCorner_EventScript_BagFull::
 	msgbox BattleFrontier_ExchangeServiceCorner_Text_DontHaveSpaceToHoldIt, MSGBOX_DEFAULT
@@ -486,7 +488,7 @@ BattleFrontier_ExchangeServiceCorner_EventScript_Salac::
 BattleFrontier_ExchangeServiceCorner_EventScript_Petaya::
 	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmPetaya, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseBerry
-	setvar VAR_0x8008, 3
+	setvar VAR_0x8008, 48
 	setvar VAR_0x8009, ITEM_PETAYA_BERRY
 	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
 	end
@@ -494,7 +496,7 @@ BattleFrontier_ExchangeServiceCorner_EventScript_Petaya::
 BattleFrontier_ExchangeServiceCorner_EventScript_Apicot::
 	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmApicot, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseBerry
-	setvar VAR_0x8008, 3
+	setvar VAR_0x8008, 48
 	setvar VAR_0x8009, ITEM_APICOT_BERRY
 	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
 	end

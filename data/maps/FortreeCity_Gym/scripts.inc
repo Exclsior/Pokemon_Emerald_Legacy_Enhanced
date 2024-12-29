@@ -14,7 +14,8 @@ FortreeCity_Gym_EventScript_TryRematchReward::
 	setvar 0x8005, TRAINER_WINONA_3
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, FortreeCity_Gym_EventScript_GiveRematchReward
-	FortreeCity_Gym_EventScript_TryRematchRewardEnd::
+FortreeCity_Gym_EventScript_TryRematchRewardEnd::
+	ClearTrainerFlag TRAINER_WINONA_5
 	releaseall
 	end
 

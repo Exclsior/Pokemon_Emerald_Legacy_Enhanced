@@ -13,7 +13,8 @@ MauvilleCity_Gym_EventScript_TryRematchReward::
 	setvar 0x8005, TRAINER_WATTSON_3
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_Gym_EventScript_GiveRematchReward
-	MauvilleCity_Gym_EventScript_TryRematchRewardEnd::
+MauvilleCity_Gym_EventScript_TryRematchRewardEnd::
+	ClearTrainerFlag TRAINER_WATTSON_5
 	releaseall
 	end
 

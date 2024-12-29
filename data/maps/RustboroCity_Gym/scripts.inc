@@ -13,6 +13,7 @@ RustboroCity_Gym_EventScript_TryRematchReward::
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, RustboroCity_Gym_EventScript_GiveRematchReward
 RustboroCity_Gym_EventScript_TryRematchRewardEnd::
+	ClearTrainerFlag TRAINER_ROXANNE_5
 	releaseall
 	end
 

@@ -20,7 +20,7 @@ BattleFrontier_PokemonCenter_1F_EventScript_Nurse::
 BattleFrontier_PokemonCenter_1F_EventScript_SchoolKid::
 	lock
 	faceplayer
-	goto_if_set FLAG_RUSTBORO_NPC_TRADE_COMPLETED, BattleFrontier_PokemonCenter_1F_EventScript_TradeCompleted
+	goto_if_set FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED, BattleFrontier_PokemonCenter_1F_EventScript_TradeCompleted
 	setvar VAR_0x8008, INGAME_TRADE_SEEDOT
 	copyvar VAR_0x8004, VAR_0x8008
 	specialvar VAR_RESULT, GetInGameTradeSpeciesInfo
@@ -41,7 +41,7 @@ BattleFrontier_PokemonCenter_1F_EventScript_SchoolKid::
 	special DoInGameTradeScene
 	waitstate
 	msgbox BattleFrontier_PokemonCenter_1F_Text_PleaseBeGoodToMyPokemon, MSGBOX_DEFAULT
-	setflag FLAG_RUSTBORO_NPC_TRADE_COMPLETED
+	setflag FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED
 	release
 	end
 

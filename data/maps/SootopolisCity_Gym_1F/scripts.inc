@@ -47,7 +47,8 @@ SootopolisCity_Gym_1F_EventScript_TryRematchReward::
 	setvar 0x8005, TRAINER_JUAN_3
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, SootopolisCity_Gym_1F_EventScript_GiveRematchReward
-	SootopolisCity_Gym_1F_EventScript_TryRematchRewardEnd::
+SootopolisCity_Gym_1F_EventScript_TryRematchRewardEnd::
+	ClearTrainerFlag TRAINER_JUAN_5
 	releaseall
 	end
 
@@ -132,12 +133,6 @@ SootopolisCity_Gym_1F_EventScript_SootopolisDoneRivalScene2::
 	call SootopolisCity_Gym_1F_EventScript_GiveWaterPulse
 	closemessage
 	delay 30
-	@playfanfare MUS_REGISTER_MATCH_CALL
-	@msgbox SootopolisCity_Gym_1F_Text_RegisteredJuan, MSGBOX_DEFAULT
-	@waitfanfare
-	@closemessage
-	@delay 30
-	@setflag FLAG_ENABLE_JUAN_MATCH_CALL
 	release
 	end
 
@@ -181,6 +176,12 @@ SootopolisCity_Gym_1F_EventScript_GiveRematchReward::
 	msgbox SootopolisCity_Gym_1F_Text_GaveReward, MSGBOX_DEFAULT
 	closemessage
 	setflag FLAG_GOT_JUAN_REMATCH_REWARD
+	playfanfare MUS_REGISTER_MATCH_CALL
+	msgbox SootopolisCity_Gym_1F_Text_RegisteredJuan, MSGBOX_DEFAULT
+	waitfanfare
+	closemessage
+	delay 30
+	setflag FLAG_ENABLE_JUAN_MATCH_CALL
 	release
 	end
 SootopolisCity_Gym_1F_EventScript_NoRoom::

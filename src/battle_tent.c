@@ -262,6 +262,8 @@ static void GiveSlateportTentPrize(void)
         CopyItemName(gSaveBlock2Ptr->frontier.slateportTentPrize, gStringVar1);
         gSaveBlock2Ptr->frontier.slateportTentPrize = ITEM_NONE;
         gSpecialVar_Result = TRUE;
+        FlagSet(FLAG_RECEIVED_SECRET_POWER);
+	    FlagClear(FLAG_HIDE_SLATEPORT_CITY_TM_SALESMAN);
     }
     else
     {

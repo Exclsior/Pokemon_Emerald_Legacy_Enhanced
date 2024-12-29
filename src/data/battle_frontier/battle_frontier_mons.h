@@ -6490,7 +6490,7 @@ const struct FacilityMon gBattleFrontierMons[NUM_FRONTIER_MONS] =
         .evSpread = F_EV_SPREAD_SP_DEFENSE | F_EV_SPREAD_DEFENSE | F_EV_SPREAD_HP,
         .nature = NATURE_CALM
     },
-        [FRONTIER_MON_DEOXYS_DEFENSE_1] = {
+    [FRONTIER_MON_DEOXYS_DEFENSE_1] = {
         .species = SPECIES_DEOXYS_DEFENSE,
         .moves = {MOVE_TOXIC, MOVE_PROTECT, MOVE_NIGHT_SHADE, MOVE_RECOVER},
         .itemTableId = BATTLE_FRONTIER_ITEM_LUM_BERRY,
@@ -6504,7 +6504,7 @@ const struct FacilityMon gBattleFrontierMons[NUM_FRONTIER_MONS] =
         .evSpread = F_EV_SPREAD_SP_ATTACK | F_EV_SPREAD_ATTACK,
         .nature = NATURE_MODEST
     },
-        [FRONTIER_MON_DEOXYS_DEFENSE_2] = {
+    [FRONTIER_MON_DEOXYS_DEFENSE_2] = {
         .species = SPECIES_DEOXYS_DEFENSE,
         .moves = {MOVE_CALM_MIND, MOVE_PSYCHIC, MOVE_ZAP_CANNON, MOVE_RECOVER},
         .itemTableId = BATTLE_FRONTIER_ITEM_LUM_BERRY,
@@ -6518,7 +6518,7 @@ const struct FacilityMon gBattleFrontierMons[NUM_FRONTIER_MONS] =
         .evSpread = F_EV_SPREAD_SP_ATTACK | F_EV_SPREAD_HP,
         .nature = NATURE_TIMID
     },
-        [FRONTIER_MON_DEOXYS_DEFENSE_3] = {
+    [FRONTIER_MON_DEOXYS_DEFENSE_3] = {
         .species = SPECIES_DEOXYS_DEFENSE,
         .moves = {MOVE_SPIKES, MOVE_TOXIC, MOVE_RECOVER, MOVE_SEISMIC_TOSS},
         .itemTableId = BATTLE_FRONTIER_ITEM_LEFTOVERS,
@@ -6532,7 +6532,7 @@ const struct FacilityMon gBattleFrontierMons[NUM_FRONTIER_MONS] =
         .evSpread = F_EV_SPREAD_SP_ATTACK | F_EV_SPREAD_HP,
         .nature = NATURE_MODEST
     },
-        [FRONTIER_MON_DEOXYS_DEFENSE_4] = {
+    [FRONTIER_MON_DEOXYS_DEFENSE_4] = {
         .species = SPECIES_DEOXYS_DEFENSE,
         .moves = {MOVE_COSMIC_POWER, MOVE_REST, MOVE_TOXIC, MOVE_NIGHT_SHADE},
         .itemTableId = BATTLE_FRONTIER_ITEM_LEFTOVERS,
@@ -6545,5 +6545,5 @@ const struct FacilityMon gBattleFrontierMons[NUM_FRONTIER_MONS] =
         .itemTableId = BATTLE_FRONTIER_ITEM_LEFTOVERS,
         .evSpread = F_EV_SPREAD_SP_ATTACK | F_EV_SPREAD_HP,
         .nature = NATURE_JOLLY
-    },
+    }
 };

@@ -85,6 +85,7 @@ PetalburgCity_Gym_EventScript_TryRematchReward::
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, PetalburgCity_Gym_EventScript_GiveRematchReward
 PetalburgCity_Gym_EventScript_TryRematchRewardEnd::
+	ClearTrainerFlag TRAINER_NORMAN_5
 	releaseall
 	end
 

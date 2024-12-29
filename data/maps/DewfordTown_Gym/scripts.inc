@@ -13,7 +13,8 @@ DewfordTown_Gym_EventScript_TryRematchReward::
 	setvar 0x8005, TRAINER_BRAWLY_3
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, DewfordTown_Gym_EventScript_GiveRematchReward
-	DewfordTown_Gym_EventScript_TryRematchRewardEnd::
+DewfordTown_Gym_EventScript_TryRematchRewardEnd::
+	ClearTrainerFlag TRAINER_BRAWLY_5
 	releaseall
 	end
 

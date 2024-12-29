@@ -12,7 +12,7 @@ BattleFrontier_Lounge8_EventScript_Woman::
 BattleFrontier_Lounge8_EventScript_NinjaBoy::
 	lock
 	faceplayer
-	goto_if_set FLAG_FORTREE_NPC_TRADE_COMPLETED, BattleFrontier_Lounge8_EventScript_TradeCompleted
+	goto_if_set FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED, BattleFrontier_Lounge8_EventScript_TradeCompleted
 	setvar VAR_0x8008, INGAME_TRADE_PLUSLE
 	copyvar VAR_0x8004, VAR_0x8008
 	specialvar VAR_RESULT, GetInGameTradeSpeciesInfo
@@ -34,7 +34,7 @@ BattleFrontier_Lounge8_EventScript_NinjaBoy::
 	waitstate
 	bufferspeciesname STR_VAR_1, VAR_0x8009
 	msgbox BattleFrontier_Lounge8_Text_MonYouTakeCare, MSGBOX_DEFAULT
-	setflag FLAG_FORTREE_NPC_TRADE_COMPLETED
+	setflag FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED
 	release
 	end
 
