@@ -72,6 +72,8 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
 * Beldum, Metang and Metagross Catch Rates increased to 45 to match other psuedo-legendaries.
 * Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
   * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
+  * Dialogue for people providing HMs updated to note that a pokemon only needs to be able to learn the move.
+    * e.g. "Cutter" in Rustboro's dialogue updated to note a pokemon able to learn cut can chop down thin trees.
   * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
   * Credit to [ScyrousFX](https://www.pokecommunity.com/member.php?u=980149) for [Use Fly/Flash from party menu if Pokémon is compatible](https://www.pokecommunity.com/showpost.php?p=10420068)
 

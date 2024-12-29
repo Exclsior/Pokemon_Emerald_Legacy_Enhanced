@@ -167,6 +167,8 @@ MossdeepCity_StevensHouse_Text_ExplainDive:
 	.string "like it. You'll drop to the seafloor.\p"
 	.string "When you want to come back up, use\n"
 	.string "DIVE again.\p"
+	.string "Your diving POKéMON needs to be with\n"
+	.string "you, but they don't need to learn DIVE\p"
 	.string "In some places, it won't be possible\n"
 	.string "for you to surface, though.$"
 

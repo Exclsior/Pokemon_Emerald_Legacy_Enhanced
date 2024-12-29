@@ -497,9 +497,11 @@ RusturfTunnel_Text_YouShatteredBoulderTakeHM:
 
 RusturfTunnel_Text_ExplainStrength:
 	.string "That HM contains STRENGTH.\p"
-	.string "If a muscular POKéMON were to learn\n"
-	.string "that, it would be able to move even\l"
-	.string "large boulders.$"
+	.string "If a muscular POKéMON were able to\n"
+	.string "learn that, it would be able to move\l"
+	.string "even large boulders.\p"
+	.string "The POKéMON just needs to be with you.\n"
+	.string "They don't even need to learn the move!$"
 
 RusturfTunnel_Text_WandaReunion:
 	.string "WANDA!\n"
