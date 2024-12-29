@@ -68,7 +68,6 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Base Special Attack Decreased by 5
     * Base Special Defence Decreased by 5
   * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
-* Giga Drain TM added to Battle Frontier Mart
 * Beldum, Metang and Metagross Catch Rates increased to 45 to match other psuedo-legendaries.
 * Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
   * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
