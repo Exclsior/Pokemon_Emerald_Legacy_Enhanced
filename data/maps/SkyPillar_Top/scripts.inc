@@ -236,7 +236,7 @@ SkyPillar_Top_Text_ZinniaDefeat:
 	.string "…I guess… It falls to you now…$"
 
 SkyPillar_Top_Text_ZinniaPostBattle1:
-	.string "{PLAYER}, You and RAYQUAZA…\n"
+	.string "{PLAYER}, you and RAYQUAZA…\n"
 	.string "together.\p"
 	.string "I am leaving this task to you, our\n"
 	.string "new SUCCESSOR.\p"

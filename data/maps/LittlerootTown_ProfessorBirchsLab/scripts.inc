@@ -644,31 +644,46 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter1::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko1::
 	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_TREECKO
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTreecko, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTorchic1::
 	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_TORCHIC
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTorchic, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip1::
 	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_MUDKIP
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko1::
 	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_TREECKO
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTreecko, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic1::
 	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_TORCHIC
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTorchic, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip1::
 	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_MUDKIP
-
-LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon::
 	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
 	lockall
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyPokemon, MSGBOX_DEFAULT
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon::
 	setflag FLAG_RIVAL_TRADE_1_COMPLETED
 	release
 	end
@@ -692,31 +707,46 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter2::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko2::
 	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_TREECKO
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTreecko, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTorchic2::
 	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_TORCHIC
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTorchic, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip2::
 	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_MUDKIP
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko2::
 	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_TREECKO
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTreecko, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic2::
 	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_TORCHIC
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTorchic, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip2::
 	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_MUDKIP
-
-LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2::
 	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
 	lockall
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyPokemon, MSGBOX_DEFAULT
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2::
 	setflag FLAG_RIVAL_TRADE_2_COMPLETED
 	release
 	end
@@ -1369,9 +1399,21 @@ LittlerootTown_ProfessorBirchsLab_Text_IllTradeIfYouWant2:
 	.string "Would you be up for trading me another?\n"
 	.string "I'll give you a {STR_VAR_2} this time!$"
 
-LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyPokemon:
+LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip:
 	.string "Eheheh… Thank you!\p"
-	.string "I'll make sure this {STR_VAR_1} finds\n"
+	.string "I'll make sure this MUDKIP finds\n"
+	.string "the right trainer to embark on a\l"
+	.string "great adventure.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTreecko:
+	.string "Eheheh… Thank you!\p"
+	.string "I'll make sure this TREECKO finds\n"
+	.string "the right trainer to embark on a\l"
+	.string "great adventure.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTorchic:
+	.string "Eheheh… Thank you!\p"
+	.string "I'll make sure this TORCHIC finds\n"
 	.string "the right trainer to embark on a\l"
 	.string "great adventure.$"
 
@@ -1444,7 +1486,7 @@ LittlerootTown_ProfessorBirchsLab_Text_CharmanderQuestCompleted:
 	.string "close and compare how each one\l"
 	.string "interacts with different POKéMON.\p"
 	.string "You've done a huge service to my\n"
-	.string "research,\p"
+	.string "research.\p"
 	.string "As promised, here's your reward.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_PlayerReceivedCharmander:
