@@ -4288,6 +4288,13 @@ static void Cmd_moveend(void)
                 effect = TRUE;
             gBattleScripting.moveendState++;
             break;
+        case MOVEEND_ATTACKBOOSTEDBYABILITY: // Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
+            if(gHitMarker){
+                if (AbilityBattleEffects(ABILITYEFFECT_MOVE_BOOSTED, gBattlerAttacker, gLastUsedAbility, 0, 0))
+                    effect = TRUE;
+            }
+            gBattleScripting.moveendState++;
+            break;
         case MOVEEND_CHOICE_MOVE: // update choice band move
             if (gHitMarker & HITMARKER_OBEYS
              && holdEffectAtk == HOLD_EFFECT_CHOICE_BAND

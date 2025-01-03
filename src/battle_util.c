@@ -3176,6 +3176,43 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u8 ability, u8 special, u16 moveA
                 }
             }
             break;
+        case ABILITYEFFECT_MOVE_BOOSTED: //20 - Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
+            if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3))
+            {
+                switch (ability)
+                {
+                    case ABILITY_OVERGROW:
+                        if (moveType == TYPE_GRASS)
+                        {
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                            effect++;
+                        }
+                        break;
+                    case ABILITY_BLAZE:
+                        if (moveType == TYPE_FIRE)
+                        {
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                            effect++;
+                        }
+                        break;
+                    case ABILITY_TORRENT:
+                        if (moveType == TYPE_WATER)
+                        {
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                            effect++;
+                        }
+                        break;
+                    case ABILITY_SWARM:
+                        if (moveType == TYPE_BUG)
+                        {
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                            effect++;
+                            
+                        }
+                        break;
+                }
+            }
+            break;
         }
 
         if (effect && caseID < ABILITYEFFECT_CHECK_OTHER_SIDE && gLastUsedAbility != 0xFF)
