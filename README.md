@@ -76,6 +76,11 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * e.g. "Cutter" in Rustboro's dialogue updated to note a pokemon able to learn cut can chop down thin trees.
   * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
   * Credit to [ScyrousFX](https://www.pokecommunity.com/member.php?u=980149) for [Use Fly/Flash from party menu if Pokémon is compatible](https://www.pokecommunity.com/showpost.php?p=10420068)
+* Low Health beep reduced to three beeps and not loop infinitely.
+  * Source [Tweaking the count of health beeps
+](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
+* Added Select as shortcut to swap Pokemon in Party
+  * Credit to [Lunos](https://www.pokecommunity.com/members/lunos.114506/) for [Swap party screen slots using Select](https://www.pokecommunity.com/showpost.php?p=10420662)
 
 ### Additional Implemented Changes in Optional Patch: Stat Editor and Nature Mints
 * Stat Editor to edit IVs and EVs added to Party Menu after National Dex is unlocked.
@@ -95,6 +100,8 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
   * Muddy Water:
     * Able to be used as Surf outside of battle
 * (Very far in future) Adding a user option at start of New Game to enable to enable/disable Treeko line Dragon Typing changes.
+* Implement Expanded Register Item List
+  * May impact save compability between Base Emerald Legacy
 
 # Pokémon Emerald Legacy
 
@@ -110,26 +117,28 @@ Keeping that nostalgic feeling is a key part of the project and thus requires us
 
 
 ## A complete list of features can be found here:
-Full doc: TODO
+Full Documentation:
+- [Make a Copy (Recommended)](https://docs.google.com/document/d/1rBSuhFmiiehghr3AQ37JwBzbLCD21TXo_SWpUUXsz9k/copy)
+- [Published Page (Use this if you do not have a Google account and/or want to download the page as a PDF)](https://docs.google.com/document/d/e/2PACX-1vSv_enL8baSvetAUgBBrkh-TJka1-IeOxPchf9cuH317VLetLnvqQu7jgRXhj2gnlDqvBaEo2mbddJl/pub)
 
 These videos also provide an overview of the hack and the ideology behind it:
-- Release 1.0: TODO
-- Prerelease: https://www.youtube.com/playlist?list=PLyv5bsGgaxokt8gJX3WvI28pG3ddrhFLd
+- [Release 1.0](https://www.youtube.com/watch?v=jUHGejDvuNM)
+- [Prerelease](https://www.youtube.com/playlist?list=PLyv5bsGgaxokt8gJX3WvI28pG3ddrhFLd)
 
 
 ## Our Other Projects
-* Pokemon Crystal Legacy: https://github.com/cRz-Shadows/Pokemon_Crystal_Legacy
-* Pokemon Yellow Legacy: https://github.com/cRz-Shadows/Pokemon_Yellow_Legacy
-* Pokemon Cursed Yellow: https://github.com/cRz-Shadows/Pokemon_Cursed_Yellow
-* Pokemon Battle Simulator: https://github.com/cRz-Shadows/Pokemon_Trainer_Tournament_Simulator
+* [Pokemon Crystal Legacy](https://github.com/cRz-Shadows/Pokemon_Crystal_Legacy)
+* [Pokemon Yellow Legacy](https://github.com/cRz-Shadows/Pokemon_Yellow_Legacy)
+* [Pokemon Cursed Yellow](https://github.com/cRz-Shadows/Pokemon_Cursed_Yellow)
+* [Pokemon Battle Simulator](https://github.com/cRz-Shadows/Pokemon_Trainer_Tournament_Simulator)
 
 
 ## Discussion and Community
-* YouTube: https://www.youtube.com/@smithplayspokemon
-* Discord: https://discord.gg/Wupx8tHRVS
-* Reddit: https://www.reddit.com/r/PokemonLegacy
-* Twitter: https://twitter.com/TheSmithPlays
-* Instagram: https://www.instagram.com/thesmithplays/
+* [YouTube](https://www.youtube.com/@smithplayspokemon)
+* [Discord](https://discord.gg/Wupx8tHRVS)
+* [Reddit](https://www.reddit.com/r/PokemonLegacy)
+* [Twitter](https://twitter.com/TheSmithPlays)
+* [Instagram](https://www.instagram.com/thesmithplays/)
 
 
 ## Pret Stuff
@@ -171,6 +180,7 @@ These videos also provide an overview of the hack and the ideology behind it:
 - Shaun Duz Stuffs
 - Flint'sInfernape
 - Dabrikishaw8008
+- PotatoMan
 - RevRush
 - Flashbang
 - Sam10q
@@ -236,6 +246,7 @@ These videos also provide an overview of the hack and the ideology behind it:
 - Goppier - [Add zigzagoon scene back to the cable car](https://www.youtube.com/watch?v=7xdcbbfwEto)
 - takyon - [Always inherit nature when holding an Everstone​](https://www.pokecommunity.com/threads/simple-modifications-directory.416647/page-4#post-10160374)
 - myxto - Always inherit nature when holding an Everstone alternate implementation​
+- Jirachii - [Hidden Power type in summary screen](https://www.pokecommunity.com/threads/simple-modifications-directory.416647/page-11#post-10269132)
 
 
 ### Other Credits:

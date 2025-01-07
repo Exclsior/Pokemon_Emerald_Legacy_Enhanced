@@ -1270,10 +1270,10 @@
 #define FLAG_SCOTT_RECIEVED_CARBOS                                  0x4CA
 #define FLAG_BEAT_ARCHIE_MARINE_CAVE                                0x4CB
 #define FLAG_BEAT_MAXIE_TERRA_CAVE                                  0x4CC
-#define FLAG_UNUSED_0x4CD                                           0x4CD // Unused Flag
-#define FLAG_UNUSED_0x4CE                                           0x4CE // Unused Flag
-#define FLAG_UNUSED_0x4CF                                           0x4CF // Unused Flag
-#define FLAG_UNUSED_0x4D0                                           0x4D0 // Unused Flag
+#define FLAG_HIDE_ROUTE_103_TREE_1                                  0x4CD
+#define FLAG_HIDE_SLATEPORT_CITY_INCENSE_WOMAN                      0x4CE
+#define FLAG_CAUGHT_UNOWN_A                                         0x4CF
+#define FLAG_SHOW_HIDDEN_POWER                                      0x4D0
 #define FLAG_UNUSED_0x4D1                                           0x4D1 // Unused Flag
 #define FLAG_UNUSED_0x4D2                                           0x4D2 // Unused Flag
 #define FLAG_UNUSED_0x4D3                                           0x4D3 // Unused Flag

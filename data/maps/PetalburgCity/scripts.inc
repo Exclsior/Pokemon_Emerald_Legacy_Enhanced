@@ -77,22 +77,12 @@ PetalburgCity_WallyFight::
 	addobject LOCALID_WALLY
 	applymovement LOCALID_WALLY, PetalburgCity_Movement_WallyWalksToPlayer
 	waitmovement 0
-	msgbox PetalburgCity_Text_WallyWantsToBattle, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, PetalburgCity_StartWallyFight
-	goto_if_eq VAR_RESULT, NO, PetalburgCity_WallyWaitInHouse
-
-PetalburgCity_StartWallyFight::
-	msgbox PetalburgCity_Text_WallyAccept, MSGBOX_DEFAULT
+	msgbox PetalburgCity_Text_WallyWantsToBattle, MSGBOX_DEFAULT
 	closemessage
 	trainerbattle_no_intro TRAINER_WALLY_PETALBURG, PetalburgCity_Text_WallyDefeat
 	msgbox PetalburgCity_Text_WallyPostBattle, MSGBOX_DEFAULT
 	closemessage
 	setvar VAR_RESULT, FALSE
-	goto PetalburgCity_EndWallyScene
-PetalburgCity_WallyWaitInHouse::
-	msgbox PetalburgCity_Text_WallyWaitInHouse, MSGBOX_DEFAULT
-	closemessage
-PetalburgCity_EndWallyScene::
 	applymovement LOCALID_WALLY, PetalburgCity_Movement_WallyLeaves
 	waitmovement 0
 	removeobject LOCALID_WALLY

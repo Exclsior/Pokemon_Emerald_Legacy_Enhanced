@@ -351,8 +351,6 @@ FortreeCity_Gym_Text_WinonaPreRematch:
 	.string "gravity's pull on the ground.\p"
 	.string "But by striving for excellence,\n"
 	.string "we have the power to soar!\p"
-	.string "You have scaled the pinnacle as\n"
-	.string "the reigning CHAMPION.\p"
 	.string "Please, allow me to see your power\n"
 	.string "at full flight!$"
 

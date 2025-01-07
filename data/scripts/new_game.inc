@@ -308,5 +308,6 @@ EventScript_ResetAllMapFlags::
 	setflag FLAG_HIDE_SMITH
 	setflag FLAG_HIDE_CRAIG
 	setflag FLAG_HIDE_WEEBRA
+	setflag FLAG_HIDE_SLATEPORT_CITY_INCENSE_WOMAN
 	call EventScript_ResetAllBerries
 	end

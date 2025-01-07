@@ -31,6 +31,8 @@ SlateportCity_OnTransition:
 	call SlateportCity_EventScript_EnterSlateport
 	call_if_eq VAR_SLATEPORT_CITY_STATE, 1, SlateportCity_EventScript_MovePeopleForSternInterview
 	call_if_eq VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE, 1, SlateportCity_EventScript_SetReadyForScottScene
+	setflag FLAG_HIDE_SLATEPORT_CITY_INCENSE_WOMAN
+	call_if_set FLAG_IS_CHAMPION, SlateportCity_EventScript_ShowIncenseWoman
 	end
 
 SlateportCity_EventScript_EnterSlateport::
@@ -67,6 +69,10 @@ SlateportCity_EventScript_SetReadyForScottScene::
 SlateportCity_EventScript_MoveScottLeft::
 	setobjectxyperm LOCALID_SCOTT, 22, 27
 	setobjectmovementtype LOCALID_SCOTT, MOVEMENT_TYPE_FACE_RIGHT
+	return
+
+SlateportCity_EventScript_ShowIncenseWoman::
+	clearflag FLAG_HIDE_SLATEPORT_CITY_INCENSE_WOMAN
 	return
 
 SlateportCity_OnFrame:
@@ -568,6 +574,24 @@ SlateportCity_EventScript_PowerTMClerk::
 SlateportCity_Pokemart_PowerTMs:
 	.2byte ITEM_TM_HIDDEN_POWER
 	.2byte ITEM_TM_SECRET_POWER
+	.2byte ITEM_NONE
+	release
+	end
+
+SlateportCity_EventScript_InsenseWoman::
+	lock
+	faceplayer
+	message gText_HowMayIServeYou
+	waitmessage
+	pokemart SlateportCity_Pokemart_Incense
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+.align 2
+	SlateportCity_Pokemart_Incense:
+	.2byte ITEM_SEA_INCENSE
+	.2byte ITEM_LAX_INCENSE
 	.2byte ITEM_NONE
 	release
 	end
