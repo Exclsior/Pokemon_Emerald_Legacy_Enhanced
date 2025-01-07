@@ -458,6 +458,7 @@ BattleFrontier_ExchangeServiceCorner_EventScript_ChooseBerry::
 	case 8, BattleFrontier_ExchangeServiceCorner_EventScript_Hondew
 	case 9, BattleFrontier_ExchangeServiceCorner_EventScript_Grepa
 	case 10, BattleFrontier_ExchangeServiceCorner_EventScript_Tamato
+	case 11, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	case MULTI_B_PRESSED, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	end
 

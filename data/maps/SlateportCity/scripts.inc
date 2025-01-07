@@ -73,6 +73,7 @@ SlateportCity_EventScript_MoveScottLeft::
 
 SlateportCity_EventScript_ShowIncenseWoman::
 	clearflag FLAG_HIDE_SLATEPORT_CITY_INCENSE_WOMAN
+	return
 
 SlateportCity_OnFrame:
 	map_script_2 VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE, 1, SlateportCity_EventScript_ScottScene

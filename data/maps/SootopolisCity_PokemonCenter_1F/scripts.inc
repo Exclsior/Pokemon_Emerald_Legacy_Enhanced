@@ -33,6 +33,7 @@ SootopolisCity_PokemonCenter_1F_EventScript_GentlemanNoLegendaries::
 	end
 SootopolisCity_PokemonCenter_1F_EventScript_GentlemanNoLegendaries2::
 	msgbox SootopolisCity_PokemonCenter_1F_Text_WallaceToughestInHoenn2, MSGBOX_DEFAULT
+	release
 	end
 
 SootopolisCity_PokemonCenter_1F_EventScript_Woman::
