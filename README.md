@@ -84,6 +84,9 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
   * Pretty Petal Flower Shop North of Petalburg Woods will sell all mints at 20,000 pokedollars each.
   * **Note:** Save file compatibility with Emerald Legacy will work, however any Pokemon which has had it's nature altered from orginal via mint will retain its altered new nature stats with their original nature name and potentially incorrect highlighting of boosted and lowered stats until they are deposited or withdrawn from a PC where their stats will be recalculated using their original nature.
   * Credit to [ghoulslash](https://www.pokecommunity.com/members/ghoulslash.581824/) for [Nature Mints](https://www.pokecommunity.com/showpost.php?p=10245635&postcount=191)
+* Low Health beep reduced to three beeps and not loop infinitely.
+  * Source [Tweaking the count of health beeps
+](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
 
 ### Changes being considered (No guarantee of implementation):
 * Allow Signature Moves to substitute as specific Field Moves:
@@ -94,6 +97,9 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
   * Muddy Water:
     * Able to be used as Surf outside of battle
 * (Very far in future) Adding a user option at start of New Game to enable to enable/disable Treeko line Dragon Typing changes.
+* Implement Expanded Register Item List
+  * May impact save compability between Base Emerald Legacy
+* Add Select in Party Menu to swap Pokemon party position
 
 # Pokémon Emerald Legacy
 
