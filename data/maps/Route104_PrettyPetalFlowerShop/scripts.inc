@@ -18,7 +18,7 @@ Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner::
 Route104_PrettyPetalFlowerShop_EventScript_ShopOwner::
 	lock
 	faceplayer
-	goto_if_set FLAG_TEMP_1, Route104_PrettyPetalFlowerShop_EventScript_SellDecorations
+	goto_if_set FLAG_TEMP_1, Route104_PrettyPetalFlowerShop_EventScript_Sell
 	msgbox Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop, MSGBOX_DEFAULT
 	goto_if_set FLAG_MET_PRETTY_PETAL_SHOP_OWNER, Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet
 	setflag FLAG_MET_PRETTY_PETAL_SHOP_OWNER
@@ -43,7 +43,8 @@ Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries::
 	msgbox Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness, MSGBOX_DEFAULT
 	return
 
-Route104_PrettyPetalFlowerShop_EventScript_SellDecorations::
+Route104_PrettyPetalFlowerShop_EventScript_Sell::
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, Route104_PrettyPetalFlowerShop_EventScript_SellMints
 	message gText_PlayerWhatCanIDoForYou
 	waitmessage
 	pokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_Plants
@@ -51,6 +52,22 @@ Route104_PrettyPetalFlowerShop_EventScript_SellDecorations::
 	release
 	end
 
+Route104_PrettyPetalFlowerShop_EventScript_SellMints::
+	msgbox Route104_PrettyPetalFlowerShop_Text_SellMints, MSGBOX_YESNO
+	call_if_eq VAR_RESULT, NO, Route104_PrettyPetalFlowerShop_EventScript_SellDecorations
+	pokemart Route104_PrettyPetalFlowerShop_Pokemart_Mints
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+Route104_PrettyPetalFlowerShop_EventScript_SellDecorations::
+	message Route104_PrettyPetalFlowerShop_Text_SellDecorInstead
+	waitmessage
+	pokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_Plants
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+	
 	.align 2
 Route104_PrettyPetalFlowerShop_Pokemart_Plants:
 	.2byte DECOR_RED_PLANT
@@ -60,6 +77,33 @@ Route104_PrettyPetalFlowerShop_Pokemart_Plants:
 	.2byte DECOR_BIG_PLANT
 	.2byte DECOR_GORGEOUS_PLANT
 	.2byte DECOR_NONE
+	release
+	end
+
+	.align 2
+Route104_PrettyPetalFlowerShop_Pokemart_Mints:
+	.2byte ITEM_ADAMANT_MINT
+	.2byte ITEM_BOLD_MINT
+	.2byte ITEM_BRAVE_MINT
+	.2byte ITEM_CALM_MINT
+	.2byte ITEM_CAREFUL_MINT
+	.2byte ITEM_GENTLE_MINT
+	.2byte ITEM_HASTY_MINT
+	.2byte ITEM_IMPISH_MINT
+	.2byte ITEM_JOLLY_MINT
+	.2byte ITEM_LAX_MINT
+	.2byte ITEM_LONELY_MINT
+	.2byte ITEM_MILD_MINT
+	.2byte ITEM_MODEST_MINT
+	.2byte ITEM_NAIVE_MINT
+	.2byte ITEM_NAUGHTY_MINT
+	.2byte ITEM_QUIET_MINT
+	.2byte ITEM_RASH_MINT
+	.2byte ITEM_RELAXED_MINT
+	.2byte ITEM_SASSY_MINT
+	.2byte ITEM_SERIOUS_MINT
+	.2byte ITEM_TIMID_MINT
+	.2byte ITEM_NONE
 	release
 	end
 

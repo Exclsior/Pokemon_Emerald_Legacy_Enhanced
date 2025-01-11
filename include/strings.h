@@ -307,6 +307,10 @@ extern const u8 gText_FrameType[];
 extern const u8 gText_ButtonTypeNormal[];
 extern const u8 gText_ButtonTypeLR[];
 extern const u8 gText_ButtonTypeLEqualsA[];
+extern const u8 gText_BikeMusicOn[];
+extern const u8 gText_BikeMusicOff[];
+extern const u8 gText_SurfMusicOn[];
+extern const u8 gText_SurfMusicOff[];
 extern const u8 gText_Option[];
 extern const u8 gText_OptionMenu[];
 extern const u8 gText_TextSpeed[];
@@ -314,7 +318,10 @@ extern const u8 gText_BattleScene[];
 extern const u8 gText_BattleStyle[];
 extern const u8 gText_Sound[];
 extern const u8 gText_Frame[];
+extern const u8 gText_BikeMusic[];
+extern const u8 gText_SurfMusic[];
 extern const u8 gText_OptionMenuCancel[];
+extern const u8 gText_OptionMenuSave[];
 extern const u8 gText_ButtonMode[];
 
 extern const u8 gText_MaleSymbol[];
@@ -522,6 +529,7 @@ extern const u8 gText_SpDef[];
 extern const u8 gText_Speed[];
 extern const u8 gText_Dash[];
 extern const u8 gText_Plus[];
+extern const u8 gText_StatEditor[];
 
 //Pokédex text
 extern const u8 gText_CryOf[];
@@ -2214,7 +2222,7 @@ extern const u8 gText_EnjoyCycling[];
 extern const u8 gText_InUseAlready_PM[];
 extern const u8 gText_CantUseHere[];
 extern const u8 gText_NoPokemonForBattle[];
-extern const u8 gText_ChoosePokemon2[];
+extern const u8 gText_ChoosePokemonSelectToMove[]; // Updates from ChoosePokemon2 to account for Select to Move
 extern const u8 gText_NotEnoughHp[];
 extern const u8 gText_PokemonAreNeeded[];
 extern const u8 gText_PokemonCantBeSame[];

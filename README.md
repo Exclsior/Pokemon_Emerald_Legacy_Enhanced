@@ -16,7 +16,7 @@ Without any further ado, below are the features added to Base Patch (main branch
 
 ## Base Patch - Enhanced Starters (Haven't yet worked backwards to separate! The Current 1.0.0 Patch is still Enhanced Starters I am currently working on updating so that the Base Patch is much closer to Pokémon Emerald Legacy):
 
-An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game. A few other quality of life features have been included in this version not directly related to the Starters.
+An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn Starters. For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
 
 ### Implemented Changes
 * Added starters to following routes for increased availability:
@@ -96,6 +96,11 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
 ](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
 * Added Select as shortcut to swap Pokemon in Party
   * Credit to [Lunos](https://www.pokecommunity.com/members/lunos.114506/) for [Swap party screen slots using Select](https://www.pokecommunity.com/showpost.php?p=10420662)
+* Low Health beep reduced to three beeps and not loop infinitely.
+  * Source [Tweaking the count of health beeps
+](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
+* Added Select as shortcut to swap Pokemon in Party
+  * Credit to [Lunos](https://www.pokecommunity.com/members/lunos.114506/) for [Swap party screen slots using Select](https://www.pokecommunity.com/showpost.php?p=10420662)
 
 ### Additional Implemented Changes in Optional Patch: Stat Editor and Nature Mints
 * Stat Editor to edit IVs and EVs added to Party Menu after National Dex is unlocked.
@@ -105,6 +110,29 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
   * Pretty Petal Flower Shop North of Petalburg Woods will sell all mints at 20,000 pokedollars each.
   * **Note:** Save file compatibility with Emerald Legacy will work, however any Pokemon which has had it's nature altered from orginal via mint will retain its altered new nature stats with their original nature name and potentially incorrect highlighting of boosted and lowered stats until they are deposited or withdrawn from a PC where their stats will be recalculated using their original nature.
   * Credit to [ghoulslash](https://www.pokecommunity.com/members/ghoulslash.581824/) for [Nature Mints](https://www.pokecommunity.com/showpost.php?p=10245635&postcount=191)
+
+### WIP Tracker: Changes added to main branch
+* Beldum, Metang and Metagross Catch Rates increased to 45 to match other psuedo-legendaries.
+* Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
+  * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
+  * Dialogue for people providing HMs updated to note that a pokemon only needs to be able to learn the move.
+    * e.g. "Cutter" in Rustboro's dialogue updated to note a pokemon able to learn cut can chop down thin trees.
+  * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
+  * Credit to [ScyrousFX](https://www.pokecommunity.com/member.php?u=980149) for [Use Fly/Flash from party menu if Pokémon is compatible](https://www.pokecommunity.com/showpost.php?p=10420068)
+* Stat Editor to edit IVs and EVs added to Party Menu after National Dex is unlocked.
+  * Credit to TeamAquasHideout for [EV IV Stat Editor UI](https://github.com/pret/pokeemerald/wiki/Add-a-EV---IV-Stat-Editor-UI)
+* Nature Mints have been added in the game for purchase after beating Petalburg Gym.
+  * One free Serious Mint will be given by Norman after gaining the Facade TM.
+  * Pretty Petal Flower Shop North of Petalburg Woods will sell all mints at 20,000 pokedollars each.
+  * **Note:** Save file compatibility with Emerald Legacy will work, however any Pokemon which has had it's nature altered from orginal via mint will retain its altered new nature stats with their original nature name and potentially incorrect highlighting of boosted and lowered stats until they are deposited or withdrawn from a PC where their stats will be recalculated using their original nature.
+  * Credit to [ghoulslash](https://www.pokecommunity.com/members/ghoulslash.581824/) for [Nature Mints](https://www.pokecommunity.com/showpost.php?p=10245635&postcount=191)
+* Low Health beep reduced to three beeps and not loop infinitely.
+  * Source [Tweaking the count of health beeps
+](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
+* Added Select as shortcut to swap Pokemon in Party
+  * Credit to [Lunos](https://www.pokecommunity.com/members/lunos.114506/) for [Swap party screen slots using Select](https://www.pokecommunity.com/showpost.php?p=10420662)
+* Updated Options Menu to add ability to enable or disable Bike and Surf Music.
+  * Credits to [TheXaman](https://www.pokecommunity.com/members/thexaman.743189/), [DizzyEgg](https://github.com/DizzyEggg), [Lunos](https://www.pokecommunity.com/members/lunos.114506/), [AsparagusEduardo](https://github.com/AsparagusEduardo), and [ella_trifle/ellabrella](https://www.pokecommunity.com/members/ellabrella.751712/) for [New Options Plus ‐ Multipage Options Menu](https://github.com/pret/pokeemerald/wiki/New-Options-Plus-%E2%80%90-Multipage-Options-Menu-with-Faster-Text,-HP%E2%80%90EXP-Bar-Speeds-and-Metric)
 
 ### Changes being considered (No guarantee of implementation):
 * Allow Signature Moves to substitute as specific Field Moves:
