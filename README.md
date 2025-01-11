@@ -59,13 +59,21 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Lvl 16: Twister
     * Lvl 19: Razor Leaf
     * Lvl 34: Dragonbreath
+    * Lvl 60: Outrage
+    * Lvl 65: Frenzy Plant
   * Combusken:
     * Lvl 37: Blaze Kick (in case of evolution cancellation)
     * Lvl 41: Sky Uppercut
     * Lvl 55: Hi Jump Kick
   * Blaziken:
     * Lvl  1: Rock Slide (Torchic Egg Move, for relearning)
+    * Lvl 65: Blast Burn
+  * Mudkip:
+    * Lvl 21: Bubblebeam
+    * Lvl 26: Dig
   * Marshtomp:
+    * Lvl 24: Mud Sport (Was in both Mudkip and Swampert Learnsets, not in Marshtomp's)
+    * Lvl 28: Dig
     * Lvl 37: Muddy Water (in case of evolution cancellation)
     * Lvl 40: Protect
     * Lvl 43: Earthquake
@@ -73,6 +81,14 @@ An expansion on the Pokemon Emerald Legacy Project which further buffs the Hoenn
     * Lvl 50: Endeavor
   * Swampert:
     * Lvl  1: Ice Ball (Mudkip Egg Move, for relearning)
+    * Lvl 28: Dig
+    * Lvl 65: Hydro Cannon
+  * Meganium:
+    * Lvl 65: Frenzy Plant
+  * Typhlosion:
+    * Lvl 65: Blast Burn
+  * Feraligatr:
+    * Lvl 65: Hydro Cannon
 * Dragon Type changed to Physical
   * **Note**: Other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile as noted below.
 * Grovyle and Sceptile Stats reworked slightly due to change for Dragon Type changed to Physical (compared to Emerald Legacy):
