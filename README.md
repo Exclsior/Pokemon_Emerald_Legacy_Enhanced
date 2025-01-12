@@ -87,10 +87,8 @@ Combination of the two above patches for physical Dragon type and to add Dragon 
     * Lvl 16: Twister
     * Lvl 19: Razor Leaf
     * Lvl 34: Dragonbreath
-    * Lvl 37: Leaf Blade (in case of evolution cancellation)
     * Lvl 45: Dragon Claw
   * Sceptile:
-    * Lvl  1: Crunch (Treeko Egg Move, for relearning)
     * Lvl 16: Twister
     * Lvl 19: Razor Leaf
     * Lvl 34: Dragonbreath
