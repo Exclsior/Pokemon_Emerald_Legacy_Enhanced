@@ -4144,6 +4144,7 @@ extern const u16 gBattleInterface_BallDisplayPal[];
 
 extern const u32 gSwapLineGfx[];
 extern const u32 gSwapLinePal[];
+extern const u32 gSwapLineGfx_RegisteredItemsMenu[];
 
 extern const u32 gBattlePyramidBag_Gfx[];
 extern const u32 gBattlePyramidBag_Pal[];
