@@ -38,4 +38,3 @@ GraniteCave_1F_Text_ExplainFlash:
 	.string "POKéMON able to learn the move.\p"
 	.string "Your POKéMON just needs to be with you.\n"
 	.string "They don't even need to learn the move!$"
-	

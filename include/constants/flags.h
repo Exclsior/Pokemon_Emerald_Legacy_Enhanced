@@ -85,7 +85,7 @@
 #define FLAG_DEFEATED_ENTEI                 0x48
 #define FLAG_HIDE_RAIKOU2                   0x49
 #define FLAG_HIDE_RAIKOU3                   0x4A
-#define FLAG_UNUSED_0x04B    0x4B // Unused Flag
+#define FLAG_EGG_MOVES_TUTOR                0x4B // Enable Egg Move Tutor
 #define FLAG_UNUSED_0x04C    0x4C // Unused Flag
 #define FLAG_UNUSED_0x04D    0x4D // Unused Flag
 #define FLAG_UNUSED_0x04E    0x4E // Unused Flag
@@ -1274,7 +1274,7 @@
 #define FLAG_HIDE_SLATEPORT_CITY_INCENSE_WOMAN                      0x4CE
 #define FLAG_CAUGHT_UNOWN_A                                         0x4CF
 #define FLAG_SHOW_HIDDEN_POWER                                      0x4D0
-#define FLAG_UNUSED_0x4D1                                           0x4D1 // Unused Flag
+#define FLAG_HIDE_EGG_MOVE_TUTOR                                    0x4D1 // Flag to Show/Hide Egg Move until National Dex
 #define FLAG_UNUSED_0x4D2                                           0x4D2 // Unused Flag
 #define FLAG_UNUSED_0x4D3                                           0x4D3 // Unused Flag
 #define FLAG_UNUSED_0x4D4                                           0x4D4 // Unused Flag

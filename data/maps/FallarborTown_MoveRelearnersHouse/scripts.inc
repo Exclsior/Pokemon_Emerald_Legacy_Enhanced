@@ -1,7 +1,14 @@
 .set LOCALID_MOVE_RELEARNER, 1
+.set LOCALID_EGGMOVETUTOR, 2
 
 FallarborTown_MoveRelearnersHouse_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, FallarborTown_MoveRelearnersHouse_OnLoad
 	.byte 0
+
+FallarborTown_MoveRelearnersHouse_OnLoad:
+	call_if_unset FLAG_SYS_GAME_CLEAR, FallarborTown_MoveRelearnersHouse_EventScript_HideEggMoveTutor
+	call_if_set FLAG_SYS_GAME_CLEAR, FallarborTown_MoveRelearnersHouse_EventScript_ShowEggMoveTutor
+	end
 
 FallarborTown_MoveRelearnersHouse_EventScript_MoveRelearner::
 	lockall
@@ -56,6 +63,69 @@ FallarborTown_MoveRelearnersHouse_EventScript_CantTeachEgg::
 FallarborTown_MoveRelearnersHouse_EventScript_ComeBackWithHeartScale::
 	msgbox FallarborTown_MoveRelearnersHouse_Text_ComeBackWithHeartScale, MSGBOX_DEFAULT
 	releaseall
+	return
+
+FallarborTown_MoveRelearnersHouse_EventScript_ShowEggMoveTutor:
+	clearflag FLAG_HIDE_EGG_MOVE_TUTOR
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_HideEggMoveTutor:
+	setflag FLAG_HIDE_EGG_MOVE_TUTOR
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_EggMovetutor::
+	lockall
+	applymovement LOCALID_EGGMOVETUTOR, Common_Movement_FacePlayer
+	waitmovement 0
+	goto_if_set FLAG_TEMP_2, FallarborTown_MoveRelearnersHouse_EventScript_AskTeachEggMove
+	msgbox FallarborTown_MoveRelearnersHouse_Text_ImTheEggMoveTutor, MSGBOX_DEFAULT
+	setflag FLAG_TEMP_2
+	goto FallarborTown_MoveRelearnersHouse_EventScript_AskTeachEggMove
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_AskTeachEggMove::
+	msgbox FallarborTown_MoveRelearnersHouse_Text_WantMeToTeachEggMove, MSGBOX_YESNO
+	switch VAR_RESULT
+	case NO, FallarborTown_MoveRelearnersHouse_EventScript_ComeBackLater
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMonEggMove
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_ChooseMonEggMove::
+	msgbox FallarborTown_MoveRelearnersHouse_Text_TutorWhichMon, MSGBOX_DEFAULT
+	setflag FLAG_EGG_MOVES_TUTOR
+	special ChooseMonForMoveRelearner
+	waitstate
+	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, FallarborTown_MoveRelearnersHouse_EventScript_ComeBackLater
+	special IsSelectedMonEgg
+	goto_if_eq VAR_RESULT, TRUE, FallarborTown_MoveRelearnersHouse_EventScript_CantTeachEggMoveToEgg
+	goto_if_eq VAR_0x8005, 0, FallarborTown_MoveRelearnersHouse_EventScript_NoEggMoveToTeachMon
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseEggMove
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_ChooseEggMove::
+	msgbox FallarborTown_MoveRelearnersHouse_Text_TeachWhichMove, MSGBOX_DEFAULT
+	special TeachMoveRelearnerMove
+	waitstate
+	goto_if_eq VAR_0x8004, 0, FallarborTown_MoveRelearnersHouse_EventScript_ChooseMonEggMove
+	msgbox FallarborTown_MoveRelearnersHouse_Text_ComeBackAgain, MSGBOX_DEFAULT
+	clearflag FLAG_EGG_MOVES_TUTOR
+	releaseall
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_NoEggMoveToTeachMon::
+	msgbox FallarborTown_MoveRelearnersHouse_Text_DontHaveMoveToTeachPokemon, MSGBOX_DEFAULT
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMonEggMove
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_CantTeachEggMoveToEgg::
+	msgbox FallarborTown_MoveRelearnersHouse_Text_CantTeachEgg, MSGBOX_DEFAULT
+	goto FallarborTown_MoveRelearnersHouse_EventScript_ChooseMonEggMove
+	end
+
+FallarborTown_MoveRelearnersHouse_EventScript_ComeBackLater::
+	msgbox FallarborTown_MoveRelearnersHouse_Text_ComeBackLater, MSGBOX_DEFAULT
+	clearflag FLAG_EGG_MOVES_TUTOR
+	releaseall
 	end
 
 FallarborTown_MoveRelearnersHouse_Text_ImTheMoveTutor:
@@ -97,3 +167,22 @@ FallarborTown_MoveRelearnersHouse_Text_CantTeachEgg:
 	.string "Hunh? There isn't a single move that\n"
 	.string "I can teach an EGG.$"
 
+FallarborTown_MoveRelearnersHouse_Text_ImTheEggMoveTutor:
+	.string "I'm the EGG MOVE MANIAC.\p"
+	.string "I know all the moves that POKéMON learn\n"
+	.string "by breeding and I can teach POKéMON\l"
+	.string "those moves.\p"
+	.string "I can teach moves to a POKéMON of\n"
+	.string "yours if you'd like.$"
+
+FallarborTown_MoveRelearnersHouse_Text_WantMeToTeachEggMove:
+	.string "Would you like me to teach your POKéMON\n"
+	.string "some of their EGG MOVES?$"
+
+FallarborTown_MoveRelearnersHouse_Text_ComeBackLater:
+	.string "If your POKéMON need to learn an\n"
+	.string "EGG MOVE, come back later.$"
+	
+FallarborTown_MoveRelearnersHouse_Text_ComeBackAgain:
+	.string "If your POKéMON needs to learn another\n"
+	.string "EGG MOVE, come back again!$"

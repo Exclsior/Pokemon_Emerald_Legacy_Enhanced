@@ -47,6 +47,7 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/union_room.h"
+#include "daycare.h"
 
 #define DAY_EVO_HOUR_BEGIN       12
 #define DAY_EVO_HOUR_END         HOURS_PER_DAY
@@ -6395,10 +6396,20 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {
     u16 learnedMoves[MAX_MON_MOVES];
     u16 moves[MAX_LEVEL_UP_MOVES];
+    u16 eggMoves[EGG_MOVES_ARRAY_COUNT];
     u8 numMoves = 0;
+    u8 numEggMoves;
     u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
     int i, j, k;
+
+    if (FlagGet(FLAG_EGG_MOVES_TUTOR))
+    {
+        numEggMoves = GetEggMoves(mon, eggMoves);
+
+        if (numEggMoves == 0)
+            return 0;
+    }
 
     if (species == SPECIES_EGG)
         return 0;
@@ -6430,6 +6441,9 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
             }
         }
     }
+    
+    if (numMoves == 0 && numEggMoves > 0 && FlagGet(FLAG_EGG_MOVES_TUTOR))
+       return numEggMoves;
 
     return numMoves;
 }
