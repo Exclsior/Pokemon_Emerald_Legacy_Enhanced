@@ -208,6 +208,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex::
 	waitfanfare
 	setflag FLAG_SYS_NATIONAL_DEX
 	special EnableNationalPokedex
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable, MSGBOX_DEFAULT
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2, MSGBOX_DEFAULT
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_StrangeRockInMossdeep
 	closemessage
@@ -1225,6 +1226,10 @@ LittlerootTown_ProfessorBirchsLab_Text_OkayAllDone:
 LittlerootTown_ProfessorBirchsLab_Text_PokedexUpgradedToNational:
 	.string "{PLAYER}'s POKéDEX was upgraded\n"
 	.string "to the NATIONAL Mode!$"
+
+LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable:
+	.string "You can now edit your POKéMON's stats\n"
+	.string "directly from the party menu!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2:
 	.string "PROF. BIRCH: But listen.\n"

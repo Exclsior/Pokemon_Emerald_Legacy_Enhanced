@@ -612,7 +612,7 @@ static const u8 *const sActionStringTable[] =
     [PARTY_MSG_ALREADY_IN_USE]         = gText_InUseAlready_PM,
     [PARTY_MSG_CANT_USE_HERE]          = gText_CantUseHere,
     [PARTY_MSG_NO_MON_FOR_BATTLE]      = gText_NoPokemonForBattle,
-    [PARTY_MSG_CHOOSE_MON_2]           = gText_ChoosePokemon2,
+    [PARTY_MSG_CHOOSE_MON_SEL_MOVE]    = gText_ChoosePokemonSelectToMove,
     [PARTY_MSG_NOT_ENOUGH_HP]          = gText_NotEnoughHp,
     [PARTY_MSG_X_MONS_ARE_NEEDED]      = gText_PokemonAreNeeded,
     [PARTY_MSG_MONS_CANT_BE_SAME]      = gText_PokemonCantBeSame,
@@ -658,6 +658,7 @@ struct
 } static const sCursorOptions[] =
 {
     [MENU_SUMMARY] = {gText_Summary5, CursorCb_Summary},
+    [MENU_STAT_EDIT] = {gText_StatEditor, CursorCb_StatEdit},
     [MENU_SWITCH] = {gText_Switch2, CursorCb_Switch},
     [MENU_CANCEL1] = {gText_Cancel2, CursorCb_Cancel1},
     [MENU_ITEM] = {gText_Item, CursorCb_Item},

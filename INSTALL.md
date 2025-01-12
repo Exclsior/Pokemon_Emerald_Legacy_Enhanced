@@ -392,7 +392,7 @@ If this works, then proceed to [Installation](#installation). Otherwise, ask for
 1. If pokeemerald is not already downloaded (some users may prefer to download pokeemerald via a git client like GitHub Desktop), run:
 
     ```bash
-    git clone https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy
+    git clone https://github.com/Exclsior/Pokemon_Emerald_Legacy_Enhanced/
     ```
 
     <details>
@@ -408,30 +408,30 @@ If this works, then proceed to [Installation](#installation). Otherwise, ask for
     >   Where *\<folder where pokeemerald is to be stored>* is the path of the folder [where you chose to store pokeemerald](#Choosing-where-to-store-pokeemerald-WSL1). Then run the `git clone` command again.
     </details>
 
-2. Install agbcc into Pokemon_Emerald_Legacy. The commands to run depend on certain conditions. **You should only follow one of the listed instructions**:
-- If agbcc has **not been built before** in the folder where you chose to store pokeemerald, run the following commands to build and install it into Pokemon_Emerald_Legacy:
+2. Install agbcc into Pokemon_Emerald_Legacy_Enhanced. The commands to run depend on certain conditions. **You should only follow one of the listed instructions**:
+- If agbcc has **not been built before** in the folder where you chose to store pokeemerald, run the following commands to build and install it into Pokemon_Emerald_Legacy_Enhanced:
 
     ```bash
     git clone https://github.com/pret/agbcc
     cd agbcc
     ./build.sh
-    ./install.sh ../Pokemon_Emerald_Legacy
+    ./install.sh ../Pokemon_Emerald_Legacy_Enhanced
     ```
 
-- **Otherwise**, if agbcc has been built before (e.g. if the git clone above fails), but was **last built on a different terminal** than the one currently used (only relevant to Windows, e.g. switching from msys2 to WSL1), then run the following commands to build and install it into Pokemon_Emerald_Legacy:
+- **Otherwise**, if agbcc has been built before (e.g. if the git clone above fails), but was **last built on a different terminal** than the one currently used (only relevant to Windows, e.g. switching from msys2 to WSL1), then run the following commands to build and install it into Pokemon_Emerald_Legacy_Enhanced:
 
     ```bash
     cd agbcc
     git clean -fX
     ./build.sh
-    ./install.sh ../Pokemon_Emerald_Legacy
+    ./install.sh ../Pokemon_Emerald_Legacy_Enhanced
     ```
 
-- **Otherwise**, if agbcc has been built before on the same terminal, run the following commands to install agbcc into Pokemon_Emerald_Legacy:
+- **Otherwise**, if agbcc has been built before on the same terminal, run the following commands to install agbcc into Pokemon_Emerald_Legacy_Enhanced:
 
     ```bash
     cd agbcc
-    ./install.sh ../Pokemon_Emerald_Legacy
+    ./install.sh ../Pokemon_Emerald_Legacy_Enhanced
     ```
 
     <details>
@@ -440,7 +440,7 @@ If this works, then proceed to [Installation](#installation). Otherwise, ask for
         > If building agbcc or pokeemerald results in an error, try deleting the agbcc folder and re-installing agbcc as if it has not been built before.
     </details>
 
-3. Once agbcc is installed, change directory back to the base directory where Pokemon_Emerald_Legacy and agbcc are stored:
+3. Once agbcc is installed, change directory back to the base directory where Pokemon_Emerald_Legacy_Enhanced and agbcc are stored:
 
     ```bash
     cd ..
@@ -448,9 +448,9 @@ If this works, then proceed to [Installation](#installation). Otherwise, ask for
 
 Now you're ready to [build **pokeemerald**](#build-pokeemerald)
 ## Build pokeemerald
-If you aren't in the Pokemon_Emerald_Legacy directory already, then **change directory** to the Pokemon_Emerald_Legacy folder:
+If you aren't in the Pokemon_Emerald_Legacy_Enhanced directory already, then **change directory** to the Pokemon_Emerald_Legacy_Enhanced folder:
 ```bash
-cd Pokemon_Emerald_Legacy
+cd Pokemon_Emerald_Legacy_Enhanced
 ```
 To build **pokeemerald.gba** (Note: to speed up builds, see [Parallel builds](#parallel-builds)):
 ```bash

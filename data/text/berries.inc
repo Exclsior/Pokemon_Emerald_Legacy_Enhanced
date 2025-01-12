@@ -154,6 +154,15 @@ Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries:
 	.string "{PLAYER}{KUN}, would you like to learn about\n"
 	.string "BERRIES?$"
 
+Route104_PrettyPetalFlowerShop_Text_SellMints:
+	.string "{PLAYER}{STRING 5}, welcome!\p"
+	.string "We have just started selling MINTS,\n"
+	.string "would you like to buy some?$"
+
+Route104_PrettyPetalFlowerShop_Text_SellDecorInstead:
+	.string "Are you interested in some floral,\n"
+	.string "decorations instead?$"
+
 Route104_PrettyPetalFlowerShop_Text_BerriesExplanation:
 	.string "BERRIES grow on trees that thrive\n"
 	.string "only in soft, loamy soil.\p"

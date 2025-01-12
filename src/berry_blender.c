@@ -890,7 +890,7 @@ static const u8 sOpponentBerrySets[NUM_NPC_BERRIES * 2][3] =
 };
 
 // Berry master's berries follow the same rules as above, but instead of explicitly listing
-// the alternate sets if the player chooses one of these berries, it implicitly uses these berries - 5, i.e. Tamato - Nomel
+// the alternate sets if the player chooses one of these berries, it implicitly uses these berries + 5
 static const u8 sBerryMasterBerries[] = {
     ITEM_TO_BERRY(ITEM_SPELON_BERRY) - 1,
     ITEM_TO_BERRY(ITEM_PAMTRE_BERRY) - 1,
@@ -1569,6 +1569,11 @@ static void SetOpponentsBerryData(u16 playerBerryItemId, u8 playersNum, struct B
         {
             opponentSetId %= ARRAY_COUNT(sBerryMasterBerries);
             opponentBerryId = sBerryMasterBerries[opponentSetId];
+
+            // If the player's berry is any of the Berry Master's berries,
+            // then use the next higher set of berries
+            if (berryMasterDiff < ARRAY_COUNT(sBerryMasterBerries))
+                opponentBerryId += ARRAY_COUNT(sBerryMasterBerries);
         }
         SetPlayerBerryData(i + 1, opponentBerryId + FIRST_BERRY_INDEX);
     }

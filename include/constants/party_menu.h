@@ -97,7 +97,7 @@
 #define PARTY_MSG_ALREADY_IN_USE            12
 #define PARTY_MSG_CANT_USE_HERE             13
 #define PARTY_MSG_NO_MON_FOR_BATTLE         14
-#define PARTY_MSG_CHOOSE_MON_2              15
+#define PARTY_MSG_CHOOSE_MON_SEL_MOVE       15 // Originally used by Daycare only, swapped for Select to Move and changed Daycare to use original Choose Mon string
 #define PARTY_MSG_NOT_ENOUGH_HP             16
 #define PARTY_MSG_X_MONS_ARE_NEEDED         17
 #define PARTY_MSG_MONS_CANT_BE_SAME         18
