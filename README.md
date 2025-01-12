@@ -165,11 +165,7 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
     * Lvl 21: Bubblebeam
     * Lvl 26: Dig
   * Marshtomp:
-<<<<<<< HEAD
-    * Lvl 24: Mud Sport (Was in both Mudkip and Swampert Learnsets, not in Marshtomp's)
-=======
     * Lvl 24: Mud Sport (Was in both Mudkip's and Swampert's Learnsets, not in Marshtomp's)
->>>>>>> main
     * Lvl 28: Dig
     * Lvl 37: Muddy Water (in case of evolution cancellation)
     * Lvl 40: Protect
@@ -186,17 +182,6 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
     * Lvl 65: Blast Burn
   * Feraligatr:
     * Lvl 65: Hydro Cannon
-* Dragon Type changed to Physical
-  * **Note**: Other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile as noted below.
-* Grovyle and Sceptile Stats reworked slightly due to change for Dragon Type changed to Physical (compared to Emerald Legacy):
-  * Grovyle:
-    * Base Attack Increased by 5
-    * Base Special Attack Decreased by 5
-  * Sceptile:
-    * Base Attack Increased by 10
-    * Base Special Attack Decreased by 5
-    * Base Special Defence Decreased by 5
-  * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
 
 ## Enhanced Credits List:
 * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)

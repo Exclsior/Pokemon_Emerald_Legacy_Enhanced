@@ -7649,10 +7649,10 @@ const struct SpeciesInfo gSpeciesInfo[] =
     [SPECIES_GROVYLE] =
     {
         .baseHP        = 50,
-        .baseAttack    = 70,
+        .baseAttack    = 65,
         .baseDefense   = 45,
         .baseSpeed     = 95,
-        .baseSpAttack  = 80,
+        .baseSpAttack  = 85,
         .baseSpDefense = 65,
         .types = { TYPE_GRASS, TYPE_DRAGON },
         .catchRate = 45,
@@ -7679,11 +7679,11 @@ const struct SpeciesInfo gSpeciesInfo[] =
     [SPECIES_SCEPTILE] =
     {
         .baseHP        = 70,
-        .baseAttack    = 95,
+        .baseAttack    = 85,
         .baseDefense   = 65,
         .baseSpeed     = 120,
-        .baseSpAttack  = 105,
-        .baseSpDefense = 80,
+        .baseSpAttack  = 110,
+        .baseSpDefense = 85,
         .types = { TYPE_GRASS, TYPE_DRAGON },
         .catchRate = 45,
         .expYield = 208,
