@@ -90,7 +90,7 @@ BattleFrontier_ScottsHouse_EventScript_CheckGoldSymbols::
 	goto_if_eq VAR_RESULT, FALSE, BattleFrontier_ScottsHouse_EventScript_BerryPocketFull
 	setflag FLAG_GOT_STARF_BERRY
 BattleFrontier_ScottsHouse_EventScript_ScottGivesBeldum::
-	goto_if_set FLAG_RECEIVED_BELDUM, BattleFrontier_ScottsHouse_EventScript_CheckGiveShield
+	goto_if_set FLAG_RECEIVED_SHINY_BELDUM, BattleFrontier_ScottsHouse_EventScript_CheckGiveShield
 	msgbox BattleFrontier_ScottsHouse_Text_JustKiddingRealReward, MSGBOX_DEFAULT
 	call BattleFrontier_ScottsHouse_EventScript_GiveBeldum
 	setflag FLAG_TEMP_4
@@ -140,7 +140,7 @@ BattleFrontier_ScottsHouseEventScript_ReceivedBeldumFanfare::
 
 BattleFrontier_ScottsHouseEventScript_ReceivedBeldum::
 	setflag FLAG_COLLECTED_ALL_GOLD_SYMBOLS
-	setflag FLAG_RECEIVED_BELDUM
+	setflag FLAG_RECEIVED_SHINY_BELDUM
 	releaseall
 	end
 
