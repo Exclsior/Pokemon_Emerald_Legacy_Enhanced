@@ -23,6 +23,10 @@ Without any further ado, below are the features added to Base Patch (main branch
 
 ## Base Patch - v1.0.1:
 
+The Base Emerald Legacy Enhanced version which primarily focuses on quality of life additions such as HM improvements, Stat Editor for IVs and EVs, Nature Mints and an Egg Move Tutor.
+
+This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 12 Jan 2025.
+
 ### Implemented Changes:
 * Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
   * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
@@ -90,7 +94,6 @@ Combination of the two above patches for physical Dragon type and to add Dragon 
     * Lvl 37: Leaf Blade (in case of evolution cancellation)
     * Lvl 45: Dragon Claw
   * Sceptile:
-    * Lvl  1: Crunch (Treeko Egg Move, for relearning)
     * Lvl 16: Twister
     * Lvl 19: Razor Leaf
     * Lvl 34: Dragonbreath
