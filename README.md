@@ -23,6 +23,10 @@ Without any further ado, below are the features added to Base Patch (main branch
 
 ## Base Patch - v1.0.1:
 
+The Base Emerald Legacy Enhanced version which primarily focuses on quality of life additions such as HM improvements, Stat Editor for IVs and EVs, Nature Mints and an Egg Move Tutor.
+
+This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 12 Jan 2025.
+
 ### Implemented Changes:
 * Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
   * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
@@ -69,7 +73,6 @@ A common request throughout the Legacy project to make the Treecko Dragon type.
     * Lvl 37: Leaf Blade (in case of evolution cancellation)
     * Lvl 45: Dragon Claw
   * Sceptile:
-    * Lvl  1: Crunch (Treeko Egg Move, for relearning)
     * Lvl 16: Twister
     * Lvl 19: Razor Leaf
     * Lvl 34: Dragonbreath
@@ -91,7 +94,6 @@ Combination of the two above patches for physical Dragon type and to add Dragon 
     * Lvl 37: Leaf Blade (in case of evolution cancellation)
     * Lvl 45: Dragon Claw
   * Sceptile:
-    * Lvl  1: Crunch (Treeko Egg Move, for relearning)
     * Lvl 16: Twister
     * Lvl 19: Razor Leaf
     * Lvl 34: Dragonbreath
@@ -182,17 +184,6 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
     * Lvl 65: Blast Burn
   * Feraligatr:
     * Lvl 65: Hydro Cannon
-* Dragon Type changed to Physical
-  * **Note**: Other dragon type pokemon have **not** been rebalanced, only Grovyle and Sceptile as noted below.
-* Grovyle and Sceptile Stats reworked slightly due to change for Dragon Type changed to Physical (compared to Emerald Legacy):
-  * Grovyle:
-    * Base Attack Increased by 5
-    * Base Special Attack Decreased by 5
-  * Sceptile:
-    * Base Attack Increased by 10
-    * Base Special Attack Decreased by 5
-    * Base Special Defence Decreased by 5
-  * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
 
 ## Enhanced Credits List:
 * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
