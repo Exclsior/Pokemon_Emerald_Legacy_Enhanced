@@ -1,4 +1,7 @@
+#include <stdint.h>
+#include <stdbool.h>
 #include "global.h"
+#include "constants/abilities.h"
 #include "battle.h"
 #include "pokemon.h"
 #include "battle_controllers.h"
@@ -29,11 +32,11 @@
 
 struct TestingBar
 {
-    s32 maxValue;
-    s32 oldValue;
-    s32 receivedValue;
-    u32 unkC_0:5;
-    u32 unk10;
+    int32_t maxValue;
+    int32_t oldValue;
+    int32_t receivedValue;
+    uint32_t unkC_0:5;
+    uint32_t unk10;
 };
 
 enum
@@ -75,6 +78,19 @@ enum
     HEALTHBOX_GFX_STATUS_BRN_BATTLER0,  //status brn
     HEALTHBOX_GFX_34,
     HEALTHBOX_GFX_35,
+    //Overgrow(not a real status)
+    HEALTHBOX_GFX_STATUS_OVERGROW_BATTLER0_FIRST_PIXEL_SET,  
+    HEALTHBOX_GFX_STATUS_OVERGROW_BATTLER0_SECOND_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_OVERGROW_BATTLER0_THIRD_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_TORRENT_BATTLER0_FIRST_PIXEL_SET,  
+    HEALTHBOX_GFX_STATUS_TORRENT_BATTLER0_SECOND_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_TORRENT_BATTLER0_THIRD_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_BLAZE_BATTLER0_FIRST_PIXEL_SET,  
+    HEALTHBOX_GFX_STATUS_BLAZE_BATTLER0_SECOND_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_BLAZE_BATTLER0_THIRD_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_SWARM_BATTLER0_FIRST_PIXEL_SET,  
+    HEALTHBOX_GFX_STATUS_SWARM_BATTLER0_SECOND_PIXEL_SET,
+    HEALTHBOX_GFX_STATUS_SWARM_BATTLER0_THIRD_PIXEL_SET,
     HEALTHBOX_GFX_36, //misc [Black section]
     HEALTHBOX_GFX_37, //misc [Black section]
     HEALTHBOX_GFX_38, //misc [Black section]
@@ -159,21 +175,21 @@ enum
     HEALTHBOX_GFX_FRAME_END_BAR,
 };
 
-static const u8 *GetHealthboxElementGfxPtr(u8);
-static u8 *AddTextPrinterAndCreateWindowOnHealthbox(const u8 *, u32, u32, u32, u32 *);
+static const uint8_t *GetHealthboxElementGfxPtr(uint8_t);
+static uint8_t *AddTextPrinterAndCreateWindowOnHealthbox(const uint8_t *, uint32_t, uint32_t, uint32_t, uint32_t *);
 
-static void RemoveWindowOnHealthbox(u32 windowId);
-static void UpdateHpTextInHealthboxInDoubles(u8, s16, u8);
-static void UpdateStatusIconInHealthbox(u8);
+static void RemoveWindowOnHealthbox(uint32_t windowId);
+static void UpdateHpTextInHealthboxInDoubles(uint8_t, int16_t, uint8_t);
+static void UpdateStatusIconInHealthbox(uint8_t);
 
-static void TextIntoHealthboxObject(void *, u8 *, s32);
-static void SafariTextIntoHealthboxObject(void *, u8 *, u32);
-static void HpTextIntoHealthboxObject(void *, u8 *, u32);
-static void FillHealthboxObject(void *, u32, u32);
+static void TextIntoHealthboxObject(void *, uint8_t *, int32_t);
+static void SafariTextIntoHealthboxObject(void *, uint8_t *, uint32_t);
+static void HpTextIntoHealthboxObject(void *, uint8_t *, uint32_t);
+static void FillHealthboxObject(void *, uint32_t, uint32_t);
 
-static void Task_HidePartyStatusSummary_BattleStart_1(u8);
-static void Task_HidePartyStatusSummary_BattleStart_2(u8);
-static void Task_HidePartyStatusSummary_DuringBattle(u8);
+static void Task_HidePartyStatusSummary_BattleStart_1(uint8_t);
+static void Task_HidePartyStatusSummary_BattleStart_2(uint8_t);
+static void Task_HidePartyStatusSummary_DuringBattle(uint8_t);
 
 static void SpriteCB_HealthBoxOther(struct Sprite *);
 static void SpriteCB_HealthBar(struct Sprite *);
@@ -183,12 +199,14 @@ static void SpriteCB_StatusSummaryBalls_Enter(struct Sprite *);
 static void SpriteCB_StatusSummaryBalls_Exit(struct Sprite *);
 static void SpriteCB_StatusSummaryBalls_OnSwitchout(struct Sprite *);
 
-static u8 GetStatusIconForBattlerId(u8, u8);
-static s32 CalcNewBarValue(s32, s32, s32, s32 *, u8, u16);
-static u8 GetScaledExpFraction(s32, s32, s32, u8);
-static void MoveBattleBarGraphically(u8, u8);
-static u8 CalcBarFilledPixels(s32, s32, s32, s32 *, u8 *, u8);
-static void Debug_TestHealthBar_Helper(struct TestingBar *, s32 *, u16 *);
+static uint8_t GetStatusIconForBattlerId(uint8_t, uint8_t);
+static int32_t CalcNewBarValue(int32_t, int32_t, int32_t, int32_t *, uint8_t, uint16_t);
+static uint8_t GetScaledExpFraction(int32_t, int32_t, int32_t, uint8_t);
+static void MoveBattleBarGraphically(uint8_t, uint8_t);
+static uint8_t CalcBarFilledPixels(int32_t, int32_t, int32_t, int32_t *, uint8_t *, uint8_t);
+static void Debug_TestHealthBar_Helper(struct TestingBar *, int32_t *, uint16_t *);
+
+static bool isHPAtOrBelow30Percent(struct Pokemon *mon);
 
 static const struct OamData sOamData_64x32 =
 {
@@ -636,7 +654,7 @@ static const struct SubspriteTable sStatusSummaryBar_SubspriteTable_Exit[] =
 };
 
 // unused unknown image
-static const u8 sUnusedStatusSummary[] = INCBIN_U8("graphics/battle_interface/unused_status_summary.4bpp");
+static const uint8_t sUnusedStatusSummary[] = INCBIN_U8("graphics/battle_interface/unused_status_summary.4bpp");
 
 static const struct CompressedSpriteSheet sStatusSummaryBarSpriteSheet =
 {
@@ -737,8 +755,8 @@ static const struct SpriteTemplate sStatusSummaryBallsSpriteTemplates[2] =
     }
 };
 
-static const u8 sEmptyWhiteText_GrayHighlight[] = __("{COLOR WHITE}{HIGHLIGHT DARK_GRAY}              ");
-static const u8 sEmptyWhiteText_TransparentHighlight[] = __("{COLOR WHITE}{HIGHLIGHT TRANSPARENT}              ");
+static const uint8_t sEmptyWhiteText_GrayHighlight[] = __("{COLOR WHITE}{HIGHLIGHT DARK_GRAY}              ");
+static const uint8_t sEmptyWhiteText_TransparentHighlight[] = __("{COLOR WHITE}{HIGHLIGHT TRANSPARENT}              ");
 
 enum
 {
@@ -746,10 +764,15 @@ enum
     PAL_STATUS_PAR,
     PAL_STATUS_SLP,
     PAL_STATUS_FRZ,
-    PAL_STATUS_BRN
+    PAL_STATUS_BRN,
+    PAL_STATUS_OVERGROW,
+    PAL_STATUS_TORRENT,
+    PAL_STATUS_BLAZE,
+    PAL_STATUS_SWARM,
+
 };
 
-static const u16 sStatusIconColors[] =
+static const uint16_t sStatusIconColors[] =
 {
     [PAL_STATUS_PSN] = RGB(24, 12, 24),
     [PAL_STATUS_PAR] = RGB(23, 23, 3),
@@ -768,15 +791,15 @@ static const struct WindowTemplate sHealthboxWindowTemplate = {
     .baseBlock = 0
 };
 
-static s32 DummiedOutFunction(s16 unused1, s16 unused2, s32 unused3)
+static int32_t DummiedOutFunction(int16_t unused1, int16_t unused2, int32_t unused3)
 {
     return 9;
 }
 
-static void Debug_DrawNumber(s16 number, u16 *dest, bool8 unk)
+static void Debug_DrawNumber(int16_t number, uint16_t *dest, bool8 unk)
 {
     s8 i, j;
-    u8 buff[4];
+    uint8_t buff[4];
 
     for (i = 0; i < 4; i++)
         buff[i] = 0;
@@ -842,7 +865,7 @@ static void Debug_DrawNumber(s16 number, u16 *dest, bool8 unk)
     }
 }
 
-static void UNUSED Debug_DrawNumberPair(s16 number1, s16 number2, u16 *dest)
+static void UNUSED Debug_DrawNumberPair(int16_t number1, int16_t number2, uint16_t *dest)
 {
     dest[4] = 0x1E;
     Debug_DrawNumber(number2, dest, FALSE);
@@ -867,11 +890,11 @@ static void UNUSED Debug_DrawNumberPair(s16 number1, s16 number2, u16 *dest)
 #define hBar_HealthBoxSpriteId      data[5]
 #define hBar_Data6                  data[6]
 
-u8 CreateBattlerHealthboxSprites(u8 battlerId)
+uint8_t CreateBattlerHealthboxSprites(uint8_t battlerId)
 {
-    s16 data6 = 0;
-    u8 healthboxLeftSpriteId, healthboxRightSpriteId;
-    u8 healthbarSpriteId;
+    int16_t data6 = 0;
+    uint8_t healthboxLeftSpriteId, healthboxRightSpriteId;
+    uint8_t healthbarSpriteId;
     struct Sprite *healthBarSpritePtr;
 
     if (!IsDoubleBattle())
@@ -951,9 +974,9 @@ u8 CreateBattlerHealthboxSprites(u8 battlerId)
     return healthboxLeftSpriteId;
 }
 
-u8 CreateSafariPlayerHealthboxSprites(void)
+uint8_t CreateSafariPlayerHealthboxSprites(void)
 {
-    u8 healthboxLeftSpriteId, healthboxRightSpriteId;
+    uint8_t healthboxLeftSpriteId, healthboxRightSpriteId;
 
     healthboxLeftSpriteId = CreateSprite(&sHealthboxSafariSpriteTemplate, DISPLAY_WIDTH, DISPLAY_HEIGHT, 1);
     healthboxRightSpriteId = CreateSpriteAtEnd(&sHealthboxSafariSpriteTemplate, DISPLAY_WIDTH, DISPLAY_HEIGHT, 1);
@@ -971,7 +994,7 @@ u8 CreateSafariPlayerHealthboxSprites(void)
     return healthboxLeftSpriteId;
 }
 
-static const u8 *GetHealthboxElementGfxPtr(u8 elementId)
+static const uint8_t *GetHealthboxElementGfxPtr(uint8_t elementId)
 {
     return gHealthboxElementsGfxTable[elementId];
 }
@@ -979,7 +1002,7 @@ static const u8 *GetHealthboxElementGfxPtr(u8 elementId)
 // Syncs the position of healthbar accordingly with the healthbox.
 static void SpriteCB_HealthBar(struct Sprite *sprite)
 {
-    u8 healthboxSpriteId = sprite->hBar_HealthBoxSpriteId;
+    uint8_t healthboxSpriteId = sprite->hBar_HealthBoxSpriteId;
 
     switch (sprite->hBar_Data6)
     {
@@ -1004,7 +1027,7 @@ static void SpriteCB_HealthBar(struct Sprite *sprite)
 
 static void SpriteCB_HealthBoxOther(struct Sprite *sprite)
 {
-    u8 healthboxMainSpriteId = sprite->hOther_HealthBoxSpriteId;
+    uint8_t healthboxMainSpriteId = sprite->hOther_HealthBoxSpriteId;
 
     sprite->x = gSprites[healthboxMainSpriteId].x + 64;
     sprite->y = gSprites[healthboxMainSpriteId].y;
@@ -1013,7 +1036,7 @@ static void SpriteCB_HealthBoxOther(struct Sprite *sprite)
     sprite->y2 = gSprites[healthboxMainSpriteId].y2;
 }
 
-void SetBattleBarStruct(u8 battlerId, u8 healthboxSpriteId, s32 maxVal, s32 oldVal, s32 receivedValue)
+void SetBattleBarStruct(uint8_t battlerId, uint8_t healthboxSpriteId, int32_t maxVal, int32_t oldVal, int32_t receivedValue)
 {
     gBattleSpritesDataPtr->battleBars[battlerId].healthboxSpriteId = healthboxSpriteId;
     gBattleSpritesDataPtr->battleBars[battlerId].maxValue = maxVal;
@@ -1022,47 +1045,47 @@ void SetBattleBarStruct(u8 battlerId, u8 healthboxSpriteId, s32 maxVal, s32 oldV
     gBattleSpritesDataPtr->battleBars[battlerId].currValue = -32768;
 }
 
-void SetHealthboxSpriteInvisible(u8 healthboxSpriteId)
+void SetHealthboxSpriteInvisible(uint8_t healthboxSpriteId)
 {
     gSprites[healthboxSpriteId].invisible = TRUE;
     gSprites[gSprites[healthboxSpriteId].hMain_HealthBarSpriteId].invisible = TRUE;
     gSprites[gSprites[healthboxSpriteId].oam.affineParam].invisible = TRUE;
 }
 
-void SetHealthboxSpriteVisible(u8 healthboxSpriteId)
+void SetHealthboxSpriteVisible(uint8_t healthboxSpriteId)
 {
     gSprites[healthboxSpriteId].invisible = FALSE;
     gSprites[gSprites[healthboxSpriteId].hMain_HealthBarSpriteId].invisible = FALSE;
     gSprites[gSprites[healthboxSpriteId].oam.affineParam].invisible = FALSE;
 }
 
-static void UpdateSpritePos(u8 spriteId, s16 x, s16 y)
+static void UpdateSpritePos(uint8_t spriteId, int16_t x, int16_t y)
 {
     gSprites[spriteId].x = x;
     gSprites[spriteId].y = y;
 }
 
-void DestoryHealthboxSprite(u8 healthboxSpriteId)
+void DestoryHealthboxSprite(uint8_t healthboxSpriteId)
 {
     DestroySprite(&gSprites[gSprites[healthboxSpriteId].oam.affineParam]);
     DestroySprite(&gSprites[gSprites[healthboxSpriteId].hMain_HealthBarSpriteId]);
     DestroySprite(&gSprites[healthboxSpriteId]);
 }
 
-void DummyBattleInterfaceFunc(u8 healthboxSpriteId, bool8 isDoubleBattleBattlerOnly)
+void DummyBattleInterfaceFunc(uint8_t healthboxSpriteId, bool8 isDoubleBattleBattlerOnly)
 {
 
 }
 
-void UpdateOamPriorityInAllHealthboxes(u8 priority)
+void UpdateOamPriorityInAllHealthboxes(uint8_t priority)
 {
-    s32 i;
+    int32_t i;
 
     for (i = 0; i < gBattlersCount; i++)
     {
-        u8 healthboxLeftSpriteId = gHealthboxSpriteIds[i];
-        u8 healthboxRightSpriteId = gSprites[gHealthboxSpriteIds[i]].oam.affineParam;
-        u8 healthbarSpriteId = gSprites[gHealthboxSpriteIds[i]].hMain_HealthBarSpriteId;
+        uint8_t healthboxLeftSpriteId = gHealthboxSpriteIds[i];
+        uint8_t healthboxRightSpriteId = gSprites[gHealthboxSpriteIds[i]].oam.affineParam;
+        uint8_t healthbarSpriteId = gSprites[gHealthboxSpriteIds[i]].hMain_HealthBarSpriteId;
 
         gSprites[healthboxLeftSpriteId].oam.priority = priority;
         gSprites[healthboxRightSpriteId].oam.priority = priority;
@@ -1070,9 +1093,9 @@ void UpdateOamPriorityInAllHealthboxes(u8 priority)
     }
 }
 
-void InitBattlerHealthboxCoords(u8 battler)
+void InitBattlerHealthboxCoords(uint8_t battler)
 {
-    s16 x = 0, y = 0;
+    int16_t x = 0, y = 0;
 
     if (!IsDoubleBattle())
     {
@@ -1103,13 +1126,13 @@ void InitBattlerHealthboxCoords(u8 battler)
     UpdateSpritePos(gHealthboxSpriteIds[battler], x, y);
 }
 
-static void UpdateLvlInHealthbox(u8 healthboxSpriteId, u8 lvl)
+static void UpdateLvlInHealthbox(uint8_t healthboxSpriteId, uint8_t lvl)
 {
-    u32 windowId, spriteTileNum;
-    u8 *windowTileData;
-    u8 text[16];
-    u32 xPos;
-    u8 *objVram;
+    uint32_t windowId, spriteTileNum;
+    uint8_t *windowTileData;
+    uint8_t text[16];
+    uint32_t xPos;
+    uint8_t *objVram;
 
     text[0] = CHAR_EXTRA_SYMBOL;
     text[1] = CHAR_LV_2;
@@ -1137,11 +1160,11 @@ static void UpdateLvlInHealthbox(u8 healthboxSpriteId, u8 lvl)
     RemoveWindowOnHealthbox(windowId);
 }
 
-void UpdateHpTextInHealthbox(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent)
+void UpdateHpTextInHealthbox(uint8_t healthboxSpriteId, int16_t value, uint8_t maxOrCurrent)
 {
-    u32 windowId, spriteTileNum;
-    u8 *windowTileData;
-    u8 text[32];
+    uint32_t windowId, spriteTileNum;
+    uint8_t *windowTileData;
+    uint8_t text[32];
     void *objVram;
 
     if (GetBattlerSide(gSprites[healthboxSpriteId].hMain_Battler) == B_SIDE_PLAYER && !IsDoubleBattle())
@@ -1173,7 +1196,7 @@ void UpdateHpTextInHealthbox(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent)
     }
     else
     {
-        u8 battler;
+        uint8_t battler;
 
         memcpy(text, sEmptyWhiteText_GrayHighlight, sizeof(sEmptyWhiteText_GrayHighlight));
         battler = gSprites[healthboxSpriteId].hMain_Battler;
@@ -1183,8 +1206,8 @@ void UpdateHpTextInHealthbox(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent)
         }
         else
         {
-            u32 var;
-            u8 i;
+            uint32_t var;
+            uint8_t i;
 
             if (GetBattlerSide(gSprites[healthboxSpriteId].data[6]) == B_SIDE_PLAYER)
             {
@@ -1214,11 +1237,11 @@ void UpdateHpTextInHealthbox(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent)
     }
 }
 
-static void UpdateHpTextInHealthboxInDoubles(u8 healthboxSpriteId, s16 value, u8 maxOrCurrent)
+static void UpdateHpTextInHealthboxInDoubles(uint8_t healthboxSpriteId, int16_t value, uint8_t maxOrCurrent)
 {
-    u32 windowId, spriteTileNum;
-    u8 *windowTileData;
-    u8 text[32];
+    uint32_t windowId, spriteTileNum;
+    uint8_t *windowTileData;
+    uint8_t text[32];
     void *objVram;
 
     if (GetBattlerSide(gSprites[healthboxSpriteId].hMain_Battler) == B_SIDE_PLAYER)
@@ -1252,17 +1275,17 @@ static void UpdateHpTextInHealthboxInDoubles(u8 healthboxSpriteId, s16 value, u8
     }
     else
     {
-        u8 battlerId;
+        uint8_t battlerId;
 
         memcpy(text, sEmptyWhiteText_TransparentHighlight, sizeof(sEmptyWhiteText_TransparentHighlight));
         battlerId = gSprites[healthboxSpriteId].hMain_Battler;
 
         if (gBattleSpritesDataPtr->battlerData[battlerId].hpNumbersNoBars) // don't print text if only bars are visible
         {
-            u8 var = 4;
-            u8 r7;
-            u8 *txtPtr;
-            u8 i;
+            uint8_t var = 4;
+            uint8_t r7;
+            uint8_t *txtPtr;
+            uint8_t i;
 
             if (maxOrCurrent == HP_CURRENT)
                 var = 0;
@@ -1310,12 +1333,12 @@ static void UpdateHpTextInHealthboxInDoubles(u8 healthboxSpriteId, s16 value, u8
 }
 
 // Prints mon's nature, catch and flee rate. Probably used to test pokeblock-related features.
-static void PrintSafariMonInfo(u8 healthboxSpriteId, struct Pokemon *mon)
+static void PrintSafariMonInfo(uint8_t healthboxSpriteId, struct Pokemon *mon)
 {
-    u8 text[20];
-    s32 j, spriteTileNum;
-    u8 *barFontGfx;
-    u8 i, var, nature, healthBarSpriteId;
+    uint8_t text[20];
+    int32_t j, spriteTileNum;
+    uint8_t *barFontGfx;
+    uint8_t i, var, nature, healthBarSpriteId;
 
     memcpy(text, sEmptyWhiteText_GrayHighlight, sizeof(sEmptyWhiteText_GrayHighlight));
     barFontGfx = &gMonSpritesGfxPtr->barFontGfx[0x520 + (GetBattlerPosition(gSprites[healthboxSpriteId].hMain_Battler) * 384)];
@@ -1326,7 +1349,7 @@ static void PrintSafariMonInfo(u8 healthboxSpriteId, struct Pokemon *mon)
 
     for (j = 6, i = 0; i < var; i++, j++)
     {
-        u8 elementId;
+        uint8_t elementId;
 
         if ((text[j] >= 55 && text[j] <= 74) || (text[j] >= 135 && text[j] <= 154))
             elementId = 44;
@@ -1376,8 +1399,8 @@ static void PrintSafariMonInfo(u8 healthboxSpriteId, struct Pokemon *mon)
 
 void SwapHpBarsWithHpText(void)
 {
-    s32 i;
-    u8 healthBarSpriteId;
+    int32_t i;
+    uint8_t healthBarSpriteId;
 
     for (i = 0; i < gBattlersCount; i++)
     {
@@ -1448,14 +1471,14 @@ void SwapHpBarsWithHpText(void)
 #define tIsBattleStart          data[10]
 #define tBlend                  data[15]
 
-u8 CreatePartyStatusSummarySprites(u8 battlerId, struct HpAndStatus *partyInfo, bool8 skipPlayer, bool8 isBattleStart)
+uint8_t CreatePartyStatusSummarySprites(uint8_t battlerId, struct HpAndStatus *partyInfo, bool8 skipPlayer, bool8 isBattleStart)
 {
     bool8 isOpponent;
-    s16 bar_X, bar_Y, bar_pos2_X, bar_data0;
-    s32 i, j, var;
-    u8 summaryBarSpriteId;
-    u8 ballIconSpritesIds[PARTY_SIZE];
-    u8 taskId;
+    int16_t bar_X, bar_Y, bar_pos2_X, bar_data0;
+    int32_t i, j, var;
+    uint8_t summaryBarSpriteId;
+    uint8_t ballIconSpritesIds[PARTY_SIZE];
+    uint8_t taskId;
 
     if (!skipPlayer || GetBattlerPosition(battlerId) != B_POSITION_OPPONENT_RIGHT)
     {
@@ -1669,13 +1692,13 @@ u8 CreatePartyStatusSummarySprites(u8 battlerId, struct HpAndStatus *partyInfo, 
 }
 
 // Slide the party summary tray back offscreen
-void Task_HidePartyStatusSummary(u8 taskId)
+void Task_HidePartyStatusSummary(uint8_t taskId)
 {
-    u8 ballIconSpriteIds[PARTY_SIZE];
+    uint8_t ballIconSpriteIds[PARTY_SIZE];
     bool8 isBattleStart;
-    u8 summaryBarSpriteId;
-    u8 battlerId;
-    s32 i;
+    uint8_t summaryBarSpriteId;
+    uint8_t battlerId;
+    int32_t i;
 
     isBattleStart = gTasks[taskId].tIsBattleStart;
     summaryBarSpriteId = gTasks[taskId].tSummaryBarSpriteId;
@@ -1725,7 +1748,7 @@ void Task_HidePartyStatusSummary(u8 taskId)
     }
 }
 
-static void Task_HidePartyStatusSummary_BattleStart_1(u8 taskId)
+static void Task_HidePartyStatusSummary_BattleStart_1(uint8_t taskId)
 {
     if ((gTasks[taskId].data[11]++ % 2) == 0)
     {
@@ -1738,15 +1761,15 @@ static void Task_HidePartyStatusSummary_BattleStart_1(u8 taskId)
         gTasks[taskId].func = Task_HidePartyStatusSummary_BattleStart_2;
 }
 
-static void Task_HidePartyStatusSummary_BattleStart_2(u8 taskId)
+static void Task_HidePartyStatusSummary_BattleStart_2(uint8_t taskId)
 {
-    u8 ballIconSpriteIds[PARTY_SIZE];
-    s32 i;
+    uint8_t ballIconSpriteIds[PARTY_SIZE];
+    int32_t i;
 
-    u8 battlerId = gTasks[taskId].tBattler;
+    uint8_t battlerId = gTasks[taskId].tBattler;
     if (--gTasks[taskId].tBlend == -1)
     {
-        u8 summaryBarSpriteId = gTasks[taskId].tSummaryBarSpriteId;
+        uint8_t summaryBarSpriteId = gTasks[taskId].tSummaryBarSpriteId;
 
         for (i = 0; i < PARTY_SIZE; i++)
             ballIconSpriteIds[i] = gTasks[taskId].tBallIconSpriteId(i);
@@ -1777,11 +1800,11 @@ static void Task_HidePartyStatusSummary_BattleStart_2(u8 taskId)
     }
 }
 
-static void Task_HidePartyStatusSummary_DuringBattle(u8 taskId)
+static void Task_HidePartyStatusSummary_DuringBattle(uint8_t taskId)
 {
-    u8 ballIconSpriteIds[PARTY_SIZE];
-    s32 i;
-    u8 battlerId = gTasks[taskId].tBattler;
+    uint8_t ballIconSpriteIds[PARTY_SIZE];
+    int32_t i;
+    uint8_t battlerId = gTasks[taskId].tBattler;
 
     if (--gTasks[taskId].tBlend >= 0)
     {
@@ -1789,7 +1812,7 @@ static void Task_HidePartyStatusSummary_DuringBattle(u8 taskId)
     }
     else if (gTasks[taskId].tBlend == -1)
     {
-        u8 summaryBarSpriteId = gTasks[taskId].tSummaryBarSpriteId;
+        uint8_t summaryBarSpriteId = gTasks[taskId].tSummaryBarSpriteId;
 
         for (i = 0; i < PARTY_SIZE; i++)
             ballIconSpriteIds[i] = gTasks[taskId].tBallIconSpriteId(i);
@@ -1833,8 +1856,8 @@ static void SpriteCB_StatusSummaryBar_Exit(struct Sprite *sprite)
 
 static void SpriteCB_StatusSummaryBalls_Enter(struct Sprite *sprite)
 {
-    u8 var1;
-    u16 var2;
+    uint8_t var1;
+    uint16_t var2;
     s8 pan;
 
     if (sprite->data[1] > 0)
@@ -1878,8 +1901,8 @@ static void SpriteCB_StatusSummaryBalls_Enter(struct Sprite *sprite)
 
 static void SpriteCB_StatusSummaryBalls_Exit(struct Sprite *sprite)
 {
-    u8 var1;
-    u16 var2;
+    uint8_t var1;
+    uint16_t var2;
 
     if (sprite->data[1] > 0)
     {
@@ -1904,20 +1927,20 @@ static void SpriteCB_StatusSummaryBalls_Exit(struct Sprite *sprite)
 
 static void SpriteCB_StatusSummaryBalls_OnSwitchout(struct Sprite *sprite)
 {
-    u8 barSpriteId = sprite->data[0];
+    uint8_t barSpriteId = sprite->data[0];
 
     sprite->x2 = gSprites[barSpriteId].x2;
     sprite->y2 = gSprites[barSpriteId].y2;
 }
 
-static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
+static void UpdateNickInHealthbox(uint8_t healthboxSpriteId, struct Pokemon *mon)
 {
-    u8 nickname[POKEMON_NAME_LENGTH + 1];
+    uint8_t nickname[POKEMON_NAME_LENGTH + 1];
     void *ptr;
-    u32 windowId, spriteTileNum;
-    u8 *windowTileData;
-    u16 species;
-    u8 gender;
+    uint32_t windowId, spriteTileNum;
+    uint8_t *windowTileData;
+    uint16_t species;
+    uint8_t gender;
 
     StringCopy(gDisplayedStringBattle, gText_HealthboxNickname);
     GetMonData(mon, MON_DATA_NICKNAME, nickname);
@@ -1968,9 +1991,9 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     RemoveWindowOnHealthbox(windowId);
 }
 
-static void TryAddPokeballIconToHealthbox(u8 healthboxSpriteId, bool8 noStatus)
+static void TryAddPokeballIconToHealthbox(uint8_t healthboxSpriteId, bool8 noStatus)
 {
-    u8 battlerId, healthBarSpriteId;
+    uint8_t battlerId, healthBarSpriteId;
 
     if (gBattleTypeFlags & BATTLE_TYPE_WALLY_TUTORIAL)
         return;
@@ -1991,20 +2014,25 @@ static void TryAddPokeballIconToHealthbox(u8 healthboxSpriteId, bool8 noStatus)
         CpuFill32(0, (void *)(OBJ_VRAM0 + (gSprites[healthBarSpriteId].oam.tileNum + 8) * TILE_SIZE_4BPP), 32);
 }
 
-static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
+static void UpdateStatusIconInHealthbox(uint8_t healthboxSpriteId)
 {
-    s32 i;
-    u8 battlerId, healthBarSpriteId;
-    u32 status, pltAdder;
-    const u8 *statusGfxPtr;
-    s16 tileNumAdder;
-    u8 statusPalId;
+    int32_t i;
+    uint8_t battlerId, healthBarSpriteId;
+    uint32_t status, pltAdder;
+    const uint8_t *statusGfxPtr;
+    int16_t tileNumAdder;
+    uint8_t statusPalId;
+    struct Pokemon *mon; // So we can use this later
+    uint16_t ability;
 
     battlerId = gSprites[healthboxSpriteId].hMain_Battler;
+    ability = gBattleMons[battlerId].ability;
     healthBarSpriteId = gSprites[healthboxSpriteId].hMain_HealthBarSpriteId;
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
     {
-        status = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_STATUS);
+        mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
+        status = GetMonData(mon, MON_DATA_STATUS);
+
         if (!IsDoubleBattle())
             tileNumAdder = 0x1A;
         else
@@ -2014,7 +2042,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     {
         status = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerId]], MON_DATA_STATUS);
         tileNumAdder = 0x11;
-    }
+    }    
 
     if (status & STATUS1_SLEEP)
     {
@@ -2041,6 +2069,53 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PRZ_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_PAR;
     }
+
+    // else if hp is at 30% or below
+    // Right now we only want to test it on the players pokemon
+    else if ((ability == ABILITY_OVERGROW || ability == ABILITY_TORRENT || ability == ABILITY_BLAZE || ability == ABILITY_SWARM) && battlerId == 0)
+    {
+        if (isHPAtOrBelow30Percent(mon))
+        {
+            switch(ability)
+            {
+                case ABILITY_OVERGROW:
+                    statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_OVERGROW_BATTLER0_FIRST_PIXEL_SET);
+                    break;
+
+                case ABILITY_BLAZE:
+                    statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_BLAZE_BATTLER0_FIRST_PIXEL_SET);
+                    break;
+
+                case ABILITY_TORRENT:
+                    statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_TORRENT_BATTLER0_FIRST_PIXEL_SET);
+                    break;
+
+                case ABILITY_SWARM:
+                    statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_SWARM_BATTLER0_FIRST_PIXEL_SET);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        else
+        {
+            statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_39);
+
+            for (i = 0; i < 3; i++)
+            CpuCopy32(statusGfxPtr, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder + i) * TILE_SIZE_4BPP), 32);
+
+            if (!gBattleSpritesDataPtr->battlerData[battlerId].hpNumbersNoBars)
+            CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_1), (void *)(OBJ_VRAM0 + gSprites[healthBarSpriteId].oam.tileNum * TILE_SIZE_4BPP), 64);
+
+            TryAddPokeballIconToHealthbox(healthboxSpriteId, TRUE);
+            return;
+        }
+        
+    }
+    
+
     else
     {
         statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_39);
@@ -2059,8 +2134,9 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     pltAdder += battlerId + 12;
 
     FillPalette(sStatusIconColors[statusPalId], OBJ_PLTT_OFFSET + pltAdder, PLTT_SIZEOF(1));
-    CpuCopy16(&gPlttBufferUnfaded[OBJ_PLTT_OFFSET + pltAdder], (u16 *)OBJ_PLTT + pltAdder, PLTT_SIZEOF(1));
+    CpuCopy16(&gPlttBufferUnfaded[OBJ_PLTT_OFFSET + pltAdder], (uint16_t *)OBJ_PLTT + pltAdder, PLTT_SIZEOF(1));
     CpuCopy32(statusGfxPtr, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder) * TILE_SIZE_4BPP), 96);
+
     if (IsDoubleBattle() == TRUE || GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
     {
         if (!gBattleSpritesDataPtr->battlerData[battlerId].hpNumbersNoBars)
@@ -2072,9 +2148,9 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     TryAddPokeballIconToHealthbox(healthboxSpriteId, FALSE);
 }
 
-static u8 GetStatusIconForBattlerId(u8 statusElementId, u8 battlerId)
+static uint8_t GetStatusIconForBattlerId(uint8_t statusElementId, uint8_t battlerId)
 {
-    u8 ret = statusElementId;
+    uint8_t ret = statusElementId;
 
     switch (statusElementId)
     {
@@ -2128,14 +2204,15 @@ static u8 GetStatusIconForBattlerId(u8 statusElementId, u8 battlerId)
         else
             ret = HEALTHBOX_GFX_STATUS_BRN_BATTLER3;
         break;
+
     }
     return ret;
 }
 
-static void UpdateSafariBallsTextOnHealthbox(u8 healthboxSpriteId)
+static void UpdateSafariBallsTextOnHealthbox(uint8_t healthboxSpriteId)
 {
-    u32 windowId, spriteTileNum;
-    u8 *windowTileData;
+    uint32_t windowId, spriteTileNum;
+    uint8_t *windowTileData;
 
     windowTileData = AddTextPrinterAndCreateWindowOnHealthbox(gText_SafariBalls, 0, 3, 2, &windowId);
     spriteTileNum = gSprites[healthboxSpriteId].oam.tileNum * TILE_SIZE_4BPP;
@@ -2144,12 +2221,12 @@ static void UpdateSafariBallsTextOnHealthbox(u8 healthboxSpriteId)
     RemoveWindowOnHealthbox(windowId);
 }
 
-static void UpdateLeftNoOfBallsTextOnHealthbox(u8 healthboxSpriteId)
+static void UpdateLeftNoOfBallsTextOnHealthbox(uint8_t healthboxSpriteId)
 {
-    u8 text[16];
-    u8 *txtPtr;
-    u32 windowId, spriteTileNum;
-    u8 *windowTileData;
+    uint8_t text[16];
+    uint8_t *txtPtr;
+    uint32_t windowId, spriteTileNum;
+    uint8_t *windowTileData;
 
     txtPtr = StringCopy(text, gText_SafariBallLeft);
     ConvertIntToDecimalStringN(txtPtr, gNumSafariBalls, STR_CONV_MODE_LEFT_ALIGN, 2);
@@ -2161,17 +2238,17 @@ static void UpdateLeftNoOfBallsTextOnHealthbox(u8 healthboxSpriteId)
     RemoveWindowOnHealthbox(windowId);
 }
 
-void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elementId)
+void UpdateHealthboxAttribute(uint8_t healthboxSpriteId, struct Pokemon *mon, uint8_t elementId)
 {
-    s32 maxHp, currHp;
-    u8 battlerId = gSprites[healthboxSpriteId].hMain_Battler;
+    int32_t maxHp, currHp;
+    uint8_t battlerId = gSprites[healthboxSpriteId].hMain_Battler;
 
     if (elementId == HEALTHBOX_ALL && !IsDoubleBattle())
         GetBattlerSide(battlerId); // Pointless function call.
 
     if (GetBattlerSide(gSprites[healthboxSpriteId].hMain_Battler) == B_SIDE_PLAYER)
     {
-        u8 isDoubles;
+        uint8_t isDoubles;
 
         if (elementId == HEALTHBOX_LEVEL || elementId == HEALTHBOX_ALL)
             UpdateLvlInHealthbox(healthboxSpriteId, GetMonData(mon, MON_DATA_LEVEL));
@@ -2190,10 +2267,10 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
         isDoubles = IsDoubleBattle();
         if (!isDoubles && (elementId == HEALTHBOX_EXP_BAR || elementId == HEALTHBOX_ALL))
         {
-            u16 species;
-            u32 exp, currLevelExp;
-            s32 currExpBarValue, maxExpBarValue;
-            u8 level;
+            uint16_t species;
+            uint32_t exp, currLevelExp;
+            int32_t currExpBarValue, maxExpBarValue;
+            uint8_t level;
 
             LoadBattleBarGfx(3);
             species = GetMonData(mon, MON_DATA_SPECIES);
@@ -2236,9 +2313,9 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
 #define B_EXPBAR_PIXELS 64
 #define B_HEALTHBAR_PIXELS 48
 
-s32 MoveBattleBar(u8 battlerId, u8 healthboxSpriteId, u8 whichBar, u8 unused)
+int32_t MoveBattleBar(uint8_t battlerId, uint8_t healthboxSpriteId, uint8_t whichBar, uint8_t unused)
 {
-    s32 currentBarValue;
+    int32_t currentBarValue;
 
     if (whichBar == HEALTH_BAR) // health bar
     {
@@ -2250,7 +2327,7 @@ s32 MoveBattleBar(u8 battlerId, u8 healthboxSpriteId, u8 whichBar, u8 unused)
     }
     else // exp bar
     {
-        u16 expFraction = GetScaledExpFraction(gBattleSpritesDataPtr->battleBars[battlerId].oldValue,
+        uint16_t expFraction = GetScaledExpFraction(gBattleSpritesDataPtr->battleBars[battlerId].oldValue,
                     gBattleSpritesDataPtr->battleBars[battlerId].receivedValue,
                     gBattleSpritesDataPtr->battleBars[battlerId].maxValue, 8);
         if (expFraction == 0)
@@ -2273,12 +2350,12 @@ s32 MoveBattleBar(u8 battlerId, u8 healthboxSpriteId, u8 whichBar, u8 unused)
     return currentBarValue;
 }
 
-static void MoveBattleBarGraphically(u8 battlerId, u8 whichBar)
+static void MoveBattleBarGraphically(uint8_t battlerId, uint8_t whichBar)
 {
-    u8 array[8];
-    u8 filledPixelsCount, level;
-    u8 barElementId;
-    u8 i;
+    uint8_t array[8];
+    uint8_t filledPixelsCount, level;
+    uint8_t barElementId;
+    uint8_t i;
 
     switch (whichBar)
     {
@@ -2298,7 +2375,7 @@ static void MoveBattleBarGraphically(u8 battlerId, u8 whichBar)
 
         for (i = 0; i < 6; i++)
         {
-            u8 healthbarSpriteId = gSprites[gBattleSpritesDataPtr->battleBars[battlerId].healthboxSpriteId].hMain_HealthBarSpriteId;
+            uint8_t healthbarSpriteId = gSprites[gBattleSpritesDataPtr->battleBars[battlerId].healthboxSpriteId].hMain_HealthBarSpriteId;
             if (i < 2)
                 CpuCopy32(GetHealthboxElementGfxPtr(barElementId) + array[i] * 32,
                           (void *)(OBJ_VRAM0 + (gSprites[healthbarSpriteId].oam.tileNum + 2 + i) * TILE_SIZE_4BPP), 32);
@@ -2332,9 +2409,9 @@ static void MoveBattleBarGraphically(u8 battlerId, u8 whichBar)
     }
 }
 
-static s32 CalcNewBarValue(s32 maxValue, s32 oldValue, s32 receivedValue, s32 *currValue, u8 scale, u16 toAdd)
+static int32_t CalcNewBarValue(int32_t maxValue, int32_t oldValue, int32_t receivedValue, int32_t *currValue, uint8_t scale, uint16_t toAdd)
 {
-    s32 ret, newValue;
+    int32_t ret, newValue;
     scale *= 8;
 
     if (*currValue == -32768) // first function call
@@ -2364,7 +2441,7 @@ static s32 CalcNewBarValue(s32 maxValue, s32 oldValue, s32 receivedValue, s32 *c
 
     if (maxValue < scale) // handle cases of max var having less pixels than the whole bar
     {
-        s32 toAdd = Q_24_8(maxValue) / scale;
+        int32_t toAdd = Q_24_8(maxValue) / scale;
 
         if (receivedValue < 0) // fill bar right
         {
@@ -2411,12 +2488,12 @@ static s32 CalcNewBarValue(s32 maxValue, s32 oldValue, s32 receivedValue, s32 *c
     return ret;
 }
 
-static u8 CalcBarFilledPixels(s32 maxValue, s32 oldValue, s32 receivedValue, s32 *currValue, u8 *pixelsArray, u8 scale)
+static uint8_t CalcBarFilledPixels(int32_t maxValue, int32_t oldValue, int32_t receivedValue, int32_t *currValue, uint8_t *pixelsArray, uint8_t scale)
 {
-    u8 pixels, filledPixels, totalPixels;
-    u8 i;
+    uint8_t pixels, filledPixels, totalPixels;
+    uint8_t i;
 
-    s32 newValue = oldValue - receivedValue;
+    int32_t newValue = oldValue - receivedValue;
     if (newValue < 0)
         newValue = 0;
     else if (newValue > maxValue)
@@ -2460,9 +2537,9 @@ static u8 CalcBarFilledPixels(s32 maxValue, s32 oldValue, s32 receivedValue, s32
 }
 
 // These two functions seem as if they were made for testing the health bar.
-static s16 UNUSED Debug_TestHealthBar(struct TestingBar *barInfo, s32 *currValue, u16 *dest, s32 unused)
+static int16_t UNUSED Debug_TestHealthBar(struct TestingBar *barInfo, int32_t *currValue, uint16_t *dest, int32_t unused)
 {
-    s16 ret, var;
+    int16_t ret, var;
 
     ret = CalcNewBarValue(barInfo->maxValue,
                     barInfo->oldValue,
@@ -2480,11 +2557,11 @@ static s16 UNUSED Debug_TestHealthBar(struct TestingBar *barInfo, s32 *currValue
     return ret;
 }
 
-static void Debug_TestHealthBar_Helper(struct TestingBar *barInfo, s32 *currValue, u16 *dest)
+static void Debug_TestHealthBar_Helper(struct TestingBar *barInfo, int32_t *currValue, uint16_t *dest)
 {
-    u8 pixels[6];
-    u16 src[6];
-    u8 i;
+    uint8_t pixels[6];
+    uint16_t src[6];
+    uint8_t i;
 
     CalcBarFilledPixels(barInfo->maxValue, barInfo->oldValue,
                 barInfo->receivedValue, currValue, pixels, B_HEALTHBAR_PIXELS / 8);
@@ -2495,9 +2572,9 @@ static void Debug_TestHealthBar_Helper(struct TestingBar *barInfo, s32 *currValu
     CpuCopy16(src, dest, sizeof(src));
 }
 
-static u8 GetScaledExpFraction(s32 oldValue, s32 receivedValue, s32 maxValue, u8 scale)
+static uint8_t GetScaledExpFraction(int32_t oldValue, int32_t receivedValue, int32_t maxValue, uint8_t scale)
 {
-    s32 newVal, result;
+    int32_t newVal, result;
     s8 oldToMax, newToMax;
 
     scale *= 8;
@@ -2515,9 +2592,9 @@ static u8 GetScaledExpFraction(s32 oldValue, s32 receivedValue, s32 maxValue, u8
     return abs(result);
 }
 
-u8 GetScaledHPFraction(s16 hp, s16 maxhp, u8 scale)
+uint8_t GetScaledHPFraction(int16_t hp, int16_t maxhp, uint8_t scale)
 {
-    u8 result = hp * scale / maxhp;
+    uint8_t result = hp * scale / maxhp;
 
     if (result == 0 && hp > 0)
         return 1;
@@ -2525,9 +2602,33 @@ u8 GetScaledHPFraction(s16 hp, s16 maxhp, u8 scale)
     return result;
 }
 
-u8 GetHPBarLevel(s16 hp, s16 maxhp)
+bool isHPAtOrBelow30Percent(struct Pokemon *mon)
 {
-    u8 result;
+    uint16_t hp = GetMonData(mon, MON_DATA_HP);
+    uint16_t maxHp = GetMonData(mon, MON_DATA_MAX_HP);
+
+    if (hp == maxHp)
+    {
+        return false;
+    }
+    else
+    {
+        uint8_t fraction = GetScaledHPFraction(hp, maxHp, B_HEALTHBAR_PIXELS);
+
+        if (fraction > (B_HEALTHBAR_PIXELS * 30 / 100)) // more than 30 % hp
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+}
+
+uint8_t GetHPBarLevel(int16_t hp, int16_t maxhp)
+{
+    uint8_t result;
 
     if (hp == maxhp)
     {
@@ -2535,7 +2636,7 @@ u8 GetHPBarLevel(s16 hp, s16 maxhp)
     }
     else
     {
-        u8 fraction = GetScaledHPFraction(hp, maxhp, B_HEALTHBAR_PIXELS);
+        uint8_t fraction = GetScaledHPFraction(hp, maxhp, B_HEALTHBAR_PIXELS);
         if (fraction > (B_HEALTHBAR_PIXELS * 50 / 100)) // more than 50 % hp
             result = HP_BAR_GREEN;
         else if (fraction > (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp
@@ -2549,10 +2650,10 @@ u8 GetHPBarLevel(s16 hp, s16 maxhp)
     return result;
 }
 
-static u8 *AddTextPrinterAndCreateWindowOnHealthbox(const u8 *str, u32 x, u32 y, u32 bgColor, u32 *windowId)
+static uint8_t *AddTextPrinterAndCreateWindowOnHealthbox(const uint8_t *str, uint32_t x, uint32_t y, uint32_t bgColor, uint32_t *windowId)
 {
-    u16 winId;
-    u8 color[3];
+    uint16_t winId;
+    uint8_t color[3];
     struct WindowTemplate winTemplate = sHealthboxWindowTemplate;
 
     winId = AddWindow(&winTemplate);
@@ -2565,25 +2666,25 @@ static u8 *AddTextPrinterAndCreateWindowOnHealthbox(const u8 *str, u32 x, u32 y,
     AddTextPrinterParameterized4(winId, FONT_SMALL, x, y, 0, 0, color, TEXT_SKIP_DRAW, str);
 
     *windowId = winId;
-    return (u8 *)(GetWindowAttribute(winId, WINDOW_TILE_DATA));
+    return (uint8_t *)(GetWindowAttribute(winId, WINDOW_TILE_DATA));
 }
 
-static void RemoveWindowOnHealthbox(u32 windowId)
+static void RemoveWindowOnHealthbox(uint32_t windowId)
 {
     RemoveWindow(windowId);
 }
 
-static void FillHealthboxObject(void *dest, u32 valMult, u32 numTiles)
+static void FillHealthboxObject(void *dest, uint32_t valMult, uint32_t numTiles)
 {
     CpuFill32(0x11111111 * valMult, dest, numTiles * TILE_SIZE_4BPP);
 }
 
-static void HpTextIntoHealthboxObject(void *dest, u8 *windowTileData, u32 windowWidth)
+static void HpTextIntoHealthboxObject(void *dest, uint8_t *windowTileData, uint32_t windowWidth)
 {
     CpuCopy32(windowTileData + 256, dest, windowWidth * TILE_SIZE_4BPP);
 }
 
-static void TextIntoHealthboxObject(void *dest, u8 *windowTileData, s32 windowWidth)
+static void TextIntoHealthboxObject(void *dest, uint8_t *windowTileData, int32_t windowWidth)
 {
     CpuCopy32(windowTileData + 256, dest + 256, windowWidth * TILE_SIZE_4BPP);
 // + 256 as that prevents the top 4 blank rows of sHealthboxWindowTemplate from being copied
@@ -2598,7 +2699,7 @@ static void TextIntoHealthboxObject(void *dest, u8 *windowTileData, s32 windowWi
     }
 }
 
-static void SafariTextIntoHealthboxObject(void *dest, u8 *windowTileData, u32 windowWidth)
+static void SafariTextIntoHealthboxObject(void *dest, uint8_t *windowTileData, uint32_t windowWidth)
 {
     CpuCopy32(windowTileData, dest, windowWidth * TILE_SIZE_4BPP);
     CpuCopy32(windowTileData + 256, dest + 256, windowWidth * TILE_SIZE_4BPP);

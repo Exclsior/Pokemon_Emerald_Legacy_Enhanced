@@ -3726,6 +3726,7 @@ u32 GetMonData3(struct Pokemon *mon, s32 field, u8 *data)
     case MON_DATA_STATUS:
         ret = mon->status;
         break;
+
     case MON_DATA_LEVEL:
         ret = mon->level;
         break;

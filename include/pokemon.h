@@ -1,5 +1,7 @@
 #ifndef GUARD_POKEMON_H
 #define GUARD_POKEMON_H
+#include <stdint.h>
+#include <stdbool.h>
 
 #include "sprite.h"
 
@@ -220,6 +222,18 @@ struct BoxPokemon
     } secure;
 };
 
+typedef enum
+{
+    SPECIAL_STATUS_START = 0,
+    SPECIAL_STATUS_OVERGROW = SPECIAL_STATUS_START,
+    SPECIAL_STATUS_TORRENT,
+    SPECIAL_STATUS_BLAZE,
+    SPECIAL_STATUS_SWARM,
+    SPECIAL_STATUS_NONE,
+    SPECIAL_STATUS_NUM,
+    SPECIAL_STATUS_INVALID,
+} SpecialStatus_t;
+
 struct Pokemon
 {
     struct BoxPokemon box;
@@ -298,6 +312,7 @@ struct BattlePokemon
     /*0x50*/ u32 status2;
     /*0x54*/ u32 otId;
 };
+
 
 struct SpeciesInfo
 {
