@@ -769,7 +769,6 @@ enum
     PAL_STATUS_TORRENT,
     PAL_STATUS_BLAZE,
     PAL_STATUS_SWARM,
-
 };
 
 static const uint16_t sStatusIconColors[] =
@@ -779,6 +778,10 @@ static const uint16_t sStatusIconColors[] =
     [PAL_STATUS_SLP] = RGB(20, 20, 17),
     [PAL_STATUS_FRZ] = RGB(17, 22, 28),
     [PAL_STATUS_BRN] = RGB(28, 14, 10),
+    [PAL_STATUS_OVERGROW] = RGB(23, 23, 3),
+    [PAL_STATUS_TORRENT] = RGB(20, 20, 17),
+    [PAL_STATUS_BLAZE] = RGB(17, 22, 28),
+    [PAL_STATUS_SWARM] = RGB(28, 14, 10),
 };
 
 static const struct WindowTemplate sHealthboxWindowTemplate = {
@@ -2080,18 +2083,22 @@ static void UpdateStatusIconInHealthbox(uint8_t healthboxSpriteId)
             {
                 case ABILITY_OVERGROW:
                     statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_OVERGROW_BATTLER0_FIRST_PIXEL_SET);
+                    statusPalId = PAL_STATUS_OVERGROW;
                     break;
 
                 case ABILITY_BLAZE:
                     statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_BLAZE_BATTLER0_FIRST_PIXEL_SET);
+                    statusPalId = PAL_STATUS_BLAZE;
                     break;
 
                 case ABILITY_TORRENT:
                     statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_TORRENT_BATTLER0_FIRST_PIXEL_SET);
+                    statusPalId = PAL_STATUS_TORRENT;
                     break;
 
                 case ABILITY_SWARM:
                     statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_STATUS_SWARM_BATTLER0_FIRST_PIXEL_SET);
+                    statusPalId = PAL_STATUS_SWARM;
                     break;
 
                 default:
