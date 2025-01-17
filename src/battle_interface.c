@@ -206,7 +206,7 @@ static void MoveBattleBarGraphically(uint8_t, uint8_t);
 static uint8_t CalcBarFilledPixels(int32_t, int32_t, int32_t, int32_t *, uint8_t *, uint8_t);
 static void Debug_TestHealthBar_Helper(struct TestingBar *, int32_t *, uint16_t *);
 
-static bool isHPAtOrBelow30Percent(struct Pokemon *mon);
+static bool isHPAtOrBelow33Percent(struct Pokemon *mon);
 
 static const struct OamData sOamData_64x32 =
 {
@@ -2077,7 +2077,7 @@ static void UpdateStatusIconInHealthbox(uint8_t healthboxSpriteId)
     // Right now we only want to test it on the players pokemon
     else if ((ability == ABILITY_OVERGROW || ability == ABILITY_TORRENT || ability == ABILITY_BLAZE || ability == ABILITY_SWARM) && battlerId == 0)
     {
-        if (isHPAtOrBelow30Percent(mon))
+        if (isHPAtOrBelow33Percent(mon))
         {
             switch(ability)
             {
@@ -2258,11 +2258,19 @@ void UpdateHealthboxAttribute(uint8_t healthboxSpriteId, struct Pokemon *mon, ui
         uint8_t isDoubles;
 
         if (elementId == HEALTHBOX_LEVEL || elementId == HEALTHBOX_ALL)
+        {
             UpdateLvlInHealthbox(healthboxSpriteId, GetMonData(mon, MON_DATA_LEVEL));
+        }
+            
         if (elementId == HEALTHBOX_CURRENT_HP || elementId == HEALTHBOX_ALL)
+        {
             UpdateHpTextInHealthbox(healthboxSpriteId, GetMonData(mon, MON_DATA_HP), HP_CURRENT);
+        }
+            
         if (elementId == HEALTHBOX_MAX_HP || elementId == HEALTHBOX_ALL)
+        {
             UpdateHpTextInHealthbox(healthboxSpriteId, GetMonData(mon, MON_DATA_MAX_HP), HP_MAX);
+        }
         if (elementId == HEALTHBOX_HEALTH_BAR || elementId == HEALTHBOX_ALL)
         {
             LoadBattleBarGfx(0);
@@ -2270,8 +2278,17 @@ void UpdateHealthboxAttribute(uint8_t healthboxSpriteId, struct Pokemon *mon, ui
             currHp = GetMonData(mon, MON_DATA_HP);
             SetBattleBarStruct(battlerId, healthboxSpriteId, maxHp, currHp, 0);
             MoveBattleBar(battlerId, healthboxSpriteId, HEALTH_BAR, 0);
+
+            // Quick and dirty fix, will refactor once it's been established that this fixes it 
+            if (isHPAtOrBelow33Percent)
+            {
+                UpdateStatusIconInHealthbox(healthboxSpriteId);
+            }
+            
         }
+
         isDoubles = IsDoubleBattle();
+
         if (!isDoubles && (elementId == HEALTHBOX_EXP_BAR || elementId == HEALTHBOX_ALL))
         {
             uint16_t species;
@@ -2290,13 +2307,24 @@ void UpdateHealthboxAttribute(uint8_t healthboxSpriteId, struct Pokemon *mon, ui
             MoveBattleBar(battlerId, healthboxSpriteId, EXP_BAR, 0);
         }
         if (elementId == HEALTHBOX_NICK || elementId == HEALTHBOX_ALL)
+        {
             UpdateNickInHealthbox(healthboxSpriteId, mon);
+        }
+            
         if (elementId == HEALTHBOX_STATUS_ICON || elementId == HEALTHBOX_ALL)
+        {
             UpdateStatusIconInHealthbox(healthboxSpriteId);
+        }
+            
         if (elementId == HEALTHBOX_SAFARI_ALL_TEXT)
+        {
             UpdateSafariBallsTextOnHealthbox(healthboxSpriteId);
+        }
         if (elementId == HEALTHBOX_SAFARI_ALL_TEXT || elementId == HEALTHBOX_SAFARI_BALLS_TEXT)
+        {
             UpdateLeftNoOfBallsTextOnHealthbox(healthboxSpriteId);
+        }
+            
     }
     else
     {
@@ -2609,7 +2637,7 @@ uint8_t GetScaledHPFraction(int16_t hp, int16_t maxhp, uint8_t scale)
     return result;
 }
 
-bool isHPAtOrBelow30Percent(struct Pokemon *mon)
+bool isHPAtOrBelow33Percent(struct Pokemon *mon)
 {
     uint16_t hp = GetMonData(mon, MON_DATA_HP);
     uint16_t maxHp = GetMonData(mon, MON_DATA_MAX_HP);
@@ -2622,7 +2650,7 @@ bool isHPAtOrBelow30Percent(struct Pokemon *mon)
     {
         uint8_t fraction = GetScaledHPFraction(hp, maxHp, B_HEALTHBAR_PIXELS);
 
-        if (fraction > (B_HEALTHBAR_PIXELS * 30 / 100)) // more than 30 % hp
+        if (fraction > (B_HEALTHBAR_PIXELS * 33 / 100)) // more than 30 % hp
         {
             return false;
         }
