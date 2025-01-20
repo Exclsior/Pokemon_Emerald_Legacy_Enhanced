@@ -2280,7 +2280,7 @@ void UpdateHealthboxAttribute(uint8_t healthboxSpriteId, struct Pokemon *mon, ui
             MoveBattleBar(battlerId, healthboxSpriteId, HEALTH_BAR, 0);
 
             // Quick and dirty fix, will refactor once it's been established that this fixes it 
-            if (isHPAtOrBelow33Percent)
+            if (isHPAtOrBelow33Percent(mon))
             {
                 UpdateStatusIconInHealthbox(healthboxSpriteId);
             }
