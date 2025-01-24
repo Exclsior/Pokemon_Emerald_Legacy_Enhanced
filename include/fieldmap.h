@@ -24,7 +24,9 @@
 extern struct BackupMapLayout gBackupMapLayout;
 
 u32 MapGridGetMetatileIdAt(int, int);
+u32 MapHeaderGetMetatileIdAt(int, int, int, int);
 u32 MapGridGetMetatileBehaviorAt(int, int);
+u32 MapHeaderGetMetatileBehaviorAt(int, int, int, int);
 void MapGridSetMetatileIdAt(int, int, u16);
 void MapGridSetMetatileEntryAt(int, int, u16);
 void GetCameraCoords(u16 *, u16 *);
@@ -32,6 +34,7 @@ u8 MapGridGetCollisionAt(int, int);
 int GetMapBorderIdAt(int x, int y);
 bool32 CanCameraMoveInDirection(int direction);
 u16 GetMetatileAttributesById(u16 metatileId);
+u16 GetBehaviorByMetatileIdAndMapHeader(u16 metatileId, int mapGroup, int mapNum);
 void GetCameraFocusCoords(u16 *x, u16 *y);
 u8 MapGridGetMetatileLayerTypeAt(int x, int y);
 u8 MapGridGetElevationAt(int x, int y);

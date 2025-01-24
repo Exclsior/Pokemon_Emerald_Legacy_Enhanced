@@ -1755,6 +1755,8 @@ void CB2_ContinueSavedGame(void)
         SetMainCallback1(CB1_Overworld);
         CB2_ReturnToField();
     }
+    
+    GetFeebasTiles();
 }
 
 static void FieldClearVBlankHBlankCallbacks(void)

@@ -46,6 +46,7 @@
 #include "union_room_chat.h"
 #include "constants/items.h"
 #include "tx_registered_items_menu.h"
+#include "wild_encounter.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -197,6 +198,7 @@ void NewGameInitData(void)
     InitEasyChatPhrases();
     SetMauvilleOldMan();
     InitDewfordTrend();
+    GetFeebasTiles();
     ResetFanClub();
     ResetLotteryCorner();
     WarpToTruck();

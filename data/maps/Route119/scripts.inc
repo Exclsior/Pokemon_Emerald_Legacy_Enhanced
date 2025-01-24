@@ -6,6 +6,7 @@
 Route119_MapScripts::
 	map_script MAP_SCRIPT_ON_RESUME, Route119_OnResume
 	map_script MAP_SCRIPT_ON_TRANSITION, Route119_OnTransition
+	map_script MAP_SCRIPT_ON_LOAD, Route119_HighlightFeebas
 	.byte 0
 
 Route119_OnResume:
@@ -33,6 +34,10 @@ Route119_OnTransition:
 	call Common_EventScript_SetupRivalOnBikeGfxId
 	call_if_eq VAR_WEATHER_INSTITUTE_STATE, 1, Route119_EventScript_MoveInstituteWorkersDownstairs
 	special SetRoute119Weather
+	end
+
+Route119_HighlightFeebas:
+	callnative HighlightFeebasTiles
 	end
 
 Route119_EventScript_MoveInstituteWorkersDownstairs::
