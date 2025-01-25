@@ -991,7 +991,7 @@ static void QueueAnimTiles_Lavaridge_Steam(u8 timer)
 static void QueueAnimTiles_Fortree_FeebasSparkle(u16 timer)
 {
     u16 i = timer % 4;
-    AppendTilesetAnimToBuffer(gTilesetAnims_Fortree_FeebasSparkle[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 240)), 0x80);
+    AppendTilesetAnimToBuffer(gTilesetAnims_Fortree_FeebasSparkle[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 240)), 4 * TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_Pacifidlog_LogBridges(u8 timer)
