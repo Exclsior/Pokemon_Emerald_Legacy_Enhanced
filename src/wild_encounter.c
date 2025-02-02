@@ -140,8 +140,8 @@ static bool8 CheckFeebas(void)
     {
         GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
 
-        // 50% chance of encountering Feebas (assuming this is a Feebas spot)
-        if (Random() % 100 > 49)
+        // Updated 50% chance of encountering Feebas to 25% (assuming this is a Feebas spot) due to Feebas tiles visible after Devon Scope recieved (Random() % 100 > 49
+        if (Random() % 100 > 74)
             return FALSE;
 
         for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
