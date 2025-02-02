@@ -6,7 +6,7 @@
 Route119_MapScripts::
 	map_script MAP_SCRIPT_ON_RESUME, Route119_OnResume
 	map_script MAP_SCRIPT_ON_TRANSITION, Route119_OnTransition
-	map_script MAP_SCRIPT_ON_LOAD, Route119_HighlightFeebas
+	map_script MAP_SCRIPT_ON_LOAD, Route119_CheckHighlightFeebas
 	.byte 0
 
 Route119_OnResume:
@@ -34,6 +34,10 @@ Route119_OnTransition:
 	call Common_EventScript_SetupRivalOnBikeGfxId
 	call_if_eq VAR_WEATHER_INSTITUTE_STATE, 1, Route119_EventScript_MoveInstituteWorkersDownstairs
 	special SetRoute119Weather
+	end
+
+Route119_CheckHighlightFeebas:
+	call_if_set FLAG_RECEIVED_DEVON_SCOPE, Route119_HighlightFeebas
 	end
 
 Route119_HighlightFeebas:
