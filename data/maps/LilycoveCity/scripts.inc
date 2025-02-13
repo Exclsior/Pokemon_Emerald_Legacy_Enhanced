@@ -593,6 +593,9 @@ LilycoveCity_Text_ContestHallInTown:
 	.string "right in this here town. \p"
 	.string "That means well-raised POKéMON will\n"
 	.string "come from all over the country.\p"
+	.string "I even heard the MUSEUM curator was\n"
+	.string "interested in showcasing more of this\l"
+	.string "talent.\p"
 	.string "My heart swells with excitement!$"
 
 LilycoveCity_Text_StrangeCaveInCove:
@@ -602,8 +605,7 @@ LilycoveCity_Text_StrangeCaveInCove:
 LilycoveCity_Text_GoingToMoveDeleterForHMs:
 	.string "I'm going to teach my POKéMON some new\n"
 	.string "moves for entering a CONTEST.\p"
-	.string "So, I'm going to see the MOVE DELETER\n"
-	.string "and make it forget HM moves.$"
+	.string "Luckily POKéMON can forget HM moves.$"
 
 LilycoveCity_Text_ImFromKanto:
 	.string "I came from KANTO.\p"

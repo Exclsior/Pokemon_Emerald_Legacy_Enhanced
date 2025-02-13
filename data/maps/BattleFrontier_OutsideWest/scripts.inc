@@ -257,7 +257,13 @@ BattleFrontier_OutsideWest_EventScript_Gentleman::
 	end
 
 BattleFrontier_OutsideWest_EventScript_Umbreon::
-	msgbox BattleFrontier_OutsideWest_Text_Umbreon, MSGBOX_NPC
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_UMBREON, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideWest_Text_Umbreon, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 BattleFrontier_OutsideWest_EventScript_Lass::
@@ -279,7 +285,13 @@ BattleFrontier_OutsideWest_EventScript_Woman1::
 	end
 
 BattleFrontier_OutsideWest_EventScript_Eevee::
-	msgbox BattleFrontier_OutsideWest_Text_Eevee, MSGBOX_NPC
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_EEVEE, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideWest_Text_Eevee, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 BattleFrontier_OutsideWest_EventScript_FatMan1::

@@ -275,8 +275,9 @@
 #define VAR_ROUTE116_WILD_SET                            0x40FF
 #define VAR_NORMAN_REMATCH_CALL_STEP_COUNTER             0x4100
 #define VAR_SHOW_ZINNIA                                  0x4101
+#define VAR_SURF_MON_SLOT                                0x4102 // Added new VAR for Surf Mon Slot
 
-#define VARS_END                                         0x4100
+#define VARS_END                                         0x4103
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)
 
 #define SPECIAL_VARS_START            0x8000

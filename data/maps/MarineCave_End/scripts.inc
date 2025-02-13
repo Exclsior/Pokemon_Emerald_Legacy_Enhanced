@@ -69,6 +69,7 @@ MarineCave_End_EventScript_Archie::
 	closemessage
 	setvar VAR_LAST_TALKED, LOCALID_ARCHIE
 	trainerbattle_no_intro TRAINER_ARCHIE_MARINE_CAVE, MarineCave_End_Text_ArchieDefeat
+	special HealPlayerParty
 MarineCave_End_EventScript_ArchiePostBattle::
 	msgbox MarineCave_End_Text_ArchiePostBattle, MSGBOX_DEFAULT
 	closemessage

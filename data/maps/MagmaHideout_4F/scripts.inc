@@ -209,7 +209,7 @@ MagmaHideout_4F_Text_MaxieGroudonWhatsWrong:
 	.string "was disrupted.$"
 
 MagmaHideout_4F_Text_MaxieOhItWasYou:
-	.string "MAXIE: Oh, its you?\n"
+	.string "MAXIE: Oh, it's you?\n"
 	.string "Everything is already in motion.\p"
 	.string "GROUDON will purge the ceaseless tides\n"
 	.string "and restore balance.\p"

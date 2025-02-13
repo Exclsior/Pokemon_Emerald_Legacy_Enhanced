@@ -334,7 +334,7 @@ SlateportCity_Harbor_EventScript_FerryFinished::
 	end
 
 SlateportCity_Harbor_EventScript_Offer2ndDeepSeaItem::
-	goto_if_set FLAG_GOT_2ND_DEEP_SEA_ITEM, SlateportCity_Harbor_EventScript_Return
+	goto_if_set FLAG_GOT_2ND_DEEP_SEA_ITEM, SlateportCity_Harbor_EventScript_Shop
 	msgbox SlateportCity_Harbor_Text_SternOffersOtherItem, MSGBOX_DEFAULT
 	goto_if_set FLAG_GOT_DEEP_SEA_TOOTH, SlateportCity_Harbor_EventScript_GiveDeepSeaScale
 	goto_if_set FLAG_GOT_DEEP_SEA_SCALE, SlateportCity_Harbor_EventScript_GiveDeepSeaTooth
@@ -352,8 +352,21 @@ SlateportCity_Harbor_EventScript_Got2ndDeepSeaItem::
 	setflag FLAG_GOT_2ND_DEEP_SEA_ITEM
 	release
 	end
-SlateportCity_Harbor_EventScript_Return::
-	return
+SlateportCity_Harbor_EventScript_Shop::
+	msgbox SlateportCity_Harbor_Text_DeepSeaStore, MSGBOX_DEFAULT
+	waitmessage
+	pokemart SlateportCity_Harbor_Pokemart
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+SlateportCity_Harbor_Pokemart:
+	.2byte ITEM_DEEP_SEA_TOOTH
+	.2byte ITEM_DEEP_SEA_SCALE
+	.2byte ITEM_NONE
+	release
+	end
 
 SlateportCity_Harbor_EventScript_AskToTradeScanner::
 	message SlateportCity_Harbor_Text_WouldYouTradeScanner
@@ -590,3 +603,9 @@ SlateportCity_Harbor_Text_PlayerReceivesOtherItem:
 	.string "CAPT. STERN: This should help you and\n"
 	.string "your POKéMON in ways you didn't expect.\p"
 	.string "Best of luck, {PLAYER}{KUN}!$"
+
+SlateportCity_Harbor_Text_DeepSeaStore:
+	.string "CAPT. STERN: That SCANNER has been a\n"
+	.string "huge help, but we could always use\l"
+	.string "extra funding for our excursions!\p"
+	.string "Wanna buy some more sea treasure?$"

@@ -410,6 +410,8 @@ gBattleAnims_General::
 	.4byte General_FocusPunchSetUp          @ B_ANIM_FOCUS_PUNCH_SETUP
 	.4byte General_IngrainHeal              @ B_ANIM_INGRAIN_HEAL
 	.4byte General_WishHeal                 @ B_ANIM_WISH_HEAL
+	.4byte General_HeldItemEffectReduced    @ B_ANIM_HELD_ITEM_REDUCED_EFFECT
+	.4byte General_HeldItemEffectMinimal    @ B_ANIM_HELD_ITEM_REDUCED_MIN
 
 	.align 2
 gBattleAnims_Special::
@@ -10432,6 +10434,41 @@ Status_SandTomb:
 	end
 
 General_HeldItemEffect:
+	loadspritegfx ANIM_TAG_THIN_RING
+	loadspritegfx ANIM_TAG_SPARKLE_2
+	delay 0
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
+	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
+	waitforvisualfinish
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
+	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
+	waitforvisualfinish
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
+	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
+	waitforvisualfinish
+	playsewithpan SE_M_MORNING_SUN, SOUND_PAN_ATTACKER
+	call GrantingStarsEffect
+	waitforvisualfinish
+	playsewithpan SE_SHINY, SOUND_PAN_ATTACKER
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, F_PAL_ATTACKER, 3, 7, 0, RGB(17, 31, 25)
+	createsprite gThinRingExpandingSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 0, 0
+	waitforvisualfinish
+	end
+
+General_HeldItemEffectReduced:
+	loadspritegfx ANIM_TAG_THIN_RING
+	loadspritegfx ANIM_TAG_SPARKLE_2
+	delay 0
+	playsewithpan SE_M_MORNING_SUN, SOUND_PAN_ATTACKER
+	call GrantingStarsEffect
+	waitforvisualfinish
+	playsewithpan SE_SHINY, SOUND_PAN_ATTACKER
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, F_PAL_ATTACKER, 3, 7, 0, RGB(17, 31, 25)
+	createsprite gThinRingExpandingSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 0, 0
+	waitforvisualfinish
+	end
+
+General_HeldItemEffectMinimal:
 	loadspritegfx ANIM_TAG_THIN_RING
 	delay 0
 	playsewithpan SE_SHINY, SOUND_PAN_ATTACKER
