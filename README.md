@@ -210,6 +210,7 @@ A combination of Enhanced Starters with Physical Dragon type.
 ](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
 * Added Select as shortcut to swap Pokemon in Party
   * Credit to [Lunos](https://www.pokecommunity.com/members/lunos.114506/) for [Swap party screen slots using Select](https://www.pokecommunity.com/showpost.php?p=10420662)
+* Credit to [Kurausukun](https://github.com/Kurausukun) for [Feebas Encounter Tile Highlight](https://github.com/DizzyEggg/pokeemerald/commit/f40f1107105244850d26ab57bad928c09300b69b)
 
 # Pokémon Emerald Legacy
 
