@@ -46,6 +46,7 @@
 #include "union_room_chat.h"
 #include "constants/items.h"
 #include "tx_registered_items_menu.h"
+#include "wild_encounter.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -99,6 +100,7 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->regionMapZoom = FALSE;
     gSaveBlock2Ptr->optionsBikeMusic = FALSE; // Added flag for Bike Music toggle (defaults to on with FALSE)
     gSaveBlock2Ptr->optionsSurfMusic = FALSE; // Added flag for Surf Music toggle (defaults to on with FALSE)
+    gSaveBlock2Ptr->optionsBattleItemAnimation = OPTIONS_ITEM_ANIMATION_NORMAL; // Added flag for Surf Music toggle (defaults to on with FALSE)
 }
 
 static void ClearPokedexFlags(void)
@@ -196,6 +198,7 @@ void NewGameInitData(void)
     InitEasyChatPhrases();
     SetMauvilleOldMan();
     InitDewfordTrend();
+    GetFeebasTiles();
     ResetFanClub();
     ResetLotteryCorner();
     WarpToTruck();

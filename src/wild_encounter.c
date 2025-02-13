@@ -56,7 +56,8 @@ static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildM
 static bool8 IsAbilityAllowingEncounter(u8 level);
 
 EWRAM_DATA static u8 sWildEncountersDisabled = 0;
-EWRAM_DATA static u32 sFeebasRngValue = 0;
+EWRAM_DATA u32 sFeebasRngValue = 0;
+EWRAM_DATA u16 gFeebasTiles[6][2] = {0};
 
 #include "data/wild_encounters.h"
 
@@ -68,6 +69,30 @@ static const u16 sRoute119WaterTileData[] =
      0,  45,  0,
     46,  91,  NUM_FISHING_SPOTS_1,
     92, 139,  NUM_FISHING_SPOTS_1 + NUM_FISHING_SPOTS_2,
+};
+
+static const u16 gRoute119MetatileTable[] =
+{
+    [0x02C - 0x02C] = 0x2A9,
+    [0x034 - 0x02C] = 0x2CB,
+    [0x03C - 0x02C] = 0x2AA,
+    [0x11D - 0x02C] = 0x31B,
+    [0x125 - 0x02C] = 0x31A,
+    [0x12C - 0x02C] = 0x318,
+    [0x12D - 0x02C] = 0x319,
+    [0x170 - 0x02C] = 0x308,
+    [0x178 - 0x02C] = 0x2FD,
+    [0x179 - 0x02C] = 0x305,
+    [0x188 - 0x02C] = 0x31C,
+    [0x189 - 0x02C] = 0x31F,
+    [0x18A - 0x02C] = 0x31D,
+    [0x190 - 0x02C] = 0x310,
+    [0x192 - 0x02C] = 0x31E,
+    [0x198 - 0x02C] = 0x311,
+    [0x19A - 0x02C] = 0x30D,
+    [0x20F - 0x02C] = 0x2D3,
+    [0x266 - 0x02C] = 0x312,
+    [0x267 - 0x02C] = 0x315
 };
 
 void DisableWildEncounters(bool8 disabled)
@@ -109,54 +134,19 @@ static u16 GetFeebasFishingSpotId(s16 targetX, s16 targetY, u8 section)
 static bool8 CheckFeebas(void)
 {
     u8 i;
-    u16 feebasSpots[NUM_FEEBAS_SPOTS];
     s16 x, y;
-    u8 route119Section = 0;
-    u16 spotId;
 
-    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE119)
-     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE119))
+    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE119) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE119))
     {
         GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
-        x -= MAP_OFFSET;
-        y -= MAP_OFFSET;
 
-        // Get which third of the map the player is in
-        if (y >= sRoute119WaterTileData[3 * 0 + 0] && y <= sRoute119WaterTileData[3 * 0 + 1])
-            route119Section = 0;
-        if (y >= sRoute119WaterTileData[3 * 1 + 0] && y <= sRoute119WaterTileData[3 * 1 + 1])
-            route119Section = 1;
-        if (y >= sRoute119WaterTileData[3 * 2 + 0] && y <= sRoute119WaterTileData[3 * 2 + 1])
-            route119Section = 2;
-
-        // 50% chance of encountering Feebas (assuming this is a Feebas spot)
-        if (Random() % 100 > 49)
+        // Updated 50% chance of encountering Feebas to 25% (assuming this is a Feebas spot) due to Feebas tiles visible after Devon Scope recieved (Random() % 100 > 49
+        if (Random() % 100 > 74)
             return FALSE;
 
-        FeebasSeedRng(gSaveBlock1Ptr->dewfordTrends[0].rand);
-
-        // Assign each Feebas spot to a random fishing spot.
-        // Randomness is fixed depending on the seed above.
-        for (i = 0; i != NUM_FEEBAS_SPOTS;)
-        {
-            feebasSpots[i] = FeebasRandom() % NUM_FISHING_SPOTS;
-            if (feebasSpots[i] == 0)
-                feebasSpots[i] = NUM_FISHING_SPOTS;
-
-            // < 1 below is a pointless check, it will never be TRUE.
-            // >= 4 to skip fishing spots 1-3, because these are inaccessible
-            // spots at the top of the map, at (9,7), (7,13), and (15,16).
-            // The first accessible fishing spot is spot 4 at (18,18).
-            if (feebasSpots[i] < 1 || feebasSpots[i] >= 4)
-                i++;
-        }
-
-        // Check which fishing spot the player is at, and see if
-        // it matches any of the Feebas spots.
-        spotId = GetFeebasFishingSpotId(x, y, route119Section);
         for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
         {
-            if (spotId == feebasSpots[i])
+            if (x == gFeebasTiles[i][0] && y == gFeebasTiles[i][1])
                 return TRUE;
         }
     }
@@ -172,6 +162,57 @@ static u16 FeebasRandom(void)
 static void FeebasSeedRng(u16 seed)
 {
     sFeebasRngValue = seed;
+}
+
+#define nWaterTiles 447
+void GetFeebasTiles(void)
+{
+    u32 nFeebasGenerated = 0;
+    u32 nFeebasHighlighted = 0;
+    u32 currentWaterTile = 0;
+    u32 feebasTiles[NUM_FEEBAS_SPOTS];
+    u32 x;
+    u32 y;
+    u32 i;
+    FeebasSeedRng(gSaveBlock1Ptr->dewfordTrends[0].rand);
+    for (; nFeebasGenerated < NUM_FEEBAS_SPOTS; nFeebasGenerated++)
+    {
+        u32 randomTile = FeebasRandom() % nWaterTiles;
+        if (randomTile == 0)
+            randomTile = nWaterTiles;
+        if (randomTile == 0 || randomTile > 3)
+            feebasTiles[nFeebasGenerated] = randomTile;
+    }
+    for (y = 0; y < 140; y++)
+    {
+        for (x = 0; x < 40; x++)
+        {
+            if (MetatileBehavior_IsSurfableAndNotWaterfall(MapHeaderGetMetatileBehaviorAt(x, y, MAP_GROUP(ROUTE119), MAP_NUM(ROUTE119))))
+            {
+                currentWaterTile++;
+                if (nFeebasHighlighted < NUM_FEEBAS_SPOTS)
+                {
+                    for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
+                    {
+                        if (currentWaterTile == feebasTiles[i])
+                        {
+                            gFeebasTiles[i][0] = x + 7;
+                            gFeebasTiles[i][1] = y + 7;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#undef nWaterTiles
+
+void HighlightFeebasTiles(void)
+{
+    u32 i;
+    for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
+        MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1], gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C]);
 }
 
 // LAND_WILD_COUNT

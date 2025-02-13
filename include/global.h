@@ -516,6 +516,8 @@ struct SaveBlock2
              u16 regionMapZoom:1; // whether the map is zoomed in
              u16 optionsBikeMusic:1; // whether the bike music plays when riding
              u16 optionsSurfMusic:1; // whether the surf music plays when surfing
+             u16 optionsSurfOverworld:1; // whether to use the original Surf blob or dynamic blob (False to use dynamic)
+             u16 optionsBattleItemAnimation:3; // whether the battle animation is reduced or not
     /*0x18*/ struct Pokedex pokedex;
     /*0x90*/ u8 filler_90[0x8];
     /*0x98*/ struct Time localTimeOffset;

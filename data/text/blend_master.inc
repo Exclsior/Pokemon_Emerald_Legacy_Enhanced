@@ -68,7 +68,8 @@ BerryBlender_Text_WhatAnExpert:
 
 BerryBlender_Text_MadeAmazingPokeblocksWithMaster:
 	.string "When I blended with the MASTER,\n"
-	.string "we made amazing {POKEBLOCK}S!$"
+	.string "we made amazing {POKEBLOCK}S!\p"
+	.string "I didn't even have to do anything!$"
 
 BerryBlender_Text_QualitiesOfBlendMaster:
 	.string "Eyes that track the arrow with\n"

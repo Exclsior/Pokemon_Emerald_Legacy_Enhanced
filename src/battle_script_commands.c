@@ -859,31 +859,31 @@ static const u8 sBallCatchBonuses[] =
 
 const ALIGNED(4) u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4] =
 {
-    [NATURE_HARDY]   = PALACE_STYLE(61,  7, 61,  7), // 32% support >= 50% HP, 32% support < 50% HP
-    [NATURE_LONELY]  = PALACE_STYLE(20, 25, 84,  8), // 55%,  8%
-    [NATURE_BRAVE]   = PALACE_STYLE(70, 15, 32, 60), // 15%,  8%
-    [NATURE_ADAMANT] = PALACE_STYLE(38, 31, 70, 15), // 31%, 15%
-    [NATURE_NAUGHTY] = PALACE_STYLE(20, 70, 70, 22), // 10%,  8%
-    [NATURE_BOLD]    = PALACE_STYLE(30, 20, 32, 58), // 50%, 10%
-    [NATURE_DOCILE]  = PALACE_STYLE(56, 22, 56, 22), // 22%, 22%
+    [NATURE_HARDY]   = PALACE_STYLE(60,  10, 70,  10), // 32% support >= 50% HP, 32% support < 50% HP
+    [NATURE_LONELY]  = PALACE_STYLE(20, 5, 75,  5), // 55%,  8%
+    [NATURE_BRAVE]   = PALACE_STYLE(75, 20, 60, 35), // 15%,  8%
+    [NATURE_ADAMANT] = PALACE_STYLE(35, 30, 70, 15), // 31%, 15%
+    [NATURE_NAUGHTY] = PALACE_STYLE(10, 80, 70, 20), // 10%,  8%
+    [NATURE_BOLD]    = PALACE_STYLE(45, 10, 5, 90), // 50%, 10%
+    [NATURE_DOCILE]  = PALACE_STYLE(60, 20, 60, 20), // 22%, 22%
     [NATURE_RELAXED] = PALACE_STYLE(25, 15, 75, 15), // 60%, 10%
-    [NATURE_IMPISH]  = PALACE_STYLE(69,  6, 28, 55), // 25%, 17%
-    [NATURE_LAX]     = PALACE_STYLE(35, 10, 29,  6), // 55%, 65%
-    [NATURE_TIMID]   = PALACE_STYLE(62, 10, 30, 20), // 28%, 50%
-    [NATURE_HASTY]   = PALACE_STYLE(58, 37, 88,  6), //  5%,  6%
-    [NATURE_SERIOUS] = PALACE_STYLE(34, 11, 29, 11), // 55%, 60%
+    [NATURE_IMPISH]  = PALACE_STYLE(70,  5, 20, 55), // 25%, 17%
+    [NATURE_LAX]     = PALACE_STYLE(35, 10, 20,  5), // 55%, 65%
+    [NATURE_TIMID]   = PALACE_STYLE(60, 10, 30, 20), // 28%, 50%
+    [NATURE_HASTY]   = PALACE_STYLE(60, 30, 90,  5), //  5%,  6%
+    [NATURE_SERIOUS] = PALACE_STYLE(40, 10, 30, 10), // 55%, 60%
     [NATURE_JOLLY]   = PALACE_STYLE(35,  5, 35, 60), // 60%,  5%
-    [NATURE_NAIVE]   = PALACE_STYLE(56, 22, 56, 22), // 22%, 22%
-    [NATURE_MODEST]  = PALACE_STYLE(35, 45, 34, 60), // 20%,  6%
-    [NATURE_MILD]    = PALACE_STYLE(44, 50, 34,  6), //  6%, 60%
-    [NATURE_QUIET]   = PALACE_STYLE(56, 22, 56, 22), // 22%, 22%
-    [NATURE_BASHFUL] = PALACE_STYLE(30, 58, 30, 58), // 12%, 12%
-    [NATURE_RASH]    = PALACE_STYLE(30, 13, 27,  6), // 57%, 67%
-    [NATURE_CALM]    = PALACE_STYLE(40, 50, 25, 62), // 10%, 13%
-    [NATURE_GENTLE]  = PALACE_STYLE(18, 70, 90,  5), // 12%,  5%
-    [NATURE_SASSY]   = PALACE_STYLE(88,  6, 22, 20), //  6%, 58%
-    [NATURE_CAREFUL] = PALACE_STYLE(42, 50, 42,  5), //  8%, 53%
-    [NATURE_QUIRKY]  = PALACE_STYLE(56, 22, 56, 22)  // 22%, 22%
+    [NATURE_NAIVE]   = PALACE_STYLE(60, 20, 60, 20), // 22%, 22%
+    [NATURE_MODEST]  = PALACE_STYLE(35, 25, 40, 50), // 20%,  6%
+    [NATURE_MILD]    = PALACE_STYLE(45, 50, 45,  5), //  6%, 60%
+    [NATURE_QUIET]   = PALACE_STYLE(60, 20, 65, 20), // 22%, 22%
+    [NATURE_BASHFUL] = PALACE_STYLE(20, 75, 10, 85), // 12%, 12%
+    [NATURE_RASH]    = PALACE_STYLE(30, 10, 30,  5), // 57%, 67%
+    [NATURE_CALM]    = PALACE_STYLE(50, 45, 80, 10), // 10%, 13%
+    [NATURE_GENTLE]  = PALACE_STYLE(10, 80, 90,  5), // 12%,  5%
+    [NATURE_SASSY]   = PALACE_STYLE(90,  5, 75, 20), //  6%, 58%
+    [NATURE_CAREFUL] = PALACE_STYLE(45, 50, 50,  5), //  8%, 53%
+    [NATURE_QUIRKY]  = PALACE_STYLE(60, 20, 75, 20)  // 22%, 22%
 };
 
 static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] =
@@ -10014,11 +10014,11 @@ static void Cmd_trysetcaughtmondexflags(void)
         }
         else
         {
-            letter += (SPECIES_UNOWN_B - 1);
-            species = letter;
+            species = letter + (SPECIES_UNOWN_B - 1);
             if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
             {
-                HandleSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_CAUGHT, personality);
+                GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_SEEN);
+                GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_CAUGHT);
             }
         }
         if (CheckCaughtAllUnown())

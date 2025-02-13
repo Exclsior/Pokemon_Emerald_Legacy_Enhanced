@@ -29,6 +29,7 @@
 #define sWINDOWS_TYPE                (gBattleScripting + 0x24) // windowsType
 #define sMULTIPLAYER_ID              (gBattleScripting + 0x25) // multiplayerId
 #define sSPECIAL_TRAINER_BATTLE_TYPE (gBattleScripting + 0x26) // specialTrainerBattleType
+#define sBATTLE_ITEM_ANIMATION       (gBattleScripting + 0x27) // heldItemReducedEffect
 
 // Array entries for battle communication
 #define MULTIUSE_STATE          0
