@@ -233,7 +233,13 @@ MauvilleCity_GameCorner_EventScript_ChoosePokemonPrizeMessage::
 	call MauvilleCity_GameCorner_EventScript_GivePorygon
 	setflag FLAG_GAME_CORNER_PRIZE_PORYGON
 	removecoins PORYGON_COINS
+	msgbox MauvilleCity_GameCorner_Text_ClaimedPorygon, MSGBOX_DEFAULT
+	closemessage
+	end
 MauvilleCity_GameCorner_EventScript_GotPorygonPrize::
+	setvar 0x8005, TRAINER_WATTSON_3
+	special HasRematchBeenFought
+	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_Gym_EventScript_PorygonUpgradePrize
 	msgbox MauvilleCity_GameCorner_Text_ClaimedPorygon, MSGBOX_DEFAULT
 	closemessage
 	end
@@ -284,6 +290,30 @@ MauvilleCity_GameCorner_EventScript_ReceivedPorygonFanfare::
 MauvilleCity_GameCorner_EventScript_Return::
 	setflag FLAG_GAME_CORNER_PRIZE_PORYGON
 	return
+
+MauvilleCity_Gym_EventScript_PorygonUpgradePrize::
+	msgbox MauvilleCity_GameCorner_Text_UpgradePrize, MSGBOX_DEFAULT
+	waitmessage
+	checkcoins VAR_TEMP_2
+	goto_if_lt VAR_TEMP_2, PORYGON_COINS, MauvilleCity_GameCorner_EventScript_NotEnoughCoinsForPorygon
+	msgbox MauvilleCity_GameCorner_Text_GotEnoughCoinsForUpgrade, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_GameCorner_EventScript_CancelPokemonSelect
+	call MauvilleCity_GameCorner_EventScript_GiveUpgrade
+	removecoins PORYGON_COINS
+	msgbox MauvilleCity_GameCorner_Text_ClaimedUpgrade, MSGBOX_DEFAULT
+	closemessage
+	end
+MauvilleCity_GameCorner_EventScript_GiveUpgrade::
+	playfanfare MUS_OBTAIN_ITEM
+	giveitem ITEM_UP_GRADE, 1
+	waitfanfare
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoRoom
+	return
+MauvilleCity_GameCorner_EventScript_NoRoom::
+	msgbox MauvilleCity_GameCorner_Text_NoRoomForReward, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
 
 MauvilleCity_GameCorner_EventScript_PrizeCornerTMs::
 	lock
@@ -867,3 +897,27 @@ MauvilleCity_GameCorner_Text_ClaimedPorygon:
 
 MauvilleCity_GameCorner_Text_PlayerReceivedPorygon:
 	.string "{PLAYER} received PORYGON!$"
+
+MauvilleCity_GameCorner_Text_UpgradePrize:
+	.string "Oh, it's you again!\p"
+	.string "I see you've already claimed your\n"
+	.string "special PORYGON.\p"
+	.string "While you can't have another, there's an\n"
+	.string "exclusive UPGRADE waiting if you can\l"
+	.string "muster another 9999 COINS.\p"
+	.string "Though, between us, I doubt you'll ever\n"
+	.string "hit that mark again…$"
+
+MauvilleCity_GameCorner_Text_GotEnoughCoinsForUpgrade:
+	.string "Another 9999 COINS, huh?\p"
+	.string "I… I can hardly believe it.\n"
+	.string "How did you even pull that off?\p"
+	.string "Well, would you like to claim your\n"
+	.string "UPGRADE?$"
+
+MauvilleCity_GameCorner_Text_ClaimedUpgrade:
+	.string "Congratulations!\p"
+	.string "The UPGRADE is now yours!$"
+
+MauvilleCity_GameCorner_Text_NoRoomForReward:
+	.string "Oh no! It seems your BAG is full!$"

@@ -3870,9 +3870,9 @@ static const u16 sBlisseyLevelUpLearnset[] = {
 
 static const u16 sRaikouLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 1, MOVE_BITE),
+    LEVEL_UP_MOVE( 1, MOVE_ROAR),
     LEVEL_UP_MOVE( 1, MOVE_LEER),
     LEVEL_UP_MOVE( 1, MOVE_THUNDER_SHOCK),
-    LEVEL_UP_MOVE(11, MOVE_ROAR),
     LEVEL_UP_MOVE(21, MOVE_QUICK_ATTACK),
     LEVEL_UP_MOVE(31, MOVE_SPARK),
     LEVEL_UP_MOVE(41, MOVE_THUNDERBOLT),

@@ -14,7 +14,7 @@ MossdeepCity_Gym_EventScript_TryRematchReward::
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, MossdeepCity_Gym_EventScript_GiveRematchReward
 MossdeepCity_Gym_EventScript_TryRematchRewardEnd::
-	ClearTrainerFlag TRAINER_TATE_AND_LIZA_3
+	ClearTrainerFlag TRAINER_TATE_AND_LIZA_5
 	releaseall
 	end
 

@@ -3135,7 +3135,9 @@ static void BattleStartClearSetData(void)
         gHitMarker |= HITMARKER_NO_ANIMATIONS;
 
     gBattleScripting.battleStyle = gSaveBlock2Ptr->optionsBattleStyle || FlagGet(FLAG_HARD);
+    gBattleScripting.heldItemReducedEffect = gSaveBlock2Ptr->optionsBattleItemAnimation;
 
+    
     gMultiHitCounter = 0;
     gBattleOutcome = 0;
     gBattleControllerExecFlags = 0;

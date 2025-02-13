@@ -214,6 +214,7 @@ Route120_EventScript_StevenGiveDeconScope::
 	msgbox Route120_Text_StevenGiveDevonScope, MSGBOX_DEFAULT
 	giveitem ITEM_DEVON_SCOPE
 	setflag FLAG_RECEIVED_DEVON_SCOPE
+	msgbox Route120_Text_StevenFeebasHint, MSGBOX_DEFAULT
 	msgbox Route120_Text_StevenGoodbye, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_STEVEN, Common_Movement_WalkInPlaceFasterDown
@@ -396,6 +397,10 @@ Route120_Text_StevenGiveDevonScope:
 	.string "DEVON SCOPE.\p"
 	.string "Who knows, there may be other\n"
 	.string "concealed POKéMON.$"
+
+Route120_Text_StevenFeebasHint:
+	.string "You might want to visit the river on\n"
+	.string "ROUTE 119 with that DEVON SCOPE.$"
 
 Route120_Text_StevenGoodbye:
 	.string "STEVEN: {PLAYER}{KUN}.\p"

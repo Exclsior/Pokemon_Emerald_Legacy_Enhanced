@@ -395,7 +395,7 @@ void ChooseItemsToTossFromPyramidBag(void)
 {
     LockPlayerFieldControls();
     FadeScreen(FADE_TO_BLACK, 0);
-    CreateTask(Task_ChooseItemsToTossFromPyramidBag, 10);
+    CreateTask(Task_ChooseItemsToTossFromPyramidBag, 13);
 }
 
 static void Task_ChooseItemsToTossFromPyramidBag(u8 taskId)

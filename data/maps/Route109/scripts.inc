@@ -558,7 +558,8 @@ Route109_Text_SeashoreHouseSign:
 
 Route109_Text_TrainerTipsSign:
 	.string "TRAINER TIPS\p"
-	.string "POKéMON at the same level may not\n"
-	.string "always have identical stats.\p"
-	.string "POKéMON raised by TRAINERS are said\n"
-	.string "to grow stronger than wild POKéMON.$"
+	.string "POKéMON at the same level can have\n"
+	.string "very different stats.\p"
+	.string "You can see the IVs and EVs that cause\n"
+	.string "this difference by pressing A from the\l"
+	.string "SUMMARY screen.$"

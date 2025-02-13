@@ -520,6 +520,8 @@ SlateportCity_PokemartDecor_Dolls:
 	.2byte DECOR_AZURILL_DOLL
 	.2byte DECOR_MARILL_DOLL
 	.2byte DECOR_SKITTY_DOLL
+	.2byte DECOR_SEEDOT_DOLL
+	.2byte DECOR_LOTAD_DOLL
 	.2byte DECOR_NONE
 	release
 	end
@@ -535,6 +537,11 @@ SlateportCity_EventScript_DecorClerk::
 	goto_if_unset FLAG_RECEIVED_SECRET_POWER, SlateportCity_EventScript_ComeBackWithSecretPower
 	message gText_HowMayIServeYou
 	waitmessage
+	goto_if_unset FLAG_TRICK_HOUSE_PRIZE_TENT, SlateportCity_EventScript_DecorationsStandard
+	goto_if_set FLAG_TRICK_HOUSE_PRIZE_TENT, SlateportCity_EventScript_DecorationsUpdated
+	end
+
+SlateportCity_EventScript_DecorationsStandard::
 	pokemartdecoration SlateportCity_PokemartDecor
 	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
@@ -556,6 +563,34 @@ SlateportCity_PokemartDecor:
 	.2byte DECOR_A_NOTE_MAT
 	.2byte DECOR_B_NOTE_MAT
 	.2byte DECOR_C_HIGH_NOTE_MAT
+	.2byte DECOR_NONE
+	release
+	end
+
+SlateportCity_EventScript_DecorationsUpdated::
+	pokemartdecoration SlateportCity_PokemartDecorUpdate
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+	
+	.align 2
+SlateportCity_PokemartDecorUpdate:
+	.2byte DECOR_RED_BRICK
+	.2byte DECOR_BLUE_BRICK
+	.2byte DECOR_YELLOW_BRICK
+	.2byte DECOR_RED_BALLOON
+	.2byte DECOR_BLUE_BALLOON
+	.2byte DECOR_YELLOW_BALLOON
+	.2byte DECOR_C_LOW_NOTE_MAT
+	.2byte DECOR_D_NOTE_MAT
+	.2byte DECOR_E_NOTE_MAT
+	.2byte DECOR_F_NOTE_MAT
+	.2byte DECOR_G_NOTE_MAT
+	.2byte DECOR_A_NOTE_MAT
+	.2byte DECOR_B_NOTE_MAT
+	.2byte DECOR_C_HIGH_NOTE_MAT
+	.2byte DECOR_BLUE_TENT
+	.2byte DECOR_RED_TENT
 	.2byte DECOR_NONE
 	release
 	end
