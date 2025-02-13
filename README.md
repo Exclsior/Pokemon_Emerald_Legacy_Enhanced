@@ -14,13 +14,14 @@ The Pret Pokeemerald disassembly upon which the project is ultimately based has 
 
 Without any further ado, below are the features added to Base Patch (main branch):
 
-## Base Patch - v1.0.1:
+## Base Patch - v1.1.0:
 
 The Base Emerald Legacy Enhanced version which primarily focuses on quality of life additions such as HM improvements, Stat Editor for IVs and EVs, Nature Mints and an Egg Move Tutor.
 
 This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 12 Jan 2025.
 
 ### Implemented Changes:
+* All Base Legacy changes as of v1.1.0
 * Removed requirement for a HM move to have to be learned by a pokemon in order to be used outside of battle.
   * Relevant Gym Badge, HM in bag, and at least one pokemon capable of learning the move required to use the HM.
   * Dialogue for people providing HMs updated to note that a pokemon only needs to be able to learn the move.
@@ -63,7 +64,7 @@ This Base patch includes all updates to Pokemon Emerald Legacy source coade as o
 
 **Note:** Saves files are compatible from Emerald Legacy, however I cannot guarantee reverse compatibility after saving on Emerald Legacy Enhanced and moving back to Emerald Legacy, please backup original saves before moving to Enhanced.
 
-## Dragon Type Physical - v1.0.1:
+## Dragon Type Physical - v1.1.0:
 
 Simple swap for Dragon type to be considered Physical. This **does not** do any stat rebalancing of any pokemon, just swaps the typing. (e.g. Salamence will benefit significantly, Latios will lose out).
 
@@ -72,7 +73,7 @@ Simple swap for Dragon type to be considered Physical. This **does not** do any 
 * Dragon type Physical in battle.
 * Updated text in Rustboro School to note change of Dragon typing to Physical.
 
-## Dragon Grovyle and Sceptile - v1.0.1:
+## Dragon Grovyle and Sceptile - v1.1.0:
 
 A common request throughout the Legacy project to make the Treecko Dragon type.
 
@@ -92,7 +93,7 @@ A common request throughout the Legacy project to make the Treecko Dragon type.
     * Lvl 34: Dragonbreath
     * Lvl 60: Outrage
 
-## Physical Dragon Grovyle and Sceptile - v1.0.1:
+## Physical Dragon Grovyle and Sceptile - v1.1.0:
 
 Combination of the two above patches for physical Dragon type and to add Dragon typing to the Treecko line. Only Grovyle and Sceptile stats rebalanced, as above no other pokemon rebalanced (e.g. Salamence will benefit significantly, Latios will lose out).
 
@@ -123,7 +124,7 @@ Combination of the two above patches for physical Dragon type and to add Dragon 
     * Base Special Defence Decreased by 5
   * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
 
-## Enhanced Starters - v1.0.1
+## Enhanced Starters - v1.1.0
 
 An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs the Hoenn Starters (and my preferred way to play!). For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
 
@@ -191,7 +192,7 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
   * Feraligatr:
     * Lvl 65: Hydro Cannon
 
-## Enhanced Starters - Dragon Physical - v1.0.1
+## Enhanced Starters - Dragon Physical - v1.1.0
 
 A combination of Enhanced Starters with Physical Dragon type.
 
