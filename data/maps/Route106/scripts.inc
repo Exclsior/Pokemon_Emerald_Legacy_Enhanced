@@ -49,5 +49,7 @@ Route106_EventScript_Tully::
 Route106_Text_TrainerTips:
 	.string "TRAINER TIPS\p"
 	.string "Advice on catching POKéMON with a ROD:\n"
-	.string "Press the A Button if you get a bite.$"
-
+	.string "Slow down, and press the A Button if\l"
+	.string "you get a bite!\p"
+	.string "You'll only need to press it once to\n"
+	.string "know if it got away.$"

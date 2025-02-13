@@ -48,7 +48,13 @@ BattleFrontier_OutsideEast_EventScript_NinjaBoy::
 	end
 
 BattleFrontier_OutsideEast_EventScript_Jolteon::
-	msgbox BattleFrontier_OutsideEast_Text_Jolteon, MSGBOX_NPC
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_JOLTEON, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideEast_Text_Jolteon, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 BattleFrontier_OutsideEast_EventScript_Man1::
@@ -66,7 +72,13 @@ BattleFrontier_OutsideEast_EventScript_HexManiac::
 	end
 
 BattleFrontier_OutsideEast_EventScript_Espeon::
-	msgbox BattleFrontier_OutsideEast_Text_Espeon, MSGBOX_NPC
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_ESPEON, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideEast_Text_Espeon, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 BattleFrontier_OutsideEast_EventScript_BlackBelt1::
@@ -183,7 +195,13 @@ BattleFrontier_OutsideEast_EventScript_Maniac1::
 	end
 
 BattleFrontier_OutsideEast_EventScript_Flareon::
-	msgbox BattleFrontier_OutsideEast_Text_Flareon, MSGBOX_NPC
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_FLAREON, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideEast_Text_Flareon, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 BattleFrontier_OutsideEast_EventScript_Girl::
@@ -193,7 +211,13 @@ BattleFrontier_OutsideEast_EventScript_Girl::
 	end
 
 BattleFrontier_OutsideEast_EventScript_Vaporeon::
-	msgbox BattleFrontier_OutsideEast_Text_Vaporeon, MSGBOX_NPC
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_VAPOREON, CRY_MODE_NORMAL
+	msgbox BattleFrontier_OutsideEast_Text_Vaporeon, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 BattleFrontier_OutsideEast_EventScript_PsychicM::

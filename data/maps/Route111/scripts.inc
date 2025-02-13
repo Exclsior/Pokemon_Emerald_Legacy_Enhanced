@@ -669,11 +669,11 @@ Route111_Text_OldLadysRestStopSign:
 
 Route111_Text_TrainerTipsSpAtkSpDef:
 	.string "TRAINER TIPS\p"
-	.string "One of the indicators of a POKéMON's\n"
-	.string "powerfulness is SP. ATK. It stands for\l"
-	.string "“SPECIAL ATTACK.”\p"
-	.string "Likewise, SP. DEF stands for “SPECIAL\n"
-	.string "DEFENSE.”$"
+	.string "In addition to EXP Points, POKéMON also\n"
+	.string "gain Effort Points (EVs) in battle.\p"
+	.string "Stat-boosting items like CALCIUM\n"
+	.string "increase EVs 10 at a time, but can't go\l"
+	.string "above 100.$"
 
 Route111_Text_ShouldBeMirageTowerAroundHere:
 	.string "There should be a tower made of sand\n"

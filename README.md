@@ -190,9 +190,12 @@ A combination of Enhanced Starters with Physical Dragon type.
 * Add Teleport to field move usage without move learned (potentially as option to reduce too many options in Party Menu after Tate and Liza)
 * Option to toggle "Edit Stats" in the Options Menu to declutter Party Menu options
 * Middle-ground method to outline Feebas tiles without making Feebas too easily accessible (have a number of potentially infeasible ideas)
-* Shiny mini sprites for PC and Party Menu (I assume somebody has done this, but haven't yet been able to find it, may be infeasible to implement)
-* Add Deepseascale and Deepseatooth to wild clamperl encounters
-* Add item drop on wild pokemon fainting
+* Potentially add item drop on wild pokemon fainting
+* Remove Battle Mode Option in Hard mode (if it doesn't break the options menu)
+* Potentially easier method for Heart Scale gathering
+* Review Department Store Sale frequency
+* Increase Mirage Island Odds (or an easy way to enable it)
+* Add self-destruct to Wailmer and Wailord Egg Movepool
 * (Surprise feature - watch this space!)
 
 ## Enhanced Credits List:
@@ -204,27 +207,6 @@ A combination of Enhanced Starters with Physical Dragon type.
 ](https://github.com/pret/pokeemerald/wiki/Tweaking-the-count-of-health-beeps)
 * Added Select as shortcut to swap Pokemon in Party
   * Credit to [Lunos](https://www.pokecommunity.com/members/lunos.114506/) for [Swap party screen slots using Select](https://www.pokecommunity.com/showpost.php?p=10420662)
-
-### Additional Implemented Changes in Optional Patch: Stat Editor and Nature Mints
-* Stat Editor to edit IVs and EVs added to Party Menu after National Dex is unlocked.
-  * Credit to TeamAquasHideout for [EV IV Stat Editor UI](https://github.com/pret/pokeemerald/wiki/Add-a-EV---IV-Stat-Editor-UI)
-* Nature Mints have been added in the game for purchase after beating Petalburg Gym.
-  * One free Serious Mint will be given by Norman after gaining the Facade TM.
-  * Pretty Petal Flower Shop North of Petalburg Woods will sell all mints at 20,000 pokedollars each.
-  * **Note:** Save file compatibility with Emerald Legacy will work, however any Pokemon which has had it's nature altered from orginal via mint will retain its altered new nature stats with their original nature name and potentially incorrect highlighting of boosted and lowered stats until they are deposited or withdrawn from a PC where their stats will be recalculated using their original nature.
-  * Credit to [ghoulslash](https://www.pokecommunity.com/members/ghoulslash.581824/) for [Nature Mints](https://www.pokecommunity.com/showpost.php?p=10245635&postcount=191)
-
-### Changes being considered (No guarantee of implementation):
-* Allow Signature Moves to substitute as specific Field Moves:
-  * Leaf Blade:
-    * Able to be used as Cut outside of battle
-  * Blaze Kick:
-    * Able to be used as Rock Smash outside of battle
-  * Muddy Water:
-    * Able to be used as Surf outside of battle
-* (Very far in future) Adding a user option at start of New Game to enable to enable/disable Treeko line Dragon Typing changes.
-* Implement Expanded Register Item List
-  * May impact save compability between Base Emerald Legacy
 
 # Pokémon Emerald Legacy
 
@@ -240,9 +222,12 @@ Keeping that nostalgic feeling is a key part of the project and thus requires us
 
 
 ## A complete list of features can be found here:
-Full Documentation:
-- [Make a Copy (Recommended)](https://docs.google.com/document/d/1rBSuhFmiiehghr3AQ37JwBzbLCD21TXo_SWpUUXsz9k/copy)
-- [Published Page (Use this if you do not have a Google account and/or want to download the page as a PDF)](https://docs.google.com/document/d/e/2PACX-1vSv_enL8baSvetAUgBBrkh-TJka1-IeOxPchf9cuH317VLetLnvqQu7jgRXhj2gnlDqvBaEo2mbddJl/pub)
+- [The Main Doc](https://docs.google.com/document/d/1rBSuhFmiiehghr3AQ37JwBzbLCD21TXo_SWpUUXsz9k/copy) is the primary source of info for Emerald Legacy
+    - [A Website Version](https://mryakobo.github.io/poke-emerald-legacy-docs/) of this doc is now available, thanks to @ MrYakobo! Please use this if you have trouble copying/viewing the Google page.
+- [The ChangeDex](https://docs.google.com/spreadsheets/d/1XyuXmMi0sodXXR8yG7_6RYDwIn4L56QNFGdcFl4PsOI/edit) remains the best source for game data, featuring reference colors for changes since Vanilla as well as some in 1.1.
+    - [Sorted Encounters](https://docs.google.com/spreadsheets/d/1euQCVphGYMXH9cEX2CwEztvbxzvF9Hik6fAoxq0_e7k/edit?gid=1066205367#gid=1066205367) is a more readable version of Changedex, specifically for Pokemon locations.
+- [The Trainer Doc](https://docs.google.com/spreadsheets/d/18XWOpv-q7e-xTfC9YEsDXsL6s3HANrA5T8rcMf41K-o/edit?gid=1969522899#gid=1969522899) is now ready for a full public release! It's still WIP, because there are plans to further sort the trainers by location for easier viewing, but the newest version now separates Rematches to their own tabs - a great resource for viewing all the new Match Call updates.
+- [A PKHeX Fork](https://github.com/cp1835/PKHeX-EmeraldLegacy) for Emerald Legacy is now available! Special thanks to [u/Silent_Pause_2425 on Reddit](https://www.reddit.com/r/PokemonLegacy/comments/1hqlp4p/i_modified_pkhex_for_emerald_legacy/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) for adapting this tool for the game.
 
 These videos also provide an overview of the hack and the ideology behind it:
 - [Release 1.0](https://www.youtube.com/watch?v=jUHGejDvuNM)
@@ -335,6 +320,12 @@ These videos also provide an overview of the hack and the ideology behind it:
     - [Make the Person in the Intro Match the the Save File](https://github.com/pret/pokeemerald/wiki/Make-the-Person-in-the-Intro-Match-the-the-Save-File)
     - [Fix AI's Switch In Battle](https://github.com/pret/pokeemerald/wiki/Fix-AI's-Switch-In-Battle)
     - [Add Move Description Submenu During Battle](https://github.com/pret/pokeemerald/wiki/Add-Description-Submenu)
+- mxeg
+	- [Fixed clock events breaking after changing the clock](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/5)
+    - [Fixed Petaya and Apicot berry are displayed as costing 48BP but actually cost 3BP](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/5)
+    - [Fixed after purchasing any berry, either successfully or unsuccessfully due to insufficient BP, the menu resets to held item shop instead of berry shop](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/5)
+	- [Fix msgbox not disappearing for Sootopolis gentleman](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/7)
+	- [Fix msgbox not disappearing after exiting BF berry shop](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/7)
 - Ghoulslash:
     - [Bag sorting](https://github.com/pret/pokeemerald/compare/master...ghoulslash:pokeemerald:bag_sort)
     - [Repeated Field Medicine/Rare Candy Use](https://github.com/pret/pokeemerald/wiki/Repeated-Field-Medicine-Use)
@@ -351,6 +342,9 @@ These videos also provide an overview of the hack and the ideology behind it:
 - FieryMewtwo
     - [Remove the extra save confirmation](https://github.com/pret/pokeemerald/wiki/Remove-the-extra-save-confirmation)
     - [Fast heal](https://github.com/pret/pokeemerald/wiki/Speedy-Nurse-Joy)
+- Exclsior
+	- [Fixed Tate and Liza getting stuck on 2nd rematch](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/13)
+	- [Maxie grammar fix](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/10)
 - TheXaman - [Pokedex plus upgrade](https://github.com/pret/pokeemerald/commit/abf5d238c2a5fe020123544a72fe432c27191153)
 - CameruptQDX - [Create a new regular trainer battle](https://github.com/pret/pokeemerald/wiki/How-to-create-a-new-regular-trainer-battle)
 - Surskitty - [Improved trainer control system](https://github.com/rh-hideout/pokeemerald-expansion/compare/master...surskitty:pokeemerald:trainer_control)
@@ -370,6 +364,8 @@ These videos also provide an overview of the hack and the ideology behind it:
 - takyon - [Always inherit nature when holding an Everstone​](https://www.pokecommunity.com/threads/simple-modifications-directory.416647/page-4#post-10160374)
 - myxto - Always inherit nature when holding an Everstone alternate implementation​
 - Jirachii - [Hidden Power type in summary screen](https://www.pokecommunity.com/threads/simple-modifications-directory.416647/page-11#post-10269132)
+- cromerc - [Fixed unix build issues](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/1)
+- ElusiveEllie - [Fixed INSTALL.md instructions to point to correct project](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/8)
 
 
 ### Other Credits:

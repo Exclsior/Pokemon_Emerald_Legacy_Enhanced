@@ -555,7 +555,7 @@ Route119_Text_MayDefeat:
 	.string "You've always been so focused.$"
 
 Route119_Text_MayPresentForYou:
-	.string "MAY: Hey, you know...\n"
+	.string "MAY: Hey, you know…\n"
 	.string "I ran into some rare POKéMON while\l"
 	.string "training nearby.\p"
 	.string "I couldn't help but take notes on\n"
@@ -596,7 +596,7 @@ Route119_Text_BrendanDefeat:
 	.string "You've always been so focused.$"
 
 Route119_Text_BrendanIllGiveYouThis:
-	.string "BRENDAN: Hey, you know...\n"
+	.string "BRENDAN: Hey, you know…\n"
 	.string "I ran into some rare POKéMON while\l"
 	.string "training nearby.\p"
 	.string "I couldn't help but take notes on\n"
@@ -684,9 +684,9 @@ Route119_Text_WeatherInstitute:
 
 Route119_Text_TrainerTipsDecoration:
 	.string "TRAINER TIPS\p"
-	.string "Up to sixteen decorations and\n"
-	.string "furniture items can be placed in\l"
-	.string "a SECRET BASE.\p"
-	.string "Pick your favorite items and create\n"
-	.string "your very own SECRET BASE exactly the\l"
-	.string "way you want.$"
+	.string "Some POKéMON find better cover in\n"
+	.string "certain weather.\p"
+	.string "A SANDSTORM increases the SP. DEF of a\n"
+	.string "ROCK type POKéMON and those with SAND\l"
+	.string "VEIL, while HAIL gives extra DEFENSE to\l"
+	.string "ICE types.$"
