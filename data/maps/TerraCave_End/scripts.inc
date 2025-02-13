@@ -70,6 +70,7 @@ TerraCave_End_EventScript_Maxie::
 	closemessage
 	setvar VAR_LAST_TALKED, LOCALID_MAXIE
 	trainerbattle_no_intro TRAINER_MAXIE_TERRA_CAVE, TerraCave_End_Text_MaxieDefeat
+	special HealPlayerParty
 MarineCave_End_EventScript_MaxiePostBattle::
 	msgbox TerraCave_End_Text_MaxiePostBattle, MSGBOX_DEFAULT
 	closemessage

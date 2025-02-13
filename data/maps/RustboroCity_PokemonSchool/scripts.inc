@@ -260,38 +260,44 @@ RustboroCity_PokemonSchool_Text_ExplainQuickClaw:
 	.string "topics to study!$"
 
 RustboroCity_PokemonSchool_Text_TradingRightNow:
-	.string "I'm trading POKéMON with my friend\n"
-	.string "right now.$"
+	.string "Wild SPOINK make me too dizzy to go to\n"
+	.string "ROUTE 116, so I'm trading POKéMON with\l"
+	.string "my friend right now.$"
 
 RustboroCity_PokemonSchool_Text_AlwaysWantedSeedot:
 	.string "I always wanted SEEDOT, but I\n"
-	.string "can't go to ROUTE 103 alone\l"
+	.string "can't go to ROUTE 103 alone.\l"
 	.string "I'm finally getting one!$"
 
 RustboroCity_PokemonSchool_Text_PokemontCantUseManMadeItems:
-	.string "POKéMON can hold items, but they\n"
-	.string "don't know what to do with man-made\l"
-	.string "items like POTION and ANTIDOTE.$"
+	.string "I hear some trainers used to trade\n"
+	.string "POKéMON to evolve them, but nowadays\l"
+	.string "using an item or leveling them up is all\l"
+	.string "they need.$"
 
 RustboroCity_PokemonSchool_Text_ConfusedPokemonAttacksItself:
-	.string "You know how some POKéMON moves can\n"
-	.string "confuse a POKéMON?\p"
-	.string "A confused POKéMON will sometimes\n"
-	.string "attack itself without meaning to.\p"
-	.string "But once it leaves battle, it will\n"
-	.string "return to normal.$"
+	.string "Abilities are so cool!\p"
+	.string "POKéMON with PICKUP can find all sorts\n"
+	.string "of rare items, even a RARE CANDY.\p"
+	.string "MAGMA ARMOR is so hot, it evaporates\n"
+	.string "WATER attacks and reduces their\l"
+	.string "damage.\p"
+	.string "STENCH smells so bad that the opponent\n"
+	.string "might miss you, while ILLUMINATE makes\l"
+	.string "it easier to see and ignore accuracy\l"
+	.string "loss!$"
 
 RustboroCity_PokemonSchool_Text_PokemonHealItselfWithBerry:
-	.string "A POKéMON holding a BERRY will heal\n"
-	.string "itself…\p"
-	.string "There are many kinds of items that\n"
-	.string "POKéMON can hold…\p"
-	.string "Boy, it sure is hard taking notes\n"
-	.string "down…$"
+	.string "POKéMON moves deal damage based\n"
+	.string "on the move's type…\p"
+	.string "Some types are SPECIAL, while others\n"
+	.string "are PHYSICAL…\p"
+	.string "I still can't keep it all straight, I\n"
+	.string "should write them down again…$"
 
 RustboroCity_PokemonSchool_Text_StudentsNotes:
 	.string "It's this student's notebook…\n"
-	.string "NORMAL, BUG, FLYING, GROUND\l"
+	.string "NORMAL, BUG, FLYING, GROUND,\l"
 	.string "ROCK, FIGHTING, POISON,\l"
 	.string "STEEL are PHYSICAL.\p"
 	.string "DARK-type uses PHYSICAL\n"

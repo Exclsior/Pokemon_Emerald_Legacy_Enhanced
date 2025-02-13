@@ -1085,14 +1085,13 @@ Route104_Text_PrettyPetalFlowShop:
 
 Route104_Text_TrainerTipsDoubleBattles:
 	.string "TRAINER TIPS\p"
-	.string "In the HOENN region there are pairs\n"
-	.string "of TRAINERS who challenge others\l"
-	.string "for 2-on-2 POKéMON battles called\l"
-	.string "DOUBLE BATTLES.\p"
-	.string "In a DOUBLE BATTLE, the TRAINER must\n"
-	.string "send out two POKéMON, the one at the\l"
-	.string "left of the list and the top one.\l"
-	.string "Watch how POKéMON are lined up.$"
+	.string "In a DOUBLE BATTLE, some attacks can\n"
+	.string "hit both opponents at a time.\p"
+	.string "These multi-target attacks have their\n"
+	.string "damaged reduced by half.\p"
+	.string "Be careful, though! If a move hits all\n"
+	.string "three other POKéMON, it deals full\l"
+	.string "damage.$"
 
 Route104_Text_MayWeShouldRegister:
 	.string "MAY: Oh, hi, {PLAYER}{KUN}!\p"

@@ -377,6 +377,9 @@
 #define B_ANIM_FOCUS_PUNCH_SETUP        20
 #define B_ANIM_INGRAIN_HEAL             21
 #define B_ANIM_WISH_HEAL                22
+#define B_ANIM_HELD_ITEM_REDUCED_EFFECT 23
+#define B_ANIM_HELD_ITEM_REDUCED_MIN    24
+#define B_ANIM_HELD_ITEM_REDUCED_NONE   25
 
 // special animations table (gBattleAnims_Special)
 #define B_ANIM_LVL_UP                   0
