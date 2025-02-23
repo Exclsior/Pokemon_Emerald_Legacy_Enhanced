@@ -14,11 +14,11 @@ The Pret Pokeemerald disassembly upon which the project is ultimately based has 
 
 Without any further ado, below are the features added to Base Patch (main branch):
 
-## Base Patch - v1.1.0:
+## Base Patch - v1.1.1:
 
 The Base Emerald Legacy Enhanced version which primarily focuses on quality of life additions such as HM improvements, Stat Editor for IVs and EVs, Nature Mints and an Egg Move Tutor.
 
-This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 12 Jan 2025.
+This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 23 Feb 2025.
 
 ### Implemented Changes:
 * All Base Legacy changes as of v1.1.0
@@ -57,14 +57,28 @@ This Base patch includes all updates to Pokemon Emerald Legacy source coade as o
 * Added Multi item Register Menu.
   * One registered item works same as vanilla Emerald, multiple registered items will show on-field menu to select item.
   * **Note:** Emerald Legacy Saves brought over will lose the originally selected item, re-registering Key Item will fix issue.
+* Added larger quantity coin purchasing in Mauville Game Corner and improved efficiency to purchase more coins.
 * Updated Regi overworld encounter sprites to match the Regi PokeDolls instead.
 * Beldum, Metang and Metagross Catch Rates increased to 45 to match other psuedo-legendaries.
 * Added Self-Destruct to Wailmer and Wailord Egg Move Pool
 * Added Heart Scales to Sootopolis Mart at 1000 pokedollars after beating the the game.
+* Added all Type Enhancing Held Items to various Town and City Pokemarts at 9800 pokedollars after beating the game.
+  * Oldale Town: Poison Barb
+  * Petalburg City: Silk Scarf
+  * Rustboro City: Hard Stone
+  * Slateport City: Black Belt
+  * Mauville City: Magnet
+  * Verdanturf Town: Miracle Seed
+  * Fallarbor Town: Dragon Fang
+  * Lavaridge Town: Charcoal & Soft Sand
+  * Fortree City: Sharp Beak
+  * Mossdeep City: Twistedspoon & Nevermeltice
+  * Sootopolis City: Mystic Water
+  * Ever Grande City (Pokémon League): Blackglasses & Spell Tag
 
 **Note:** Saves files are compatible from Emerald Legacy, however I cannot guarantee reverse compatibility after saving on Emerald Legacy Enhanced and moving back to Emerald Legacy, please backup original saves before moving to Enhanced.
 
-## Dragon Type Physical - v1.1.0:
+## Dragon Type Physical - v1.1.1:
 
 Simple swap for Dragon type to be considered Physical. This **does not** do any stat rebalancing of any pokemon, just swaps the typing. (e.g. Salamence will benefit significantly, Latios will lose out).
 
@@ -73,7 +87,7 @@ Simple swap for Dragon type to be considered Physical. This **does not** do any 
 * Dragon type Physical in battle.
 * Updated text in Rustboro School to note change of Dragon typing to Physical.
 
-## Dragon Grovyle and Sceptile - v1.1.0:
+## Dragon Grovyle and Sceptile - v1.1.1:
 
 A common request throughout the Legacy project to make the Treecko Dragon type.
 
@@ -93,7 +107,7 @@ A common request throughout the Legacy project to make the Treecko Dragon type.
     * Lvl 34: Dragonbreath
     * Lvl 60: Outrage
 
-## Physical Dragon Grovyle and Sceptile - v1.1.0:
+## Physical Dragon Grovyle and Sceptile - v1.1.1:
 
 Combination of the two above patches for physical Dragon type and to add Dragon typing to the Treecko line. Only Grovyle and Sceptile stats rebalanced, as above no other pokemon rebalanced (e.g. Salamence will benefit significantly, Latios will lose out).
 
@@ -124,7 +138,7 @@ Combination of the two above patches for physical Dragon type and to add Dragon 
     * Base Special Defence Decreased by 5
   * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
 
-## Enhanced Starters - v1.1.0
+## Enhanced Starters - v1.1.1
 
 An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs the Hoenn Starters (and my preferred way to play!). For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
 
@@ -192,7 +206,7 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
   * Feraligatr:
     * Lvl 65: Hydro Cannon
 
-## Enhanced Starters - Dragon Physical - v1.1.0
+## Enhanced Starters - Dragon Physical - v1.1.1
 
 A combination of Enhanced Starters with Physical Dragon type.
 
@@ -209,9 +223,12 @@ A combination of Enhanced Starters with Physical Dragon type.
 * Add Teleport to field move usage without move learned (potentially as option to reduce too many options in Party Menu after Tate and Liza)
 * Option to toggle "Edit Stats" in the Options Menu to declutter Party Menu options
 * Potentially add item drop on wild pokemon fainting
-* Remove Battle Mode Option in Hard mode (if it doesn't break the options menu)
 * Increase Mirage Island Odds (or an easy way to enable it)
-* Add bulk option for coin purchases in Mauville Game Corner
+* Add a way to see Secret ID in-game
+* Look into Gen 6 Exp. Share/Exp. All implementation
+* Adding some Shiny Pokemon battles as a nod to the anime
+* Add a method to infinitely acquire Type Enhancing Items and Smoke Ball
+* Rebalance Battle Frontier Move Tutor
 
 ## Enhanced Credits List:
 * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
@@ -383,6 +400,7 @@ These videos also provide an overview of the hack and the ideology behind it:
 - Jirachii - [Hidden Power type in summary screen](https://www.pokecommunity.com/threads/simple-modifications-directory.416647/page-11#post-10269132)
 - cromerc - [Fixed unix build issues](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/1)
 - ElusiveEllie - [Fixed INSTALL.md instructions to point to correct project](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/8)
+- Scyrous - [Make Move Relearner Teach Egg Moves With A Flag](https://github.com/pret/pokeemerald/wiki/Make-Move-Relearner-Teach-Egg-Moves-With-A-Flag)
 
 
 ### Other Credits:
