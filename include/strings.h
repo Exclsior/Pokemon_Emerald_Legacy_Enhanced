@@ -1314,6 +1314,9 @@ extern const u8 gText_TM24AndPrice[];
 extern const u8 gText_TM13AndPrice[];
 extern const u8 gText_50CoinsAndPrice[];
 extern const u8 gText_500CoinsAndPrice[];
+extern const u8 gText_1000CoinsAndPrice[];
+extern const u8 gText_2500CoinsAndPrice[];
+extern const u8 gText_5000CoinsAndPrice[];
 extern const u8 gText_Excellent2[];
 extern const u8 gText_NotSoGood[];
 extern const u8 gText_LilycoveCity[];
@@ -3145,5 +3148,9 @@ extern const u8 gText_YourName[];
 extern const u8 gText_BoxName[];
 extern const u8 gText_PkmnsNickname[];
 extern const u8 gText_TellHimTheWords[];
+
+// Old Save File Messages
+extern const u8 gText_SaveFileOldUpdated[];
+extern const u8 gText_SaveFileOldErrored[];
 
 #endif // GUARD_STRINGS_H

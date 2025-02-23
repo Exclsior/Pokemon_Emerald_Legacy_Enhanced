@@ -33,6 +33,8 @@
 #define SAVE_STATUS_OK       1
 #define SAVE_STATUS_CORRUPT  2
 #define SAVE_STATUS_NO_FLASH 4
+#define SAVE_STATUS_OUTDATED 10
+#define SAVE_STATUS_UPDATED  11
 #define SAVE_STATUS_ERROR    0xFF
 
 // Special sector id value for certain save functions to
@@ -107,6 +109,7 @@ u16 GetSaveBlocksPointersBaseOffset(void);
 u32 TryReadSpecialSaveSector(u8 sector, u8 *dst);
 u32 TryWriteSpecialSaveSector(u8 sector, u8 *src);
 void Task_LinkFullSave(u8 taskId);
+bool8 UpdateSaveFile(void);
 
 // save_failed_screen.c
 void DoSaveFailedScreen(u8 saveType);

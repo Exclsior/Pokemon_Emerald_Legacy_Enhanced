@@ -50,7 +50,7 @@ static u16 GetSurfMonSpecies(void)
 
 static u16 GetSurfablePokemonSprite(void)
 {
-    u8 i;
+    u32 i;
     u16 mon = GetSurfMonSpecies();
 
     for (i = 0; i < ARRAY_COUNT(gSurfablePokemon); i++)
@@ -143,8 +143,11 @@ static void UpdateSurfMonOverlay(struct Sprite *sprite)
     SynchroniseSurfAnim(playerObj, sprite);
     SynchroniseSurfPosition(playerObj, sprite);
     
-    // Fix for Fishing whilst surfing having overlay sprite "bob" up and down appropriately, unfortunately breaks proper "jump" onto Surfing Pokemon - Needs further investigation to fix.
-    UpdateBobbingEffect(playerObj, linkedSprite, sprite);
+    // Fix for Fishing whilst surfing having overlay sprite "bob" up and down appropriately
+    if (VarGet(VAR_FREEZE_SURF_BLOB) == 0)
+	{
+        UpdateBobbingEffect(playerObj, linkedSprite, sprite);
+    }
 
     // Reset the subpriority for the overlay sprite so it shows on top of the player
     // We need this here so the subprio is correct after a screen transition (e.g. after exiting a battle)
