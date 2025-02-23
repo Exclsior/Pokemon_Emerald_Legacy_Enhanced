@@ -192,6 +192,8 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
     * Lvl 65: Blast Burn
   * Feraligatr:
     * Lvl 65: Hydro Cannon
+  * Brendan/May give 2 Ultra Balls in addition to Poké Balls to help catch the other starters
+  * 2000 extra Pokédollars at start of game to help catch the other starters
 
 ## Enhanced Starters - Dragon Physical - v1.1.0
 
