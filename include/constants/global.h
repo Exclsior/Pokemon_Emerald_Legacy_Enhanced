@@ -26,8 +26,12 @@
 #define LANGUAGE_SPANISH  7
 #define NUM_LANGUAGES     7
 
+#define SAVE_VERSION_0 0
+#define SAVE_VERSION_1 1
+
 #define GAME_VERSION (VERSION_EMERALD)
 #define GAME_LANGUAGE (LANGUAGE_ENGLISH)
+#define SAVE_VERSION (SAVE_VERSION_1)
 
 // party sizes
 #define PARTY_SIZE 6

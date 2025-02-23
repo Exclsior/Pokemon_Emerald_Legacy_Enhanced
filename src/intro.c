@@ -1146,6 +1146,11 @@ void CB2_InitCopyrightScreenAfterBootup(void)
         ResetMenuAndMonGlobals();
         Save_ResetSaveCounters();
         LoadGameSave(SAVE_NORMAL);
+        if (gSaveFileStatus == SAVE_STATUS_OUTDATED)
+        {
+            if (UpdateSaveFile())
+                gSaveFileStatus = SAVE_STATUS_UPDATED;
+        }
         if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
             Sav2_ClearSetDefault();
         SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);

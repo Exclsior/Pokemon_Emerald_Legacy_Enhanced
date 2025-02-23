@@ -683,6 +683,16 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                 tMenuType = HAS_NO_SAVED_GAME;
                 gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
                 break;
+            case SAVE_STATUS_UPDATED:
+                CreateMainMenuErrorWindow(gText_SaveFileOldUpdated);
+                tMenuType = HAS_SAVED_GAME;
+                gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
+                break;
+            case SAVE_STATUS_OUTDATED:
+                CreateMainMenuErrorWindow(gText_SaveFileOldErrored);
+                tMenuType = HAS_NO_SAVED_GAME;
+                gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
+                break;
             case SAVE_STATUS_ERROR:
                 CreateMainMenuErrorWindow(gText_SaveFileCorrupted);
                 gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
