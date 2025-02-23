@@ -14,11 +14,11 @@ The Pret Pokeemerald disassembly upon which the project is ultimately based has 
 
 Without any further ado, below are the features added to Base Patch (main branch):
 
-## Base Patch - v1.1.0:
+## Base Patch - v1.1.1:
 
 The Base Emerald Legacy Enhanced version which primarily focuses on quality of life additions such as HM improvements, Stat Editor for IVs and EVs, Nature Mints and an Egg Move Tutor.
 
-This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 12 Jan 2025.
+This Base patch includes all updates to Pokemon Emerald Legacy source coade as of 23 Feb 2025.
 
 ### Implemented Changes:
 * All Base Legacy changes as of v1.1.0
@@ -75,11 +75,10 @@ This Base patch includes all updates to Pokemon Emerald Legacy source coade as o
   * Mossdeep City: Twistedspoon & Nevermeltice
   * Sootopolis City: Mystic Water
   * Ever Grande City (Pokémon League): Blackglasses & Spell Tag
-  
 
 **Note:** Saves files are compatible from Emerald Legacy, however I cannot guarantee reverse compatibility after saving on Emerald Legacy Enhanced and moving back to Emerald Legacy, please backup original saves before moving to Enhanced.
 
-## Dragon Type Physical - v1.1.0:
+## Dragon Type Physical - v1.1.1:
 
 Simple swap for Dragon type to be considered Physical. This **does not** do any stat rebalancing of any pokemon, just swaps the typing. (e.g. Salamence will benefit significantly, Latios will lose out).
 
@@ -88,7 +87,7 @@ Simple swap for Dragon type to be considered Physical. This **does not** do any 
 * Dragon type Physical in battle.
 * Updated text in Rustboro School to note change of Dragon typing to Physical.
 
-## Dragon Grovyle and Sceptile - v1.1.0:
+## Dragon Grovyle and Sceptile - v1.1.1:
 
 A common request throughout the Legacy project to make the Treecko Dragon type.
 
@@ -108,7 +107,7 @@ A common request throughout the Legacy project to make the Treecko Dragon type.
     * Lvl 34: Dragonbreath
     * Lvl 60: Outrage
 
-## Physical Dragon Grovyle and Sceptile - v1.1.0:
+## Physical Dragon Grovyle and Sceptile - v1.1.1:
 
 Combination of the two above patches for physical Dragon type and to add Dragon typing to the Treecko line. Only Grovyle and Sceptile stats rebalanced, as above no other pokemon rebalanced (e.g. Salamence will benefit significantly, Latios will lose out).
 
@@ -139,7 +138,7 @@ Combination of the two above patches for physical Dragon type and to add Dragon 
     * Base Special Defence Decreased by 5
   * **Note:** If you are bringing a save file from Emerald Legacy and have Grovyle or Sceptile in your party, please deposit and withdraw from a PC to get their base stat calculations to be reset.
 
-## Enhanced Starters - v1.1.0
+## Enhanced Starters - v1.1.1
 
 An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs the Hoenn Starters (and my preferred way to play!). For the most balanced version, please use the original version! This version is just to feed into the childhood nostalgia feeling of having an overpowered starter throughout the game and to catch all the starters early in the game.
 
@@ -209,7 +208,7 @@ An expansion on the Pokemon Emerald Legacy Enhanced Project which further buffs 
   * Brendan/May give 2 Ultra Balls in addition to Poké Balls to help catch the other starters
   * 2000 extra Pokédollars at start of game to help catch the other starters
 
-## Enhanced Starters - Dragon Physical - v1.1.0
+## Enhanced Starters - Dragon Physical - v1.1.1
 
 A combination of Enhanced Starters with Physical Dragon type.
 
