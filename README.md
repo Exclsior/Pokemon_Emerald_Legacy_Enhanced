@@ -57,6 +57,7 @@ This Base patch includes all updates to Pokemon Emerald Legacy source coade as o
 * Added Multi item Register Menu.
   * One registered item works same as vanilla Emerald, multiple registered items will show on-field menu to select item.
   * **Note:** Emerald Legacy Saves brought over will lose the originally selected item, re-registering Key Item will fix issue.
+* Added larger quantity coin purchasing in Mauville Game Corner and improved efficiency to purchase more coins.
 * Updated Regi overworld encounter sprites to match the Regi PokeDolls instead.
 * Beldum, Metang and Metagross Catch Rates increased to 45 to match other psuedo-legendaries.
 * Added Self-Destruct to Wailmer and Wailord Egg Move Pool
@@ -209,9 +210,13 @@ A combination of Enhanced Starters with Physical Dragon type.
 * Add Teleport to field move usage without move learned (potentially as option to reduce too many options in Party Menu after Tate and Liza)
 * Option to toggle "Edit Stats" in the Options Menu to declutter Party Menu options
 * Potentially add item drop on wild pokemon fainting
-* Remove Battle Mode Option in Hard mode (if it doesn't break the options menu)
 * Increase Mirage Island Odds (or an easy way to enable it)
-* Add bulk option for coin purchases in Mauville Game Corner
+* Add more pokeballs for early game
+* Add a way to see Secret ID in-game
+* Look into Gen 6 Exp. Share/Exp. All implementation
+* Adding some Shiny Pokemon battles as a nod to the anime
+* Add a method to infinitely acquire Type Enhancing Items and Smoke Ball
+* Rebalance Battle Frontier Move Tutor
 
 ## Enhanced Credits List:
 * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
@@ -383,6 +388,7 @@ These videos also provide an overview of the hack and the ideology behind it:
 - Jirachii - [Hidden Power type in summary screen](https://www.pokecommunity.com/threads/simple-modifications-directory.416647/page-11#post-10269132)
 - cromerc - [Fixed unix build issues](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/1)
 - ElusiveEllie - [Fixed INSTALL.md instructions to point to correct project](https://github.com/cRz-Shadows/Pokemon_Emerald_Legacy/pull/8)
+- Scyrous - [Make Move Relearner Teach Egg Moves With A Flag](https://github.com/pret/pokeemerald/wiki/Make-Move-Relearner-Teach-Egg-Moves-With-A-Flag)
 
 
 ### Other Credits:

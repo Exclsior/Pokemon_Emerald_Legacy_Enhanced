@@ -16,6 +16,7 @@
 #include "strings.h"
 #include "gba/m4a_internal.h"
 #include "constants/rgb.h"
+#include "event_data.h"
 
 enum
 {
@@ -313,7 +314,18 @@ static bool8 CheckConditions(int selection)
         //case MENUITEM_CUSTOM_HP_BAR:          return TRUE;
         //case MENUITEM_CUSTOM_EXP_BAR:         return TRUE;
         case MENUITEM_MAIN_BATTLESCENE:     return TRUE;
-        case MENUITEM_MAIN_BATTLESTYLE:     return TRUE;
+        case MENUITEM_MAIN_BATTLESTYLE:
+        {
+            if (FlagGet(FLAG_HARD) || FlagGet(FLAG_NUZLOCKE))
+            {
+                return FALSE;
+            }
+            else
+            {
+                return TRUE;
+            }
+
+        }
         case MENUITEM_BATTLE_ITEMANIMATE:     return TRUE;
         case MENUITEM_BATTLE_CANCEL:          return TRUE;
         case MENUITEM_BATTLE_COUNT:           return TRUE;
@@ -404,8 +416,8 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledMain[MENUITEM_MAIN_COU
     [MENUITEM_MAIN_CANCEL]      = sText_Empty,
 };
 
-// Disabled Custom
-//static const u8 sText_Desc_Disabled_BattleHPBar[]   = _("Only active if xyz.");
+// Disabled Battle
+static const u8 sText_Desc_Disabled_BattleStyle[]   = _("BATTLE STYLE cannot be changed if\nHARD or HARDCORE difficulty chosen.");
 static const u8 *const sOptionMenuItemDescriptionsDisabledBattle[MENUITEM_BATTLE_COUNT] =
 {
     //[MENUITEM_CUSTOM_HP_BAR]      = sText_Desc_Disabled_BattleHPBar,
@@ -413,8 +425,9 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledBattle[MENUITEM_BATTLE
     //[MENUITEM_CUSTOM_FONT]        = sText_Empty,
     //[MENUITEM_CUSTOM_MATCHCALL]   = sText_Empty,
     [MENUITEM_MAIN_BATTLESCENE] = sText_Empty,
-    [MENUITEM_MAIN_BATTLESTYLE] = sText_Empty,
+    [MENUITEM_MAIN_BATTLESTYLE] = sText_Desc_Disabled_BattleStyle,
     [MENUITEM_BATTLE_CANCEL]      = sText_Empty,
+    
 };
 
 static const u8 *const OptionTextDescription(void)
@@ -433,7 +446,7 @@ static const u8 *const OptionTextDescription(void)
         return sOptionMenuItemDescriptionsMain[menuItem][selection];
     case MENU_BATTLE:
         if (!CheckConditions(menuItem))
-            return sOptionMenuItemDescriptionsDisabledMain[menuItem];
+            return sOptionMenuItemDescriptionsDisabledBattle[menuItem];
         selection = sOptions->sel_battle[menuItem];
         //if (menuItem == MENUITEM_WORLD_BIKEMUSIC || menuItem == MENUITEM_WORLD_SURFMUSIC)
         //    selection = 0;
@@ -681,7 +694,16 @@ void CB2_InitOptionPlusMenu(void)
         //sOptions->sel_battle[MENUITEM_CUSTOM_HP_BAR]      = gSaveBlock2Ptr->optionsHpBarSpeed;
         //sOptions->sel_battle[MENUITEM_CUSTOM_EXP_BAR]     = gSaveBlock2Ptr->optionsExpBarSpeed;
         sOptions->sel_battle[MENUITEM_MAIN_BATTLESCENE] = gSaveBlock2Ptr->optionsBattleSceneOff;
-        sOptions->sel_battle[MENUITEM_MAIN_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
+
+        if (FlagGet(FLAG_HARD) || FlagGet(FLAG_NUZLOCKE))
+        {
+            sOptions->sel_battle[MENUITEM_MAIN_BATTLESTYLE] = OPTIONS_BATTLE_STYLE_SET;
+        }
+        else
+        {
+            sOptions->sel_battle[MENUITEM_MAIN_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
+        }
+
         sOptions->sel_battle[MENUITEM_BATTLE_ITEMANIMATE]   = gSaveBlock2Ptr->optionsBattleItemAnimation;
 
         sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC]   = gSaveBlock2Ptr->optionsBikeMusic;

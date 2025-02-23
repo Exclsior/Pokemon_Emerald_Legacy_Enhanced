@@ -117,9 +117,9 @@
 #define VAR_ROUTE102_STATE                               0x4061 // Unused Var
 #define VAR_ROUTE103_STATE                               0x4062 // Unused Var
 #define VAR_ROUTE104_STATE                               0x4063
-#define VAR_ROUTE105_STATE                               0x4064 // Unused Var
-#define VAR_ROUTE106_STATE                               0x4065 // Unused Var
-#define VAR_SHOAL_CAVE_LOW_TIDE_INNER_ROOM_WILD_SET     0x4066
+#define VAR_SURF_MON_SLOT                                0x4064 // Replaced unused 'VAR_ROUTE105_STATE' for Surfing Overworlds
+#define VAR_FREEZE_SURF_BLOB                             0x4065 // Replaced unused 'VAR_ROUTE106_STATE' for Surfing Overworlds - Set on surf init to stop blob overlay being offset incorrectly
+#define VAR_SHOAL_CAVE_LOW_TIDE_INNER_ROOM_WILD_SET      0x4066
 #define VAR_ARTISAN_CAVE_B1F_WILD_SET                    0x4067
 #define VAR_SOOTOPOLIS_CITY_WILD_SET                     0x4068
 #define VAR_ROUTE110_STATE                               0x4069
@@ -275,9 +275,8 @@
 #define VAR_ROUTE116_WILD_SET                            0x40FF
 #define VAR_NORMAN_REMATCH_CALL_STEP_COUNTER             0x4100
 #define VAR_SHOW_ZINNIA                                  0x4101
-#define VAR_SURF_MON_SLOT                                0x4102 // Added new VAR for Surf Mon Slot
 
-#define VARS_END                                         0x4103
+#define VARS_END                                         0x4100
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)
 
 #define SPECIAL_VARS_START            0x8000
