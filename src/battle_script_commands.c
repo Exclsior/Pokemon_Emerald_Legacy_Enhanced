@@ -3530,6 +3530,7 @@ static void Cmd_getexp(void)
         {
             AddBagItem(gBattleMons[gBattlerFainted].item, 1);
             PREPARE_ITEM_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerFainted].item);
+            PREPARE_POCKET_BUFFER(gBattleTextBuff2, gBattleMons[gBattlerFainted].item);
             PrepareStringBattle(STRINGID_ADDEDTOBAG, gBattleStruct->expGetterBattlerId);
             gBattleScripting.getexpState = 8;
         }
