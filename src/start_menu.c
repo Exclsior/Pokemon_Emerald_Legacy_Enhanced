@@ -1425,3 +1425,14 @@ void AppendToList(u8 *list, u8 *pos, u8 newEntry)
     list[*pos] = newEntry;
     (*pos)++;
 }
+
+bool32 CheckInList(u8 *list, u8 *listLength, u8 listItem)
+{
+    u32 i;
+
+    for (i = 0; i < *listLength; i++)
+        if(list[i] == listItem)
+            return TRUE;
+    
+    return FALSE;
+}

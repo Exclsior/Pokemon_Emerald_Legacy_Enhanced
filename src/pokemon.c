@@ -6342,6 +6342,38 @@ u32 CanSpeciesLearnTMHM(u16 species, u8 tm)
     }
 }
 
+bool8 CanMonLearnLevelUpMove(struct Pokemon *mon, u8 move)
+{
+    u16 learnedMoves[MAX_MON_MOVES];
+    bool8 canLearn = FALSE;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
+    u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
+    int i, j, k;
+
+    if (species == SPECIES_EGG)
+    {
+        return FALSE;
+    }
+    
+    for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
+    {
+        u16 moveLevel;
+
+        if (gLevelUpLearnsets[species][i] == LEVEL_UP_END)
+            break;
+
+        moveLevel = gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_LV;
+
+        if (moveLevel <= (level << 9))
+        {
+            if (move == (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID))
+                canLearn = TRUE;
+        }
+    }
+
+    return canLearn;
+}
+
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
 {
     u16 learnedMoves[MAX_MON_MOVES];
@@ -6737,14 +6769,30 @@ void SetWildMonHeldItem(void)
     {
         u16 rnd = Random() % 100;
         u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, 0);
-        u16 chanceNoItem = 45;
-        u16 chanceNotRare = 95;
+        u16 chanceNoItem = 45; // 45% chance for no item, 50% chance for Common Item
+        u16 chanceNotRare = 95; // 5% chance for Rare Item
+
+        // Set default Clamperl to equal chance of either Common or Rare item for evolution items.
+        if (species == SPECIES_CLAMPERL)
+        {
+            chanceNoItem = 90; // 90% chance for no item, 5% chance for Common Item
+            chanceNotRare = 95; // 5% chance for Rare Item
+        }
+        
         if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG, 0)
             && GetMonAbility(&gPlayerParty[0]) == ABILITY_COMPOUND_EYES)
         {
-            chanceNoItem = 20;
-            chanceNotRare = 80;
+            chanceNoItem = 5; // 5% chance for no item, 70% chance for Common Item
+            chanceNotRare = 75; // 25% chance for Rare Item
+            
+            // Set Clamperl to equal chance of either Common or Rare item for evolution items.
+            if (species == SPECIES_CLAMPERL)
+            {
+                chanceNoItem = 80; // 80% chance for no item, 10% chance for Common Item
+                chanceNotRare = 90; // 10% chance for Rare Item
+            }
         }
+
         if (gMapHeader.mapLayoutId == LAYOUT_ALTERING_CAVE)
         {
             s32 alteringCaveId = GetWildMonTableIdInAlteringCave(species);

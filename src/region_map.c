@@ -1170,6 +1170,9 @@ static void RegionMap_InitializeStateBasedOnSSTidalLocation(void)
 
 static u8 GetMapsecType(u16 mapSecId)
 {
+    if (CheckPlayerCurrentlyHasSecretBase() && mapSecId == VarGet(VAR_SECRET_BASE_MAP))
+        mapSecId = MAPSEC_SECRET_BASE;
+
     switch (mapSecId)
     {
     case MAPSEC_NONE:
@@ -1210,6 +1213,8 @@ static u8 GetMapsecType(u16 mapSecId)
         return FlagGet(FLAG_LANDMARK_BATTLE_FRONTIER) ? MAPSECTYPE_BATTLE_FRONTIER : MAPSECTYPE_NONE;
     case MAPSEC_SOUTHERN_ISLAND:
         return FlagGet(FLAG_LANDMARK_SOUTHERN_ISLAND) ? MAPSECTYPE_ROUTE : MAPSECTYPE_NONE;
+    case MAPSEC_SECRET_BASE:
+        return FlagGet(FLAG_RECEIVED_SECRET_POWER) ? MAPSECTYPE_ROUTE_CANFLY : MAPSECTYPE_ROUTE;
     default:
         return MAPSECTYPE_ROUTE;
     }
@@ -1440,12 +1445,25 @@ static void UNUSED ClearUnkCursorSpriteData(void)
     sRegionMap->cursorSprite->data[3] = FALSE;
 }
 
+static void GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *height)
+{
+    *x = gRegionMapEntries[mapSecId].x;
+    *y = gRegionMapEntries[mapSecId].y;
+    *width = gRegionMapEntries[mapSecId].width;
+    *height = gRegionMapEntries[mapSecId].height;
+}
+
 void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
 {
     u8 spriteId;
     struct SpriteSheet sheet = {sRegionMapPlayerIcon_BrendanGfx, 0x80, tileTag};
     struct SpritePalette palette = {sRegionMapPlayerIcon_BrendanPal, paletteTag};
     struct SpriteTemplate template = {tileTag, paletteTag, &sRegionMapPlayerIconOam, sRegionMapPlayerIconAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy};
+    // u16 mapSecId;
+    // u16 x;
+    // u16 y;
+    // u16 width;
+    // u16 height;
 
     if (IsEventIslandMapSecId(gMapHeader.regionMapSectionId))
     {
@@ -1473,6 +1491,15 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
         sRegionMap->playerIconSprite->y = sRegionMap->playerIconSpritePosY * 16 - 0x42;
         sRegionMap->playerIconSprite->callback = SpriteCB_PlayerIconMapZoomed;
     }
+
+    // if (CheckPlayerCurrentlyHasSecretBase())
+    // {
+    //     mapSecId = VarGet(VAR_SECRET_BASE_MAP);  
+    //     GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
+    //     x = (x + MAPCURSOR_X_MIN) * 8 + 4;
+    //     y = (y + MAPCURSOR_Y_MIN) * 8 + 4;
+    //     spriteId = CreateSprite(&template, x, y, 2);
+    // }
 }
 
 static void HideRegionMapPlayerIcon(void)
@@ -1613,14 +1640,6 @@ u8 *GetMapNameHandleAquaHideout(u8 *dest, u16 mapSecId)
         return StringCopy(dest, gText_Hideout);
     else
         return GetMapNameGeneric(dest, mapSecId);
-}
-
-static void GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *height)
-{
-    *x = gRegionMapEntries[mapSecId].x;
-    *y = gRegionMapEntries[mapSecId].y;
-    *width = gRegionMapEntries[mapSecId].width;
-    *height = gRegionMapEntries[mapSecId].height;
 }
 
 bool8 IsRegionMapZoomed(void)
@@ -1781,6 +1800,20 @@ static void DrawFlyDestTextWindow(void)
                 break;
             }
         }
+
+        if (CheckPlayerCurrentlyHasSecretBase() && sFlyMap->regionMap.mapSecId == VarGet(VAR_SECRET_BASE_MAP))
+        {
+            StringLength(gText_SecretBase);
+            namePrinted = TRUE;
+            ClearStdWindowAndFrameToTransparent(WIN_MAPSEC_NAME, FALSE);
+            DrawStdFrameWithCustomTileAndPalette(WIN_MAPSEC_NAME_TALL, FALSE, 101, 13);
+            AddTextPrinterParameterized(WIN_MAPSEC_NAME_TALL, FONT_NORMAL, sFlyMap->regionMap.mapSecName, 0, 1, 0, NULL);
+            name = gText_SecretBase;
+            AddTextPrinterParameterized(WIN_MAPSEC_NAME_TALL, FONT_NORMAL, name, GetStringRightAlignXOffset(FONT_NORMAL, name, 96), 17, 0, NULL);
+            ScheduleBgCopyTilemapToVram(0);
+            sDrawFlyDestTextWindow = TRUE;
+        }
+
         if (!namePrinted)
         {
             if (sDrawFlyDestTextWindow == TRUE)
@@ -1872,6 +1905,37 @@ static void CreateFlyDestIcons(void)
         }
         canFlyFlag++;
     }
+
+    // Alternate Method to highlight Secret Base - Use Town/City icon
+    // if (CheckPlayerCurrentlyHasSecretBase())
+    // {
+    //     mapSecId = VarGet(VAR_SECRET_BASE_MAP);        
+    //     canFlyFlag = FLAG_RECEIVED_SECRET_POWER;
+
+    //     GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
+    //     x = (x + MAPCURSOR_X_MIN) * 8 + 4;
+    //     y = (y + MAPCURSOR_Y_MIN) * 8 + 4;
+
+    //     if (width >= 2)
+    //         shape = SPRITE_SHAPE(16x8);
+    //     else if (height >= 2)
+    //         shape = SPRITE_SHAPE(8x16);
+    //     else
+    //         shape = SPRITE_SHAPE(8x8);
+
+    //     spriteId = CreateSprite(&sFlyDestIconSpriteTemplate, x, y, 10);
+    //     if (spriteId != MAX_SPRITES)
+    //     {
+    //         gSprites[spriteId].oam.shape = shape;
+
+    //         if (FlagGet(canFlyFlag))
+    //             gSprites[spriteId].callback = SpriteCB_FlyDestIcon;
+    //         else
+    //             shape += 3;
+
+    //         StartSpriteAnim(&gSprites[spriteId], shape);
+    //     }
+    // }
 }
 
 // Draw a red outline box on the mapsec if its corresponding flag has been set
@@ -1885,6 +1949,23 @@ static void TryCreateRedOutlineFlyDestIcons(void)
     u16 height;
     u16 mapSecId;
     u8 spriteId;
+
+    // Alternate Method to highlight Secret Base - Use Battle Frontier Red Outline
+    if (CheckPlayerCurrentlyHasSecretBase())
+    {
+        mapSecId = VarGet(VAR_SECRET_BASE_MAP);
+        GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
+        x = (x + MAPCURSOR_X_MIN) * 8;
+        y = (y + MAPCURSOR_Y_MIN) * 8;
+        spriteId = CreateSprite(&sFlyDestIconSpriteTemplate, x, y, 2);
+        if (spriteId != MAX_SPRITES)
+        {
+            gSprites[spriteId].oam.size = SPRITE_SIZE(16x16);
+            gSprites[spriteId].callback = SpriteCB_FlyDestIcon;
+            StartSpriteAnim(&gSprites[spriteId], FLYDESTICON_RED_OUTLINE);
+            gSprites[spriteId].sIconMapSec = mapSecId;
+        }
+    }
 
     for (i = 0; sRedOutlineFlyDestinations[i][1] != MAPSEC_NONE; i++)
     {
@@ -1958,7 +2039,7 @@ static void CB_HandleFlyMapInput(void)
             DrawFlyDestTextWindow();
             break;
         case MAP_INPUT_A_BUTTON:
-            if (sFlyMap->regionMap.mapSecType == MAPSECTYPE_CITY_CANFLY || sFlyMap->regionMap.mapSecType == MAPSECTYPE_BATTLE_FRONTIER)
+            if (sFlyMap->regionMap.mapSecType == MAPSECTYPE_CITY_CANFLY || sFlyMap->regionMap.mapSecType == MAPSECTYPE_ROUTE_CANFLY || sFlyMap->regionMap.mapSecType == MAPSECTYPE_BATTLE_FRONTIER)
             {
                 m4aSongNumStart(SE_SELECT);
                 sFlyMap->choseFlyLocation = TRUE;
@@ -1988,6 +2069,10 @@ static void CB_ExitFlyMap(void)
             FreeRegionMapIconResources();
             if (sFlyMap->choseFlyLocation)
             {
+                
+                if (CheckPlayerCurrentlyHasSecretBase() && sFlyMap->regionMap.mapSecId == VarGet(VAR_SECRET_BASE_MAP))
+                    sFlyMap->regionMap.mapSecId = MAPSEC_SECRET_BASE;
+
                 switch (sFlyMap->regionMap.mapSecId)
                 {
                 case MAPSEC_SOUTHERN_ISLAND:
@@ -2001,6 +2086,9 @@ static void CB_ExitFlyMap(void)
                     break;
                 case MAPSEC_EVER_GRANDE_CITY:
                     SetWarpDestinationToHealLocation(FlagGet(FLAG_LANDMARK_POKEMON_LEAGUE) && sFlyMap->regionMap.posWithinMapSec == 0 ? HEAL_LOCATION_EVER_GRANDE_CITY_POKEMON_LEAGUE : HEAL_LOCATION_EVER_GRANDE_CITY);
+                    break;
+                case MAPSEC_SECRET_BASE:
+                    SetWarpDestinationToDynamicWarp(WARP_ID_SECRET_BASE);
                     break;
                 default:
                     if (sMapHealLocations[sFlyMap->regionMap.mapSecId][2] != HEAL_LOCATION_NONE)
