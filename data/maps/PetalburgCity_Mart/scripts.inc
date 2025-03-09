@@ -85,6 +85,7 @@ PetalburgCity_Mart_Pokemart_PostGame:
 	.2byte ITEM_X_DEFEND
 	.2byte ITEM_ORANGE_MAIL
 	.2byte ITEM_SILK_SCARF
+	.2byte ITEM_SILVER_POWDER
 	.2byte ITEM_NONE
 	release
 	end

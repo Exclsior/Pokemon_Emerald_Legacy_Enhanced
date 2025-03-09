@@ -264,6 +264,15 @@ void CheckPlayerHasSecretBase(void)
         gSpecialVar_Result = FALSE;
 }
 
+bool32 CheckPlayerCurrentlyHasSecretBase(void)
+{
+    // The player's secret base is always the first in the array.
+    if (gSaveBlock1Ptr->secretBases[0].secretBaseId)
+        return TRUE;
+    else
+        return FALSE;
+}
+
 static u8 GetSecretBaseTypeInFrontOfPlayer_(void)
 {
     s16 x, y;
