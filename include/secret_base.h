@@ -23,6 +23,7 @@ void ClearSecretBases(void);
 void SetCurSecretBaseIdFromPosition(const struct MapPosition *position, const struct MapEvents *events);
 void TrySetCurSecretBaseIndex(void);
 void CheckPlayerHasSecretBase(void);
+bool32 CheckPlayerCurrentlyHasSecretBase(void);
 void ToggleSecretBaseEntranceMetatile(void);
 void ScriptContext_Enable(void);
 void ReceiveSecretBasesData(void *records, size_t recordSize, u8 linkIdx);
