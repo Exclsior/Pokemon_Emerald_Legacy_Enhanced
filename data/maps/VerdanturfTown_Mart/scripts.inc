@@ -12,6 +12,7 @@ VerdanturfTown_Mart_EventScript_Clerk_MainGame::
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart VerdanturfTown_Mart_Pokemart
+	goto_if_set FLAG_RUSTURF_TUNNEL_OPENED, VerdanturfTown_Mart_EventScript_Clerk_ExpandedItems
 	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end
@@ -43,10 +44,35 @@ VerdanturfTown_Mart_Pokemart:
 	release
 	end
 
+VerdanturfTown_Mart_EventScript_Clerk_ExpandedItems::
+	pokemart VerdanturfTown_Mart_Pokemart_Expanded
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+VerdanturfTown_Mart_Pokemart_Expanded:
+	.2byte ITEM_GREAT_BALL
+	.2byte ITEM_NEST_BALL
+	.2byte ITEM_LUXURY_BALL
+	.2byte ITEM_SUPER_POTION
+	.2byte ITEM_ANTIDOTE
+	.2byte ITEM_PARALYZE_HEAL
+	.2byte ITEM_AWAKENING
+	.2byte ITEM_BURN_HEAL
+	.2byte ITEM_ICE_HEAL
+	.2byte ITEM_SUPER_REPEL
+	.2byte ITEM_X_SPECIAL
+	.2byte ITEM_FLUFFY_TAIL
+	.2byte ITEM_NONE
+	release
+	end
+
 	.align 2
 VerdanturfTown_Mart_Pokemart_PostGame:
 	.2byte ITEM_GREAT_BALL
 	.2byte ITEM_NEST_BALL
+	.2byte ITEM_LUXURY_BALL
 	.2byte ITEM_SUPER_POTION
 	.2byte ITEM_ANTIDOTE
 	.2byte ITEM_PARALYZE_HEAL
