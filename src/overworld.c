@@ -659,6 +659,18 @@ void SetWarpDestinationToDynamicWarp(u8 unusedWarpId)
     sWarpDestination = gSaveBlock1Ptr->dynamicWarp;
 }
 
+// Function to store coordinates for Player's Secret Base Entrance
+void SetPlayerSecretBaseCoords(s8 mapGroup, s8 mapNum, s8 warpId, s8 x, s8 y)
+{
+    SetWarpData(&gSaveBlock1Ptr->secretBaseWarp, mapGroup, mapNum, warpId, x, y);
+}
+
+// Function to Set warp destination to Player's Secret Base Entrance
+void SetWarpDestinationToPlayerSecretBase()
+{
+    sWarpDestination = gSaveBlock1Ptr->secretBaseWarp;
+}
+
 void SetWarpDestinationToHealLocation(u8 healLocationId)
 {
     const struct HealLocation *healLocation = GetHealLocation(healLocationId);

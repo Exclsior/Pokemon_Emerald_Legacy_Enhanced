@@ -46,6 +46,7 @@ enum
     MENUITEM_MAIN_BATTLESCENE,
     MENUITEM_MAIN_BATTLESTYLE,
     MENUITEM_BATTLE_ITEMANIMATE,
+    MENUITEM_BATTLE_TYPEEFFECT,
     MENUITEM_BATTLE_CANCEL,
     MENUITEM_BATTLE_COUNT,
 };
@@ -180,6 +181,7 @@ static void DrawChoices_BikeMusic(int selection, int y);
 static void DrawChoices_SurfMusic(int selection, int y);
 static void DrawChoices_SurfOverworld(int selection, int y);
 static void DrawChoices_ItemAnimate(int selection, int y);
+static void DrawChoices_TypeEffect(int selection, int y);
 static void DrawChoices_FrameType(int selection, int y);
 static void DrawBgWindowFrames(void);
 
@@ -232,6 +234,7 @@ struct // MENU_BATTLE
     [MENUITEM_MAIN_BATTLESCENE]  = {DrawChoices_BattleScene, ProcessInput_Options_Two},
     [MENUITEM_MAIN_BATTLESTYLE]  = {DrawChoices_BattleStyle, ProcessInput_Options_Two},
     [MENUITEM_BATTLE_ITEMANIMATE]  = {DrawChoices_ItemAnimate,   ProcessInput_Options_Four},
+    [MENUITEM_BATTLE_TYPEEFFECT]  = {DrawChoices_TypeEffect, ProcessInput_Options_Two},
     [MENUITEM_BATTLE_CANCEL]       = {NULL, NULL},
 };
 
@@ -269,6 +272,7 @@ static const u8 *const sOptionMenuItemsNamesBattle[MENUITEM_BATTLE_COUNT] =
     [MENUITEM_MAIN_BATTLESCENE] = gText_BattleScene,
     [MENUITEM_MAIN_BATTLESTYLE] = gText_BattleStyle,
     [MENUITEM_BATTLE_ITEMANIMATE]   = gText_ItemAnimate,
+    [MENUITEM_BATTLE_TYPEEFFECT]   = gText_TypeEffect,
     [MENUITEM_BATTLE_CANCEL]      = gText_OptionMenuSave,
 };
 
@@ -327,6 +331,7 @@ static bool8 CheckConditions(int selection)
 
         }
         case MENUITEM_BATTLE_ITEMANIMATE:     return TRUE;
+        case MENUITEM_BATTLE_TYPEEFFECT:      return TRUE;
         case MENUITEM_BATTLE_CANCEL:          return TRUE;
         case MENUITEM_BATTLE_COUNT:           return TRUE;
         }
@@ -375,6 +380,8 @@ static const u8 sText_Desc_ItemAnimateNormal[]  = _("Original in-battle item ani
 static const u8 sText_Desc_ItemAnimateRed[]     = _("Reduced in-battle item animation.\nRemoved the shaking animation.");
 static const u8 sText_Desc_ItemAnimateMin[]     = _("Minimal in-battle item animation.\nOnly the final ring animation.");
 static const u8 sText_Desc_ItemAnimateNone[]    = _("No in-battle item animation.\nAnimation skipped.");
+static const u8 sText_Desc_TypeEffect_On[]      = _("Show move type effect in battle.\nGreen: Super, Red: Not very, Grey: None");
+static const u8 sText_Desc_TypeEffect_Off[]     = _("Original experience, does not show\nmove type effectiveness in battle.");
 //static const u8 sText_Desc_FontType[]           = _("Choose the font design.");
 //static const u8 sText_Desc_OverworldCallsOn[]   = _("TRAINERs will be able to call you,\noffering rematches and info.");
 //static const u8 sText_Desc_OverworldCallsOff[]  = _("You will not receive calls.\nSpecial events will still occur.");
@@ -385,6 +392,7 @@ static const u8 *const sOptionMenuItemDescriptionsBattle[MENUITEM_BATTLE_COUNT][
     [MENUITEM_MAIN_BATTLESCENE] = {sText_Desc_BattleScene_On,       sText_Desc_BattleScene_Off, sText_Empty},
     [MENUITEM_MAIN_BATTLESTYLE] = {sText_Desc_BattleStyle_Shift,    sText_Desc_BattleStyle_Set, sText_Empty},
     [MENUITEM_BATTLE_ITEMANIMATE] = {sText_Desc_ItemAnimateNormal,  sText_Desc_ItemAnimateRed,  sText_Desc_ItemAnimateMin,  sText_Desc_ItemAnimateNone},
+    [MENUITEM_BATTLE_TYPEEFFECT] = {sText_Desc_TypeEffect_On,    sText_Desc_TypeEffect_Off, sText_Empty},
     [MENUITEM_BATTLE_CANCEL]      = {sText_Desc_Save,               sText_Empty,                sText_Empty,                sText_Empty},
 };
 
@@ -705,6 +713,7 @@ void CB2_InitOptionPlusMenu(void)
         }
 
         sOptions->sel_battle[MENUITEM_BATTLE_ITEMANIMATE]   = gSaveBlock2Ptr->optionsBattleItemAnimation;
+        sOptions->sel_battle[MENUITEM_BATTLE_TYPEEFFECT]    = FlagGet(FLAG_SHOW_TYPE_EFFECT_BATTLE);
 
         sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC]   = gSaveBlock2Ptr->optionsBikeMusic;
         sOptions->sel_world[MENUITEM_WORLD_SURFMUSIC]   = gSaveBlock2Ptr->optionsSurfMusic;
@@ -944,6 +953,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsBattleSceneOff       = sOptions->sel_battle[MENUITEM_MAIN_BATTLESCENE];
     gSaveBlock2Ptr->optionsBattleStyle          = sOptions->sel_battle[MENUITEM_MAIN_BATTLESTYLE];
     gSaveBlock2Ptr->optionsBattleItemAnimation  = sOptions->sel_battle[MENUITEM_BATTLE_ITEMANIMATE];
+    sOptions->sel_battle[MENUITEM_BATTLE_TYPEEFFECT] == 0 ? FlagClear(FLAG_SHOW_TYPE_EFFECT_BATTLE) : FlagSet(FLAG_SHOW_TYPE_EFFECT_BATTLE);
     
     gSaveBlock2Ptr->optionsBikeMusic            = sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC];
     gSaveBlock2Ptr->optionsSurfMusic            = sOptions->sel_world[MENUITEM_WORLD_SURFMUSIC];
@@ -1204,6 +1214,16 @@ static void DrawChoices_BattleStyle(int selection, int y)
 
     DrawOptionMenuChoice(gText_BattleStyleShift, 104, y, styles[0], active);
     DrawOptionMenuChoice(gText_BattleStyleSet, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleStyleSet, 198), y, styles[1], active);
+}
+
+static void DrawChoices_TypeEffect(int selection, int y)
+{
+    bool8 active = CheckConditions(MENUITEM_BATTLE_TYPEEFFECT);
+    u8 styles[2] = {0};
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_TypeEffectOn, 104, y, styles[0], active);
+    DrawOptionMenuChoice(gText_TypeEffectOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_TypeEffectOff, 198), y, styles[1], active);
 }
 
 static void DrawChoices_Sound(int selection, int y)

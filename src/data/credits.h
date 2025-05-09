@@ -1,5 +1,10 @@
 enum
 {
+    PAGE_ELE_TITLE,
+    PAGE_ELE_CREDIT,
+    PAGE_ELE_CODE_CREDITS_1,
+    PAGE_ELE_CODE_CREDITS_2,
+    PAGE_ELE_CODE_CREDITS_3,
     PAGE_EL_TITLE,
     PAGE_EL_PROJECT_LEAD,
     PAGE_EL_LEAD_PROGRAMMER,
@@ -86,6 +91,18 @@ enum
 };
 
 #define ENTRIES_PER_PAGE 5
+
+static const u8 sCreditsText_PkmnEmeraldVersionEnhanced[]    = _("POKéMON EMERALD LEGACY ENHANCED");
+
+static const u8 sCreditsText_Developer[]                     = _("Developer");
+static const u8 sCreditsText_Exclsior[]                      = _("Exclsior");
+static const u8 sCreditsText_TeamAqua[]                      = _("Team Aquas Hideout");
+static const u8 sCreditsText_YakAttack[]                     = _("Yak Attack");
+static const u8 sCreditsText_Kurausukun[]                    = _("Kurausukun");
+static const u8 sCreditsText_Zatsu[]                         = _("Zatsu");
+static const u8 sCreditsText_Slawter666[]                    = _("slawter666");
+static const u8 sCreditsText_Wally217[]                      = _("wally-217");
+static const u8 sCreditsText_HiroshiSotomura[]               = _("Hiroshi Sotomura");
 
 static const u8 sCreditsText_PkmnEmeraldLegacy[]             = _("POKéMON EMERALD LEGACY");
 
@@ -348,6 +365,17 @@ static const u8 sCreditsText_ShellieDow[]                     = _("Shellie Dow")
 static const u8 sCreditsText_ErikJohnson[]                    = _("Erik Johnson");
 static const struct CreditsEntry sCreditsEntry_EmptyString                      = { 0, FALSE, sCreditsText_EmptyString};
 
+static const struct CreditsEntry sCreditsEntry_PkmnEmeraldLegacyEnhanced        = { 7,  TRUE, sCreditsText_PkmnEmeraldVersionEnhanced};
+static const struct CreditsEntry sCreditsEntry_Developer                        = { 9,  TRUE, sCreditsText_Developer};
+static const struct CreditsEntry sCreditsEntry_Exclsior                         = {10,  FALSE, sCreditsText_Exclsior};
+static const struct CreditsEntry sCreditsEntry_TeamAqua                         = { 9,  FALSE, sCreditsText_TeamAqua};
+static const struct CreditsEntry sCreditsEntry_YakAttack                        = { 9,  FALSE, sCreditsText_YakAttack};
+static const struct CreditsEntry sCreditsEntry_Kurausukun                       = { 9,  FALSE, sCreditsText_Kurausukun};
+static const struct CreditsEntry sCreditsEntry_Zatsu                            = { 9,  FALSE, sCreditsText_Zatsu};
+static const struct CreditsEntry sCreditsEntry_Slawter666                       = { 9,  FALSE, sCreditsText_Slawter666};
+static const struct CreditsEntry sCreditsEntry_Wally217                         = { 9,  FALSE, sCreditsText_Wally217};
+static const struct CreditsEntry sCreditsEntry_HiroshiSotomura                  = { 9,  FALSE, sCreditsText_HiroshiSotomura};
+
 static const struct CreditsEntry sCreditsEntry_PkmnEmeraldLegacy                = { 7,  TRUE, sCreditsText_PkmnEmeraldLegacy};
 static const struct CreditsEntry sCreditsEntry_ProjectLead                      = {10,  TRUE, sCreditsText_ProjectLead};
 static const struct CreditsEntry sCreditsEntry_TheSmithPlays                    = { 9,  FALSE, sCreditsText_TheSmithPlays};
@@ -595,6 +623,41 @@ static const struct CreditsEntry sCreditsEntry_ErikJohnson                      
 #define _ &sCreditsEntry_EmptyString
 static const struct CreditsEntry *const sCreditsEntryPointerTable[PAGE_COUNT][ENTRIES_PER_PAGE] =
 {
+    [PAGE_ELE_TITLE] = {
+        _,
+        &sCreditsEntry_PkmnEmeraldLegacyEnhanced,
+        &sCreditsEntry_Credits,
+        _,
+        _
+    },
+    [PAGE_ELE_CREDIT] = {
+        _,
+        &sCreditsEntry_Developer,
+        &sCreditsEntry_Exclsior,
+        _,
+        _
+    },
+    [PAGE_ELE_CODE_CREDITS_1] = {
+        &sCreditsEntry_CodeCredits,
+        &sCreditsEntry_Devolov,
+        &sCreditsEntry_Scyrous,
+        &sCreditsEntry_TeamAqua,
+        &sCreditsEntry_Ghoulslash,
+    },
+    [PAGE_ELE_CODE_CREDITS_2] = {
+        &sCreditsEntry_CodeCredits,
+        &sCreditsEntry_YakAttack,
+        &sCreditsEntry_Kurausukun,
+        &sCreditsEntry_Zatsu,
+        &sCreditsEntry_Lunos,
+    },
+    [PAGE_ELE_CODE_CREDITS_3] = {
+        &sCreditsEntry_CodeCredits,
+        &sCreditsEntry_Slawter666,
+        &sCreditsEntry_Wally217,
+        &sCreditsEntry_HiroshiSotomura,
+        _
+    },
     [PAGE_EL_TITLE] = {
         _,
         &sCreditsEntry_PkmnEmeraldLegacy,

@@ -411,7 +411,7 @@ gBattleAnims_General::
 	.4byte General_IngrainHeal              @ B_ANIM_INGRAIN_HEAL
 	.4byte General_WishHeal                 @ B_ANIM_WISH_HEAL
 	.4byte General_HeldItemEffectReduced    @ B_ANIM_HELD_ITEM_REDUCED_EFFECT
-	.4byte General_HeldItemEffectMinimal    @ B_ANIM_HELD_ITEM_REDUCED_MIN
+	.4byte General_HeldItemEffectMinimal    @ B_ANIM_HELD_ITEM_MIN_EFFECT
 
 	.align 2
 gBattleAnims_Special::

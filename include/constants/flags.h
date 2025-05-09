@@ -690,7 +690,7 @@
 #define FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED    0x28B
 #define FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED    0x28C
 #define FLAG_RECEIVED_SHINY_BELDUM      0x28D
-#define FLAG_UNUSED_0x28E  0x28E // Unused Flag
+#define FLAG_RECEIVED_EXP_ALL  0x28E // Used to record if EXP. ALL has been received by player
 #define FLAG_UNUSED_0x28F  0x28F // Unused Flag
 #define FLAG_UNUSED_0x290  0x290 // Unused Flag
 #define FLAG_UNUSED_0x291  0x291 // Unused Flag
@@ -729,13 +729,13 @@
 #define FLAG_UNUSED_0x2B2  0x2B2 // Unused Flag
 #define FLAG_UNUSED_0x2B3  0x2B3 // Unused Flag
 #define FLAG_UNUSED_0x2B4  0x2B4 // Unused Flag
-#define FLAG_UNUSED_0x2B5  0x2B5 // Unused Flag
-#define FLAG_UNUSED_0x2B6  0x2B6 // Unused Flag
-#define FLAG_UNUSED_0x2B7  0x2B7 // Unused Flag
-#define FLAG_UNUSED_0x2B8  0x2B8 // Unused Flag
-#define FLAG_UNUSED_0x2B9  0x2B9 // Unused Flag
-#define FLAG_UNUSED_0x2BA  0x2BA // Unused Flag
-#define FLAG_UNUSED_0x2BB  0x2BB // Unused Flag
+#define FLAG_SYS_NO_COLLISION           0x2B5 // Unused Flag // Debug
+#define FLAG_SYS_NO_ENCOUNTER           0x2B6 // Unused Flag // Debug
+#define FLAG_SYS_NO_TRAINER_SEE         0x2B7 // Unused Flag // Debug
+#define FLAG_SYS_NO_BAG_USE             0x2B8 // Unused Flag // Debug
+#define FLAG_SYS_NO_CATCHING            0x2B9 // Unused Flag // Debug
+#define FLAG_SYS_PC_FROM_DEBUG_MENU     0x2BA // Unused Flag // Debug
+#define FLAG_SYS_NO_BATTLE_DMG          0x2BB // Unused Flag // Debug
 
 // Event Flags
 #define FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG                      0x2BC
@@ -1275,8 +1275,8 @@
 #define FLAG_CAUGHT_UNOWN_A                                         0x4CF
 #define FLAG_SHOW_HIDDEN_POWER                                      0x4D0
 #define FLAG_HIDE_EGG_MOVE_TUTOR                                    0x4D1 // Flag to Show/Hide Egg Move until National Dex
-#define FLAG_UNUSED_0x4D2                                           0x4D2 // Unused Flag
-#define FLAG_UNUSED_0x4D3                                           0x4D3 // Unused Flag
+#define FLAG_EXP_ALL                                                0x4D2 // Flag for Enabling and Disabling EXP. All
+#define FLAG_SHOW_TYPE_EFFECT_BATTLE                                0x4D3 // Flag to Option to enable and disable type effectiveness in battle
 #define FLAG_UNUSED_0x4D4                                           0x4D4 // Unused Flag
 #define FLAG_UNUSED_0x4D5                                           0x4D5 // Unused Flag
 #define FLAG_UNUSED_0x4D6                                           0x4D6 // Unused Flag

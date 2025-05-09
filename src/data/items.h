@@ -2348,7 +2348,7 @@ const struct Item gItems[] =
     {
         .name = _("SOUL DEW"),
         .itemId = ITEM_SOUL_DEW,
-        .price = 200,
+        .price = 50000,
         .holdEffect = HOLD_EFFECT_SOUL_DEW,
         .description = sSoulDewDesc,
         .pocket = POCKET_ITEMS,
@@ -2484,7 +2484,7 @@ const struct Item gItems[] =
     {
         .name = _("LIGHT BALL"),
         .itemId = ITEM_LIGHT_BALL,
-        .price = 100,
+        .price = 9800,
         .holdEffect = HOLD_EFFECT_LIGHT_BALL,
         .description = sLightBallDesc,
         .pocket = POCKET_ITEMS,
@@ -2742,7 +2742,7 @@ const struct Item gItems[] =
     {
         .name = _("LUCKY PUNCH"),
         .itemId = ITEM_LUCKY_PUNCH,
-        .price = 10,
+        .price = 9800,
         .holdEffect = HOLD_EFFECT_LUCKY_PUNCH,
         .description = sLuckyPunchDesc,
         .pocket = POCKET_ITEMS,
@@ -2754,7 +2754,7 @@ const struct Item gItems[] =
     {
         .name = _("METAL POWDER"),
         .itemId = ITEM_METAL_POWDER,
-        .price = 10,
+        .price = 9800,
         .holdEffect = HOLD_EFFECT_METAL_POWDER,
         .description = sMetalPowderDesc,
         .pocket = POCKET_ITEMS,
@@ -2766,7 +2766,7 @@ const struct Item gItems[] =
     {
         .name = _("THICK CLUB"),
         .itemId = ITEM_THICK_CLUB,
-        .price = 500,
+        .price = 9800,
         .holdEffect = HOLD_EFFECT_THICK_CLUB,
         .description = sThickClubDesc,
         .pocket = POCKET_ITEMS,
@@ -2778,7 +2778,7 @@ const struct Item gItems[] =
     {
         .name = _("STICK"),
         .itemId = ITEM_STICK,
-        .price = 200,
+        .price = 9800,
         .holdEffect = HOLD_EFFECT_STICK,
         .description = sStickDesc,
         .pocket = POCKET_ITEMS,
@@ -3301,7 +3301,7 @@ const struct Item gItems[] =
         .importance = 1,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .fieldUseFunc = ItemUseOutOfBattle_SootSack,
     },
 
     [ITEM_BASEMENT_KEY] =
@@ -3522,6 +3522,19 @@ const struct Item gItems[] =
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
+    [ITEM_EXP_ALL] =
+    {
+        .name = _("EXP. ALL"),
+        .itemId = ITEM_EXP_ALL,
+        .price = 0,
+        .importance = 1,
+        .registrability = TRUE,
+        .description = sExpAllDesc,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_ExpAll,
     },
 
 // TMs/HMs
@@ -4782,5 +4795,18 @@ const struct Item gItems[] =
         .type = 1,
         .fieldUseFunc = ItemUseOutOfBattle_Mints,
         .secondaryId = NATURE_TIMID,
+    },
+
+    // Ability Capsule
+
+    [ITEM_ABILITY_CAPSULE] =
+    {
+        .name = _("ABILITY CAPSULE"),
+        .itemId = ITEM_ABILITY_CAPSULE,
+        .price = 20000,
+        .description = sAbilityCapsuleDesc,
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_AbilityCapsule,
     },
 };

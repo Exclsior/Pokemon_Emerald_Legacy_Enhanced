@@ -2352,7 +2352,7 @@ void ShowScrollableMultichoice(void)
         break;
     case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR:
         task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-        task->tNumItems = 8;
+        task->tNumItems = 9;
         task->tLeft = 14;
         task->tTop = 1;
         task->tWidth = 15;
@@ -2362,7 +2362,7 @@ void ShowScrollableMultichoice(void)
         break;
     case SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR:
         task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-        task->tNumItems = 11;
+        task->tNumItems = 19;
         task->tLeft = 14;
         task->tTop = 1;
         task->tWidth = 15;
@@ -2402,6 +2402,8 @@ void ShowScrollableMultichoice(void)
         break;
     case SCROLL_MULTI_BF_MOVE_TUTOR_1:
     case SCROLL_MULTI_BF_MOVE_TUTOR_2:
+    case SCROLL_MULTI_BF_MOVE_TUTOR_1_FREE:
+    case SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE:
         task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
         task->tNumItems = 11;
         task->tLeft = 15;
@@ -2472,65 +2474,74 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_1] =
     {
-        gText_KissPoster16BP,
-        gText_KissCushion32BP,
-        gText_SmoochumDoll32BP,
-        gText_TogepiDoll48BP,
-        gText_MeowthDoll48BP,
-        gText_ClefairyDoll48BP,
-        gText_DittoDoll48BP,
-        gText_CyndaquilDoll80BP,
-        gText_ChikoritaDoll80BP,
-        gText_TotodileDoll80BP,
+        gText_KissPosterCost,
+        gText_KissCushionCost,
+        gText_SmoochumDollCost,
+        gText_TogepiDollCost,
+        gText_MeowthDollCost,
+        gText_ClefairyDollCost,
+        gText_DittoDollCost,
+        gText_CyndaquilDollCost,
+        gText_ChikoritaDollCost,
+        gText_TotodileDollCost,
         gText_Exit
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_2] =
     {
-        gText_LaprasDoll128BP,
-        gText_SnorlaxDoll128BP,
-        gText_VenusaurDoll256BP,
-        gText_CharizardDoll256BP,
-        gText_BlastoiseDoll256BP,
+        gText_LaprasDollCost,
+        gText_SnorlaxDollCost,
+        gText_VenusaurDollCost,
+        gText_CharizardDollCost,
+        gText_BlastoiseDollCost,
         gText_Exit
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR] =
     {
-        gText_Protein1BP,
-        gText_Calcium1BP,
-        gText_Iron1BP,
-        gText_Zinc1BP,
-        gText_Carbos1BP,
-        gText_HpUp1BP,
-        gText_RareCandy25BP,
+        gText_ProteinCost,
+        gText_CalciumCost,
+        gText_IronCost,
+        gText_ZincCost,
+        gText_CarbosCost,
+        gText_HpUpCost,
+        gText_RareCandyCost,
+        gText_AbilityCapsuleCost,
         gText_Exit
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR] =
     {
-        gText_Leftovers48BP,
-        gText_WhiteHerb48BP,
-        gText_QuickClaw48BP,
-        gText_MentalHerb48BP,
-        gText_BrightPowder64BP,
-        gText_ChoiceBand64BP,
-        gText_KingsRock64BP,
-        gText_FocusBand64BP,
-        gText_ScopeLens64BP,
-        gText_MetalCoat64BP,
+        gText_LeftoversCost,
+        gText_WhiteHerbCost,
+        gText_QuickClawCost,
+        gText_MentalHerbCost,
+        gText_BrightPowderCost,
+        gText_ChoiceBandCost,
+        gText_KingsRockCost,
+        gText_FocusBandCost,
+        gText_ScopeLensCost,
+        gText_MetalCoatCost,
+        gText_AmuletCoinCost,
+        gText_ExpShareCost,
+        gText_LuckyEggCost,
+        gText_MachoBraceCost,
+        gText_CleanseTagCost,
+        gText_SmokeBallCost,
+        gText_SootheBellCost,
+        gText_EverstoneCost,
         gText_Exit
     },
     [SCROLL_MULTI_BF_EXCHANGE_CORNER_BERRY_VENDOR] =
     {
-        gText_Liechi48BP,
-        gText_Ganlon48BP,
-        gText_Salac48BP,
-        gText_Petaya48BP,
-        gText_Apicot48BP,
-        gText_Pomeg3BP,
-        gText_Kelpsy3BP,
-        gText_Qualot3BP,
-        gText_Hondew3BP,
-        gText_Grepa3BP,
-        gText_Tamato3BP,
+        gText_LiechiCost,
+        gText_GanlonCost,
+        gText_SalacCost,
+        gText_PetayaCost,
+        gText_ApicotCost,
+        gText_PomegCost,
+        gText_KelpsyCost,
+        gText_QualotCost,
+        gText_HondewCost,
+        gText_GrepaCost,
+        gText_TamatoCost,
         gText_Exit
     },
     [SCROLL_MULTI_BERRY_POWDER_VENDOR] =
@@ -2563,30 +2574,30 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
     },
     [SCROLL_MULTI_BF_MOVE_TUTOR_1] =
     {
-        gText_Softboiled16BP,
-        gText_SeismicToss24BP,
-        gText_DreamEater24BP,
-        gText_MegaPunch24BP,
-        gText_MegaKick48BP,
-        gText_BodySlam48BP,
-        gText_RockSlide48BP,
-        gText_Counter48BP,
-        gText_ThunderWave48BP,
-        gText_SwordsDance48BP,
+        gText_SoftboiledCost,
+        gText_SeismicTossCost,
+        gText_DreamEaterCost,
+        gText_MegaPunchCost,
+        gText_MegaKickCost,
+        gText_BodySlamCost,
+        gText_RockSlideCost,
+        gText_CounterCost,
+        gText_ThunderWaveCost,
+        gText_SwordsDanceCost,
         gText_Exit
     },
     [SCROLL_MULTI_BF_MOVE_TUTOR_2] =
     {
-        gText_DefenseCurl16BP,
-        gText_Snore24BP,
-        gText_MudSlap24BP,
-        gText_Swift24BP,
-        gText_IcyWind24BP,
-        gText_Endure48BP,
-        gText_PsychUp48BP,
-        gText_IcePunch48BP,
-        gText_ThunderPunch48BP,
-        gText_FirePunch48BP,
+        gText_DefenseCurlCost,
+        gText_SnoreCost,
+        gText_MudSlapCost,
+        gText_SwiftCost,
+        gText_IcyWindCost,
+        gText_EndureCost,
+        gText_PsychUpCost,
+        gText_IcePunchCost,
+        gText_ThunderPunchCost,
+        gText_FirePunchCost,
         gText_Exit
     },
     [SCROLL_MULTI_SS_TIDAL_DESTINATION] =
@@ -2607,6 +2618,34 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_PokemonMoves,
         gText_Underpowered,
         gText_WhenInDanger,
+        gText_Exit
+    },
+    [SCROLL_MULTI_BF_MOVE_TUTOR_1_FREE] =
+    {
+        gText_SoftboiledFree,
+        gText_SeismicTossFree,
+        gText_DreamEaterFree,
+        gText_MegaPunchFree,
+        gText_MegaKickFree,
+        gText_BodySlamFree,
+        gText_RockSlideFree,
+        gText_CounterFree,
+        gText_ThunderWaveFree,
+        gText_SwordsDanceFree,
+        gText_Exit
+    },
+    [SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE] =
+    {
+        gText_DefenseCurlFree,
+        gText_SnoreFree,
+        gText_MudSlapFree,
+        gText_SwiftFree,
+        gText_IcyWindFree,
+        gText_EndureFree,
+        gText_PsychUpFree,
+        gText_IcePunchFree,
+        gText_ThunderPunchFree,
+        gText_FirePunchFree,
         gText_Exit
     }
 };
@@ -3178,7 +3217,7 @@ static void ShowBattleFrontierTutorWindow(u8 menu, u16 selection)
         .baseBlock = 28,
     };
 
-    if (menu == SCROLL_MULTI_BF_MOVE_TUTOR_1 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2)
+    if (menu == SCROLL_MULTI_BF_MOVE_TUTOR_1 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_1_FREE || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE)
     {
         if (gSpecialVar_0x8006 == 0)
         {
@@ -3221,10 +3260,10 @@ static void ShowBattleFrontierTutorMoveDescription(u8 menu, u16 selection)
         gText_Exit,
     };
 
-    if (menu == SCROLL_MULTI_BF_MOVE_TUTOR_1 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2)
+    if (menu == SCROLL_MULTI_BF_MOVE_TUTOR_1 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_1_FREE || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE)
     {
         FillWindowPixelRect(sTutorMoveAndElevatorWindowId, PIXEL_FILL(1), 0, 0, 96, 48);
-        if (menu == SCROLL_MULTI_BF_MOVE_TUTOR_2)
+        if (menu == SCROLL_MULTI_BF_MOVE_TUTOR_2 || menu == SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE)
             AddTextPrinterParameterized(sTutorMoveAndElevatorWindowId, FONT_NORMAL, sBattleFrontier_TutorMoveDescriptions2[selection], 0, 1, 0, NULL);
         else
             AddTextPrinterParameterized(sTutorMoveAndElevatorWindowId, FONT_NORMAL, sBattleFrontier_TutorMoveDescriptions1[selection], 0, 1, 0, NULL);

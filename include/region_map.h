@@ -102,6 +102,7 @@ bool8 UpdateRegionMapZoom(void);
 void FreeRegionMapIconResources(void);
 u16 GetRegionMapSecIdAt(u16 x, u16 y);
 void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag);
+void CreateRegionMapPlayerGrayscaleIcon(u16 tileTag, u16 paletteTag);
 void CreateRegionMapCursor(u16 tileTag, u16 paletteTag);
 bool32 IsEventIslandMapSecId(u8 mapSecId);
 u8 *GetMapName(u8 *, u16, u16);
@@ -115,6 +116,7 @@ bool8 IsRegionMapZoomed(void);
 void TrySetPlayerIconBlink(void);
 void BlendRegionMap(u16 color, u32 coeff);
 void SetRegionMapDataForZoom(void);
+u8* GetMapName_HandleVersion(u8*, u16, u8);
 
 extern const struct RegionMapLocation gRegionMapEntries[];
 

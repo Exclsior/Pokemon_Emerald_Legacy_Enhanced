@@ -28,10 +28,11 @@
 
 #define SAVE_VERSION_0 0
 #define SAVE_VERSION_1 1
+#define SAVE_VERSION_2 2
 
 #define GAME_VERSION (VERSION_EMERALD)
 #define GAME_LANGUAGE (LANGUAGE_ENGLISH)
-#define SAVE_VERSION (SAVE_VERSION_1)
+#define SAVE_VERSION (SAVE_VERSION_2)
 
 // party sizes
 #define PARTY_SIZE 6
@@ -98,7 +99,7 @@
 #define CONTEST_CATEGORIES_COUNT  5
 
 // string lengths
-#define ITEM_NAME_LENGTH 14
+#define ITEM_NAME_LENGTH 20
 #define POKEMON_NAME_LENGTH 10
 #define POKEMON_NAME_BUFFER_SIZE max(20, POKEMON_NAME_LENGTH + 1) // Frequently used buffer size. Larger than necessary
 #define PLAYER_NAME_LENGTH 7

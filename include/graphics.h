@@ -2937,6 +2937,7 @@ extern const u32 gTrainerFrontPic_LeaderFlannery[];
 extern const u32 gTrainerFrontPic_LeaderNorman[];
 extern const u32 gTrainerFrontPic_LeaderWinona[];
 extern const u32 gTrainerFrontPic_LeaderTateAndLiza[];
+extern const u32 gTrainerFrontPic_LeaderWallace[];
 extern const u32 gTrainerFrontPic_LeaderJuan[];
 extern const u32 gTrainerFrontPic_SchoolKidM[];
 extern const u32 gTrainerFrontPic_SchoolKidF[];
@@ -3034,6 +3035,7 @@ extern const u32 gTrainerPalette_LeaderFlannery[];
 extern const u32 gTrainerPalette_LeaderNorman[];
 extern const u32 gTrainerPalette_LeaderWinona[];
 extern const u32 gTrainerPalette_LeaderTateAndLiza[];
+extern const u32 gTrainerPalette_LeaderWallace[];
 extern const u32 gTrainerPalette_LeaderJuan[];
 extern const u32 gTrainerPalette_SchoolKidM[];
 extern const u32 gTrainerPalette_SchoolKidF[];
@@ -3308,6 +3310,7 @@ extern const u32 gBattleTerrainPalette_StadiumPhoebe[];
 extern const u32 gBattleTerrainPalette_StadiumGlacia[];
 extern const u32 gBattleTerrainPalette_StadiumDrake[];
 extern const u32 gBattleTerrainPalette_StadiumWallace[];
+extern const u32 gBattleTerrainPalette_StadiumSteven[];
 
 // Pokédex
 extern const u32 gPokedexInterface_Gfx[];
@@ -3893,6 +3896,10 @@ extern const u32 gItemIconPalette_GreenMint[];
 extern const u32 gItemIconPalette_LightBlueMint[];
 extern const u32 gItemIconPalette_YellowMint[];
 
+// Ability Capsule
+extern const u32 gItemIcon_AbilityCapsule[];
+extern const u32 gItemIconPalette_AbilityCapsule[];
+
 extern const u32 gItemIcon_ReturnToFieldArrow[];
 extern const u32 gItemIconPalette_ReturnToFieldArrow[];
 
@@ -4154,14 +4161,15 @@ extern const u16 gBattlePyramidFloor_Pal[][16];
 
 extern const u16 gStandardMenuPalette[];
 
-extern const u32 gTitleScreenEmeraldVersionGfx[];
+extern const u32 gTitleScreenEmeraldLegacyEnhancedLeftGfx[];
+extern const u32 gTitleScreenEmeraldLegacyEnhancedRightGfx[];
 extern const u32 gTitleScreenPressStartGfx[];
 extern const u32 gTitleScreenPokemonLogoGfx[];
 extern const u32 gTitleScreenPokemonLogoTilemap[];
 extern const u32 gTitleScreenCloudsTilemap[];
 extern const u16 gTitleScreenBgPalettes[];
 extern const u16 gTitleScreenPressStartPal[];
-extern const u16 gTitleScreenEmeraldVersionPal[];
+extern const u16 gTitleScreenEmeraldLegacyEnhancedPal[];
 
 // Battle Dome
 extern const u32 gDomeTourneyInfoCard_Gfx[];

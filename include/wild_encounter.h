@@ -38,4 +38,6 @@ u16 GetLocalWaterMon(void);
 bool8 UpdateRepelCounter(void);
 void GetFeebasTiles(void);
 
+bool8 StandardWildEncounter_Debug(void);
+
 #endif // GUARD_WILD_ENCOUNTER_H

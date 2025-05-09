@@ -440,7 +440,13 @@
 #define ITEM_SERIOUS_MINT        396
 #define ITEM_TIMID_MINT          397
 
-#define ITEMS_COUNT              398
+// Ability Capsule
+#define ITEM_ABILITY_CAPSULE     398
+
+// EXP. ALL Key Item
+#define ITEM_EXP_ALL             399
+
+#define ITEMS_COUNT              400
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
 // Its icon is defined at ITEMS_COUNT as the "return to field" arrow

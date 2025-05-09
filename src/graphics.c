@@ -1516,10 +1516,11 @@ const u16 gMonIconPalettes[][16] =
 
 const u16 gTitleScreenBgPalettes[]         = INCBIN_U16("graphics/title_screen/pokemon_logo.gbapal",
                                                         "graphics/title_screen/rayquaza_and_clouds.gbapal");
-const u16 gTitleScreenEmeraldVersionPal[]  = INCBIN_U16("graphics/title_screen/emerald_version.gbapal");
+const u16 gTitleScreenEmeraldLegacyEnhancedPal[]  = INCBIN_U16("graphics/title_screen/emerald_legacy_enhanced.gbapal");
 const u32 gTitleScreenCloudsTilemap[]      = INCBIN_U32("graphics/title_screen/clouds.bin.lz");
 const u32 gTitleScreenPokemonLogoGfx[]     = INCBIN_U32("graphics/title_screen/pokemon_logo.8bpp.lz");
-const u32 gTitleScreenEmeraldVersionGfx[]  = INCBIN_U32("graphics/title_screen/emerald_version.8bpp.lz");
+const u32 gTitleScreenEmeraldLegacyEnhancedLeftGfx[]  = INCBIN_U32("graphics/title_screen/emerald_legacy_enhanced_left.8bpp.lz");
+const u32 gTitleScreenEmeraldLegacyEnhancedRightGfx[]  = INCBIN_U32("graphics/title_screen/emerald_legacy_enhanced_right.8bpp.lz");
 const u16 gTitleScreenPressStartPal[]      = INCBIN_U16("graphics/title_screen/press_start.gbapal");
 const u32 gTitleScreenPressStartGfx[]      = INCBIN_U32("graphics/title_screen/press_start.4bpp.lz");
 const u32 gTitleScreenPokemonLogoTilemap[] = INCBIN_U32("graphics/title_screen/pokemon_logo.bin.lz");

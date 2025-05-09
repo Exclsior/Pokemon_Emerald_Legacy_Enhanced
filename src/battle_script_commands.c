@@ -51,6 +51,8 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
+#include "constants/flags.h"
+#include "debug.h"
 
 extern const u8 *const gBattleScriptsForMoveEffects[];
 
@@ -1807,6 +1809,14 @@ static void Cmd_waitanimation(void)
 
 static void Cmd_healthbarupdate(void)
 {
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+    u8 side = GetBattlerSide(gBattlerTarget);
+    if (FlagGet(FLAG_SYS_NO_BATTLE_DMG) && side == B_SIDE_PLAYER)
+    {
+        gMoveResultFlags |= MOVE_RESULT_NO_EFFECT;
+    }
+#endif
+
     if (gBattleControllerExecFlags)
         return;
 
@@ -3283,13 +3293,13 @@ static void Cmd_getexp(void)
         {
             u16 calculatedExp;
             s32 viaSentIn;
+            bool32 luckyEggCheck = FALSE;
+            gExpAllMessCheck = FALSE;
 
             for (viaSentIn = 0, i = 0; i < PARTY_SIZE; i++)
             {
-                if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE || GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0)
-                    continue;
-                if (gBitTable[i] & sentIn)
-                    viaSentIn++;
+                if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE || GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+                continue;
 
                 item = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
 
@@ -3297,20 +3307,38 @@ static void Cmd_getexp(void)
                     holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
                 else
                     holdEffect = ItemId_GetHoldEffect(item);
+                
+                // Added Lucky Egg to increase all battle EXP
+                if (holdEffect == HOLD_EFFECT_LUCKY_EGG)
+                    luckyEggCheck = TRUE;
+                
+                if (GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0)
+                continue;
+                
+                if (gBitTable[i] & sentIn)
+                    viaSentIn++;
 
-                if (holdEffect == HOLD_EFFECT_EXP_SHARE)
+                // Added EXP. ALL to EXPShare calculation 
+                if (FlagGet(FLAG_EXP_ALL)
+                    && !(GetMonData(&gPlayerParty[i], MON_DATA_LEVEL) == MAX_LEVEL
+                    || levelCappedNuzlocke(GetMonData(&gPlayerParty[i], MON_DATA_LEVEL))))
+                    viaExpShare++;
+                else if (holdEffect == HOLD_EFFECT_EXP_SHARE)
                     viaExpShare++;
             }
 
             calculatedExp = gSpeciesInfo[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 7;
 
-            if (viaExpShare) // at least one mon is getting exp via exp share
+            if (luckyEggCheck)
+                calculatedExp = (calculatedExp * 150) / 100;
+
+            if (viaExpShare) // at least one mon is getting exp via exp share or EXP. ALL is turned on
             {
                 *exp = SAFE_DIV(calculatedExp / 2, viaSentIn);
                 if (*exp == 0)
                     *exp = 1;
 
-                gExpShareExp = calculatedExp / 2 / viaExpShare;
+                gExpShareExp = SAFE_DIV(calculatedExp / 2, viaExpShare);
                 if (gExpShareExp == 0)
                     gExpShareExp = 1;
             }
@@ -3345,14 +3373,14 @@ static void Cmd_getexp(void)
                 gBattleStruct->wildVictorySong++;
             }
 
-            if (holdEffect != HOLD_EFFECT_EXP_SHARE && !(gBattleStruct->sentInPokes & 1))
+            if (holdEffect != HOLD_EFFECT_EXP_SHARE && !FlagGet(FLAG_EXP_ALL) && !(gBattleStruct->sentInPokes & 1))
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
                 gBattleScripting.getexpState = 5;
                 gBattleMoveDamage = 0; // used for exp
             }
             else if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == MAX_LEVEL
-            || levelCappedNuzlocke(GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL)))
+                || levelCappedNuzlocke(GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL)))
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
                 gBattleScripting.getexpState = 5;
@@ -3363,17 +3391,28 @@ static void Cmd_getexp(void)
             }
             else
             {
-                if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))
+                if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP)
+                    && !GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_IS_EGG))
                 {
                     if (gBattleStruct->sentInPokes & 1)
                         gBattleMoveDamage = *exp;
                     else
                         gBattleMoveDamage = 0;
 
-                    if (holdEffect == HOLD_EFFECT_EXP_SHARE)
+                    // Added EXP. ALL to EXP. Share calculation 
+                    if (FlagGet(FLAG_EXP_ALL))
+                    {
+                        gExpAllMessCheck = TRUE;
                         gBattleMoveDamage += gExpShareExp;
+                    }
+                    else if (holdEffect == HOLD_EFFECT_EXP_SHARE)
+                        gBattleMoveDamage += gExpShareExp;
+
+                    /* Lucky Egg modification moved to apply to all exp
                     if (holdEffect == HOLD_EFFECT_LUCKY_EGG)
                         gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
+                    */
+
                     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
                         gBattleMoveDamage = (gBattleMoveDamage * 150) / 100;
 
@@ -3418,7 +3457,9 @@ static void Cmd_getexp(void)
                     PREPARE_STRING_BUFFER(gBattleTextBuff2, i);
                     PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gBattleMoveDamage);
 
-                    PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
+                    if ((gBattleStruct->sentInPokes & 1) || ((holdEffect == HOLD_EFFECT_EXP_SHARE) && !FlagGet(FLAG_EXP_ALL)))
+                        PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
+
                     MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);
                 }
                 gBattleStruct->sentInPokes >>= 1;
@@ -3511,7 +3552,16 @@ static void Cmd_getexp(void)
             if (gBattleStruct->expGetterMonId < PARTY_SIZE)
                 gBattleScripting.getexpState = 2; // loop again
             else
+            {                
+                if (gExpAllMessCheck && FlagGet(FLAG_EXP_ALL))
+                {
+                    gExpAllMessCheck = FALSE;
+                    gBattleStruct->expGetterMonId = 0;
+                    PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gExpShareExp);
+                    PrepareStringBattle(STRINGID_PKMNGAINEDEXPALL, gBattleStruct->expGetterBattlerId);
+                }
                 gBattleScripting.getexpState = 6; // we're done
+            }
         }
         break;
     case 6: // increment instruction
@@ -3552,7 +3602,7 @@ static void Cmd_checkteamslost(void)
         for (i = 0; i < PARTY_SIZE; i++)
         {
             if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)
-             && (!(gBattleTypeFlags & BATTLE_TYPE_ARENA) || !(gBattleStruct->arenaLostPlayerMons & gBitTable[i])))
+                && (!(gBattleTypeFlags & BATTLE_TYPE_ARENA) || !(gBattleStruct->arenaLostPlayerMons & gBitTable[i])))
             {
                 HP_count += GetMonData(&gPlayerParty[i], MON_DATA_HP);
             }
@@ -3566,7 +3616,7 @@ static void Cmd_checkteamslost(void)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         if (GetMonData(&gEnemyParty[i], MON_DATA_SPECIES) && !GetMonData(&gEnemyParty[i], MON_DATA_IS_EGG)
-         && (!(gBattleTypeFlags & BATTLE_TYPE_ARENA) || !(gBattleStruct->arenaLostOpponentMons & gBitTable[i])))
+            && (!(gBattleTypeFlags & BATTLE_TYPE_ARENA) || !(gBattleStruct->arenaLostOpponentMons & gBitTable[i])))
         {
             HP_count += GetMonData(&gEnemyParty[i], MON_DATA_HP);
         }

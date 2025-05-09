@@ -325,8 +325,200 @@ bool8 UpdateSave_v0_v1(const struct SaveSectorLocation *locations)
      * with a newly loaded map and event objects. Here, we're using the last location
      * that the player healed, so the player will appear in the same spot they would
      * as if they blacked out. */
-    // SetContinueGameWarpStatus();
-    // gSaveBlock1Ptr->continueGameWarp = gSaveBlock1Ptr->lastHealLocation;
+    //SetContinueGameWarpStatus();
+    //gSaveBlock1Ptr->continueGameWarp = gSaveBlock1Ptr->lastHealLocation;
+
+    return TRUE;
+}
+
+bool8 UpdateSave_v0_v2(const struct SaveSectorLocation *locations)
+{
+    const struct SaveBlock2_v0* sOldSaveBlock2Ptr = (struct SaveBlock2_v0*)(locations[SECTOR_ID_SAVEBLOCK2].data);
+    const struct SaveBlock1_v0* sOldSaveBlock1Ptr = (struct SaveBlock1_v0*)(locations[SECTOR_ID_SAVEBLOCK1_START].data);
+    const struct PokemonStorage* sOldPokemonStoragePtr = (struct PokemonStorage*)(locations[SECTOR_ID_PKMN_STORAGE_START].data);
+
+    u32 arg, i, j, k;
+    
+    #define COPY_FIELD(field) gSaveBlock2Ptr->field = sOldSaveBlock2Ptr->field
+    #define COPY_BLOCK(field) CpuCopy16(&sOldSaveBlock2Ptr->field, &gSaveBlock2Ptr->field, sizeof(gSaveBlock2Ptr->field))
+    #define COPY_ARRAY(field) for(i = 0; i < min(ARRAY_COUNT(gSaveBlock2Ptr->field), ARRAY_COUNT(sOldSaveBlock2Ptr->field)); i++) gSaveBlock2Ptr->field[i] = sOldSaveBlock2Ptr->field[i];
+
+    /** We need to fill in any data that's new in this version. */
+    gSaveBlock2Ptr->_saveSentinel = 0xFF;
+    gSaveBlock2Ptr->saveVersion = 2;
+    gSaveBlock2Ptr->optionsBikeMusic = 0;
+    gSaveBlock2Ptr->optionsSurfMusic = 0;
+    gSaveBlock2Ptr->optionsSurfOverworld = 0;
+    gSaveBlock2Ptr->optionsBattleItemAnimation = 0;
+    gSaveBlock1Ptr->registeredItemSelect = ITEM_NONE;
+    gSaveBlock1Ptr->registeredItemLastSelected = 0;
+    gSaveBlock1Ptr->registeredItemListCount = 0;
+    
+    for (i = 0 ; i < REGISTERED_ITEMS_MAX; i++)
+    {
+        gSaveBlock1Ptr->registeredItems[i].itemId = ITEM_NONE;
+    }
+
+    COPY_ARRAY(playerName);
+    COPY_FIELD(playerGender);
+    COPY_FIELD(specialSaveWarpFlags);
+    COPY_ARRAY(playerTrainerId);
+    COPY_FIELD(playTimeHours);
+    COPY_FIELD(playTimeMinutes);
+    COPY_FIELD(playTimeSeconds);
+    COPY_FIELD(playTimeVBlanks);
+    COPY_FIELD(optionsButtonMode);
+    COPY_FIELD(optionsTextSpeed);
+    COPY_FIELD(optionsWindowFrameType);
+    COPY_FIELD(optionsSound);
+    COPY_FIELD(optionsBattleStyle);
+    COPY_FIELD(optionsBattleSceneOff);
+    COPY_FIELD(regionMapZoom);
+    
+    COPY_FIELD(pokedex);
+    COPY_FIELD(localTimeOffset);
+    COPY_FIELD(lastBerryTreeUpdate);
+    COPY_FIELD(gcnLinkFlags);
+    COPY_FIELD(encryptionKey);
+    COPY_FIELD(playerApprentice);
+    COPY_BLOCK(apprentices);
+    COPY_FIELD(berryCrush);
+    COPY_FIELD(pokeJump);
+    COPY_FIELD(berryPick);
+    COPY_BLOCK(hallRecords1P);
+    COPY_BLOCK(hallRecords2P);
+    COPY_BLOCK(contestLinkResults);
+    COPY_FIELD(frontier);
+
+    #undef COPY_FIELD
+    #undef COPY_BLOCK
+    #undef COPY_ARRAY
+
+    #define COPY_FIELD(field) gSaveBlock1Ptr->field = sOldSaveBlock1Ptr->field
+    #define COPY_BLOCK(field) CpuCopy16(&sOldSaveBlock1Ptr->field, &gSaveBlock1Ptr->field, sizeof(gSaveBlock1Ptr->field))
+    #define COPY_ARRAY(field) for(i = 0; i < min(ARRAY_COUNT(gSaveBlock1Ptr->field), ARRAY_COUNT(sOldSaveBlock1Ptr->field)); i++) gSaveBlock1Ptr->field[i] = sOldSaveBlock1Ptr->field[i];
+    
+    COPY_FIELD(pos);
+    COPY_FIELD(location);
+    COPY_FIELD(continueGameWarp);
+    COPY_FIELD(dynamicWarp);
+    COPY_FIELD(lastHealLocation);
+    COPY_FIELD(escapeWarp);
+
+    /** Only use this if there are no major map changes to load into original location
+     * If there are any major map changes comment the below section out and use the 
+     * heal warp at the bottom of this function instead. */
+    COPY_FIELD(weather);
+    COPY_FIELD(weatherCycleStage);
+    COPY_FIELD(flashLevel);
+    COPY_FIELD(savedMusic);
+    COPY_FIELD(mapLayoutId);
+    COPY_BLOCK(mapView);
+    COPY_BLOCK(objectEvents);
+    COPY_BLOCK(objectEventTemplates);
+    
+    /** The pokemon structure hasn't changed at all this version, so
+     *  we don't need to do anything special to copy the pokemon over. */
+    COPY_FIELD(playerPartyCount);
+    COPY_ARRAY(playerParty);
+    
+    COPY_FIELD(money);
+    COPY_FIELD(coins);
+    
+    /** Because we changed the PC items, it's not gonna be a straight copy. */
+    COPY_ARRAY(pcItems);
+    COPY_ARRAY(bagPocket_Items);
+    COPY_ARRAY(bagPocket_KeyItems);
+    COPY_ARRAY(bagPocket_PokeBalls);
+    COPY_ARRAY(bagPocket_TMHM);
+    COPY_ARRAY(bagPocket_Berries);
+    
+    COPY_BLOCK(pokeblocks);
+    COPY_BLOCK(seen1);
+    COPY_BLOCK(berryBlenderRecords);
+    COPY_FIELD(trainerRematchStepCounter);
+    COPY_BLOCK(trainerRematches);
+    
+    COPY_BLOCK(flags);
+    COPY_BLOCK(vars);
+    COPY_BLOCK(gameStats);
+    COPY_BLOCK(berryTrees);
+    COPY_BLOCK(secretBases);
+    COPY_BLOCK(playerRoomDecorations);
+    COPY_BLOCK(playerRoomDecorationPositions);
+    COPY_BLOCK(decorationDesks);
+    COPY_BLOCK(decorationChairs);
+    COPY_BLOCK(decorationPlants);
+    COPY_BLOCK(decorationOrnaments);
+    COPY_BLOCK(decorationMats);
+    COPY_BLOCK(decorationPosters);
+    COPY_BLOCK(decorationDolls);
+    COPY_BLOCK(decorationCushions);
+    
+    COPY_BLOCK(tvShows);
+    COPY_BLOCK(pokeNews);
+    COPY_FIELD(outbreakPokemonSpecies);
+    COPY_FIELD(outbreakLocationMapNum);
+    COPY_FIELD(outbreakLocationMapGroup);
+    COPY_FIELD(outbreakPokemonLevel);
+    COPY_FIELD(outbreakUnused1);
+    COPY_FIELD(outbreakUnused2);
+    COPY_BLOCK(outbreakPokemonMoves);
+    COPY_FIELD(outbreakUnused3);
+    COPY_FIELD(outbreakPokemonProbability);
+    COPY_FIELD(outbreakDaysLeft);
+    COPY_FIELD(gabbyAndTyData);
+    COPY_BLOCK(easyChatProfile);
+    COPY_BLOCK(easyChatBattleStart);
+    COPY_BLOCK(easyChatBattleWon);
+    COPY_BLOCK(easyChatBattleLost);
+    COPY_BLOCK(mail);
+    COPY_BLOCK(unlockedTrendySayings);
+    
+    COPY_FIELD(oldMan);
+    COPY_BLOCK(dewfordTrends);
+    COPY_BLOCK(contestWinners);
+    COPY_FIELD(daycare);
+    COPY_FIELD(linkBattleRecords);
+    COPY_BLOCK(giftRibbons);
+    COPY_FIELD(externalEventData);
+    COPY_FIELD(externalEventFlags);
+    COPY_FIELD(roamer);
+    COPY_FIELD(enigmaBerry);
+    COPY_FIELD(mysteryGift);
+    COPY_BLOCK(trainerHillTimes);
+    COPY_FIELD(ramScript);
+    COPY_FIELD(recordMixingGift);
+    COPY_BLOCK(seen2);
+    COPY_FIELD(lilycoveLady);
+    COPY_BLOCK(trainerNameRecords);
+    COPY_BLOCK(registeredTexts);
+    COPY_FIELD(trainerHill);
+    COPY_FIELD(waldaPhrase);
+    
+    #undef COPY_FIELD
+    #undef COPY_BLOCK
+    #undef COPY_ARRAY
+    
+    /**
+     * The pokemon structure hasn't changed at all this version, so
+     * we can just assign across the old box storage to the new.  */ 
+    *gPokemonStoragePtr = *sOldPokemonStoragePtr;
+    
+    /**
+     * The most common kind of change that might happen between major versions are 
+     * map changes. The save file usually saves the area around the player and 
+     * event objects currently on the map, so that when the player resumes play, 
+     * everything will be exactly where it was when they saved. But if the map has
+     * changed at all, this means there could be incongruity between the saved
+     * version of the map and the new version in the updated ROM. So to make it so
+     * that the map reloads properly, we use the "Continue Game Warp" usually used
+     * when the player clears the game to place the player at a known position and
+     * with a newly loaded map and event objects. Here, we're using the last location
+     * that the player healed, so the player will appear in the same spot they would
+     * as if they blacked out. */
+    //SetContinueGameWarpStatus();
+    //gSaveBlock1Ptr->continueGameWarp = gSaveBlock1Ptr->lastHealLocation;
 
     return TRUE;
 }

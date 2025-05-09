@@ -54,6 +54,7 @@ EWRAM_DATA struct BattleMsgData *gBattleMsgDataPtr = NULL;
 
 static const u8 sText_Trainer1LoseText[] = _("{B_TRAINER1_LOSE_TEXT}");
 static const u8 sText_PkmnGainedEXP[] = _("{B_BUFF1} gained{B_BUFF2}\n{B_BUFF3} EXP. Points!\p");
+static const u8 sText_PkmnGainedEXPAll[] = _("POKéMON in party each gained\n{B_BUFF3} EXP. Points.\p");
 static const u8 sText_EmptyString4[] = _("");
 static const u8 sText_ABoosted[] = _(" a boosted");
 static const u8 sText_PkmnGrewToLv[] = _("{B_BUFF1} grew to\nLV. {B_BUFF2}!{WAIT_SE}\p");
@@ -885,6 +886,7 @@ const u8 * const gBattleStringsTable[BATTLESTRINGS_COUNT - BATTLESTRINGS_TABLE_S
     [STRINGID_PKMNBOXLANETTESPCFULL - BATTLESTRINGS_TABLE_START] = gText_PkmnTransferredLanettesPCBoxFull,
     [STRINGID_TRAINER1WINTEXT - BATTLESTRINGS_TABLE_START] = sText_Trainer1WinText,
     [STRINGID_TRAINER2WINTEXT - BATTLESTRINGS_TABLE_START] = sText_Trainer2WinText,
+    [STRINGID_PKMNGAINEDEXPALL - BATTLESTRINGS_TABLE_START] = sText_PkmnGainedEXPAll
 };
 
 const u16 gMissStringIds[] =
@@ -1731,6 +1733,42 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
         .bgColor = TEXT_DYNAMIC_COLOR_5,
         .shadowColor = TEXT_DYNAMIC_COLOR_6,
     },
+    [B_WIN_TYPE_SUPER_EFF] = { // Super Effective
+        .fillValue = PIXEL_FILL(0xE),
+        .fontId = 7,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 6,
+        .bgColor = 14,
+        .shadowColor = 5,
+    },
+    [B_WIN_TYPE_NOT_VERY_EFF] = { // Not Very Effective
+        .fillValue = PIXEL_FILL(0xE),
+        .fontId = 7,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 14,
+        .shadowColor = 3,
+    },
+    [B_WIN_TYPE_NO_EFF] = { // No Effect
+        .fillValue = PIXEL_FILL(0xE),
+        .fontId = 7,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 7,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
 };
 
 static const struct BattleWindowText sTextOnWindowsInfo_Arena[] =
@@ -1975,6 +2013,42 @@ static const struct BattleWindowText sTextOnWindowsInfo_Arena[] =
         .fgColor = TEXT_DYNAMIC_COLOR_4,
         .bgColor = TEXT_DYNAMIC_COLOR_5,
         .shadowColor = TEXT_DYNAMIC_COLOR_6,
+    },
+    [B_WIN_TYPE_SUPER_EFF] = { // Super Effective
+        .fillValue = PIXEL_FILL(0xE),
+        .fontId = 7,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 6,
+        .bgColor = 14,
+        .shadowColor = 5,
+    },
+    [B_WIN_TYPE_NOT_VERY_EFF] = { // Not Very Effective
+        .fillValue = PIXEL_FILL(0xE),
+        .fontId = 7,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 14,
+        .shadowColor = 3,
+    },
+    [B_WIN_TYPE_NO_EFF] = { // No Effect
+        .fillValue = PIXEL_FILL(0xE),
+        .fontId = 7,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 7,
+        .bgColor = 14,
+        .shadowColor = 15,
     },
 };
 

@@ -77,6 +77,8 @@ void SetWarpDestinationToMapWarp(s8 mapGroup, s8 mapNum, s8 warpId);
 void SetDynamicWarp(s32 unused, s8 mapGroup, s8 mapNum, s8 warpId);
 void SetDynamicWarpWithCoords(s32 unused, s8 mapGroup, s8 mapNum, s8 warpId, s8 x, s8 y);
 void SetWarpDestinationToDynamicWarp(u8 unused);
+void SetPlayerSecretBaseCoords(s8 mapGroup, s8 mapNum, s8 warpId, s8 x, s8 y);
+void SetWarpDestinationToPlayerSecretBase();
 void SetWarpDestinationToHealLocation(u8 healLocationId);
 void SetWarpDestinationToLastHealLocation(void);
 void SetLastHealLocationWarp(u8 healLocationId);

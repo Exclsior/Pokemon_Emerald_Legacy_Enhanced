@@ -32,6 +32,7 @@ static const u16 sFrontierExchangeCorner_Vitamins[] =
     ITEM_CARBOS,
     ITEM_HP_UP,
     ITEM_RARE_CANDY,
+    ITEM_ABILITY_CAPSULE,
     ITEM_LIST_END
 };
 
@@ -47,6 +48,14 @@ static const u16 sFrontierExchangeCorner_HoldItems[] =
     ITEM_FOCUS_BAND,
     ITEM_SCOPE_LENS,
     ITEM_METAL_COAT,
+    ITEM_AMULET_COIN,
+    ITEM_EXP_SHARE,
+    ITEM_LUCKY_EGG,
+    ITEM_MACHO_BRACE,
+    ITEM_CLEANSE_TAG,
+    ITEM_SMOKE_BALL,
+    ITEM_SOOTHE_BELL,
+    ITEM_EVERSTONE,
     ITEM_LIST_END
 };
 
@@ -100,6 +109,7 @@ static const u8 *const sFrontierExchangeCorner_VitaminsDescriptions[] =
     BattleFrontier_ExchangeServiceCorner_Text_CarbosDesc,
     BattleFrontier_ExchangeServiceCorner_Text_HPUpDesc,
     BattleFrontier_ExchangeServiceCorner_Text_RareCandyDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_AbilityCapsuleDesc,
     gText_Exit
 };
 
@@ -115,6 +125,14 @@ static const u8 *const sFrontierExchangeCorner_HoldItemsDescriptions[] =
     BattleFrontier_ExchangeServiceCorner_Text_FocusBandDesc,
     BattleFrontier_ExchangeServiceCorner_Text_ScopeLensDesc,
     BattleFrontier_ExchangeServiceCorner_Text_MetalCoatDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_AmuletCoinDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_ExpShareDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_LuckyEggDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_MachoBraceDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_CleanseTagDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_SmokeBallDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_SootheBellDesc,
+    BattleFrontier_ExchangeServiceCorner_Text_EverstoneDesc,
     gText_Exit
 };
 

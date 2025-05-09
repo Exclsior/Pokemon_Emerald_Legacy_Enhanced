@@ -18,6 +18,7 @@
 #include "constants/event_object_movement.h"
 #include "constants/field_effects.h"
 #include "constants/trainer_types.h"
+#include "debug.h"
 
 // this file's functions
 static u8 CheckTrainer(u8 objectEventId);
@@ -191,6 +192,11 @@ static const struct SpriteTemplate sSpriteTemplate_HeartIcon =
 bool8 CheckForTrainersWantingBattle(void)
 {
     u8 i;
+
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+    if (FlagGet(FLAG_SYS_NO_TRAINER_SEE))
+        return FALSE;
+#endif
 
     gNoOfApproachingTrainers = 0;
     gApproachingTrainerId = 0;

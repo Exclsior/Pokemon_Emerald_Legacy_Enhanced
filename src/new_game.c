@@ -217,6 +217,9 @@ void NewGameInitData(void)
     ResetContestLinkResults();
     nuzlockePrev ? FlagSet(FLAG_NUZLOCKE) : FlagClear(FLAG_NUZLOCKE);
     hardPrev ? FlagSet(FLAG_HARD) : FlagClear(FLAG_HARD);
+    
+    // Set Secret Base Entrance Warp to WARP_ID_NONE until Secret Base created.
+    SetPlayerSecretBaseCoords(-1, -1, WARP_ID_NONE, -1, -1);
 }
 
 static void ResetMiniGamesRecords(void)

@@ -263,7 +263,8 @@ BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin::
 	case 4, BattleFrontier_ExchangeServiceCorner_EventScript_Carbos
 	case 5, BattleFrontier_ExchangeServiceCorner_EventScript_HPUp
 	case 6, BattleFrontier_ExchangeServiceCorner_EventScript_RareCandy
-	case 7, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
+	case 7, BattleFrontier_ExchangeServiceCorner_EventScript_AbilityCapsule
+	case 8, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	case MULTI_B_PRESSED, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	end
 
@@ -323,6 +324,14 @@ BattleFrontier_ExchangeServiceCorner_EventScript_RareCandy::
 	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
 	end
 
+BattleFrontier_ExchangeServiceCorner_EventScript_AbilityCapsule::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmAbilityCapsule, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin
+	setvar VAR_0x8008, 4
+	setvar VAR_0x8009, ITEM_ABILITY_CAPSULE
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
 BattleFrontier_ExchangeServiceCorner_EventScript_HoldItemClerk::
 	lock
 	faceplayer
@@ -348,7 +357,15 @@ BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem::
 	case 7, BattleFrontier_ExchangeServiceCorner_EventScript_FocusBand
 	case 8, BattleFrontier_ExchangeServiceCorner_EventScript_ScopeLens
 	case 9, BattleFrontier_ExchangeServiceCorner_EventScript_MetalCoat
-	case 10, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
+	case 10, BattleFrontier_ExchangeServiceCorner_EventScript_AmuletCoin
+	case 11, BattleFrontier_ExchangeServiceCorner_EventScript_ExpShare
+	case 12, BattleFrontier_ExchangeServiceCorner_EventScript_LuckyEgg
+	case 13, BattleFrontier_ExchangeServiceCorner_EventScript_MachoBrace
+	case 14, BattleFrontier_ExchangeServiceCorner_EventScript_CleanseTag
+	case 15, BattleFrontier_ExchangeServiceCorner_EventScript_SmokeBall
+	case 16, BattleFrontier_ExchangeServiceCorner_EventScript_SootheBell
+	case 17, BattleFrontier_ExchangeServiceCorner_EventScript_Everstone
+	case 18, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	case MULTI_B_PRESSED, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	end
 
@@ -429,6 +446,70 @@ BattleFrontier_ExchangeServiceCorner_EventScript_MetalCoat::
 	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
 	setvar VAR_0x8008, 16
 	setvar VAR_0x8009, ITEM_METAL_COAT
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_AmuletCoin::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmAmuletCoin, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_AMULET_COIN
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_ExpShare::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmExpShare, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_EXP_SHARE
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_LuckyEgg::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmLuckyEgg, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_LUCKY_EGG
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_MachoBrace::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmMachoBrace, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_MACHO_BRACE
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_CleanseTag::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmCleanseTag, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_CLEANSE_TAG
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_SmokeBall::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmSmokeBall, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_SMOKE_BALL
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_SootheBell::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmSootheBell, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_SOOTHE_BELL
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_Everstone::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmEverstone, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseHoldItem
+	setvar VAR_0x8008, 16
+	setvar VAR_0x8009, ITEM_EVERSTONE
 	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
 	end
 
@@ -667,6 +748,14 @@ BattleFrontier_ExchangeServiceCorner_Text_ConfirmHPUp:
 	.string "You've chosen the HP UP.\n"
 	.string "Is that correct?$"
 
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmRareCandy:
+	.string "You've chosen a RARE CANDY.\n"
+	.string "Is that correct?$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmAbilityCapsule:
+	.string "You've chosen the ABILITY CAPSULE.\n"
+	.string "Is that correct?$"
+
 BattleFrontier_ExchangeServiceCorner_Text_ConfirmBrightpowder:
 	.string "You've chosen the BRIGHTPOWDER.\n"
 	.string "Is that correct?$"
@@ -703,12 +792,40 @@ BattleFrontier_ExchangeServiceCorner_Text_ConfirmMetalCoat:
 	.string "You've chosen the METAL COAT.\n"
 	.string "Is that correct?$"
 
-BattleFrontier_ExchangeServiceCorner_Text_ConfirmLeftovers:
-	.string "You've chosen the LEFTOVERS.\n"
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmAmuletCoin:
+	.string "You've chosen the AMULET COIN.\n"
 	.string "Is that correct?$"
 
-BattleFrontier_ExchangeServiceCorner_Text_ConfirmRareCandy:
-	.string "You've chosen a RARE CANDY.\n"
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmExpShare:
+	.string "You've chosen the EXP. SHARE.\n"
+	.string "Is that correct?$"
+	
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmLuckyEgg:
+	.string "You've chosen the LUCKY EGG.\n"
+	.string "Is that correct?$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmMachoBrace:
+	.string "You've chosen the MACHO BRACE.\n"
+	.string "Is that correct?$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmCleanseTag:
+	.string "You've chosen the CLEANSE TAG.\n"
+	.string "Is that correct?$"
+	
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmSmokeBall:
+	.string "You've chosen the SMOKE BALL.\n"
+	.string "Is that correct?$"
+	
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmSootheBell:
+	.string "You've chosen the SOOTHE BELL.\n"
+	.string "Is that correct?$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmEverstone:
+	.string "You've chosen the EVERSTONE.\n"
+	.string "Is that correct?$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmLeftovers:
+	.string "You've chosen the LEFTOVERS.\n"
 	.string "Is that correct?$"
 
 BattleFrontier_ExchangeServiceCorner_Text_ConfirmLiechi:
@@ -878,6 +995,14 @@ BattleFrontier_ExchangeServiceCorner_Text_CarbosDesc::
 BattleFrontier_ExchangeServiceCorner_Text_HPUpDesc::
 	.string "Raises the HP of one POKéMON.$"
 
+BattleFrontier_ExchangeServiceCorner_Text_RareCandyDesc::
+	.string "A candy that instantly raises\n"
+	.string "the level of a Pokémon by 1.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_AbilityCapsuleDesc::
+	.string "A capsule that allows a POKéMON with\n"
+	.string "two abilities to switch their ability.$"
+
 BattleFrontier_ExchangeServiceCorner_Text_LeftoversDesc::
 	.string "A hold item that gradually restores\n"
 	.string "HP in battle.$"
@@ -899,8 +1024,8 @@ BattleFrontier_ExchangeServiceCorner_Text_BrightpowderDesc::
 	.string "reduce accuracy.$"
 
 BattleFrontier_ExchangeServiceCorner_Text_ChoiceBandDesc::
-	.string "Raises a move's power, but permits\n"
-	.string "only that move.$"
+	.string "A hold item that raises a move's power,\n"
+	.string "but permits only that move.$"
 
 BattleFrontier_ExchangeServiceCorner_Text_KingsRockDesc::
 	.string "A hold item that may cause flinching\n"
@@ -918,9 +1043,37 @@ BattleFrontier_ExchangeServiceCorner_Text_MetalCoatDesc::
 	.string "A hold item that raises the\n"
 	.string "power of STEEL-type moves.$"
 
-BattleFrontier_ExchangeServiceCorner_Text_RareCandyDesc::
-	.string "A candy that instantly raises\n"
-	.string "the level of a Pokémon by 1.$"
+BattleFrontier_ExchangeServiceCorner_Text_AmuletCoinDesc::
+	.string "A hold item that doubles prize money if\n"
+	.string "holder is in party.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ExpShareDesc::
+	.string "A hold item that gets EXP. points\n"
+	.string "from battles.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_LuckyEggDesc::
+	.string "A hold item that boosts EXP. points\n"
+	.string "earned in battle.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_MachoBraceDesc::
+	.string "A hold item that promotes growth,\n"
+	.string "but reduces SPEED.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_CleanseTagDesc::
+	.string "A hold item that helps repel\n"
+	.string "wild POKéMON.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_SmokeBallDesc::
+	.string "A hold item that assures fleeing\n"
+	.string "from wild POKéMON.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_SootheBellDesc::
+	.string "A hold item that calms spirits and\n"
+	.string "fosters friendship.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_EverstoneDesc::
+	.string "A wondrous hold item that\n"
+	.string "prevents evolution.$"
 
 BattleFrontier_ExchangeServiceCorner_Text_LiechiDesc::
     .string "A hold item that boosts Attack\n"
