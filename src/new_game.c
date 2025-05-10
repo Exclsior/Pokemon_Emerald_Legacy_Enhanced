@@ -220,6 +220,8 @@ void NewGameInitData(void)
     
     // Set Secret Base Entrance Warp to WARP_ID_NONE until Secret Base created.
     SetPlayerSecretBaseCoords(-1, -1, WARP_ID_NONE, -1, -1);
+    
+    FlagSet(FLAG_HIDE_TYPE_EFFECT_BATTLE); // Set to not show Type Effectiveness by default
 }
 
 static void ResetMiniGamesRecords(void)

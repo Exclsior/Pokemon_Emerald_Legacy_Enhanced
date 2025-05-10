@@ -1,6 +1,7 @@
 #include "global.h"
 #include "save.h"
 #include "item.h"
+#include "constants/heal_locations.h"
 
 struct SaveBlock2_v0
 {
@@ -408,6 +409,7 @@ bool8 UpdateSave_v0_v2(const struct SaveSectorLocation *locations)
     /** Only use this if there are no major map changes to load into original location
      * If there are any major map changes comment the below section out and use the 
      * heal warp at the bottom of this function instead. */
+    /*
     COPY_FIELD(weather);
     COPY_FIELD(weatherCycleStage);
     COPY_FIELD(flashLevel);
@@ -416,6 +418,7 @@ bool8 UpdateSave_v0_v2(const struct SaveSectorLocation *locations)
     COPY_BLOCK(mapView);
     COPY_BLOCK(objectEvents);
     COPY_BLOCK(objectEventTemplates);
+    */
     
     /** The pokemon structure hasn't changed at all this version, so
      *  we don't need to do anything special to copy the pokemon over. */
@@ -517,8 +520,12 @@ bool8 UpdateSave_v0_v2(const struct SaveSectorLocation *locations)
      * with a newly loaded map and event objects. Here, we're using the last location
      * that the player healed, so the player will appear in the same spot they would
      * as if they blacked out. */
-    //SetContinueGameWarpStatus();
-    //gSaveBlock1Ptr->continueGameWarp = gSaveBlock1Ptr->lastHealLocation;
+    SetContinueGameWarpStatus();
+    
+    if (gSaveBlock2Ptr->playerGender == MALE)
+        SetContinueGameWarpToHealLocation(HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F);
+    else
+        SetContinueGameWarpToHealLocation(HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE_2F);
 
     return TRUE;
 }

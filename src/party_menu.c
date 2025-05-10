@@ -915,6 +915,14 @@ static void DisplayPartyPokemonDataForChooseHalf(u8 slot)
 
     if (!GetBattleEntryEligibility(mon))
     {
+
+        // Changed Message for not allowing Soul Dew holding pokemon into Battle Frontier due to Soul Dew not having an effect
+        if (GetMonData(mon, MON_DATA_HELD_ITEM) == ITEM_SOUL_DEW)
+        {
+            DisplayPartyPokemonDescriptionData(slot, PARTYBOX_DESC_ITEM_DENY);
+            return;
+        }
+
         DisplayPartyPokemonDescriptionData(slot, PARTYBOX_DESC_NOT_ABLE);
         return;
     }
@@ -5809,6 +5817,13 @@ static bool8 GetBattleEntryEligibility(struct Pokemon *mon)
             if (gFrontierBannedSpecies[i] == species)
                 return FALSE;
         }
+        
+        // Added to not allow Soul Dew holding pokemon into Battle Frontier due to Soul Dew not having an effect
+        if (GetMonData(mon, MON_DATA_HELD_ITEM) == ITEM_SOUL_DEW)
+        {
+            return FALSE;
+        }
+
         return TRUE;
     }
 }

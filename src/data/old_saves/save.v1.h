@@ -1,6 +1,7 @@
 #include "global.h"
 #include "save.h"
 #include "item.h"
+#include "constants/heal_locations.h"
 
 struct SaveBlock2_v1
 {
@@ -333,7 +334,11 @@ bool8 UpdateSave_v1_v2(const struct SaveSectorLocation *locations)
      * that the player healed, so the player will appear in the same spot they would
      * as if they blacked out. */
     SetContinueGameWarpStatus();
-    gSaveBlock1Ptr->continueGameWarp = gSaveBlock1Ptr->lastHealLocation;
+
+    if (gSaveBlock2Ptr->playerGender == MALE)
+        SetContinueGameWarpToHealLocation(HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F);
+    else
+        SetContinueGameWarpToHealLocation(HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE_2F);
 
     return TRUE;
 }

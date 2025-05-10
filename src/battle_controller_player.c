@@ -1575,7 +1575,7 @@ u8 TypeEffectiveness(u8 targetId)
     u16 move;
     struct ChooseMoveStruct *moveInfo;
     
-    if (FlagGet(FLAG_SHOW_TYPE_EFFECT_BATTLE)){
+    if (FlagGet(FLAG_HIDE_TYPE_EFFECT_BATTLE)){
         return 10;
     }
 
