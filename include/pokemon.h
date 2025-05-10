@@ -95,7 +95,7 @@ enum {
     MON_DATA_SPATK2,
     MON_DATA_SPDEF2,
     MON_DATA_DEAD,
-}; // Due to compile errors with ENUM, MON_DATA_HIDDEN_NATURE defined separated in include/constants/pokemon.h
+}; // Due to compile errors with ENUM, MON_DATA_NATURE and MON_DATA_HIDDEN_NATURE defined separated in include/constants/pokemon.h
 
 struct PokemonSubstruct0
 {

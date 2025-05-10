@@ -22,7 +22,7 @@
 #define FLAG_TEMP_C      (TEMP_FLAGS_START + 0xC)  // Unused Flag
 #define FLAG_TEMP_D      (TEMP_FLAGS_START + 0xD)  // Unused Flag
 #define FLAG_TEMP_E      (TEMP_FLAGS_START + 0xE)  // Unused Flag
-#define FLAG_TEMP_F      (TEMP_FLAGS_START + 0xF)  // Unused Flag
+#define FLAG_TEMP_HIDE_FOLLOWER      (TEMP_FLAGS_START + 0xF)  // When set, follower pokemon won't be spawned
 #define FLAG_TEMP_10     (TEMP_FLAGS_START + 0x10) // Unused Flag
 #define FLAG_TEMP_11     (TEMP_FLAGS_START + 0x11)
 #define FLAG_TEMP_12     (TEMP_FLAGS_START + 0x12)
@@ -1276,8 +1276,8 @@
 #define FLAG_SHOW_HIDDEN_POWER                                      0x4D0
 #define FLAG_HIDE_EGG_MOVE_TUTOR                                    0x4D1 // Flag to Show/Hide Egg Move until National Dex
 #define FLAG_EXP_ALL                                                0x4D2 // Flag for Enabling and Disabling EXP. All
-#define FLAG_HIDE_TYPE_EFFECT_BATTLE                                0x4D3 // Flag to Option to enable and disable type effectiveness in battle
-#define FLAG_UNUSED_0x4D4                                           0x4D4 // Unused Flag
+#define FLAG_HIDE_TYPE_EFFECT_BATTLE                                0x4D3 // Flag for Option to enable and disable type effectiveness in battle
+#define FLAG_HIDE_FOLLOWER                                          0x4D4 // Flag for Option to enable and disable Pokemon follower
 #define FLAG_UNUSED_0x4D5                                           0x4D5 // Unused Flag
 #define FLAG_UNUSED_0x4D6                                           0x4D6 // Unused Flag
 #define FLAG_UNUSED_0x4D7                                           0x4D7 // Unused Flag
@@ -1637,6 +1637,9 @@
 #define FLAG_ENABLE_MULTI_CORRIDOR_DOOR         (SPECIAL_FLAGS_START + 0x2)
 #define FLAG_SPECIAL_FLAG_UNUSED_0x4003         (SPECIAL_FLAGS_START + 0x3) // Unused Flag
 #define FLAG_STORING_ITEMS_IN_PYRAMID_BAG       (SPECIAL_FLAGS_START + 0x4)
+// When set, `applymovement` does not hide follower pokemon;
+// Also, scripted movements on the player will move follower(s), too
+#define FLAG_SAFE_FOLLOWER_MOVEMENT             (SPECIAL_FLAGS_START + 0x5)
 // FLAG_SPECIAL_FLAG_0x4005 - 0x407F also exist and are unused
 #define SPECIAL_FLAGS_END                       (SPECIAL_FLAGS_START + 0x7F)
 #define NUM_SPECIAL_FLAGS                       (SPECIAL_FLAGS_END - SPECIAL_FLAGS_START + 1)
