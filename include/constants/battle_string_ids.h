@@ -379,8 +379,11 @@
 #define STRINGID_TRAINER1WINTEXT            379
 #define STRINGID_TRAINER2WINTEXT            380
 #define STRINGID_PKMNGAINEDEXPALL           381
+#define STRINGID_PKMNDROPPEDITEM            382
+#define STRINGID_ADDEDTOBAG                 383
+#define STRINGID_BAGISFULL                  384
 
-#define BATTLESTRINGS_COUNT                 382
+#define BATTLESTRINGS_COUNT                 385
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,
