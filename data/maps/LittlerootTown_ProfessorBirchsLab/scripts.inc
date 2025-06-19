@@ -174,6 +174,7 @@ LittlerootTown_ProfessorBirchsLab_Movement_PlayerEnterLabForPokedex:
 LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex::
 	lockall
 	delay 30
+	goto_if_set FLAG_NATIONAL_DEX_MODE, LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_UpgradeDex
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_OtherRegionsUpgradeToNational, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchRetrievePokedexes
@@ -208,7 +209,11 @@ LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex::
 	waitfanfare
 	setflag FLAG_SYS_NATIONAL_DEX
 	special EnableNationalPokedex
+	setflag FLAG_ENABLE_STAT_EDITOR
+	setflag FLAG_SHOW_STAT_EDITOR
+	playfanfare MUS_OBTAIN_ITEM
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable, MSGBOX_DEFAULT
+	waitfanfare
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2, MSGBOX_DEFAULT
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_StrangeRockInMossdeep
 	closemessage
@@ -234,6 +239,65 @@ LittlerootTown_ProfessorBirchsLab_EventScript_MayUpgradeComment::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanUpgradeComment::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BrendanYouCanThankMe, MSGBOX_DEFAULT
+	closemessage
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_UpgradeDex::
+	lockall
+	delay 30
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_UpgradeDex, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchRetrievePokedexes
+	waitmovement 0
+	delay 20
+	playse SE_CLICK
+	delay 10
+	playse SE_CLICK
+	delay 10
+	playse SE_CLICK
+	delay 10
+	playse SE_CLICK
+	delay 20
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFasterRight
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
+	waitmovement 0
+	checkplayergender
+	call_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayUpgradeComment
+	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_BrendanUpgradeComment
+	playse SE_PC_ON
+	waitse
+	delay 20
+	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchReturnPokedex
+	waitmovement 0
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFasterUp
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterUp
+	waitmovement 0
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_OkayAllDone, MSGBOX_DEFAULT
+	setflag FLAG_ENABLE_STAT_EDITOR
+	setflag FLAG_SHOW_STAT_EDITOR
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable, MSGBOX_DEFAULT
+	waitfanfare
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2, MSGBOX_DEFAULT
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_StrangeRockInMossdeep
+	closemessage
+	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchLeaves
+	waitmovement 0
+	removeobject LOCALID_BIRCH
+	setvar VAR_MOSSDEEP_CITY_STATE, 4
+	setvar VAR_BIRCH_STATE, 8
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCH
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_RIVAL
+	clearflag FLAG_HIDE_MOSSDEEP_CITY_BIRCH
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_BIRCH
+	setvar VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2
+	setvar VAR_SCOTT_BF_CALL_STEP_COUNTER, 0
+	setflag FLAG_SCOTT_CALL_BATTLE_FRONTIER
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_BrendanUpgradeComment::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_BrendanYouCanThankMe, MSGBOX_DEFAULT
 	closemessage
 	return
 
@@ -588,6 +652,11 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ReceivePokedex::
 	special SetUnlockedPokedexFlags
 	setflag FLAG_RECEIVED_POKEDEX_FROM_BIRCH
 	setvar VAR_CABLE_CLUB_TUTORIAL_STATE, 1
+	call_if_set FLAG_NATIONAL_DEX_MODE, LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_Enable
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_Enable::
+	special EnableNationalPokedex
 	return
 
 LittlerootTown_ProfessorBirchsLab_EventScript_PokemonAwait::
@@ -1231,9 +1300,29 @@ LittlerootTown_ProfessorBirchsLab_Text_PokedexUpgradedToNational:
 	.string "{PLAYER}'s POKéDEX was upgraded\n"
 	.string "to the NATIONAL Mode!$"
 
+LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_UpgradeDex::
+	.string "PROF. BIRCH: Now…\p"
+	.string "{PLAYER}{KUN} and {RIVAL}, I've had the two\n"
+	.string "of you help me study POKéMON.\p"
+	.string "Thanks to your help, new facts\n"
+	.string "are coming to light.\p"
+	.string "It goes to show how rich and varied\n"
+	.string "the natural environments of HOENN\l"
+	.string "happen to be.\p"
+	.string "That's why I think it's necessary for\n"
+	.string "me to upgrade your POKéDEX.\p"
+	.string "Here, let me see your POKéDEX units.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_BrendanYouCanThankMe:
+	.string "BRENDAN: I went out all over HOENN\n"
+	.string "and checked out POKéMON.\p"
+	.string "You can thank me for getting\n"
+	.string "your POKéDEX upgraded.\p"
+	.string "Yep, you're lucky, {PLAYER}!$"
+
 LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable:
-	.string "You can now edit your POKéMON's stats\n"
-	.string "directly from the party menu!$"
+	.string "{PLAYER}'s POKéDEX was upgraded\n"
+	.string "to allow editing party POKéMON stats!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2:
 	.string "PROF. BIRCH: But listen.\n"

@@ -1276,10 +1276,10 @@
 #define FLAG_SHOW_HIDDEN_POWER                                      0x4D0
 #define FLAG_HIDE_EGG_MOVE_TUTOR                                    0x4D1 // Flag to Show/Hide Egg Move until National Dex
 #define FLAG_EXP_ALL                                                0x4D2 // Flag for Enabling and Disabling EXP. All
-#define FLAG_HIDE_TYPE_EFFECT_BATTLE                                0x4D3 // Flag for Option to enable and disable type effectiveness in battle
-#define FLAG_HIDE_FOLLOWER                                          0x4D4 // Flag for Option to enable and disable Pokemon follower
-#define FLAG_UNUSED_0x4D5                                           0x4D5 // Unused Flag
-#define FLAG_UNUSED_0x4D6                                           0x4D6 // Unused Flag
+#define FLAG_HIDE_TYPE_EFFECT_BATTLE                                0x4D3 // Flag to Option to enable and disable type effectiveness in battle
+#define FLAG_ENABLE_STAT_EDITOR                                     0x4D4 // Flag for enabling the IV/EV Editor function
+#define FLAG_SHOW_STAT_EDITOR                                       0x4D5 // Flag for showing the IV/EV Editor in the party menu
+#define FLAG_HIDE_FOLLOWER                                          0x4D6 // Flag for Option to enable and disable Pokemon follower
 #define FLAG_UNUSED_0x4D7                                           0x4D7 // Unused Flag
 #define FLAG_UNUSED_0x4D8                                           0x4D8 // Unused Flag
 #define FLAG_UNUSED_0x4D9                                           0x4D9 // Unused Flag
@@ -1324,7 +1324,7 @@
 #define FLAG_DEFEATED_ELITE_4_GLACIA                                0x4FD
 #define FLAG_DEFEATED_ELITE_4_DRAKE                                 0x4FE
 
-#define FLAG_UNUSED_0x4FF                                           0x4FF // Unused Flag
+#define FLAG_NATIONAL_DEX_MODE                                      0x4FF // National Dex Mode Flag
 
 // Trainer Flags
 // Trainer flags occupy 0x500 - 0x85F, the last 9 of which are unused

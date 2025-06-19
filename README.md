@@ -55,6 +55,7 @@ This Base patch includes all updates to Pokemon Emerald Legacy source code as of
   * Available from Slateport Mart Energy Guru for 20,000 pokedollars if your lead pokemon has an Effort Ribbon
   * Available from Battle Frontier from vitamin seller for 4BP
 * Added Egg Move Tutor to Fallarbor Town Move Tutor's House after beating the game.
+* Updated Pokedex to include evolution information.
 * Added EXP. All as reward from Mr. Stone for delivering Steven's Letter.
   * **Note:**
     * This is in addition to traditional Gen 3 EXP. Share held item remaining unchanged.
@@ -299,7 +300,6 @@ A combination of Enhanced Starters with Physical Dragon type.
 * Adding some Shiny Pokemon battles as a nod to the anime
 * Use Legendary Beast's themes for their in-game encounters
 * Review Frontier Streak and Level 50 requirements
-* Update Pokedex to include Evolution information (if possible)
 * Add overworld followers
 * Potentialy add all Starters as option in Enhanced Starters
 
