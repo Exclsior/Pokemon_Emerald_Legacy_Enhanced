@@ -955,6 +955,42 @@ void ChooseStarter(void)
     gMain.savedCallback = CB2_GiveStarter;
 }
 
+void StartFirstBattle_NationalDexMode(void)
+{
+    u16 starterMon;
+    
+    starterMon = gSpecialVar_Result;
+
+    // Switch to set starter as original Hoenn starter of same type for all starter decisions in game
+    switch(starterMon)
+    {
+        case SPECIES_BULBASAUR:
+        case SPECIES_CHIKORITA:
+        case SPECIES_TREECKO:
+            *GetVarPointer(VAR_STARTER_MON) = 0;
+            break;
+        case SPECIES_CHARMANDER:
+        case SPECIES_CYNDAQUIL:
+        case SPECIES_TORCHIC:
+            *GetVarPointer(VAR_STARTER_MON) = 1;
+            break;
+        case SPECIES_SQUIRTLE:
+        case SPECIES_TOTODILE:
+        case SPECIES_MUDKIP:
+            *GetVarPointer(VAR_STARTER_MON) = 2;
+            break;
+        default:
+            *GetVarPointer(VAR_STARTER_MON) = 0;
+            break;
+    }
+
+    ScriptGiveMon(starterMon, 5, ITEM_NONE, 0, 0, 0);
+    ResetTasks();
+    PlayBattleBGM();
+    SetMainCallback2(CB2_StartFirstBattle);
+    BattleTransition_Start(B_TRANSITION_BLUR);
+}
+
 static void CB2_GiveStarter(void)
 {
     u16 starterMon;

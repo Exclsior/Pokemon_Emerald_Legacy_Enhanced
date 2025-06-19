@@ -30,6 +30,7 @@ void StartRegiBattle(void);
 u8 BattleSetup_GetTerrainId(void);
 u8 GetSpecialBattleTransition(s32 id);
 void ChooseStarter(void);
+void StartFirstBattle_NationalDexMode(void);
 void ResetTrainerOpponentIds(void);
 void SetMapVarsToTrainer(void);
 const u8 *BattleSetup_ConfigureTrainerBattle(const u8 *data);
