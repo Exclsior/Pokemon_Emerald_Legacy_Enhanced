@@ -6640,6 +6640,11 @@ void IsLastMonThatKnowsSurf(void)
     }
 }
 
+u16 GetTMHMMoves(u16 position)
+{
+    return sTMHMMoves[position];
+}
+
 // mints
 #define tState          data[0]
 #define tSpecies        data[1]
