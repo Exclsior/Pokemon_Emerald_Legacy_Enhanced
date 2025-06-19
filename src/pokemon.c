@@ -2272,18 +2272,27 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
                     personality = ((((Random() % SHINY_ODDS) ^ (HIHALF(value) ^ LOHALF(value))) ^ LOHALF(personality)) << 16) | LOHALF(personality);
                 } while (nature != GetNatureFromPersonality(personality));
             }
-
 #ifdef ITEM_SHINY_CHARM
-            if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
+            else if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
             {
                 u32 shinyValue;
+                u32 maxShinyRolls = 0;
                 u32 rolls = 0;
+                u32 itemCount = 0;
+
+                // Add Additional Rolls for each Shiny Charm in bag
+                do
+                {
+                    maxShinyRolls += I_SHINY_CHARM_ADDITIONAL_ROLLS;
+                    itemCount++;
+                } while (CheckBagHasItem(ITEM_SHINY_CHARM, itemCount) && itemCount < I_SHINY_CHARM_MAX_EFFECTIVE);
+
                 do
                 {
                     personality = Random32();
                     shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
                     rolls++;
-                } while (shinyValue >= SHINY_ODDS && rolls < I_SHINY_CHARM_REROLLS);
+                } while (shinyValue >= SHINY_ODDS && rolls < maxShinyRolls);
             }
 #endif
         }

@@ -428,6 +428,9 @@ const u32 *const gItemIconTable[ITEMS_COUNT + 1][2] =
     // Ability Capsule
     [ITEM_ABILITY_CAPSULE] = {gItemIcon_AbilityCapsule, gItemIconPalette_AbilityCapsule},
 
+    // Shiny Charm
+    [ITEM_SHINY_CHARM] = {gItemIcon_ShinyCharm, gItemIconPalette_ShinyCharm},
+
     // EXP. ALL Key Item
     [ITEM_EXP_ALL] = {gItemIcon_ExpShare, gItemIconPalette_ExpShare},
 

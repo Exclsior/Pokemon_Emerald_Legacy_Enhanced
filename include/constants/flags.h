@@ -1392,8 +1392,8 @@
 #define FLAG_SYS_SAFARI_MODE                        (SYSTEM_FLAGS + 0x2C)
 #define FLAG_SYS_CRUISE_MODE                        (SYSTEM_FLAGS + 0x2D)
 
-#define FLAG_UNUSED_0x88E                           (SYSTEM_FLAGS + 0x2E) // Unused Flag
-#define FLAG_UNUSED_0x88F                           (SYSTEM_FLAGS + 0x2F) // Unused Flag
+#define FLAG_HOENN_DEX_COMPLETE                     (SYSTEM_FLAGS + 0x2E) // 0x88E - Flag for completion of Hoenn Dex to provide a Shiny Charm
+#define FLAG_NATIONAL_DEX_COMPLETE                  (SYSTEM_FLAGS + 0x2F) // 0x88F - Flag for completion of National Dex to provide a Shiny Charm
 
 #define FLAG_SYS_TV_HOME                            (SYSTEM_FLAGS + 0x30)
 #define FLAG_SYS_TV_WATCH                           (SYSTEM_FLAGS + 0x31)

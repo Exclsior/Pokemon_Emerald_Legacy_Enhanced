@@ -73,6 +73,7 @@ BattleFrontier_ScottsHouse_EventScript_GotCarbos::
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	setflag FLAG_COLLECTED_ALL_SILVER_SYMBOLS
 	setflag FLAG_TEMP_4
+	addpcitem ITEM_SHINY_CHARM, 1
 	release
 	end
 
@@ -141,6 +142,7 @@ BattleFrontier_ScottsHouseEventScript_ReceivedBeldumFanfare::
 BattleFrontier_ScottsHouseEventScript_ReceivedBeldum::
 	setflag FLAG_COLLECTED_ALL_GOLD_SYMBOLS
 	setflag FLAG_RECEIVED_SHINY_BELDUM
+	addpcitem ITEM_SHINY_CHARM, 1
 	releaseall
 	end
 

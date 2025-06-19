@@ -129,7 +129,9 @@
 #define ABILITY_HIDDEN 2
 
 // Shiny odds
-#define SHINY_ODDS 8 // Actual probability is SHINY_ODDS/65536
+#define SHINY_ODDS 8                                // Actual probability is SHINY_ODDS/65536
+#define I_SHINY_CHARM_ADDITIONAL_ROLLS  16          // Amount of additional shiny rolls if the player has at least one Shiny Charm in their bag.
+#define I_SHINY_CHARM_MAX_EFFECTIVE  8              // Maximum number of shiny charms used to calculate maximum rolls.
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON       0

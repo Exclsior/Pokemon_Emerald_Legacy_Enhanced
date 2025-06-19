@@ -1669,4 +1669,9 @@ static const u8 sTimidMintDesc[] = _(
 static const u8 sAbilityCapsuleDesc[] = _(
     "Changes the ability\n"
     "of a Pokémon.");
+
+static const u8 sShinyCharmDesc[] = _(
+    "A charm that will\n"
+    "raise the chance\n"
+    "of Shiny Pokémon.");
     

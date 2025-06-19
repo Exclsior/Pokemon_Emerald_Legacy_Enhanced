@@ -4696,6 +4696,17 @@ bool16 HasAllHoennMons(void)
         if (!GetSetPokedexFlag(HoennToNationalOrder(i + 1), FLAG_GET_CAUGHT))
             return FALSE;
     }
+
+    // If first check after getting all Hoenn Pokemon, add Shiny Charm to Item PC
+    if (!FlagGet(FLAG_HOENN_DEX_COMPLETE))
+    {
+        FlagSet(FLAG_HOENN_DEX_COMPLETE);
+        AddPCItem(ITEM_SHINY_CHARM, 1);
+    }
+
+    // Run HasAllMons for each Hoenn Dex check to trigger National Dex check in the background.
+    HasAllMons();
+
     return TRUE;
 }
 
@@ -4736,6 +4747,14 @@ bool16 HasAllMons(void)
         if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
             return FALSE;
     }
+
+    // If first check after getting all National Dex Pokemon, add Shiny Charm to Item PC
+    if (!FlagGet(FLAG_NATIONAL_DEX_COMPLETE))
+    {
+        FlagSet(FLAG_NATIONAL_DEX_COMPLETE);
+        AddPCItem(ITEM_SHINY_CHARM, 1);
+    }
+
     return TRUE;
 }
 

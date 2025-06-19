@@ -18,6 +18,7 @@ MeteorFalls_StevensCave_EventScript_Steven::
 	trainerbattle_no_intro TRAINER_STEVEN_2, MeteorFalls_StevensCave_Text_StevenDefeat
 	msgbox MeteorFalls_StevensCave_Text_MyPredictionCameTrue, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_METEOR_FALLS_STEVEN
+	addpcitem ITEM_SHINY_CHARM, 1
 	goto_if_unset FLAG_RECEIVED_EON_TICKET, MeteorFalls_StevensCave_EventScript_GiveEonTicket
 	release
 	end
