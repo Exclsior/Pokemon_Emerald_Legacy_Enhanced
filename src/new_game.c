@@ -49,6 +49,7 @@
 #include "wild_encounter.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
+extern const u8 EventScript_SetWildEncountersToNationalDex[];
 
 static void ClearFrontierRecord(void);
 static void WarpToTruck(void);
@@ -153,8 +154,11 @@ void ResetMenuAndMonGlobals(void)
 
 void NewGameInitData(void)
 {
+     // A function lower down here clears these, so retain it and reset it at the end
     bool8 nuzlockePrev = FlagGet(FLAG_NUZLOCKE);
-    bool8 hardPrev = FlagGet(FLAG_HARD);  // A function lower down here clears these, so retain it and reset it at the end
+    bool8 hardPrev = FlagGet(FLAG_HARD); 
+    bool8 natDexMode = FlagGet(FLAG_NATIONAL_DEX_MODE);
+
     if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
         RtcReset();
 
@@ -217,6 +221,13 @@ void NewGameInitData(void)
     ResetContestLinkResults();
     nuzlockePrev ? FlagSet(FLAG_NUZLOCKE) : FlagClear(FLAG_NUZLOCKE);
     hardPrev ? FlagSet(FLAG_HARD) : FlagClear(FLAG_HARD);
+    natDexMode ? FlagSet(FLAG_NATIONAL_DEX_MODE) : FlagClear(FLAG_NATIONAL_DEX_MODE);
+
+    // If National Dex Mode selected, set all wild encounters to national Dex
+    if (natDexMode)
+    {        
+        RunScriptImmediately(EventScript_SetWildEncountersToNationalDex);
+    }    
     
     // Set Secret Base Entrance Warp to WARP_ID_NONE until Secret Base created.
     SetPlayerSecretBaseCoords(-1, -1, WARP_ID_NONE, -1, -1);

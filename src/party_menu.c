@@ -2657,8 +2657,8 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
 
-    // If National Dex is enabled, enable Stat Editing.
-    if(IsNationalPokedexEnabled()){
+    // If game is cleared is enabled, enable Stat Editing.
+    if(FlagGet(FLAG_ENABLE_STAT_EDITOR) && FlagGet(FLAG_SHOW_STAT_EDITOR)){
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_STAT_EDIT);
     }    
 

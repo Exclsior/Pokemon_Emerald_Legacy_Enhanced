@@ -137,6 +137,11 @@
  * Task_NewGameBirchSpeech_Nuzlocke
  * Task_NewGameBirchSpeech_WaitToShowNuzlockeMenu
  * Task_NewGameBirchSpeech_ChooseNuzlocke
+ *  Advances to Task_NewGameBirchSpeech_DexType when done.
+ * 
+ * Task_NewGameBirchSpeech_DexType
+ * Task_NewGameBirchSpeech_WaitToShowNationalDexMenu
+ * Task_NewGameBirchSpeech_ChooseDexType
  *  Advances to Task_NewGameBirchSpeech_WhatsYourName when done.
  *
  * Task_NewGameBirchSpeech_WhatsYourName
@@ -217,6 +222,7 @@ static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8);
 static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8);
 static void Task_NewGameBirchSpeech_BoyOrGirl(u8);
 static void Task_NewGameBirchSpeech_Nuzlocke(u8);
+static void Task_NewGameBirchSpeech_DexType(u8);
 static void LoadMainMenuWindowFrameTiles(u8, u16);
 static void DrawMainMenuWindowBorder(const struct WindowTemplate *, u16);
 static void Task_HighlightSelectedMainMenuItem(u8);
@@ -229,12 +235,21 @@ static void Task_NewGameBirchSpeech_HardText(u8);
 static void Task_NewGameBirchSpeech_HardcoreText(u8);
 static void Task_NewGameBirchSpeech_AreYouSure(u8);
 static void Task_NewGameBirchSpeech_AreYouSureSelection(u8);
+static void Task_NewGameBirchSpeech_WaitToShowNationalDexMenu(u8);
+static void Task_NewGameBirchSpeech_ChooseDexType(u8);
+static void Task_NewGameBirchSpeech_HoennDexText(u8);
+static void Task_NewGameBirchSpeech_NationalDexText(u8);
+static void Task_NewGameBirchSpeech_AreYouSure_Dex(u8);
+static void Task_NewGameBirchSpeech_AreYouSureSelection_Dex(u8);
 static void NewGameBirchSpeech_ShowGenderMenu(void);
 static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void);
 static void NewGameBirchSpeech_ClearGenderWindow(u8, u8);
 static void NewGameBirchSpeech_ShowNuzlockeMenu(void);
 static s8 NewGameBirchSpeech_ProcessNuzlockeMenuInput(void);
 static void NewGameBirchSpeech_ClearNuzlockeWindow(u8, u8);
+static void NewGameBirchSpeech_ShowDexTypeMenu(void);
+static s8 NewGameBirchSpeech_ProcessDexTypeMenuInput(void);
+static void NewGameBirchSpeech_ClearDexTypeWindow(u8, u8);
 static void Task_NewGameBirchSpeech_WhatsYourName(u8);
 static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8);
 static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8);
@@ -427,6 +442,15 @@ static const struct WindowTemplate sNewGameBirchSpeechTextWindows[] =
         .paletteNum = 15,
         .baseBlock = 0x6D
     },
+    {
+        .bg = 0,
+        .tilemapLeft = 3,
+        .tilemapTop = 5,
+        .width = 10,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 0x6D
+    },
     DUMMY_WIN_TEMPLATE
 };
 
@@ -488,6 +512,11 @@ static const struct MenuAction sMenuActions_Nuzlocke[] = {
     {gText_Normal, NULL},
     {gText_Hard, NULL},
     {gText_Hardcore, NULL}
+};
+
+static const struct MenuAction sMenuActions_DexMode[] = {
+    {gText_Birch_HoennDex, {NULL}},
+    {gText_Birch_NationalDex, {NULL}}
 };
 
 static const u8 *const sMalePresetNames[] = {
@@ -1710,6 +1739,89 @@ static void Task_NewGameBirchSpeech_AreYouSureSelection(u8 taskId)
         case 0:
             PlaySE(SE_SELECT);
             gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+            //NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
+            //NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_DexType;
+            break;
+        case MENU_B_PRESSED:
+        case 1:
+            PlaySE(SE_SELECT);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            break;
+    }
+}
+
+// National Dex Mode
+static void Task_NewGameBirchSpeech_DexType(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_DexType);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowNationalDexMenu;
+}
+
+static void Task_NewGameBirchSpeech_WaitToShowNationalDexMenu(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        NewGameBirchSpeech_ShowDexTypeMenu();
+        gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseDexType;
+    }
+}
+
+static void Task_NewGameBirchSpeech_ChooseDexType(u8 taskId)
+{
+    int dexType = NewGameBirchSpeech_ProcessDexTypeMenuInput();
+    switch (dexType)
+    {
+        case 0:
+            NewGameBirchSpeech_ClearDexTypeWindow(4, 1);
+            PlaySE(SE_SELECT);
+            FlagClear(FLAG_NATIONAL_DEX_MODE);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_HoennDexText;
+            break;
+    
+        case 1:
+            NewGameBirchSpeech_ClearDexTypeWindow(4, 1);
+            PlaySE(SE_SELECT);
+            FlagSet(FLAG_NATIONAL_DEX_MODE);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_NationalDexText;
+            break;
+    }
+}
+
+static void Task_NewGameBirchSpeech_HoennDexText(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_AreYouSure_HoennDex);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_AreYouSure_Dex;
+}
+
+static void Task_NewGameBirchSpeech_NationalDexText(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_AreYouSure_NationalDex);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_AreYouSure_Dex;
+}
+
+static void Task_NewGameBirchSpeech_AreYouSure_Dex(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        CreateYesNoMenuParameterized(2, 1, 0xF3, 0xDF, 2, 15);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_AreYouSureSelection_Dex;
+    }
+}
+
+static void Task_NewGameBirchSpeech_AreYouSureSelection_Dex(u8 taskId)
+{
+    switch (Menu_ProcessInputNoWrapClearOnChoose())
+    {
+        case 0:
+            PlaySE(SE_SELECT);
+            gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
             NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
             NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
             gTasks[taskId].func = Task_NewGameBirchSpeech_WhatsYourName;
@@ -1717,7 +1829,7 @@ static void Task_NewGameBirchSpeech_AreYouSureSelection(u8 taskId)
         case MENU_B_PRESSED:
         case 1:
             PlaySE(SE_SELECT);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_DexType;
             break;
     }
 }
@@ -2269,6 +2381,22 @@ static s8 NewGameBirchSpeech_ProcessNuzlockeMenuInput(void)
     return Menu_ProcessInputNoWrap();
 }
 
+// National Dex Mode
+static void NewGameBirchSpeech_ShowDexTypeMenu(void)
+{
+    DrawMainMenuWindowBorder(&sNewGameBirchSpeechTextWindows[4], 0xF3);
+    FillWindowPixelBuffer(4, PIXEL_FILL(1));
+    PrintMenuTable(4, ARRAY_COUNT(sMenuActions_DexMode), sMenuActions_DexMode);
+    InitMenuInUpperLeftCornerNormal(4, ARRAY_COUNT(sMenuActions_DexMode), 0);
+    PutWindowTilemap(4);
+    CopyWindowToVram(4, COPYWIN_FULL);
+}
+
+static s8 NewGameBirchSpeech_ProcessDexTypeMenuInput(void)
+{
+    return Menu_ProcessInputNoWrap();
+}
+
 void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
 {
     const u8 *name;
@@ -2412,6 +2540,20 @@ static void NewGameBirchSpeech_ClearNuzlockeWindowTilemap(u8 bg, u8 x, u8 y, u8 
 static void NewGameBirchSpeech_ClearNuzlockeWindow(u8 windowId, bool8 copyToVram)
 {
     CallWindowFunction(windowId, NewGameBirchSpeech_ClearNuzlockeWindowTilemap);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+    ClearWindowTilemap(windowId);
+    if (copyToVram == TRUE)
+        CopyWindowToVram(windowId, COPYWIN_FULL);
+}
+
+static void NewGameBirchSpeech_ClearDexTypeWindowTilemap(u8 bg, u8 x, u8 y, u8 width, u8 height, u8 unused)
+{
+    FillBgTilemapBufferRect(bg, 0, x + 255, y + 255, width + 2, height + 2, 2);
+}
+
+static void NewGameBirchSpeech_ClearDexTypeWindow(u8 windowId, bool8 copyToVram)
+{
+    CallWindowFunction(windowId, NewGameBirchSpeech_ClearDexTypeWindowTilemap);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     ClearWindowTilemap(windowId);
     if (copyToVram == TRUE)
