@@ -4714,6 +4714,10 @@ extern const u32 gItemIconPalette_YellowMint[];
 extern const u32 gItemIcon_AbilityCapsule[];
 extern const u32 gItemIconPalette_AbilityCapsule[];
 
+// Shiny Charm
+extern const u32 gItemIcon_ShinyCharm[];
+extern const u32 gItemIconPalette_ShinyCharm[];
+
 extern const u32 gItemIcon_ReturnToFieldArrow[];
 extern const u32 gItemIconPalette_ReturnToFieldArrow[];
 

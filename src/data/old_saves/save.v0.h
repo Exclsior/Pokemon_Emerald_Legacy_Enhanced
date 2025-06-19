@@ -1,7 +1,9 @@
 #include "global.h"
 #include "save.h"
 #include "item.h"
+#include "event_data.h"
 #include "constants/heal_locations.h"
+#include "constants/flags.h"
 
 struct SaveBlock2_v0
 {
@@ -503,6 +505,18 @@ bool8 UpdateSave_v0_v2(const struct SaveSectorLocation *locations)
     #undef COPY_BLOCK
     #undef COPY_ARRAY
     
+    // Add Shiny Charm to Save Upgrades
+    AddPCItem(ITEM_SHINY_CHARM, 1); // One base Shiny Charm for the game
+
+    // Add Shiny Charms based on in-game progression
+    FlagGet(FLAG_SYS_GAME_CLEAR)                ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Beat the game
+    FlagGet(FLAG_RECEIVED_GLASS_ORNAMENT)       ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Complete Master Rank Contests
+    FlagGet(FLAG_DEFEATED_METEOR_FALLS_STEVEN)  ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Defeat Steven in Meteor Falls
+    FlagGet(FLAG_HOENN_DEX_COMPLETE)            ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Complete the Hoenn Dex (not including Jirachi or Deoxys)
+    FlagGet(FLAG_NATIONAL_DEX_COMPLETE)         ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Complete the National Dex (not including Mew, Celebi, Jirachi or Deoxys)
+    FlagGet(FLAG_COLLECTED_ALL_SILVER_SYMBOLS)  ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Get all Silver Symbols
+    FlagGet(FLAG_COLLECTED_ALL_GOLD_SYMBOLS)    ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Get all Gold Symbols
+
     /**
      * The pokemon structure hasn't changed at all this version, so
      * we can just assign across the old box storage to the new.  */ 

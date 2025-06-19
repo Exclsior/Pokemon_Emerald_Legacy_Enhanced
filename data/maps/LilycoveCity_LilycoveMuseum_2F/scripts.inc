@@ -128,6 +128,7 @@ LilycoveCity_LilycoveMuseum_2F_EventScript_GiveGlassOrnament::
 	givedecoration DECOR_GLASS_ORNAMENT
 	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_LilycoveMuseum_2F_EventScript_NoRoomForGlassOrnament
 	setflag FLAG_RECEIVED_GLASS_ORNAMENT
+	addpcitem ITEM_SHINY_CHARM, 1
 LilycoveCity_LilycoveMuseum_2F_EventScript_GiveMysticTicket::
 	goto_if_set FLAG_RECEIVED_MYSTIC_TICKET, LilycoveCity_LilycoveMuseum_2F_EventScript_CuratorEnd
 	msgbox LilycoveCity_LilycoveMuseum_2F_Text_SpecialTicket, MSGBOX_DEFAULT
