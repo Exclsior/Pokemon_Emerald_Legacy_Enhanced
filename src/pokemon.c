@@ -2229,7 +2229,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     else
         personality = Random32();
 
-SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
+    SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality); // Battle Frontier Nature Fix
 
     // Determine original trainer ID
     switch (otIdType)
