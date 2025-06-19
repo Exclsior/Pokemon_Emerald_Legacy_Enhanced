@@ -28,13 +28,45 @@ static const struct SpriteFrameImage sPicTable_ShadowExtraLarge[] = {
     obj_frame_tiles(gFieldEffectObjectPic_ShadowExtraLarge),
 };
 
-const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {TAG_NONE, TAG_WEATHER_START, &gObjectEventBaseOam_8x8, sAnimTable_Shadow, sPicTable_ShadowSmall, gDummySpriteAffineAnimTable, UpdateShadowFieldEffect};
+const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+    .oam = &gObjectEventBaseOam_8x8,
+    .anims = sAnimTable_Shadow,
+    .images = sPicTable_ShadowSmall,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = UpdateShadowFieldEffect,
+};
 
-const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowMedium = {TAG_NONE, TAG_WEATHER_START, &gObjectEventBaseOam_16x8, sAnimTable_Shadow, sPicTable_ShadowMedium, gDummySpriteAffineAnimTable, UpdateShadowFieldEffect};
+const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowMedium = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+    .oam = &gObjectEventBaseOam_16x8,
+    .anims = sAnimTable_Shadow,
+    .images = sPicTable_ShadowMedium,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = UpdateShadowFieldEffect,
+};
 
-const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowLarge = {TAG_NONE, TAG_WEATHER_START, &gObjectEventBaseOam_32x8, sAnimTable_Shadow, sPicTable_ShadowLarge, gDummySpriteAffineAnimTable, UpdateShadowFieldEffect};
+const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowLarge = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+    .oam = &gObjectEventBaseOam_32x8,
+    .anims = sAnimTable_Shadow,
+    .images = sPicTable_ShadowLarge,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = UpdateShadowFieldEffect,
+};
 
-const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowExtraLarge = {TAG_NONE, TAG_WEATHER_START, &gObjectEventBaseOam_64x32, sAnimTable_Shadow, sPicTable_ShadowExtraLarge, gDummySpriteAffineAnimTable, UpdateShadowFieldEffect};
+const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowExtraLarge = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
+    .oam = &gObjectEventBaseOam_64x32,
+    .anims = sAnimTable_Shadow,
+    .images = sPicTable_ShadowExtraLarge,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = UpdateShadowFieldEffect,
+};
 
 static const struct SpriteFrameImage sPicTable_TallGrass[] = {
     overworld_frame(gFieldEffectObjectPic_TallGrass, 2, 2, 0),
@@ -178,7 +210,7 @@ static const union AnimCmd *const sAnimTable_SurfBlob[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_SurfBlob = {
     .tileTag = TAG_NONE,
-    .paletteTag = OBJ_EVENT_PAL_TAG_MAY,
+    .paletteTag = OBJ_EVENT_PAL_TAG_BRENDAN,
     .oam = &gObjectEventBaseOam_32x32,
     .anims = sAnimTable_SurfBlob,
     .images = sPicTable_SurfBlob,

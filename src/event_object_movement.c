@@ -554,7 +554,7 @@ const u8 gInitialMovementTypeFacingDirections[NUM_MOVEMENT_TYPES] = {
 #define OBJ_EVENT_PAL_TAG_EMOTES                  0x8002
 // Not a real OW palette tag; used for the white flash applied to followers
 #define OBJ_EVENT_PAL_TAG_WHITE                   (OBJ_EVENT_PAL_TAG_NONE - 1)
-#define OBJ_EVENT_PAL_TAG_NONE 0x11FF
+#define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #if OW_GFX_COMPRESS
 // This + localId is used as the tileTag
@@ -622,9 +622,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_CastformSunny,         OBJ_EVENT_PAL_TAG_CASTFORM_SUNNY},
     {gObjectEventPal_CastformRainy,         OBJ_EVENT_PAL_TAG_CASTFORM_RAINY},
     {gObjectEventPal_CastformSnowy,         OBJ_EVENT_PAL_TAG_CASTFORM_SNOWY},
-    {gObjectEventPal_DeoxysAttack,          OBJ_EVENT_PAL_TAG_DEOXYS_ATTACK},
-    {gObjectEventPal_DeoxysDefense,         OBJ_EVENT_PAL_TAG_DEOXYS_DEFENSE},
-    {gObjectEventPal_DeoxysSpeed,           OBJ_EVENT_PAL_TAG_DEOXYS_SPEED},
     #if OW_MON_POKEBALLS
     // Vanilla
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},
@@ -1680,10 +1677,10 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
     spriteTemplate->tileTag = LoadSheetGraphicsInfo(graphicsInfo, objectEvent->graphicsId, NULL);
     #endif
 
-    if (objectEvent->graphicsId >= OBJ_EVENT_GFX_MON_BASE + SPECIES_SHINY_TAG)
+    if (objectEvent->graphicsId >= OBJ_EVENT_GFX_MON_BASE + SPECIES_OVERWORLD_SHINY_TAG)
     {
         objectEvent->shiny = TRUE;
-        objectEvent->graphicsId -= SPECIES_SHINY_TAG;
+        objectEvent->graphicsId -= SPECIES_OVERWORLD_SHINY_TAG;
     }
 
     spriteId = CreateSprite(spriteTemplate, 0, 0, 0);
@@ -1831,7 +1828,7 @@ static void MakeSpriteTemplateFromObjectEventTemplate(const struct ObjectEventTe
 static u8 LoadDynamicFollowerPaletteFromGraphicsId(u16 graphicsId, bool8 shiny, struct SpriteTemplate *template) {
     u16 species = ((graphicsId & OBJ_EVENT_GFX_SPECIES_MASK) - OBJ_EVENT_GFX_MON_BASE);
     u8 form = (graphicsId >> OBJ_EVENT_GFX_SPECIES_BITS);
-    const struct CompressedSpritePalette *spritePalette = &(shiny ? gMonShinyPaletteTable : gMonPaletteTable)[species];
+    const struct CompressedSpritePalette *spritePalette = &(shiny ? gMonOverworldShinyPaletteTable : gMonOverworldPaletteTable)[species];
     u8 paletteNum = LoadDynamicFollowerPalette(species, form, shiny);
     if (template)
         template->paletteTag = spritePalette->tag;
@@ -1983,15 +1980,16 @@ static const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u16 species, 
 // Find, or load, the palette for the specified pokemon info
 static u8 LoadDynamicFollowerPalette(u16 species, u8 form, bool32 shiny) {
     u32 paletteNum;
-    // Note that the shiny palette tag is `species + SPECIES_SHINY_TAG`, which must be increased with more pokemon
+    // Note that the shiny palette tag is `species + SPECIES_OVERWORLD_SHINY_TAG`, which must be increased with more pokemon
     // so that palette tags do not overlap
-    struct SpritePalette spritePalette = {.tag = shiny ? (species + SPECIES_SHINY_TAG) : species};
+    struct SpritePalette spritePalette = {.tag = shiny ? (species + SPECIES_OVERWORLD_SHINY_TAG) : (species + SPECIES_OVERWORLD_TAG)};
     // palette already loaded
     if ((paletteNum = IndexOfSpritePaletteTag(spritePalette.tag)) < 16)
         return paletteNum;
 
-    // Use matching front sprite's normal/shiny palettes
-    spritePalette.data = (u16*)((shiny ? gMonShinyPaletteTable : gMonPaletteTable)[species].data);
+    // Use specific overworld normal or shiny palettes
+    spritePalette.data = (u16*)((shiny ? gMonOverworldShinyPaletteTable : gMonOverworldPaletteTable)[species].data);
+    
     // Use standalone palette, unless entry is OOB or NULL (fallback to front-sprite-based)
     if (species < ARRAY_COUNT(gFollowerPalettes) && gFollowerPalettes[species][shiny & 1])
         spritePalette.data = gFollowerPalettes[species][shiny & 1];
@@ -2759,6 +2757,7 @@ static void GetBerryTreeGraphics(struct ObjectEvent *objectEvent, struct Sprite 
         if (berryId > ITEM_TO_BERRY(LAST_BERRY_INDEX))
             berryId = 0;
 
+        SetBerryTreeGraphics(objectEvent, berryId, berryStage);
         StartSpriteAnim(sprite, berryStage);
     }
 }
@@ -2775,8 +2774,8 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
         form = graphicsId >> OBJ_EVENT_GFX_SPECIES_BITS;
         graphicsId = graphicsId & OBJ_EVENT_GFX_SPECIES_MASK;
     }
-    if (graphicsId >= OBJ_EVENT_GFX_MON_BASE + SPECIES_SHINY_TAG)
-        graphicsId -= SPECIES_SHINY_TAG;
+    if (graphicsId >= OBJ_EVENT_GFX_MON_BASE + SPECIES_OVERWORLD_SHINY_TAG)
+        graphicsId -= SPECIES_OVERWORLD_SHINY_TAG;
 
     if (graphicsId == OBJ_EVENT_GFX_BARD) {
         return gMauvilleOldManGraphicsInfoPointers[GetCurrentMauvilleOldMan()];

@@ -86,10 +86,10 @@
 #define FLAG_HIDE_RAIKOU2                   0x49
 #define FLAG_HIDE_RAIKOU3                   0x4A
 #define FLAG_EGG_MOVES_TUTOR                0x4B // Enable Egg Move Tutor
-#define FLAG_UNUSED_0x04C    0x4C // Unused Flag
-#define FLAG_UNUSED_0x04D    0x4D // Unused Flag
-#define FLAG_UNUSED_0x04E    0x4E // Unused Flag
-#define FLAG_UNUSED_0x04F    0x4F // Unused Flag
+#define FLAG_CAUGHT_JIRACHI                 0x4C // Check for Jirachi Caught, for Rematch
+#define FLAG_DEFEATED_JIRACHI               0x4D // Check for Jirachi Defeated, for Rematch
+#define FLAG_UNUSED_0x04E                   0x4E // Unused Flag
+#define FLAG_UNUSED_0x04F                   0x4F // Unused Flag
 
 // Scripts
 #define FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL  0x50

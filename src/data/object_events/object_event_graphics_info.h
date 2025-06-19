@@ -1875,7 +1875,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Poochyena = {
     .oam = &gObjectEventBaseOam_32x32,
     .subspriteTables = sOamTables_32x32,
     .anims = sAnimTable_Standard,
-    .images = sPicTable_Poochyena,
+    .images = sPicTable_PoochyenaOld,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
 

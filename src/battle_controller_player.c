@@ -2324,7 +2324,7 @@ static void PlayerHandleSwitchInAnim(void)
 // have it slide in instead of being thrown
 static bool8 ShouldDoSlideInAnim(void) {
     struct ObjectEvent *followerObj = GetFollowerObject();
-    if (!followerObj || followerObj->invisible)
+    if (!followerObj || followerObj->invisible || FlagGet(FLAG_HIDE_FOLLOWER))
         return FALSE;
 
     if (gBattleTypeFlags & (
@@ -2367,7 +2367,7 @@ static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit, bool8 d
     gSprites[gBattlerSpriteIds[battlerId]].invisible = TRUE;
     gSprites[gBattlerSpriteIds[battlerId]].callback = SpriteCallbackDummy;
 
-    gSprites[gBattleControllerData[battlerId]].data[0] = DoPokeballSendOutAnimation(0, doSlideIn || !FlagGet(FLAG_HIDE_FOLLOWER) ? POKEBALL_PLAYER_SLIDEIN : POKEBALL_PLAYER_SENDOUT);
+    gSprites[gBattleControllerData[battlerId]].data[0] = DoPokeballSendOutAnimation(0, doSlideIn ? POKEBALL_PLAYER_SLIDEIN : POKEBALL_PLAYER_SENDOUT);
 }
 
 static void PlayerHandleReturnMonToBall(void)

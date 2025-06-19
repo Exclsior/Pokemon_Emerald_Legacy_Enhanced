@@ -749,6 +749,7 @@ static u8 RotatingGate_CreateGate(u8 gateId, s16 deltaX, s16 deltaY)
     y = gate->y + MAP_OFFSET;
 
     sprite = &gSprites[spriteId];
+    UpdateSpritePaletteByTemplate(&template, sprite);
     sprite->data[0] = gateId;
     sprite->coordOffsetEnabled = 1;
 

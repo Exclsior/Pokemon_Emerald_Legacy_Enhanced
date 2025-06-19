@@ -41,7 +41,7 @@
       "flag": "FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_WHISMUR",
+      "graphics_id": "OBJ_EVENT_GFX_MON_BASE+SPECIES_WHISMUR",
       "x": 15,
       "y": 9,
       "elevation": 3,
