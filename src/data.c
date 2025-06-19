@@ -301,6 +301,8 @@ const union AnimCmd *const gAnims_MonPic[MAX_MON_PIC_FRAMES] =
 #define SPECIES_SPRITE(species, sprite) [SPECIES_##species] = {sprite, MON_PIC_SIZE, SPECIES_##species}
 #define SPECIES_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species}
 #define SPECIES_SHINY_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species + SPECIES_SHINY_TAG}
+#define SPECIES_OVERWORLD_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species + SPECIES_OVERWORLD_TAG}
+#define SPECIES_OVERWORLD_SHINY_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species + SPECIES_OVERWORLD_SHINY_TAG}
 
 #include "data/pokemon_graphics/unused_anims.h"
 #include "data/pokemon_graphics/front_pic_coordinates.h"
@@ -310,6 +312,8 @@ const union AnimCmd *const gAnims_MonPic[MAX_MON_PIC_FRAMES] =
 #include "data/pokemon_graphics/back_pic_table.h"
 #include "data/pokemon_graphics/palette_table.h"
 #include "data/pokemon_graphics/shiny_palette_table.h"
+#include "data/pokemon_graphics/overworld_palette_table.h"
+#include "data/pokemon_graphics/overworld_shiny_palette_table.h"
 
 #include "data/trainer_graphics/front_pic_anims.h"
 #include "data/trainer_graphics/front_pic_tables.h"
@@ -326,3 +330,4 @@ const union AnimCmd *const gAnims_MonPic[MAX_MON_PIC_FRAMES] =
 #include "data/trainers.h"
 #include "data/text/species_names.h"
 #include "data/text/move_names.h"
+#include "data/text/follower_messages.h"

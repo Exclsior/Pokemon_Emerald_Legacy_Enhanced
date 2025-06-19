@@ -56,6 +56,7 @@ enum
 {
     MENUITEM_WORLD_BIKEMUSIC,
     MENUITEM_WORLD_SURFMUSIC,
+    MENUITEM_WORLD_MONOVERWORLD,
     MENUITEM_WORLD_SURFOVERWORLD,
     MENUITEM_WORLD_CANCEL,
     MENUITEM_WORLD_COUNT,
@@ -179,6 +180,7 @@ static void DrawChoices_ButtonMode(int selection, int y);
 //static void DrawChoices_UnitSystem(int selection, int y);
 static void DrawChoices_BikeMusic(int selection, int y);
 static void DrawChoices_SurfMusic(int selection, int y);
+static void DrawChoices_MonOverworld(int selection, int y);
 static void DrawChoices_SurfOverworld(int selection, int y);
 static void DrawChoices_ItemAnimate(int selection, int y);
 static void DrawChoices_TypeEffect(int selection, int y);
@@ -248,6 +250,7 @@ struct // MENU_WORLD
 //    [MENUITEM_CUSTOM_EXP_BAR]      = {DrawChoices_BarSpeed,    ProcessInput_Options_Eleven},
     [MENUITEM_WORLD_BIKEMUSIC]    = {DrawChoices_BikeMusic,   ProcessInput_Options_Two},
     [MENUITEM_WORLD_SURFMUSIC]    = {DrawChoices_SurfMusic,   ProcessInput_Options_Two},
+    [MENUITEM_WORLD_MONOVERWORLD]    = {DrawChoices_MonOverworld,   ProcessInput_Options_Two},
     [MENUITEM_WORLD_SURFOVERWORLD]    = {DrawChoices_SurfOverworld,   ProcessInput_Options_Two},
     [MENUITEM_WORLD_CANCEL]       = {NULL, NULL},
 };
@@ -282,6 +285,7 @@ static const u8 *const sOptionMenuItemsNamesWorld[MENUITEM_WORLD_COUNT] =
 //    [MENUITEM_CUSTOM_EXP_BAR]     = sText_ExpBar,
     [MENUITEM_WORLD_BIKEMUSIC]   = gText_BikeMusic,
     [MENUITEM_WORLD_SURFMUSIC]   = gText_SurfMusic,
+    [MENUITEM_WORLD_MONOVERWORLD]   = gText_MonOverworld,
     [MENUITEM_WORLD_SURFOVERWORLD]   = gText_SurfOverworld,
     [MENUITEM_WORLD_CANCEL]      = gText_OptionMenuSave,
 };
@@ -340,6 +344,7 @@ static bool8 CheckConditions(int selection)
         {
         case MENUITEM_WORLD_BIKEMUSIC:       return TRUE;
         case MENUITEM_WORLD_SURFMUSIC:       return TRUE;
+        case MENUITEM_WORLD_MONOVERWORLD:    return TRUE;
         case MENUITEM_WORLD_SURFOVERWORLD:   return TRUE;
         case MENUITEM_WORLD_CANCEL:          return TRUE;
         case MENUITEM_WORLD_COUNT:           return TRUE;
@@ -400,6 +405,8 @@ static const u8 sText_Desc_SurfOff[]            = _("Disables the SURF music whe
 static const u8 sText_Desc_SurfOn[]             = _("Enables the SURF music when you\nstart surfing on a POKéMON.");
 static const u8 sText_Desc_BikeOff[]            = _("Disables the BIKE music when you\nstart riding the BIKE.");
 static const u8 sText_Desc_BikeOn[]             = _("Enables the BIKE music when you\nstart riding the BIKE.");
+static const u8 sText_Desc_MonOverworldOff[]            = _("Disables following for the first\nPOKéMON in your party.");
+static const u8 sText_Desc_MonOverworldOn[]             = _("Enables following for the first\nPOKéMON in your party.");
 static const u8 sText_Desc_SurfOverworldDynamic[]       = _("Use the relevant POKéMON's sprite\nwhen surfing.");
 static const u8 sText_Desc_SurfOverworldOriginal[]      = _("Use the original generic sprite when\nsurfing.");
 static const u8 *const sOptionMenuItemDescriptionsWorld[MENUITEM_WORLD_COUNT][2] =
@@ -408,6 +415,7 @@ static const u8 *const sOptionMenuItemDescriptionsWorld[MENUITEM_WORLD_COUNT][2]
     //[MENUITEM_CUSTOM_EXP_BAR]     = {sText_Desc_BattleExpBar,       sText_Empty},
     [MENUITEM_WORLD_BIKEMUSIC]   = {sText_Desc_BikeOn,             sText_Desc_BikeOff},
     [MENUITEM_WORLD_SURFMUSIC]   = {sText_Desc_SurfOn,             sText_Desc_SurfOff},
+    [MENUITEM_WORLD_MONOVERWORLD]   = {sText_Desc_MonOverworldOn,             sText_Desc_MonOverworldOff},
     [MENUITEM_WORLD_SURFOVERWORLD]   = {sText_Desc_SurfOverworldDynamic,             sText_Desc_SurfOverworldOriginal},
     [MENUITEM_WORLD_CANCEL]      = {sText_Desc_Save,              sText_Empty},
 };
@@ -717,6 +725,7 @@ void CB2_InitOptionPlusMenu(void)
 
         sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC]   = gSaveBlock2Ptr->optionsBikeMusic;
         sOptions->sel_world[MENUITEM_WORLD_SURFMUSIC]   = gSaveBlock2Ptr->optionsSurfMusic;
+        sOptions->sel_world[MENUITEM_WORLD_MONOVERWORLD]   = FlagGet(FLAG_HIDE_FOLLOWER);
         sOptions->sel_world[MENUITEM_WORLD_SURFOVERWORLD]   = gSaveBlock2Ptr->optionsSurfOverworld;
 
         sOptions->submenu = MENU_MAIN;
@@ -957,6 +966,7 @@ static void Task_OptionMenuSave(u8 taskId)
     
     gSaveBlock2Ptr->optionsBikeMusic            = sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC];
     gSaveBlock2Ptr->optionsSurfMusic            = sOptions->sel_world[MENUITEM_WORLD_SURFMUSIC];
+    sOptions->sel_world[MENUITEM_WORLD_MONOVERWORLD] == 0 ? FlagClear(FLAG_HIDE_FOLLOWER) : FlagSet(FLAG_HIDE_FOLLOWER);
     gSaveBlock2Ptr->optionsSurfOverworld        = sOptions->sel_world[MENUITEM_WORLD_SURFOVERWORLD];
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
@@ -1327,6 +1337,16 @@ static void DrawChoices_SurfMusic(int selection, int y)
 
     DrawOptionMenuChoice(gText_SurfMusicOn, 104, y, styles[0], active);
     DrawOptionMenuChoice(gText_SurfMusicOff, GetStringRightAlignXOffset(1, gText_SurfMusicOff, 198), y, styles[1], active);
+}
+
+static void DrawChoices_MonOverworld(int selection, int y)
+{
+    bool8 active = CheckConditions(MENUITEM_WORLD_MONOVERWORLD);
+    u8 styles[2] = {0};
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_MonOverworldOn, 104, y, styles[0], active);
+    DrawOptionMenuChoice(gText_MonOverworldOff, GetStringRightAlignXOffset(1, gText_MonOverworldOff, 198), y, styles[1], active);
 }
 
 static void DrawChoices_SurfOverworld(int selection, int y)
