@@ -4020,6 +4020,7 @@ const union {
     } },
 
     [SPECIES_MEGANIUM] = { .learnset = {
+        .DRAGON_CLAW = TRUE,
         .TOXIC = TRUE,
         .BULLET_SEED = TRUE,
         .HIDDEN_POWER = TRUE,
@@ -4052,6 +4053,7 @@ const union {
         .SUNNY_DAY = TRUE,
         .PROTECT = TRUE,
         .FRUSTRATION = TRUE,
+        .EARTHQUAKE = TRUE,
         .RETURN = TRUE,
         .DIG = TRUE,
         .DOUBLE_TEAM = TRUE,
@@ -4074,6 +4076,7 @@ const union {
         .SUNNY_DAY = TRUE,
         .PROTECT = TRUE,
         .FRUSTRATION = TRUE,
+        .EARTHQUAKE = TRUE,
         .RETURN = TRUE,
         .DIG = TRUE,
         .BRICK_BREAK = TRUE,
