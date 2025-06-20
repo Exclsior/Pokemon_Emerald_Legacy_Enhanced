@@ -437,6 +437,41 @@ static u16 GetCurrentMapWildMonHeaderId(void)
             {
                 i += VarGet(VAR_JAGGED_PASS_WILD_SET);
             }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_2F_1R) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_2F_1R))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_2F_2R) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_2F_2R))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_2F_3R) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_2F_3R))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_3F_1R) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_3F_1R))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_3F_2R) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_3F_2R))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_3F_3R) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_3F_3R))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_4F) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_4F))
+            {
+                i += VarGet(VAR_MAGMA_HIDEOUT_WILD_SET);
+            }
             if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE107) &&
                 gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE107))
             {
