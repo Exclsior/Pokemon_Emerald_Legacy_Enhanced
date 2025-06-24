@@ -517,9 +517,6 @@ bool8 UpdateSave_v0_v2(const struct SaveSectorLocation *locations)
     FlagGet(FLAG_COLLECTED_ALL_SILVER_SYMBOLS)  ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Get all Silver Symbols
     FlagGet(FLAG_COLLECTED_ALL_GOLD_SYMBOLS)    ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Get all Gold Symbols
 
-    // Setup new National Dex or Post-game Wild Encounter Group variables
-    FlagGet(FLAG_BATTLED_JIRACHI) || FlagGet(FLAG_NATIONAL_DEX_MODE) ? VarSet(VAR_MAGMA_HIDEOUT_WILD_SET, 1) : 0; // New encounter group for Cyndaquil
-
     /**
      * The pokemon structure hasn't changed at all this version, so
      * we can just assign across the old box storage to the new.  */ 
