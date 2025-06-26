@@ -2126,7 +2126,7 @@ void UpdateFollowingPokemon(void) { // Update following pokemon if any
     // 3. flag is set
     if (!GetFollowerInfo(&species, &form, &shiny) ||
         (gMapHeader.mapType == MAP_TYPE_INDOOR && SpeciesToGraphicsInfo(species, 0)->oam->size > ST_OAM_SIZE_2) ||
-        FlagGet(FLAG_TEMP_HIDE_FOLLOWER) || FlagGet(FLAG_HIDE_FOLLOWER))
+        FlagGet(FLAG_TEMP_HIDE_FOLLOWER) || !FlagGet(FLAG_ENABLE_FOLLOWER))
     {
         RemoveFollowingPokemon();
         return;

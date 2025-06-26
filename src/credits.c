@@ -59,7 +59,10 @@ enum {
 #define tPrintedPage       data[14]
 #define tTaskId_UpdatePage data[15]
 
-#define NUM_MON_SLIDES 71
+// Increased Number of Mon Slides to handle extra credits.
+// Was 71, set 386 as an arbitrary large number unlikely to be hit
+// May need further increasing if more credits added
+#define NUM_MON_SLIDES 386 
 
 struct CreditsData
 {

@@ -1167,7 +1167,7 @@ void Overworld_PlaySpecialMapMusic(void)
             music = gSaveBlock1Ptr->savedMusic;
         else if (GetCurrentMapType() == MAP_TYPE_UNDERWATER)
             music = MUS_UNDERWATER;
-        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !gSaveBlock2Ptr->optionsSurfMusic)
+        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !FlagGet(FLAG_DISABLE_SURFMUSIC))
             music = MUS_SURF;
     }
 
@@ -1195,7 +1195,7 @@ static void TransitionMapMusic(void)
         {
             if (currentMusic == MUS_UNDERWATER || currentMusic == MUS_SURF)
                 return;
-            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !gSaveBlock2Ptr->optionsSurfMusic)
+            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !FlagGet(FLAG_DISABLE_SURFMUSIC))
                 newMusic = MUS_SURF;
         }
         if (newMusic != currentMusic)

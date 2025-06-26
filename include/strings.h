@@ -307,20 +307,6 @@ extern const u8 gText_FrameType[];
 extern const u8 gText_ButtonTypeNormal[];
 extern const u8 gText_ButtonTypeLR[];
 extern const u8 gText_ButtonTypeLEqualsA[];
-extern const u8 gText_BikeMusicOn[];
-extern const u8 gText_BikeMusicOff[];
-extern const u8 gText_SurfMusicOn[];
-extern const u8 gText_SurfMusicOff[];
-extern const u8 gText_MonOverworldOn[];
-extern const u8 gText_MonOverworldOff[];
-extern const u8 gText_SurfOverworldDynamic[];
-extern const u8 gText_SurfOverworldOriginal[];
-extern const u8 gText_ItemAnimateNormal[];
-extern const u8 gText_ItemAnimateReduced[];
-extern const u8 gText_ItemAnimateMinimal[];
-extern const u8 gText_ItemAnimateNone[];
-extern const u8 gText_TypeEffectOn[];
-extern const u8 gText_TypeEffectOff[];
 extern const u8 gText_Option[];
 extern const u8 gText_OptionMenu[];
 extern const u8 gText_TextSpeed[];
@@ -328,12 +314,6 @@ extern const u8 gText_BattleScene[];
 extern const u8 gText_BattleStyle[];
 extern const u8 gText_Sound[];
 extern const u8 gText_Frame[];
-extern const u8 gText_BikeMusic[];
-extern const u8 gText_SurfMusic[];
-extern const u8 gText_MonOverworld[];
-extern const u8 gText_SurfOverworld[];
-extern const u8 gText_ItemAnimate[];
-extern const u8 gText_TypeEffect[];
 extern const u8 gText_OptionMenuCancel[];
 extern const u8 gText_OptionMenuSave[];
 extern const u8 gText_ButtonMode[];
@@ -3267,6 +3247,12 @@ extern const u8 gText_YourName[];
 extern const u8 gText_BoxName[];
 extern const u8 gText_PkmnsNickname[];
 extern const u8 gText_TellHimTheWords[];
+
+// Move Items in Party Menu
+extern const u8 gMenuText_Move[];
+extern const u8 gText_MoveItemWhere[];
+extern const u8 gText_XsYAnd[];
+extern const u8 gText_XsYWereSwapped[];
 
 // Old Save File Messages
 extern const u8 gText_SaveFileOldUpdated[];

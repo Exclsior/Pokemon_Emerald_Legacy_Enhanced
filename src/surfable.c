@@ -81,7 +81,7 @@ u32 CreateSurfablePokemonSprite(void)
     SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 8);
 
     sCurrentSurfMon = GetSurfablePokemonSprite();
-    if (sCurrentSurfMon != 0xFFFF && !gSaveBlock2Ptr->optionsSurfOverworld)
+    if (sCurrentSurfMon != 0xFFFF && FlagGet(FLAG_ENABLE_SURFOVERWORLD))
     {
         LoadSurfOverworldPalette();
         spriteId = CreateSpriteAtEnd(&gSurfablePokemonOverworldSprites[sCurrentSurfMon], gFieldEffectArguments[0], gFieldEffectArguments[1], 0x96);

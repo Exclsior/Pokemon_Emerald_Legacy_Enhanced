@@ -13350,6 +13350,65 @@ static const struct TrainerMon sParty_Steven2[] = {
     }
 };
 
+// Post Game Boss Rematch
+static const struct TrainerMon sParty_Steven3[] = {
+    {
+    .iv = 255,
+    .lvl = 80,
+    .species = SPECIES_TYRANITAR,
+    .heldItem = ITEM_SALAC_BERRY,
+    .evs = {0, 252, 252, 0, 0, 0},
+    .moves = {MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_CRUNCH, MOVE_THUNDERBOLT},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .iv = 255,
+    .lvl = 81,
+    .species = SPECIES_ARMALDO,
+    .heldItem = ITEM_SCOPE_LENS,
+    .evs = {0, 252, 252, 0, 0, 0},
+    .moves = {MOVE_ROCK_BLAST, MOVE_TWINEEDLE, MOVE_EARTHQUAKE, MOVE_SWORDS_DANCE},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .iv = 255,
+    .lvl = 82,
+    .species = SPECIES_AERODACTYL,
+    .heldItem = ITEM_CHOICE_BAND,
+    .evs = {0, 252, 0, 252, 0, 0},
+    .moves = {MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE, MOVE_SKY_ATTACK, MOVE_DOUBLE_EDGE},
+    .nature = NATURE_JOLLY
+    },
+    {
+    .iv = 255,
+    .lvl = 81,
+    .species = SPECIES_CRADILY,
+    .heldItem = ITEM_LEFTOVERS,
+    .evs = {252, 0, 0, 0, 0, 252},
+    .moves = {MOVE_REST, MOVE_CURSE, MOVE_SLEEP_TALK, MOVE_ANCIENT_POWER},
+    .nature = NATURE_CALM
+    },
+    {
+    .iv = 255,
+    .lvl = 81,
+    .species = SPECIES_STEELIX,
+    .heldItem = ITEM_QUICK_CLAW,
+    .evs = {252, 252, 0, 0, 0, 0},
+    .moves = {MOVE_EARTHQUAKE, MOVE_IRON_TAIL, MOVE_EXPLOSION, MOVE_CRUNCH},
+    .nature = NATURE_IMPISH
+    },
+    {
+    .iv = 255,
+    .lvl = 83,
+    .species = SPECIES_METAGROSS,
+    .heldItem = ITEM_LUM_BERRY,
+    .evs = {252, 252, 0, 0, 0, 0},
+    .moves = {MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_METEOR_MASH, MOVE_REST},
+    .nature = NATURE_ADAMANT,
+    .shiny = TRUE
+    }
+};
+
 static const struct TrainerMon sParty_Anabel[] = {
     {
     .iv = 0,

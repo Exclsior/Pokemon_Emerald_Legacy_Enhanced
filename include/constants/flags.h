@@ -1279,14 +1279,14 @@
 #define FLAG_HIDE_TYPE_EFFECT_BATTLE                                0x4D3 // Flag to Option to enable and disable type effectiveness in battle
 #define FLAG_ENABLE_STAT_EDITOR                                     0x4D4 // Flag for enabling the IV/EV Editor function
 #define FLAG_SHOW_STAT_EDITOR                                       0x4D5 // Flag for showing the IV/EV Editor in the party menu
-#define FLAG_HIDE_FOLLOWER                                          0x4D6 // Flag for Option to enable and disable Pokemon follower
-#define FLAG_UNUSED_0x4D7                                           0x4D7 // Unused Flag
-#define FLAG_UNUSED_0x4D8                                           0x4D8 // Unused Flag
-#define FLAG_UNUSED_0x4D9                                           0x4D9 // Unused Flag
-#define FLAG_UNUSED_0x4DA                                           0x4DA // Unused Flag
-#define FLAG_UNUSED_0x4DB                                           0x4DB // Unused Flag
-#define FLAG_UNUSED_0x4DC                                           0x4DC // Unused Flag
-#define FLAG_UNUSED_0x4DD                                           0x4DD // Unused Flag
+#define FLAG_ENABLE_FOLLOWER                                        0x4D6 // Flag for Option to enable and disable Pokemon follower
+#define FLAG_ENABLE_AUTORUN                                         0x4D7 // Flag for enabling Autorun
+#define FLAG_ENABLE_FASTSURF                                        0x4D8 // Flag for enabling Fast Surf
+#define FLAG_SWAP_FONT                                              0x4D9 // Flag for swapping between Emerald or FireRed fonts, 0/FALSE for Emerald, 1/TRUE for FireRed
+#define FLAG_ENABLE_FISHALWAYSBITE                                  0x4DA // Flag for enabling fish always biting
+#define FLAG_ENABLE_SURFOVERWORLD                                   0x4DB // Flag for enabling Surfing Overworld or use original Surf Blob
+#define FLAG_DISABLE_SURFMUSIC                                      0x4DC // Flag for disabling Surf music when surfing
+#define FLAG_DISABLE_BIKEMUSIC                                      0x4DD // Flag for disabling Bike music when biking
 #define FLAG_UNUSED_0x4DE                                           0x4DE // Unused Flag
 #define FLAG_UNUSED_0x4DF                                           0x4DF // Unused Flag
 #define FLAG_UNUSED_0x4E0                                           0x4E0 // Unused Flag
@@ -1304,8 +1304,8 @@
 #define FLAG_UNUSED_0x4EC                                           0x4EC // Unused Flag
 #define FLAG_UNUSED_0x4ED                                           0x4ED // Unused Flag
 #define FLAG_UNUSED_0x4EE                                           0x4EE // Unused Flag
-#define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
 
+#define FLAG_REMATCH_METEOR_FALLS_STEVEN                            0x4EF // Flag to allow Steven Meteor Cave Rematch
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1
 #define FLAG_DEFEATED_MAUVILLE_GYM                                  0x4F2
