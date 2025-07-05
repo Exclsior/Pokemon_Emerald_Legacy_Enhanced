@@ -228,8 +228,8 @@ Route101_EventScript_BirchsBag::
 	setobjectxy OBJ_EVENT_ID_PLAYER, 6, 13
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
-	special ChooseStarter
-	waitstate
+	call_if_unset FLAG_NATIONAL_DEX_MODE, Route101_EventScript_BirchsBag_HoennDex
+	call_if_set FLAG_NATIONAL_DEX_MODE, Route101_EventScript_BirchsBag_NationalDex
 	applymovement LOCALID_BIRCH, Route101_Movement_BirchApproachPlayer
 	waitmovement 0
 	msgbox Route101_Text_YouSavedMe, MSGBOX_DEFAULT
@@ -247,6 +247,16 @@ Route101_EventScript_BirchsBag::
 	waitstate
 	release
 	end
+
+Route101_EventScript_BirchsBag_HoennDex::
+	special ChooseStarter
+	waitstate
+	return
+
+Route101_EventScript_BirchsBag_NationalDex::
+   	callnative ChooseStarter_NationalDex
+   	waitstate
+	return
 
 Route101_EventScript_HideMayInBedroom::
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM

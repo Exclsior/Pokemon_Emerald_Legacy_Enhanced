@@ -25,6 +25,8 @@ struct ConnectionFlags
     u8 east:1;
 };
 
+extern const struct MapHeader *const *const gMapGroups[];
+
 EWRAM_DATA static u16 ALIGNED(4) sBackupMapData[MAX_MAP_DATA_SIZE] = {0};
 EWRAM_DATA struct MapHeader gMapHeader = {0};
 EWRAM_DATA struct Camera gCamera = {0};
@@ -59,9 +61,24 @@ static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, 
     block = gMapHeader.mapLayout->border[i] | MAPGRID_COLLISION_MASK;                              \
 })
 
+#define MapHeaderGetBorderTileAt(x, y, mapGroup, mapNum) ({                                        \
+    u16 block;                                                                                     \
+    int i;                                                                                         \
+    const u16 *border = gMapGroups[mapGroup][mapNum]->mapLayout->border;                           \
+                                                                                                   \
+    i = (x + 1) & 1;                                                                               \
+    i += ((y + 1) & 1) * 2;                                                                        \
+                                                                                                   \
+    block = gMapGroups[mapGroup][mapNum]->mapLayout->border[i] | MAPGRID_COLLISION_MASK;           \
+})
+
 #define AreCoordsWithinMapGridBounds(x, y) (x >= 0 && x < gBackupMapLayout.width && y >= 0 && y < gBackupMapLayout.height)
 
+#define AreCoordsWithinMapHeaderBounds(x, y, mapGroup, mapNum) (x >= 0 && x < gMapGroups[mapGroup][mapNum]->mapLayout->width && y >= 0 && y < gMapGroups[mapGroup][mapNum]->mapLayout->height)
+
 #define GetMapGridBlockAt(x, y) (AreCoordsWithinMapGridBounds(x, y) ? gBackupMapLayout.map[x + gBackupMapLayout.width * y] : GetBorderBlockAt(x, y))
+
+#define MapHeaderGetTileAt(x, y, mapGroup, mapNum) (AreCoordsWithinMapHeaderBounds(x, y, mapGroup, mapNum) ? gMapGroups[mapGroup][mapNum]->mapLayout->map[x + gMapGroups[mapGroup][mapNum]->mapLayout->width * y] : MapHeaderGetBorderTileAt(x, y, mapGroup, mapNum))
 
 const struct MapHeader *const GetMapHeaderFromConnection(const struct MapConnection *connection)
 {
@@ -372,10 +389,26 @@ u32 MapGridGetMetatileIdAt(int x, int y)
     return block & MAPGRID_METATILE_ID_MASK;
 }
 
+u32 MapHeaderGetMetatileIdAt(int x, int y, int mapGroup, int mapNum)
+{
+    u16 block = MapHeaderGetTileAt(x, y, mapGroup, mapNum);
+    
+    if (block == MAPGRID_METATILE_ID_MASK)
+        return MapHeaderGetBorderTileAt(x, y, mapGroup, mapNum) & MAPGRID_METATILE_ID_MASK;
+    
+    return block & MAPGRID_METATILE_ID_MASK;
+}
+
 u32 MapGridGetMetatileBehaviorAt(int x, int y)
 {
     u16 metatile = MapGridGetMetatileIdAt(x, y);
     return GetMetatileAttributesById(metatile) & METATILE_ATTR_BEHAVIOR_MASK;
+}
+
+u32 MapHeaderGetMetatileBehaviorAt(int x, int y, int mapGroup, int mapNum)
+{
+    u16 metatile = MapHeaderGetMetatileIdAt(x, y, mapGroup, mapNum);
+    return GetBehaviorByMetatileIdAndMapHeader(metatile, mapGroup, mapNum) & METATILE_ATTR_BEHAVIOR_MASK;
 }
 
 u8 MapGridGetMetatileLayerTypeAt(int x, int y)
@@ -415,6 +448,25 @@ u16 GetMetatileAttributesById(u16 metatile)
     else if (metatile < NUM_METATILES_TOTAL)
     {
         attributes = gMapHeader.mapLayout->secondaryTileset->metatileAttributes;
+        return attributes[metatile - NUM_METATILES_IN_PRIMARY];
+    }
+    else
+    {
+        return MB_INVALID;
+    }
+}
+
+u16 GetBehaviorByMetatileIdAndMapHeader(u16 metatile, int mapGroup, int mapNum)
+{
+    const u16 *attributes;
+    if (metatile < NUM_METATILES_IN_PRIMARY)
+{
+        attributes = gMapGroups[mapGroup][mapNum]->mapLayout->primaryTileset->metatileAttributes;
+        return attributes[metatile];
+    }
+    else if (metatile < NUM_METATILES_TOTAL)
+    {
+        attributes = gMapGroups[mapGroup][mapNum]->mapLayout->secondaryTileset->metatileAttributes;
         return attributes[metatile - NUM_METATILES_IN_PRIMARY];
     }
     else

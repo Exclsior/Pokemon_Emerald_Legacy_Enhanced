@@ -378,9 +378,10 @@
 #define STRINGID_PKMNBOXLANETTESPCFULL      378
 #define STRINGID_TRAINER1WINTEXT            379
 #define STRINGID_TRAINER2WINTEXT            380
-#define STRINGID_ATTACKBOOSTEDBYABILITY     381 // Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
+#define STRINGID_PKMNGAINEDEXPALL           381
+#define STRINGID_ATTACKBOOSTEDBYABILITY     382 // Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
 
-#define BATTLESTRINGS_COUNT                 382
+#define BATTLESTRINGS_COUNT                 383
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,

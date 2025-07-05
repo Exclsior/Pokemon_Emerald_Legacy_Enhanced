@@ -59,7 +59,10 @@ enum {
 #define tPrintedPage       data[14]
 #define tTaskId_UpdatePage data[15]
 
-#define NUM_MON_SLIDES 71
+// Increased Number of Mon Slides to handle extra credits.
+// Was 71, set 386 as an arbitrary large number unlikely to be hit
+// May need further increasing if more credits added
+#define NUM_MON_SLIDES 386 
 
 struct CreditsData
 {
@@ -1554,6 +1557,9 @@ static void DeterminePokemonToShow(void)
     u16 page;
     u16 dexNum;
     u16 j;
+
+    if (FlagGet(FLAG_NATIONAL_DEX_MODE))
+        starter = SpeciesToNationalPokedexNum(GetStarterPokemon_NatDex(VarGet(VAR_STARTER_MON_NATDEX)));
 
     // Go through the Pokédex, and anything that has gotten caught we put into our massive array.
     // This basically packs all of the caught Pokémon into the front of the array

@@ -26,8 +26,14 @@
 #define LANGUAGE_SPANISH  7
 #define NUM_LANGUAGES     7
 
+#define SAVE_VERSION_0 0
+#define SAVE_VERSION_1 1
+#define SAVE_VERSION_2 2
+#define SAVE_VERSION_3 3
+
 #define GAME_VERSION (VERSION_EMERALD)
 #define GAME_LANGUAGE (LANGUAGE_ENGLISH)
+#define SAVE_VERSION (SAVE_VERSION_3)
 
 // party sizes
 #define PARTY_SIZE 6
@@ -63,7 +69,7 @@
 #define UNION_ROOM_KB_ROW_COUNT 10
 #define GIFT_RIBBONS_COUNT 11
 #define SAVED_TRENDS_COUNT 5
-#define PYRAMID_BAG_ITEMS_COUNT 10
+#define PYRAMID_BAG_ITEMS_COUNT 13
 
 //tx_registered_items_menu
 #define REGISTERED_ITEMS_MAX 10
@@ -94,7 +100,7 @@
 #define CONTEST_CATEGORIES_COUNT  5
 
 // string lengths
-#define ITEM_NAME_LENGTH 14
+#define ITEM_NAME_LENGTH 20
 #define POKEMON_NAME_LENGTH 10
 #define POKEMON_NAME_BUFFER_SIZE max(20, POKEMON_NAME_LENGTH + 1) // Frequently used buffer size. Larger than necessary
 #define PLAYER_NAME_LENGTH 7
@@ -136,6 +142,12 @@
 
 #define OPTIONS_BATTLE_STYLE_SHIFT 0
 #define OPTIONS_BATTLE_STYLE_SET 1
+
+// Added for Reduced Held Item Animation
+#define OPTIONS_ITEM_ANIMATION_NORMAL 0
+#define OPTIONS_ITEM_ANIMATION_REDUCED 1
+#define OPTIONS_ITEM_ANIMATION_MINIMAL 2
+#define OPTIONS_ITEM_ANIMATION_NONE 3
 
 #define DIR_NONE        0
 #define DIR_SOUTH       1

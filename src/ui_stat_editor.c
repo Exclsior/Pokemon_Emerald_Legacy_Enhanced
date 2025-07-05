@@ -912,9 +912,11 @@ static void ChangeAndUpdateStat()
 }
 
 #define EDIT_INPUT_INCREASE_STATE           0
-#define EDIT_INPUT_MAX_INCREASE_STATE       1
-#define EDIT_INPUT_DECREASE_STATE           2
-#define EDIT_INPUT_MAX_DECREASE_STATE       3
+#define EDIT_INPUT_BULK_INCREASE_STATE      1
+#define EDIT_INPUT_MAX_INCREASE_STATE       2
+#define EDIT_INPUT_DECREASE_STATE           3
+#define EDIT_INPUT_BULK_DECREASE_STATE      4
+#define EDIT_INPUT_MAX_DECREASE_STATE       5
 
 #define STAT_MINIMUM          0  
 #define IV_MAX_SINGLE_STAT    31   
@@ -943,6 +945,7 @@ static void HandleEditingStatInput(u32 input)
     }
 
     #define INCREASE_DECREASE_AMOUNT 1
+    #define BULK_INCREASE_DECREASE_AMOUNT 10
 
     switch(input)
     {
@@ -955,11 +958,29 @@ static void HandleEditingStatInput(u32 input)
                     break;
             }
             break;
-       case EDIT_INPUT_MAX_DECREASE_STATE:
+        case EDIT_INPUT_BULK_DECREASE_STATE:
+            for (iterator = 0; iterator < BULK_INCREASE_DECREASE_AMOUNT; iterator++)
+            {
+                if(!(sStatEditorDataPtr->editingStat == STAT_MINIMUM))
+                    sStatEditorDataPtr->editingStat--;
+                else
+                    break;
+            }
+            break;
+        case EDIT_INPUT_MAX_DECREASE_STATE:
             sStatEditorDataPtr->editingStat = STAT_MINIMUM;
             break;
         case EDIT_INPUT_INCREASE_STATE:
             for (iterator = 0; iterator < INCREASE_DECREASE_AMOUNT; iterator++)
+            {
+                if(!CHECK_IF_STAT_CANT_INCREASE)
+                    sStatEditorDataPtr->editingStat++;
+                else
+                    break;
+            }
+            break;
+        case EDIT_INPUT_BULK_INCREASE_STATE:
+            for (iterator = 0; iterator < BULK_INCREASE_DECREASE_AMOUNT; iterator++)
             {
                 if(!CHECK_IF_STAT_CANT_INCREASE)
                     sStatEditorDataPtr->editingStat++;
@@ -1004,14 +1025,19 @@ static void Task_MenuEditingStat(u8 taskId) // This function should be refactore
         PrintTitleToWindowMainState();
         return;
     }
+    
     if (JOY_NEW(DPAD_LEFT))
         HandleEditingStatInput(EDIT_INPUT_DECREASE_STATE);
     else if (JOY_NEW(DPAD_RIGHT))
         HandleEditingStatInput(EDIT_INPUT_INCREASE_STATE);
-    else if (JOY_NEW(DPAD_UP) || JOY_NEW(R_BUTTON))
+    else if (JOY_NEW(DPAD_UP))
         HandleEditingStatInput(EDIT_INPUT_MAX_INCREASE_STATE);
-    else if (JOY_NEW(DPAD_DOWN) || JOY_NEW(L_BUTTON))
+    else if (JOY_NEW(DPAD_DOWN))
         HandleEditingStatInput(EDIT_INPUT_MAX_DECREASE_STATE);
+    else if (JOY_NEW(L_BUTTON))
+        HandleEditingStatInput(EDIT_INPUT_BULK_DECREASE_STATE);
+    else if (JOY_NEW(R_BUTTON))
+        HandleEditingStatInput(EDIT_INPUT_BULK_INCREASE_STATE);
 
 }
 

@@ -174,6 +174,7 @@ LittlerootTown_ProfessorBirchsLab_Movement_PlayerEnterLabForPokedex:
 LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex::
 	lockall
 	delay 30
+	goto_if_set FLAG_NATIONAL_DEX_MODE, LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_UpgradeDex
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_OtherRegionsUpgradeToNational, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchRetrievePokedexes
@@ -208,7 +209,11 @@ LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex::
 	waitfanfare
 	setflag FLAG_SYS_NATIONAL_DEX
 	special EnableNationalPokedex
+	setflag FLAG_ENABLE_STAT_EDITOR
+	setflag FLAG_SHOW_STAT_EDITOR
+	playfanfare MUS_OBTAIN_ITEM
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable, MSGBOX_DEFAULT
+	waitfanfare
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2, MSGBOX_DEFAULT
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_StrangeRockInMossdeep
 	closemessage
@@ -234,6 +239,65 @@ LittlerootTown_ProfessorBirchsLab_EventScript_MayUpgradeComment::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanUpgradeComment::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BrendanYouCanThankMe, MSGBOX_DEFAULT
+	closemessage
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_UpgradeDex::
+	lockall
+	delay 30
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_UpgradeDex, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchRetrievePokedexes
+	waitmovement 0
+	delay 20
+	playse SE_CLICK
+	delay 10
+	playse SE_CLICK
+	delay 10
+	playse SE_CLICK
+	delay 10
+	playse SE_CLICK
+	delay 20
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFasterRight
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
+	waitmovement 0
+	checkplayergender
+	call_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayUpgradeComment
+	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_BrendanUpgradeComment
+	playse SE_PC_ON
+	waitse
+	delay 20
+	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchReturnPokedex
+	waitmovement 0
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFasterUp
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterUp
+	waitmovement 0
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_OkayAllDone, MSGBOX_DEFAULT
+	setflag FLAG_ENABLE_STAT_EDITOR
+	setflag FLAG_SHOW_STAT_EDITOR
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable, MSGBOX_DEFAULT
+	waitfanfare
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2, MSGBOX_DEFAULT
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_StrangeRockInMossdeep
+	closemessage
+	applymovement LOCALID_BIRCH, LittlerootTown_ProfessorBirchsLab_Movement_BirchLeaves
+	waitmovement 0
+	removeobject LOCALID_BIRCH
+	setvar VAR_MOSSDEEP_CITY_STATE, 4
+	setvar VAR_BIRCH_STATE, 8
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCH
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_RIVAL
+	clearflag FLAG_HIDE_MOSSDEEP_CITY_BIRCH
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_BIRCH
+	setvar VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2
+	setvar VAR_SCOTT_BF_CALL_STEP_COUNTER, 0
+	setflag FLAG_SCOTT_CALL_BATTLE_FRONTIER
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_BrendanUpgradeComment::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_BrendanYouCanThankMe, MSGBOX_DEFAULT
 	closemessage
 	return
 
@@ -367,6 +431,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_TakeYourTime::
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveCyndaquil::
 	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_CYNDAQUIL
+	call_if_eq VAR_STARTER_MON_NATDEX, 7, LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny
 	givemon SPECIES_CYNDAQUIL, 5
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendCyndaquilToParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendCyndaquilToPC
@@ -409,6 +474,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedCyndaquil::
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveTotodile::
 	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_TOTODILE
+	call_if_eq VAR_STARTER_MON_NATDEX, 8, LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny
 	givemon SPECIES_TOTODILE, 5
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendTotodileToParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendTotodileToPC
@@ -451,6 +517,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTotodile::
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveChikorita::
 	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_CHIKORITA
+	call_if_eq VAR_STARTER_MON_NATDEX, 6, LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny
 	givemon SPECIES_CHIKORITA, 5
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendChikoritaToParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendChikoritaToPC
@@ -584,6 +651,11 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ReceivePokedex::
 	special SetUnlockedPokedexFlags
 	setflag FLAG_RECEIVED_POKEDEX_FROM_BIRCH
 	setvar VAR_CABLE_CLUB_TUTORIAL_STATE, 1
+	call_if_set FLAG_NATIONAL_DEX_MODE, LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_Enable
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NationalDexMode_Enable::
+	special EnableNationalPokedex
 	return
 
 LittlerootTown_ProfessorBirchsLab_EventScript_PokemonAwait::
@@ -622,8 +694,10 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Rival::
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_RivalPostGame::
-	goto_if_set FLAG_RIVAL_GOT_ALL_KANTO_MONS, Common_EventScript_NopReturn
-	goto_if_set FLAG_RIVAL_TRADE_2_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalGiveKantoMons
+	goto_if_set FLAG_RIVAL_GOT_ALL_KANTO_MONS, LittlerootTown_ProfessorBirchsLab_EventScript_RivalPostGame_GiftMon3Check
+	goto_if_set FLAG_RIVAL_TRADE_3_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalGiveKantoMons
+	goto_if_set FLAG_NATIONAL_DEX_MODE, LittlerootTown_ProfessorBirchsLab_EventScript_RivalPostGame_NatDexMode
+	goto_if_set FLAG_RIVAL_TRADE_2_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalGiftMon3
 	lock
 	faceplayer
 	goto_if_set FLAG_RIVAL_TRADE_1_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade2
@@ -631,17 +705,55 @@ LittlerootTown_ProfessorBirchsLab_EventScript_RivalPostGame::
 	goto_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter1
 	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter1
 
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalPostGame_GiftMon3Check:
+	goto_if_set FLAG_RIVAL_TRADE_3_COMPLETED, Common_EventScript_NopReturn
+	goto_if_set FLAG_RIVAL_TRADE_2_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalGiftMon3
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalPostGame_NatDexMode::
+	goto_if_set FLAG_RIVAL_TRADE_2_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade3_NatDexMode
+	lock
+	faceplayer
+	goto_if_set FLAG_RIVAL_TRADE_1_COMPLETED, LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade2_NatDexMode
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter1_NatDexMode
+	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter1_NatDexMode
+
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter1::
 	switch VAR_STARTER_MON
 	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko1
 	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTorchic1
 	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip1
 
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter1_NatDexMode::
+	switch VAR_STARTER_MON_NATDEX
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko1
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTorchic1
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip1
+	case 3, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterBulbasaur1
+	case 4, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCharmander1
+	case 5, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterSquirtle1
+	case 6, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterChikorita1
+	case 7, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCyndaquil1
+	case 8, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTotodile1
+
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter1::
 	switch VAR_STARTER_MON
 	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko1
 	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic1
 	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip1
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter1_NatDexMode::
+	switch VAR_STARTER_MON_NATDEX
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko1
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic1
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip1
+	case 3, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterBulbasaur1
+	case 4, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCharmander1
+	case 5, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterSquirtle1
+	case 6, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterChikorita1
+	case 7, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCyndaquil1
+	case 8, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile1
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko1::
 	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_TREECKO
@@ -664,6 +776,54 @@ LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip1::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
 
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterBulbasaur1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_BULBASAUR
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCharmander1::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_CHARMANDER
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterSquirtle1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_SQUIRTLE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterChikorita1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_CHIKORITA
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCyndaquil1::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_CYNDAQUIL
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTotodile1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_TOTODILE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko1::
 	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_TREECKO
 	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
@@ -684,6 +844,54 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip1::
 	lockall
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
 
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterBulbasaur1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_BULBASAUR
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCharmander1::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_CHARMANDER
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterSquirtle1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_SQUIRTLE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterChikorita1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_CHIKORITA
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCyndaquil1::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_CYNDAQUIL
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile1::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_TOTODILE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon
+
 LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon::
 	setflag FLAG_RIVAL_TRADE_1_COMPLETED
 	release
@@ -694,17 +902,28 @@ LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade2::
 	goto_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter2
 	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter2
 
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade2_NatDexMode::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter2_NatDexMode
+	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter2_NatDexMode
+
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter2::
 	switch VAR_STARTER_MON
 	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko2
 	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTorchic2
 	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip2
 
-LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter2::
-	switch VAR_STARTER_MON
-	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko2
-	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic2
-	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip2
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter2_NatDexMode::
+	switch VAR_STARTER_MON_NATDEX
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko2
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTorchic2
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip2
+	case 3, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterBulbasaur2
+	case 4, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCharmander2
+	case 5, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterSquirtle2
+	case 6, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterChikorita2
+	case 7, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCyndaquil2
+	case 8, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTotodile2
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTreecko2::
 	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_TREECKO
@@ -727,6 +946,72 @@ LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterMudkip2::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
 	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
 
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterBulbasaur2::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_BULBASAUR
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCharmander2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_CHARMANDER
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterSquirtle2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_SQUIRTLE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterChikorita2::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_CHIKORITA
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCyndaquil2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_CYNDAQUIL
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTotodile2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_TOTODILE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter2::
+	switch VAR_STARTER_MON
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko2
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic2
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter2_NatDexMode::
+	switch VAR_STARTER_MON_NATDEX
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko2
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTorchic2
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip2
+	case 3, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterBulbasaur2
+	case 4, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCharmander2
+	case 5, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterSquirtle2
+	case 6, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterChikorita2
+	case 7, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCyndaquil2
+	case 8, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile2
+
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTreecko2::
 	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_TREECKO
 	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
@@ -747,9 +1032,262 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterMudkip2::
 	lockall
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMudkip, MSGBOX_DEFAULT
 
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterBulbasaur2::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_BULBASAUR
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCharmander2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_CHARMANDER
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterSquirtle2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_SQUIRTLE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterChikorita2::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_CHIKORITA
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCyndaquil2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_CYNDAQUIL
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile2::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_TOTODILE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2
+
 LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2::
 	setflag FLAG_RIVAL_TRADE_2_COMPLETED
 	release
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalGiftMon3::
+	switch VAR_STARTER_MON
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTreecko3
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTorchic3
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterMudkip3
+	
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade3_NatDexMode::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter3_NatDexMode
+	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter3_NatDexMode
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarter3_NatDexMode::
+	switch VAR_STARTER_MON_NATDEX
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTreecko3
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTorchic3
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterMudkip3
+	case 3, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterBulbasaur3
+	case 4, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCharmander3
+	case 5, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterSquirtle3
+	case 6, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterChikorita3
+	case 7, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCyndaquil3
+	case 8, LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTotodile3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterBulbasaur3::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_BULBASAUR
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCharmander3::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_CHARMANDER
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterSquirtle3::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_SQUIRTLE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterChikorita3::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_MAY_CHIKORITA
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterCyndaquil3::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_MAY_CYNDAQUIL
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MayStarterTotodile3::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_MAY_TOTODILE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarter3_NatDexMode::
+	switch VAR_STARTER_MON_NATDEX
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTreecko3
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTorchic3
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterMudkip3
+	case 3, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterBulbasaur3
+	case 4, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCharmander3
+	case 5, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterSquirtle3
+	case 6, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterChikorita3
+	case 7, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCyndaquil3
+	case 8, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterBulbasaur3::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_BULBASAUR
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_BULBASAUR
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCharmander3::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_CHARMANDER
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHARMANDER
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterSquirtle3::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_SQUIRTLE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_SQUIRTLE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterChikorita3::
+	setvar VAR_0x8008, INGAME_TRADE_TREECKO_BRENDAN_CHIKORITA
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CHIKORITA
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterCyndaquil3::
+	setvar VAR_0x8008, INGAME_TRADE_TORCHIC_BRENDAN_CYNDAQUIL
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_CYNDAQUIL
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile3::
+	setvar VAR_0x8008, INGAME_TRADE_MUDKIP_BRENDAN_TOTODILE
+	call LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade2
+	lockall
+	bufferspeciesname STR_VAR_1, SPECIES_TOTODILE
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon, MSGBOX_DEFAULT
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3::
+	setflag FLAG_RIVAL_TRADE_3_COMPLETED
+	release
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTreecko3::
+	bufferspeciesname STR_VAR_1, SPECIES_TREECKO
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_SpecialGiftForYou, MSGBOX_DEFAULT
+	setflag FLAG_SHINY_CREATION	
+	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_TREECKO
+	givemon SPECIES_TREECKO, 5
+	bufferspeciesname STR_VAR_2, SPECIES_TREECKO
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTorchic3::
+	bufferspeciesname STR_VAR_1, SPECIES_TORCHIC
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_SpecialGiftForYou, MSGBOX_DEFAULT
+	setflag FLAG_SHINY_CREATION	
+	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_TORCHIC
+	givemon SPECIES_TORCHIC, 5 
+	bufferspeciesname STR_VAR_2, SPECIES_TORCHIC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterMudkip3::
+	bufferspeciesname STR_VAR_1, SPECIES_MUDKIP
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_SpecialGiftForYou, MSGBOX_DEFAULT
+	setflag FLAG_SHINY_CREATION	
+	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_MUDKIP
+	givemon SPECIES_MUDKIP, 5
+	bufferspeciesname STR_VAR_2, SPECIES_MUDKIP
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3::
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_ReceivedParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_SentPC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	release
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_ReceivedParty::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedGiftMonFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_Return
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_Return
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_SentPC::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedGiftMonFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_SendGiftMonToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_SendGiftMonToPC
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendGiftMonToPC::
+	call Common_EventScript_TransferredToPC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_Return
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedGiftMonFanfare::
+	playfanfare MUS_OBTAIN_ITEM
+	message LittlerootTown_ProfessorBirchsLab_Text_PlayerReceivedMon
+	waitmessage
+	waitfanfare
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiftMon3_Return::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_GotGiftMon, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_RIVAL_TRADE_3_COMPLETED
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_DoTrade1::
@@ -812,6 +1350,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_GotSquirtle::
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveBulbasaur::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BulbasaurQuestCompleted, MSGBOX_DEFAULT
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_BULBASAUR
+	call_if_eq VAR_STARTER_MON_NATDEX, 3, LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny
 	givemon SPECIES_BULBASAUR, 5
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveBulbasaurParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveBulbasaurPC
@@ -856,6 +1395,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BulbasaurReturn::
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveCharmander::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_CharmanderQuestCompleted, MSGBOX_DEFAULT
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_CHARMANDER
+	call_if_eq VAR_STARTER_MON_NATDEX, 4, LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny
 	givemon SPECIES_CHARMANDER, 5
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveCharmanderParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveCharmanderPC
@@ -900,6 +1440,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_CharmanderReturn::
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveSquirtle::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_SquirtleQuestCompleted, MSGBOX_DEFAULT
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_SQUIRTLE
+	call_if_eq VAR_STARTER_MON_NATDEX, 5, LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny
 	givemon SPECIES_SQUIRTLE, 5
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSquirtleParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSquirtlePC
@@ -945,6 +1486,10 @@ LittlerootTown_ProfessorBirchsLab_EventScript_EndGiveKantoStarter::
 	special CheckGotAllKantoStarters
 	release
 	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_EnableShiny::
+	setflag FLAG_SHINY_CREATION
+	return
 
 LittlerootTown_ProfessorBirchsLab_EventScript_DeclineTrade::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_YouDontWantToThatsOkay, MSGBOX_DEFAULT
@@ -1227,9 +1772,29 @@ LittlerootTown_ProfessorBirchsLab_Text_PokedexUpgradedToNational:
 	.string "{PLAYER}'s POKéDEX was upgraded\n"
 	.string "to the NATIONAL Mode!$"
 
+LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_UpgradeDex::
+	.string "PROF. BIRCH: Now…\p"
+	.string "{PLAYER}{KUN} and {RIVAL}, I've had the two\n"
+	.string "of you help me study POKéMON.\p"
+	.string "Thanks to your help, new facts\n"
+	.string "are coming to light.\p"
+	.string "It goes to show how rich and varied\n"
+	.string "the natural environments of HOENN\l"
+	.string "happen to be.\p"
+	.string "That's why I think it's necessary for\n"
+	.string "me to upgrade your POKéDEX.\p"
+	.string "Here, let me see your POKéDEX units.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_NationalDexMode_BrendanYouCanThankMe:
+	.string "BRENDAN: I went out all over HOENN\n"
+	.string "and checked out POKéMON.\p"
+	.string "You can thank me for getting\n"
+	.string "your POKéDEX upgraded.\p"
+	.string "Yep, you're lucky, {PLAYER}!$"
+
 LittlerootTown_ProfessorBirchsLab_Text_StatEditorAvailable:
-	.string "You can now edit your POKéMON's stats\n"
-	.string "directly from the party menu!$"
+	.string "{PLAYER}'s POKéDEX was upgraded\n"
+	.string "to allow editing party POKéMON stats!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_GrassyPatchWaiting2:
 	.string "PROF. BIRCH: But listen.\n"
@@ -1422,6 +1987,12 @@ LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyTorchic:
 	.string "the right trainer to embark on a\l"
 	.string "great adventure.$"
 
+LittlerootTown_ProfessorBirchsLab_Text_PleaseBeGoodToMyMon:
+	.string "Eheheh… Thank you!\p"
+	.string "I'll make sure this {STR_VAR_1} finds\n"
+	.string "the right trainer to embark on a\l"
+	.string "great adventure.$"
+
 LittlerootTown_ProfessorBirchsLab_Text_DoesntLookLikeMonToMe:
 	.string "Wait… That doesn't look like a {STR_VAR_1}\n"
 	.string "to me. Could you double-check?$"
@@ -1539,3 +2110,19 @@ LittlerootTown_ProfessorBirchsLab_Text_GotSquirtle:
 	.string "alright?\p"
 	.string "I have no doubt it'll be a loyal friend\l"
 	.string "on your journey!$"
+
+LittlerootTown_ProfessorBirchsLab_Text_SpecialGiftForYou:
+	.string "Hey, {PLAYER}{KUN}!\n"
+	.string "I've been waiting for you!\p"
+	.string "That {STR_VAR_1} found an amazing new\n"
+	.string "trainer!\p"
+	.string "I wanted to thank you for your help!\n"
+	.string "I have a special {STR_VAR_1} for you!$"
+
+LittlerootTown_ProfessorBirchsLab_Text_PlayerReceivedMon:
+	.string "{PLAYER} received {STR_VAR_1}!$"
+
+LittlerootTown_ProfessorBirchsLab_Text_GotGiftMon:
+	.string "Take good care of {STR_VAR_2}!\p"
+	.string "I have a feeling you'll both take\n"
+	.string "a shine to each other.$"

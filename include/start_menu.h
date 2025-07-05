@@ -12,5 +12,6 @@ void CB2_SetUpSaveAfterLinkBattle(void);
 void SaveForBattleTowerLink(void);
 void HideStartMenu(void);
 void AppendToList(u8 *list, u8 *pos, u8 newEntry);
+bool32 CheckInList(u8 *list, u8 *listLength, u8 listItem);
 
 #endif // GUARD_START_MENU_H

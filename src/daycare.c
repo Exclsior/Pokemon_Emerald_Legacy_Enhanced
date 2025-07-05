@@ -685,6 +685,7 @@ u8 GetEggMovesSpecies(u16 species, u16 *eggMoves)
 
     return numEggMoves;
 }
+
 bool8 SpeciesCanLearnEggMove(u16 species, u16 move) //Move search PokedexPlus HGSS_Ui
 {
     u16 eggMoveIdx;
@@ -1157,8 +1158,9 @@ static u8 GetDaycareCompatibilityScore(struct DayCare *daycare)
 
 static u8 GetDaycareCompatibilityScoreFromSave(void)
 {
-    return GetDaycareCompatibilityScore(&gSaveBlock1Ptr->daycare);
-}
+    // Changed to also store result for scripts
+    gSpecialVar_Result = GetDaycareCompatibilityScore(&gSaveBlock1Ptr->daycare);
+    return gSpecialVar_Result;}
 
 void SetDaycareCompatibilityString(void)
 {

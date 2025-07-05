@@ -630,19 +630,45 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING)
     {
         // same speed as running
-        if (heldKeys & B_BUTTON)
+        if ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_FASTSURF))
             PlayerWalkFaster(direction);
         else
             PlayerWalkFast(direction);
         return;
     }
 
-    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER) && (heldKeys & B_BUTTON) && FlagGet(FLAG_SYS_B_DASH)
-     && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0)
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER)
+    {
+        switch (gSaveBlock2Ptr->optionsDiveSpeed)
+        {
+            case 2:
+                PlayerWalkFaster(direction);
+                break;
+            case 1:
+                PlayerWalkFast(direction);
+                break;
+            case 0:
+            default:
+                PlayerWalkNormal(direction);
+                break;
+        }
+    }
+
+    if (
+        !(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER)
+        && FlagGet(FLAG_SYS_B_DASH)
+        && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0
+        && ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_AUTORUN)) // If AutoRun setting On, run as default without holding B
+        && !((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_AUTORUN)) // Invert B Button to walk if AutRun setting On
+        )
     {
         PlayerRun(direction);
         gPlayerAvatar.flags |= PLAYER_AVATAR_FLAG_DASH;
         return;
+    }
+    else if(((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_AUTORUN))) // Invert B Button to walk if AutRun setting On
+    {
+        PlayerWalkNormal(direction);
     }
     else
     {
@@ -1240,25 +1266,7 @@ u16 GetPlayerAvatarGraphicsIdByStateId(u8 state)
     return GetPlayerAvatarGraphicsIdByStateIdAndGender(state, gPlayerAvatar.gender);
 }
 
-u8 unref_GetRivalAvatarGenderByGraphicsId(u16 gfxId)
-{
-    switch (gfxId)
-    {
-    case OBJ_EVENT_GFX_RIVAL_MAY_NORMAL:
-    case OBJ_EVENT_GFX_RIVAL_MAY_MACH_BIKE:
-    case OBJ_EVENT_GFX_RIVAL_MAY_ACRO_BIKE:
-    case OBJ_EVENT_GFX_RIVAL_MAY_SURFING:
-    case OBJ_EVENT_GFX_RIVAL_MAY_FIELD_MOVE:
-    case OBJ_EVENT_GFX_MAY_UNDERWATER:
-    case OBJ_EVENT_GFX_MAY_FISHING:
-    case OBJ_EVENT_GFX_MAY_WATERING:
-        return FEMALE;
-    default:
-        return MALE;
-    }
-}
-
-u8 GetPlayerAvatarGenderByGraphicsId(u16 gfxId)
+u16 GetPlayerAvatarGenderByGraphicsId(u16 gfxId)
 {
     switch (gfxId)
     {
@@ -1845,7 +1853,7 @@ static bool8 Fishing_CheckForBite(struct Task *task)
 
         if (!bite)
         {
-            if (Random() & 1)
+            if ((Random() & 1))
                 task->tStep = FISHING_NO_BITE;
             else
                 bite = TRUE;
@@ -1877,7 +1885,9 @@ static bool8 Fishing_WaitForA(struct Task *task)
 
     AlignFishingAnimationFrames();
     task->tFrameCounter++;
-    if (task->tFrameCounter >= reelTimeouts[task->tFishingRod])
+
+    // If Option setting enabled, fish can't get away, wait until player presses A to start encounter
+    if ((task->tFrameCounter >= reelTimeouts[task->tFishingRod]) && !FlagGet(FLAG_ENABLE_FISHCANTESCAPE))
         task->tStep = FISHING_GOT_AWAY;
     else if (JOY_NEW(A_BUTTON))
         task->tStep++;

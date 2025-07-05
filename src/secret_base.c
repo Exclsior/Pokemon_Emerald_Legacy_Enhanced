@@ -264,6 +264,15 @@ void CheckPlayerHasSecretBase(void)
         gSpecialVar_Result = FALSE;
 }
 
+bool32 CheckPlayerCurrentlyHasSecretBase(void)
+{
+    // The player's secret base is always the first in the array.
+    if (gSaveBlock1Ptr->secretBases[0].secretBaseId)
+        return TRUE;
+    else
+        return FALSE;
+}
+
 static u8 GetSecretBaseTypeInFrontOfPlayer_(void)
 {
     s16 x, y;
@@ -371,6 +380,9 @@ void SetPlayerSecretBase(void)
         gSaveBlock1Ptr->secretBases[0].trainerId[i] = gSaveBlock2Ptr->playerTrainerId[i];
 
     VarSet(VAR_CURRENT_SECRET_BASE, 0);
+    
+    // Set Warp Data for Secret Base
+    SetPlayerSecretBaseCoords(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_SECRET_BASE, gSaveBlock1Ptr->pos.x, gSaveBlock1Ptr->pos.y);
     StringCopyN(gSaveBlock1Ptr->secretBases[0].trainerName, gSaveBlock2Ptr->playerName, GetNameLength(gSaveBlock2Ptr->playerName));
     gSaveBlock1Ptr->secretBases[0].gender = gSaveBlock2Ptr->playerGender;
     gSaveBlock1Ptr->secretBases[0].language = GAME_LANGUAGE;
@@ -431,6 +443,10 @@ static void Task_EnterSecretBase(u8 taskId)
         secretBaseIdx = VarGet(VAR_CURRENT_SECRET_BASE);
         if (gSaveBlock1Ptr->secretBases[secretBaseIdx].numTimesEntered < 255)
             gSaveBlock1Ptr->secretBases[secretBaseIdx].numTimesEntered++;
+
+        // Set Warp Data for Secret Base (Mainly for transferred save files)
+        if (secretBaseIdx == 0)
+            SetPlayerSecretBaseCoords(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_SECRET_BASE, gSaveBlock1Ptr->pos.x, gSaveBlock1Ptr->pos.y);
 
         SetSecretBaseWarpDestination();
         WarpIntoMap();
@@ -811,6 +827,8 @@ void ClearAndLeaveSecretBase(void)
 {
     u16 temp = gSaveBlock1Ptr->secretBases[0].numSecretBasesReceived;
     ClearSecretBase(&gSaveBlock1Ptr->secretBases[0]);
+    // Remove Secret Base Warp Information
+    SetPlayerSecretBaseCoords(-1, -1, WARP_ID_NONE, -1, -1);
     gSaveBlock1Ptr->secretBases[0].numSecretBasesReceived = temp;
     WarpOutOfSecretBase();
 }

@@ -22,7 +22,7 @@
 #define FLAG_TEMP_C      (TEMP_FLAGS_START + 0xC)  // Unused Flag
 #define FLAG_TEMP_D      (TEMP_FLAGS_START + 0xD)  // Unused Flag
 #define FLAG_TEMP_E      (TEMP_FLAGS_START + 0xE)  // Unused Flag
-#define FLAG_TEMP_F      (TEMP_FLAGS_START + 0xF)  // Unused Flag
+#define FLAG_TEMP_HIDE_FOLLOWER      (TEMP_FLAGS_START + 0xF)  // When set, follower pokemon won't be spawned
 #define FLAG_TEMP_10     (TEMP_FLAGS_START + 0x10) // Unused Flag
 #define FLAG_TEMP_11     (TEMP_FLAGS_START + 0x11)
 #define FLAG_TEMP_12     (TEMP_FLAGS_START + 0x12)
@@ -86,10 +86,10 @@
 #define FLAG_HIDE_RAIKOU2                   0x49
 #define FLAG_HIDE_RAIKOU3                   0x4A
 #define FLAG_EGG_MOVES_TUTOR                0x4B // Enable Egg Move Tutor
-#define FLAG_UNUSED_0x04C    0x4C // Unused Flag
-#define FLAG_UNUSED_0x04D    0x4D // Unused Flag
-#define FLAG_UNUSED_0x04E    0x4E // Unused Flag
-#define FLAG_UNUSED_0x04F    0x4F // Unused Flag
+#define FLAG_CAUGHT_JIRACHI                 0x4C // Check for Jirachi Caught, for Rematch
+#define FLAG_DEFEATED_JIRACHI               0x4D // Check for Jirachi Defeated, for Rematch
+#define FLAG_UNUSED_0x04E                   0x4E // Unused Flag
+#define FLAG_UNUSED_0x04F                   0x4F // Unused Flag
 
 // Scripts
 #define FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL  0x50
@@ -689,8 +689,8 @@
 #define FLAG_BEAT_WALLY_PETALBURG       0x28A
 #define FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED    0x28B
 #define FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED    0x28C
-#define FLAG_UNUSED_0x28D  0x28D // Unused Flag
-#define FLAG_UNUSED_0x28E  0x28E // Unused Flag
+#define FLAG_RECEIVED_SHINY_BELDUM      0x28D
+#define FLAG_RECEIVED_EXP_ALL  0x28E // Used to record if EXP. ALL has been received by player
 #define FLAG_UNUSED_0x28F  0x28F // Unused Flag
 #define FLAG_UNUSED_0x290  0x290 // Unused Flag
 #define FLAG_UNUSED_0x291  0x291 // Unused Flag
@@ -729,13 +729,13 @@
 #define FLAG_UNUSED_0x2B2  0x2B2 // Unused Flag
 #define FLAG_UNUSED_0x2B3  0x2B3 // Unused Flag
 #define FLAG_UNUSED_0x2B4  0x2B4 // Unused Flag
-#define FLAG_UNUSED_0x2B5  0x2B5 // Unused Flag
-#define FLAG_UNUSED_0x2B6  0x2B6 // Unused Flag
-#define FLAG_UNUSED_0x2B7  0x2B7 // Unused Flag
-#define FLAG_UNUSED_0x2B8  0x2B8 // Unused Flag
-#define FLAG_UNUSED_0x2B9  0x2B9 // Unused Flag
-#define FLAG_UNUSED_0x2BA  0x2BA // Unused Flag
-#define FLAG_UNUSED_0x2BB  0x2BB // Unused Flag
+#define FLAG_SYS_NO_COLLISION           0x2B5 // Unused Flag // Debug
+#define FLAG_SYS_NO_ENCOUNTER           0x2B6 // Unused Flag // Debug
+#define FLAG_SYS_NO_TRAINER_SEE         0x2B7 // Unused Flag // Debug
+#define FLAG_SYS_NO_BAG_USE             0x2B8 // Unused Flag // Debug
+#define FLAG_SYS_NO_CATCHING            0x2B9 // Unused Flag // Debug
+#define FLAG_SYS_PC_FROM_DEBUG_MENU     0x2BA // Unused Flag // Debug
+#define FLAG_SYS_NO_BATTLE_DMG          0x2BB // Unused Flag // Debug
 
 // Event Flags
 #define FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG                      0x2BC
@@ -1165,7 +1165,7 @@
 #define FLAG_ITEM_NEW_MAUVILLE_FULL_HEAL                            0x462
 #define FLAG_ITEM_NEW_MAUVILLE_PARALYZE_HEAL                        0x463
 #define FLAG_ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL                      0x464
-#define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B1F_MASTER_BALL                 0x465 // Unused Flag, leftover from the Ruby Magma hideout
+#define FLAG_RIVAL_TRADE_3_COMPLETED                                0x465 // Was previously FLAG_ITEM_OLD_MAGMA_HIDEOUT_B1F_MASTER_BALL flag, reused for 3rd Starter Trade in National Dex Mode
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B1F_MAX_ELIXIR                  0x466 // Unused Flag, leftover from the Ruby Magma hideout
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B2F_NEST_BALL                   0x467 // Unused Flag, leftover from the Ruby Magma hideout
 #define FLAG_ITEM_ROUTE_108_BLUE_SHARD                              0x468
@@ -1275,18 +1275,18 @@
 #define FLAG_CAUGHT_UNOWN_A                                         0x4CF
 #define FLAG_SHOW_HIDDEN_POWER                                      0x4D0
 #define FLAG_HIDE_EGG_MOVE_TUTOR                                    0x4D1 // Flag to Show/Hide Egg Move until National Dex
-#define FLAG_UNUSED_0x4D2                                           0x4D2 // Unused Flag
-#define FLAG_UNUSED_0x4D3                                           0x4D3 // Unused Flag
-#define FLAG_UNUSED_0x4D4                                           0x4D4 // Unused Flag
-#define FLAG_UNUSED_0x4D5                                           0x4D5 // Unused Flag
-#define FLAG_UNUSED_0x4D6                                           0x4D6 // Unused Flag
-#define FLAG_UNUSED_0x4D7                                           0x4D7 // Unused Flag
-#define FLAG_UNUSED_0x4D8                                           0x4D8 // Unused Flag
-#define FLAG_UNUSED_0x4D9                                           0x4D9 // Unused Flag
-#define FLAG_UNUSED_0x4DA                                           0x4DA // Unused Flag
-#define FLAG_UNUSED_0x4DB                                           0x4DB // Unused Flag
-#define FLAG_UNUSED_0x4DC                                           0x4DC // Unused Flag
-#define FLAG_UNUSED_0x4DD                                           0x4DD // Unused Flag
+#define FLAG_EXP_ALL                                                0x4D2 // Flag for Enabling and Disabling EXP. All
+#define FLAG_HIDE_TYPE_EFFECT_BATTLE                                0x4D3 // Flag to Option to enable and disable type effectiveness in battle
+#define FLAG_ENABLE_STAT_EDITOR                                     0x4D4 // Flag for enabling the IV/EV Editor function
+#define FLAG_SHOW_STAT_EDITOR                                       0x4D5 // Flag for showing the IV/EV Editor in the party menu
+#define FLAG_ENABLE_FOLLOWER                                        0x4D6 // Flag for Option to enable and disable Pokemon follower
+#define FLAG_ENABLE_AUTORUN                                         0x4D7 // Flag for enabling Autorun
+#define FLAG_ENABLE_FASTSURF                                        0x4D8 // Flag for enabling Fast Surf
+#define FLAG_SWAP_FONT                                              0x4D9 // Flag for swapping between Emerald or FireRed fonts, 0/FALSE for Emerald, 1/TRUE for FireRed
+#define FLAG_ENABLE_FISHCANTESCAPE                                  0x4DA // Flag for enabling fish always biting
+#define FLAG_ENABLE_SURFOVERWORLD                                   0x4DB // Flag for enabling Surfing Overworld or use original Surf Blob
+#define FLAG_DISABLE_SURFMUSIC                                      0x4DC // Flag for disabling Surf music when surfing
+#define FLAG_DISABLE_BIKEMUSIC                                      0x4DD // Flag for disabling Bike music when biking
 #define FLAG_UNUSED_0x4DE                                           0x4DE // Unused Flag
 #define FLAG_UNUSED_0x4DF                                           0x4DF // Unused Flag
 #define FLAG_UNUSED_0x4E0                                           0x4E0 // Unused Flag
@@ -1304,8 +1304,8 @@
 #define FLAG_UNUSED_0x4EC                                           0x4EC // Unused Flag
 #define FLAG_UNUSED_0x4ED                                           0x4ED // Unused Flag
 #define FLAG_UNUSED_0x4EE                                           0x4EE // Unused Flag
-#define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
 
+#define FLAG_REMATCH_METEOR_FALLS_STEVEN                            0x4EF // Flag to allow Steven Meteor Cave Rematch
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1
 #define FLAG_DEFEATED_MAUVILLE_GYM                                  0x4F2
@@ -1324,7 +1324,7 @@
 #define FLAG_DEFEATED_ELITE_4_GLACIA                                0x4FD
 #define FLAG_DEFEATED_ELITE_4_DRAKE                                 0x4FE
 
-#define FLAG_UNUSED_0x4FF                                           0x4FF // Unused Flag
+#define FLAG_NATIONAL_DEX_MODE                                      0x4FF // National Dex Mode Flag
 
 // Trainer Flags
 // Trainer flags occupy 0x500 - 0x85F, the last 9 of which are unused
@@ -1392,8 +1392,8 @@
 #define FLAG_SYS_SAFARI_MODE                        (SYSTEM_FLAGS + 0x2C)
 #define FLAG_SYS_CRUISE_MODE                        (SYSTEM_FLAGS + 0x2D)
 
-#define FLAG_UNUSED_0x88E                           (SYSTEM_FLAGS + 0x2E) // Unused Flag
-#define FLAG_UNUSED_0x88F                           (SYSTEM_FLAGS + 0x2F) // Unused Flag
+#define FLAG_HOENN_DEX_COMPLETE                     (SYSTEM_FLAGS + 0x2E) // 0x88E - Flag for completion of Hoenn Dex to provide a Shiny Charm
+#define FLAG_NATIONAL_DEX_COMPLETE                  (SYSTEM_FLAGS + 0x2F) // 0x88F - Flag for completion of National Dex to provide a Shiny Charm
 
 #define FLAG_SYS_TV_HOME                            (SYSTEM_FLAGS + 0x30)
 #define FLAG_SYS_TV_WATCH                           (SYSTEM_FLAGS + 0x31)
@@ -1637,6 +1637,9 @@
 #define FLAG_ENABLE_MULTI_CORRIDOR_DOOR         (SPECIAL_FLAGS_START + 0x2)
 #define FLAG_SPECIAL_FLAG_UNUSED_0x4003         (SPECIAL_FLAGS_START + 0x3) // Unused Flag
 #define FLAG_STORING_ITEMS_IN_PYRAMID_BAG       (SPECIAL_FLAGS_START + 0x4)
+// When set, `applymovement` does not hide follower pokemon;
+// Also, scripted movements on the player will move follower(s), too
+#define FLAG_SAFE_FOLLOWER_MOVEMENT             (SPECIAL_FLAGS_START + 0x5)
 // FLAG_SPECIAL_FLAG_0x4005 - 0x407F also exist and are unused
 #define SPECIAL_FLAGS_END                       (SPECIAL_FLAGS_START + 0x7F)
 #define NUM_SPECIAL_FLAGS                       (SPECIAL_FLAGS_END - SPECIAL_FLAGS_START + 1)

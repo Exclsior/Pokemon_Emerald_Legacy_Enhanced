@@ -30,6 +30,7 @@ void StartRegiBattle(void);
 u8 BattleSetup_GetTerrainId(void);
 u8 GetSpecialBattleTransition(s32 id);
 void ChooseStarter(void);
+void StartFirstBattle_NationalDexMode(void);
 void ResetTrainerOpponentIds(void);
 void SetMapVarsToTrainer(void);
 const u8 *BattleSetup_ConfigureTrainerBattle(const u8 *data);
@@ -66,5 +67,8 @@ u16 CountBattledRematchTeams(u16 trainerId);
 u8 getLevelCap(void);
 bool8 levelCappedNuzlocke(u8 level);
 s32 FirstBattleTrainerIdToRematchTableId(const struct RematchTrainer *table, u16 trainerId);
+
+void DoStandardWildBattle_Debug(void);
+void BattleSetup_StartTrainerBattle_Debug(void);
 
 #endif // GUARD_BATTLE_SETUP_H

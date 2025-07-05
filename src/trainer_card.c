@@ -55,8 +55,8 @@ struct TrainerCardData
     bool8 hasHofResult;
     bool8 hasLinkResults;
     bool8 hasBattleTowerWins;
-    bool8 unused_E;
-    bool8 unused_F;
+    bool8 showSecretID;
+    bool8 isInitialLoadComplete;
     bool8 hasTrades;
     u8 badgeCount[NUM_BADGES];
     u8 easyChatProfile[TRAINER_CARD_PROFILE_LENGTH][13];
@@ -101,7 +101,7 @@ static void HblankCb_TrainerCard(void);
 static void BlinkTimeColon(void);
 static void CB2_TrainerCard(void);
 static void CloseTrainerCard(u8 task);
-static bool8 PrintAllOnCardFront(void);
+static bool8 PrintAllOnCardFront(bool8 shouldShowSecretID);
 static void DrawTrainerCardWindow(u8);
 static void CreateTrainerCardTrainerPic(void);
 static void DrawCardScreenBackground(u16 *);
@@ -129,6 +129,7 @@ static void InitTrainerCardData(void);
 static u8 GetSetCardType(void);
 static void PrintNameOnCardFront(void);
 static void PrintIdOnCard(void);
+static void PrintSIdOnCard(void);
 static void PrintMoneyOnCard(void);
 static void PrintPokedexOnCard(void);
 static void PrintProfilePhraseOnCard(void);
@@ -390,7 +391,7 @@ static void Task_TrainerCard(u8 taskId)
         }
         break;
     case 1:
-        if (PrintAllOnCardFront())
+        if (PrintAllOnCardFront(sData->showSecretID))
             sData->mainState++;
         break;
     case 2:
@@ -422,10 +423,17 @@ static void Task_TrainerCard(u8 taskId)
             LoadWirelessStatusIndicatorSpriteGfx();
             CreateWirelessStatusIndicatorSprite(DISPLAY_WIDTH - 10, DISPLAY_HEIGHT - 10);
         }
-        BlendPalettes(PALETTES_ALL, 16, sData->blendColor);
-        BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, sData->blendColor);
+
         SetVBlankCallback(VblankCb_TrainerCard);
-        sData->mainState++;
+
+        if (!sData->isInitialLoadComplete){
+            BlendPalettes(PALETTES_ALL, 16, sData->blendColor);
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, sData->blendColor);
+            sData->mainState++;
+        }
+        else
+            sData->mainState = STATE_HANDLE_INPUT_FRONT;
+        
         break;
     case 8:
         if (!UpdatePaletteFade() && !IsDma3ManagerBusyWithBgCopy())
@@ -439,6 +447,7 @@ static void Task_TrainerCard(u8 taskId)
             sData->mainState++;
         break;
     case STATE_HANDLE_INPUT_FRONT:
+        sData->isInitialLoadComplete = TRUE;
         // Blink the : in play time
         if (!gReceivedRemoteLinkPlayers && sData->timeColonNeedDraw)
         {
@@ -463,6 +472,12 @@ static void Task_TrainerCard(u8 taskId)
                 BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, sData->blendColor);
                 sData->mainState = STATE_CLOSE_CARD;
             }
+        }
+        else if (JOY_NEW(START_BUTTON))
+        {
+            sData->showSecretID = !sData->showSecretID;
+            sData->mainState = 0;
+            PlaySE(SE_SELECT);
         }
         break;
     case STATE_WAIT_FLIP_TO_BACK:
@@ -835,8 +850,8 @@ static void SetDataFromTrainerCard(void)
     sData->hasHofResult = FALSE;
     sData->hasLinkResults = FALSE;
     sData->hasBattleTowerWins = FALSE;
-    sData->unused_E = FALSE;
-    sData->unused_F = FALSE;
+    sData->showSecretID = FALSE;
+    sData->isInitialLoadComplete = FALSE;
     sData->hasTrades = FALSE;
     memset(sData->badgeCount, 0, sizeof(sData->badgeCount));
     if (sData->trainerCard.hasPokedex)
@@ -933,7 +948,7 @@ static void SetUpTrainerCardTask(void)
     SetDataFromTrainerCard();
 }
 
-static bool8 PrintAllOnCardFront(void)
+static bool8 PrintAllOnCardFront(bool8 shouldShowSecretID)
 {
     switch (sData->printState)
     {
@@ -941,7 +956,10 @@ static bool8 PrintAllOnCardFront(void)
         PrintNameOnCardFront();
         break;
     case 1:
-        PrintIdOnCard();
+        if(!shouldShowSecretID)
+            PrintIdOnCard();
+        else
+            PrintSIdOnCard();
         break;
     case 2:
         PrintMoneyOnCard();
@@ -1036,6 +1054,38 @@ static void PrintIdOnCard(void)
     u32 top;
     txtPtr = StringCopy(buffer, gText_TrainerCardIDNo);
     ConvertIntToDecimalStringN(txtPtr, sData->trainerCard.trainerId, STR_CONV_MODE_LEADING_ZEROS, 5);
+    if (sData->cardType == CARD_TYPE_FRLG)
+    {
+        xPos = GetStringCenterAlignXOffset(FONT_NORMAL, buffer, 80) + 132;
+        top = 9;
+    }
+    else
+    {
+        xPos = GetStringCenterAlignXOffset(FONT_NORMAL, buffer, 96) + 120;
+        top = 9;
+    }
+
+    AddTextPrinterParameterized3(WIN_CARD_TEXT, FONT_NORMAL, xPos, top, sTrainerCardTextColors, TEXT_SKIP_DRAW, buffer);
+}
+
+static void PrintSIdOnCard(void)
+{
+    u8 buffer[32];
+    u8 *txtPtr;
+    s32 xPos;
+    u32 top;
+    u32 trainerIDValue;
+    u16 secretTrainerID;
+
+    trainerIDValue = gSaveBlock2Ptr->playerTrainerId[0]
+                 | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+                 | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+                 | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+    
+    secretTrainerID = HIHALF(trainerIDValue);
+
+    txtPtr = StringCopy(buffer, gText_TrainerCardSIDNo);
+    ConvertIntToDecimalStringN(txtPtr, secretTrainerID, STR_CONV_MODE_LEADING_ZEROS, 5);
     if (sData->cardType == CARD_TYPE_FRLG)
     {
         xPos = GetStringCenterAlignXOffset(FONT_NORMAL, buffer, 80) + 132;
@@ -1704,7 +1754,7 @@ static bool8 Task_DrawFlippedCardSide(struct Task *task)
             }
             else
             {
-                if (!PrintAllOnCardFront())
+                if (!PrintAllOnCardFront(sData->showSecretID))
                     return FALSE;
             }
             break;

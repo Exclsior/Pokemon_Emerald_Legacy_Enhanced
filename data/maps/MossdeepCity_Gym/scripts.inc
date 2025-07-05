@@ -1,7 +1,12 @@
 MossdeepCity_Gym_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, MossdeepCity_Gym_OnTransition
 	map_script MAP_SCRIPT_ON_LOAD, MossdeepCity_Gym_OnLoad
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, MossdeepCity_Gym_OnFrame
 	.byte 0
+
+MossdeepCity_Gym_OnTransition:
+	setflag FLAG_TEMP_HIDE_FOLLOWER @ Hide follower since it can collide with moving statues
+	end
 
 MossdeepCity_Gym_OnFrame:
 	map_script_2 VAR_TEMP_1, 1, MossdeepCity_Gym_EventScript_TryRematchReward
@@ -14,7 +19,7 @@ MossdeepCity_Gym_EventScript_TryRematchReward::
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, MossdeepCity_Gym_EventScript_GiveRematchReward
 MossdeepCity_Gym_EventScript_TryRematchRewardEnd::
-	ClearTrainerFlag TRAINER_TATE_AND_LIZA_3
+	ClearTrainerFlag TRAINER_TATE_AND_LIZA_5
 	releaseall
 	end
 

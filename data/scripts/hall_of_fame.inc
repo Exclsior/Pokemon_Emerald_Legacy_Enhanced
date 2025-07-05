@@ -39,6 +39,7 @@ EverGrandeCity_HallOfFame_EventScript_SetGameClearFlags::
 	settrainerflag TRAINER_TATE_AND_LIZA_2
 	settrainerflag TRAINER_JUAN_2
 	setflag FLAG_REMATCH_READY_JUAN
+	call_if_set FLAG_DEFEATED_METEOR_FALLS_STEVEN, EverGrandeCity_HallOfFame_EventScript_SetMeteorFallsStevenRematch
 	setvar VAR_EVER_GRANDE_CITY_STATE, 1
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 0, EverGrandeCity_HallOfFame_EventScript_ReadyDexUpgradeEvent
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 6, EverGrandeCity_HallOfFame_EventScript_ResetJohtoStarter
@@ -48,6 +49,7 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_MEW
 	clearflag FLAG_DEFEATED_LATIAS_OR_LATIOS
 	clearflag FLAG_DEFEATED_DEOXYS
+	clearflag FLAG_DEFEATED_JIRACHI
 	clearflag FLAG_DEFEATED_LUGIA
 	clearflag FLAG_DEFEATED_HO_OH
 	clearflag FLAG_DEFEATED_MEWTWO
@@ -84,4 +86,8 @@ EverGrandeCity_HallOfFame_EventScript_ResetJohtoStarter::
 	return
 EverGrandeCity_HallOfFame_EventScript_UpdateJohtoStarterVar::
 	setvar VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3
+	return
+
+EverGrandeCity_HallOfFame_EventScript_SetMeteorFallsStevenRematch::
+	setflag FLAG_REMATCH_METEOR_FALLS_STEVEN
 	return

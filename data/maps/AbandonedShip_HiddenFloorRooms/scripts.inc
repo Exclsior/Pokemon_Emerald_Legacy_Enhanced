@@ -142,6 +142,7 @@ AbandonedShip_HiddenFloorRooms_EventScript_Trash::
 	end
 
 AbandonedShip_HiddenFloorRooms_EventScript_Suicune::
+	applymovement LOCALID_SUICUNE, Common_Movement_FacePlayer
 	playmoncry SPECIES_SUICUNE, CRY_MODE_ENCOUNTER
 	delay 40
 	waitmoncry

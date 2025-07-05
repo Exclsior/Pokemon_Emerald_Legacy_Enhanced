@@ -99,7 +99,7 @@
 #define VAR_LOTAD_SIZE_RECORD                            0x404F
 #define VAR_LITTLEROOT_TOWN_STATE                        0x4050
 #define VAR_OLDALE_TOWN_STATE                            0x4051
-#define VAR_DEWFORD_TOWN_STATE                           0x4052 // Unused Var
+#define VAR_STARTER_MON_NATDEX                           0x4052 // Replaced unused VAR_DEWFORD_TOWN_STATE - Hold National Dex Starter Selection_Nat -  // 0=Treecko, 1=Torchic, 2=Mudkip, 3=Bulbasaur, 4=Charmander, 5=Squirtle, 6=Chikorita, 7=Cyndaquil, 8=Totodile
 #define VAR_LAVARIDGE_TOWN_STATE                         0x4053
 #define VAR_CURRENT_SECRET_BASE                          0x4054 // was probably allocated for VAR_FALLARBOR_TOWN_STATE at one point
 #define VAR_VERDANTURF_TOWN_STATE                        0x4055 // Unused Var
@@ -117,9 +117,9 @@
 #define VAR_ROUTE102_STATE                               0x4061 // Unused Var
 #define VAR_ROUTE103_STATE                               0x4062 // Unused Var
 #define VAR_ROUTE104_STATE                               0x4063
-#define VAR_ROUTE105_STATE                               0x4064 // Unused Var
-#define VAR_ROUTE106_STATE                               0x4065 // Unused Var
-#define VAR_SHOAL_CAVE_LOW_TIDE_INNER_ROOM_WILD_SET     0x4066
+#define VAR_SURF_MON_SLOT                                0x4064 // Replaced unused 'VAR_ROUTE105_STATE' for Surfing Overworlds
+#define VAR_FREEZE_SURF_BLOB                             0x4065 // Replaced unused 'VAR_ROUTE106_STATE' for Surfing Overworlds - Set on surf init to stop blob overlay being offset incorrectly
+#define VAR_SHOAL_CAVE_LOW_TIDE_INNER_ROOM_WILD_SET      0x4066
 #define VAR_ARTISAN_CAVE_B1F_WILD_SET                    0x4067
 #define VAR_SOOTOPOLIS_CITY_WILD_SET                     0x4068
 #define VAR_ROUTE110_STATE                               0x4069

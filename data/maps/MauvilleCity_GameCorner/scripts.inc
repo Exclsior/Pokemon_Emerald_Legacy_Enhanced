@@ -12,6 +12,9 @@ MauvilleCity_GameCorner_MapScripts::
 
 	.set COINS_PRICE_50,  1000
 	.set COINS_PRICE_500, 10000
+	.set COINS_PRICE_1000, 20000
+	.set COINS_PRICE_2500, 50000
+	.set COINS_PRICE_5000, 100000
 
 MauvilleCity_GameCorner_EventScript_CoinsClerk::
 	lock
@@ -19,6 +22,10 @@ MauvilleCity_GameCorner_EventScript_CoinsClerk::
 	msgbox MauvilleCity_GameCorner_Text_ThisIsMauvilleGameCorner, MSGBOX_DEFAULT
 	checkitem ITEM_COIN_CASE
 	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NeedCoinCase
+	checkcoins VAR_TEMP_1
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 50), MauvilleCity_GameCorner_EventScript_NoRoomFor50Coins
+	checkmoney COINS_PRICE_50
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoneyFor50
 	message MauvilleCity_GameCorner_Text_WereYouLookingForCoins
 	waitmessage
 	showmoneybox 0, 0
@@ -30,32 +37,69 @@ MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault50::
 	switch VAR_RESULT
 	case 0, MauvilleCity_GameCorner_EventScript_Buy50Coins
 	case 1, MauvilleCity_GameCorner_EventScript_Buy500Coins
+	case 2, MauvilleCity_GameCorner_EventScript_Buy1000Coins
+	case 3, MauvilleCity_GameCorner_EventScript_Buy2500Coins
+	case 4, MauvilleCity_GameCorner_EventScript_Buy5000Coins
 	goto MauvilleCity_GameCorner_EventScript_CancelBuyCoins
 	end
 
-@ Unused
 MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault500::
 	multichoicedefault 15, 0, MULTI_GAME_CORNER_COINS, 1, FALSE
 	switch VAR_RESULT
 	case 0, MauvilleCity_GameCorner_EventScript_Buy50Coins
 	case 1, MauvilleCity_GameCorner_EventScript_Buy500Coins
+	case 2, MauvilleCity_GameCorner_EventScript_Buy1000Coins
+	case 3, MauvilleCity_GameCorner_EventScript_Buy2500Coins
+	case 4, MauvilleCity_GameCorner_EventScript_Buy5000Coins
+	goto MauvilleCity_GameCorner_EventScript_CancelBuyCoins
+	end
+
+MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault1000::
+	multichoicedefault 15, 0, MULTI_GAME_CORNER_COINS, 2, FALSE
+	switch VAR_RESULT
+	case 0, MauvilleCity_GameCorner_EventScript_Buy50Coins
+	case 1, MauvilleCity_GameCorner_EventScript_Buy500Coins
+	case 2, MauvilleCity_GameCorner_EventScript_Buy1000Coins
+	case 3, MauvilleCity_GameCorner_EventScript_Buy2500Coins
+	case 4, MauvilleCity_GameCorner_EventScript_Buy5000Coins
+	goto MauvilleCity_GameCorner_EventScript_CancelBuyCoins
+	end
+
+MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault2500::
+	multichoicedefault 15, 0, MULTI_GAME_CORNER_COINS, 3, FALSE
+	switch VAR_RESULT
+	case 0, MauvilleCity_GameCorner_EventScript_Buy50Coins
+	case 1, MauvilleCity_GameCorner_EventScript_Buy500Coins
+	case 2, MauvilleCity_GameCorner_EventScript_Buy1000Coins
+	case 3, MauvilleCity_GameCorner_EventScript_Buy2500Coins
+	case 4, MauvilleCity_GameCorner_EventScript_Buy5000Coins
+	goto MauvilleCity_GameCorner_EventScript_CancelBuyCoins
+	end
+
+MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault5000::
+	multichoicedefault 15, 0, MULTI_GAME_CORNER_COINS, 4, FALSE
+	switch VAR_RESULT
+	case 0, MauvilleCity_GameCorner_EventScript_Buy50Coins
+	case 1, MauvilleCity_GameCorner_EventScript_Buy500Coins
+	case 2, MauvilleCity_GameCorner_EventScript_Buy1000Coins
+	case 3, MauvilleCity_GameCorner_EventScript_Buy2500Coins
+	case 4, MauvilleCity_GameCorner_EventScript_Buy5000Coins
 	goto MauvilleCity_GameCorner_EventScript_CancelBuyCoins
 	end
 
 MauvilleCity_GameCorner_EventScript_Buy50Coins::
 	checkcoins VAR_TEMP_1
-	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 50), MauvilleCity_GameCorner_EventScript_NoRoomForCoins
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 50), MauvilleCity_GameCorner_EventScript_NoRoomFor50Coins
 	checkmoney COINS_PRICE_50
-	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoney
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoneyFor50
 	addcoins 50
 	removemoney COINS_PRICE_50
 	updatemoneybox
 	updatecoinsbox 1, 6
 	playse SE_SHOP
 	msgbox MauvilleCity_GameCorner_Text_ThankYouHereAreYourCoins, MSGBOX_DEFAULT
-	hidemoneybox
-	hidecoinsbox 0, 5
-	release
+	setflag FLAG_TEMP_2
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault50
 	end
 
 MauvilleCity_GameCorner_EventScript_Buy500Coins::
@@ -69,9 +113,53 @@ MauvilleCity_GameCorner_EventScript_Buy500Coins::
 	updatecoinsbox 1, 6
 	playse SE_SHOP
 	msgbox MauvilleCity_GameCorner_Text_ThankYouHereAreYourCoins, MSGBOX_DEFAULT
-	hidemoneybox
-	hidecoinsbox 0, 5
-	release
+	setflag FLAG_TEMP_2
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault500
+	end
+
+MauvilleCity_GameCorner_EventScript_Buy1000Coins::
+	checkcoins VAR_TEMP_1
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 1000), MauvilleCity_GameCorner_EventScript_NoRoomForCoins
+	checkmoney COINS_PRICE_1000
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoney
+	addcoins 1000
+	removemoney COINS_PRICE_1000
+	updatemoneybox
+	updatecoinsbox 1, 6
+	playse SE_SHOP
+	msgbox MauvilleCity_GameCorner_Text_ThankYouHereAreYourCoins, MSGBOX_DEFAULT
+	setflag FLAG_TEMP_2
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault1000
+	end
+
+MauvilleCity_GameCorner_EventScript_Buy2500Coins::
+	checkcoins VAR_TEMP_1
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 2500), MauvilleCity_GameCorner_EventScript_NoRoomForCoins
+	checkmoney COINS_PRICE_2500
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoney
+	addcoins 2500
+	removemoney COINS_PRICE_2500
+	updatemoneybox
+	updatecoinsbox 1, 6
+	playse SE_SHOP
+	msgbox MauvilleCity_GameCorner_Text_ThankYouHereAreYourCoins, MSGBOX_DEFAULT
+	setflag FLAG_TEMP_2
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault2500
+	end
+
+MauvilleCity_GameCorner_EventScript_Buy5000Coins::
+	checkcoins VAR_TEMP_1
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 5000), MauvilleCity_GameCorner_EventScript_NoRoomForCoins
+	checkmoney COINS_PRICE_5000
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoney
+	addcoins 5000
+	removemoney COINS_PRICE_5000
+	updatemoneybox
+	updatecoinsbox 1, 6
+	playse SE_SHOP
+	msgbox MauvilleCity_GameCorner_Text_ThankYouHereAreYourCoins, MSGBOX_DEFAULT
+	setflag FLAG_TEMP_2
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault5000
 	end
 
 MauvilleCity_GameCorner_EventScript_NeedCoinCase::
@@ -79,25 +167,51 @@ MauvilleCity_GameCorner_EventScript_NeedCoinCase::
 	release
 	end
 
-MauvilleCity_GameCorner_EventScript_NotEnoughMoney::
-	msgbox MauvilleCity_GameCorner_Text_DontHaveEnoughMoney, MSGBOX_DEFAULT
+MauvilleCity_GameCorner_EventScript_NotEnoughMoneyFor50::
+	msgbox MauvilleCity_GameCorner_Text_DontHaveEnoughMoneyFor50, MSGBOX_DEFAULT
+	clearflag FLAG_TEMP_2
 	hidemoneybox
 	hidecoinsbox 0, 5
 	release
 	end
 
+MauvilleCity_GameCorner_EventScript_NotEnoughMoney::
+	checkmoney COINS_PRICE_50
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoneyFor50
+	msgbox MauvilleCity_GameCorner_Text_DontHaveEnoughMoney, MSGBOX_DEFAULT
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault50
+	end
+
 MauvilleCity_GameCorner_EventScript_CancelBuyCoins::
+	goto_if_set FLAG_TEMP_2, MauvilleCity_GameCorner_EventScript_ThanksBuyCoins
 	msgbox MauvilleCity_GameCorner_Text_DontNeedCoinsThen, MSGBOX_DEFAULT
+	clearflag FLAG_TEMP_2
+	hidemoneybox
+	hidecoinsbox 0, 5
+	release
+	end
+
+MauvilleCity_GameCorner_EventScript_ThanksBuyCoins::
+	msgbox MauvilleCity_GameCorner_Text_ThanksBuyCoins, MSGBOX_DEFAULT
+	clearflag FLAG_TEMP_2
+	hidemoneybox
+	hidecoinsbox 0, 5
+	release
+	end
+
+MauvilleCity_GameCorner_EventScript_NoRoomFor50Coins::
+	msgbox MauvilleCity_GameCorner_Text_NoRoomFor50Coins, MSGBOX_DEFAULT
+	clearflag FLAG_TEMP_2
 	hidemoneybox
 	hidecoinsbox 0, 5
 	release
 	end
 
 MauvilleCity_GameCorner_EventScript_NoRoomForCoins::
-	msgbox MauvilleCity_GameCorner_Text_CoinCaseIsFull, MSGBOX_DEFAULT
-	hidemoneybox
-	hidecoinsbox 0, 5
-	release
+	checkcoins VAR_TEMP_1
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 50), MauvilleCity_GameCorner_EventScript_NoRoomFor50Coins
+	msgbox MauvilleCity_GameCorner_Text_NoRoomForCoins, MSGBOX_DEFAULT
+	goto MauvilleCity_GameCorner_EventScript_ChooseCoinsDefault50
 	end
 
 MauvilleCity_GameCorner_EventScript_PrizeCornerDolls::
@@ -233,7 +347,14 @@ MauvilleCity_GameCorner_EventScript_ChoosePokemonPrizeMessage::
 	call MauvilleCity_GameCorner_EventScript_GivePorygon
 	setflag FLAG_GAME_CORNER_PRIZE_PORYGON
 	removecoins PORYGON_COINS
+	msgbox MauvilleCity_GameCorner_Text_ClaimedPorygon, MSGBOX_DEFAULT
+	closemessage
+	end
+	
 MauvilleCity_GameCorner_EventScript_GotPorygonPrize::
+	setvar 0x8005, TRAINER_WATTSON_3
+	special HasRematchBeenFought
+	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_Gym_EventScript_PorygonUpgradePrize
 	msgbox MauvilleCity_GameCorner_Text_ClaimedPorygon, MSGBOX_DEFAULT
 	closemessage
 	end
@@ -284,6 +405,30 @@ MauvilleCity_GameCorner_EventScript_ReceivedPorygonFanfare::
 MauvilleCity_GameCorner_EventScript_Return::
 	setflag FLAG_GAME_CORNER_PRIZE_PORYGON
 	return
+
+MauvilleCity_Gym_EventScript_PorygonUpgradePrize::
+	msgbox MauvilleCity_GameCorner_Text_UpgradePrize, MSGBOX_DEFAULT
+	waitmessage
+	checkcoins VAR_TEMP_2
+	goto_if_lt VAR_TEMP_2, PORYGON_COINS, MauvilleCity_GameCorner_EventScript_NotEnoughCoinsForPorygon
+	msgbox MauvilleCity_GameCorner_Text_GotEnoughCoinsForUpgrade, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, MauvilleCity_GameCorner_EventScript_CancelPokemonSelect
+	call MauvilleCity_GameCorner_EventScript_GiveUpgrade
+	removecoins PORYGON_COINS
+	msgbox MauvilleCity_GameCorner_Text_ClaimedUpgrade, MSGBOX_DEFAULT
+	closemessage
+	end
+MauvilleCity_GameCorner_EventScript_GiveUpgrade::
+	playfanfare MUS_OBTAIN_ITEM
+	giveitem ITEM_UP_GRADE, 1
+	waitfanfare
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NoRoom
+	return
+MauvilleCity_GameCorner_EventScript_NoRoom::
+	msgbox MauvilleCity_GameCorner_Text_NoRoomForReward, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
 
 MauvilleCity_GameCorner_EventScript_PrizeCornerTMs::
 	lock
@@ -717,16 +862,33 @@ MauvilleCity_GameCorner_Text_ThankYouHereAreYourCoins:
 	.string "Thank you very much!\n"
 	.string "Here are your COINS!$"
 
+MauvilleCity_GameCorner_Text_DontHaveEnoughMoneyFor50:
+	.string "Um… You don't appear to have\n"
+	.string "enough money to buy COINS…\p"
+	.string "Please come back when you have\n"
+	.string "at least ¥1000!$"
+
 MauvilleCity_GameCorner_Text_DontHaveEnoughMoney:
 	.string "Um… You don't appear to have\n"
-	.string "enough money…$"
+	.string "enough money for that many COINS…$"
 
-MauvilleCity_GameCorner_Text_CoinCaseIsFull:
+MauvilleCity_GameCorner_Text_NoRoomFor50Coins:
+	.string "Oh! Your COIN CASE is too full to buy\n"
+	.string "any more COINS!\p"
+	.string "Enjoy the MAUVILLE GAME CORNER or\n"
+	.string "exchange your COINS for prizes before\l"
+	.string "coming back!$"
+
+MauvilleCity_GameCorner_Text_NoRoomForCoins:
 	.string "Oh?\n"
-	.string "Your COIN CASE is full.$"
+	.string "Your COIN CASE can't fit those COINS...$"
 
 MauvilleCity_GameCorner_Text_DontNeedCoinsThen:
 	.string "Oh… You don't need COINS, then?\n"
+	.string "Good luck on your adventure!$"
+
+MauvilleCity_GameCorner_Text_ThanksBuyCoins:
+	.string "Thank you for buying some COINS!\n"
 	.string "Good luck on your adventure!$"
 
 MauvilleCity_GameCorner_Text_ExchangeCoinsForPrizes:
@@ -867,3 +1029,27 @@ MauvilleCity_GameCorner_Text_ClaimedPorygon:
 
 MauvilleCity_GameCorner_Text_PlayerReceivedPorygon:
 	.string "{PLAYER} received PORYGON!$"
+
+MauvilleCity_GameCorner_Text_UpgradePrize:
+	.string "Oh, it's you again!\p"
+	.string "I see you've already claimed your\n"
+	.string "special PORYGON.\p"
+	.string "While you can't have another, there's an\n"
+	.string "exclusive UPGRADE waiting if you can\l"
+	.string "muster another 9999 COINS.\p"
+	.string "Though, between us, I doubt you'll ever\n"
+	.string "hit that mark again…$"
+
+MauvilleCity_GameCorner_Text_GotEnoughCoinsForUpgrade:
+	.string "Another 9999 COINS, huh?\p"
+	.string "I… I can hardly believe it.\n"
+	.string "How did you even pull that off?\p"
+	.string "Well, would you like to claim your\n"
+	.string "UPGRADE?$"
+
+MauvilleCity_GameCorner_Text_ClaimedUpgrade:
+	.string "Congratulations!\p"
+	.string "The UPGRADE is now yours!$"
+
+MauvilleCity_GameCorner_Text_NoRoomForReward:
+	.string "Oh no! It seems your BAG is full!$"

@@ -382,6 +382,41 @@ static void CreateBattleStartTask(u8 transition, u16 song)
     PlayMapChosenOrBattleBGM(song);
 }
 
+static void Task_BattleStart_Debug(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+
+    switch (tState)
+    {
+    case 0:
+        if (!FldEffPoison_IsActive()) // is poison not active?
+        {
+            BattleTransition_StartOnField(tTransition);
+            ClearMirageTowerPulseBlendEffect();
+            tState++; // go to case 1.
+        }
+        break;
+    case 1:
+        if (IsBattleTransitionDone() == TRUE)
+        {
+            CleanupOverworldWindowsAndTilemaps();
+            SetMainCallback2(CB2_InitBattle);
+            RestartWildEncounterImmunitySteps();
+            ClearPoisonStepCounter();
+            DestroyTask(taskId);
+        }
+        break;
+    }
+}
+
+static void CreateBattleStartTask_Debug(u8 transition, u16 song)
+{
+    u8 taskId = CreateTask(Task_BattleStart_Debug, 1);
+
+    gTasks[taskId].tTransition = transition;
+    PlayMapChosenOrBattleBGM(song);
+}
+
 #undef tState
 #undef tTransition
 
@@ -415,6 +450,25 @@ static void DoStandardWildBattle(void)
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
     IncrementDailyWildBattles();
     TryUpdateGymLeaderRematchFromWild();
+}
+
+void DoStandardWildBattle_Debug(void)
+{
+    LockPlayerFieldControls();
+    FreezeObjectEvents();
+    StopPlayerAvatar();
+    gMain.savedCallback = CB2_EndWildBattle;
+    gBattleTypeFlags = 0;
+    if (InBattlePyramid())
+    {
+        VarSet(VAR_TEMP_E, 0);
+        gBattleTypeFlags |= BATTLE_TYPE_PYRAMID;
+    }
+    CreateBattleStartTask_Debug(GetWildBattleTransition(), 0);
+    //IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
+    //IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    //IncrementDailyWildBattles();
+    //TryUpdateGymLeaderRematchFromWild();
 }
 
 void BattleSetup_StartRoamerBattle(void)
@@ -535,10 +589,12 @@ void BattleSetup_StartLegendaryBattle(void)
         break;
     case SPECIES_LUGIA:
     case SPECIES_HO_OH:
+        CreateBattleStartTask(B_TRANSITION_BLUR, MUS_RG_VS_LEGEND);
+        break;
     case SPECIES_ENTEI:
     case SPECIES_RAIKOU:
     case SPECIES_SUICUNE:
-        CreateBattleStartTask(B_TRANSITION_BLUR, MUS_RG_VS_LEGEND);
+        CreateBattleStartTask(B_TRANSITION_BLUR, MUS_C_VS_LEGEND_BEAST);
         break;
     case SPECIES_MEWTWO:
     case SPECIES_ZAPDOS:
@@ -897,6 +953,64 @@ void ChooseStarter(void)
 {
     SetMainCallback2(CB2_ChooseStarter);
     gMain.savedCallback = CB2_GiveStarter;
+}
+
+void StartFirstBattle_NationalDexMode(void)
+{
+    u16 starterMon;
+    
+    starterMon = gSpecialVar_Result;
+
+    // Switch to set starter as original Hoenn starter of same type for all starter decisions in game
+    switch(starterMon)
+    {
+        case SPECIES_TREECKO:
+            *GetVarPointer(VAR_STARTER_MON) = 0;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 0;
+            break;
+        case SPECIES_TORCHIC:
+            *GetVarPointer(VAR_STARTER_MON) = 1;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 1;
+            break;
+        case SPECIES_MUDKIP:
+            *GetVarPointer(VAR_STARTER_MON) = 2;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 2;
+            break;
+        case SPECIES_BULBASAUR:
+            *GetVarPointer(VAR_STARTER_MON) = 0;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 3;
+            break;
+        case SPECIES_CHARMANDER:
+            *GetVarPointer(VAR_STARTER_MON) = 1;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 4;
+            break;
+        case SPECIES_SQUIRTLE:
+            *GetVarPointer(VAR_STARTER_MON) = 2;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 5;
+            break;
+        case SPECIES_CHIKORITA:
+            *GetVarPointer(VAR_STARTER_MON) = 0;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 6;
+            break;
+        case SPECIES_CYNDAQUIL:
+            *GetVarPointer(VAR_STARTER_MON) = 1;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 7;
+            break;
+        case SPECIES_TOTODILE:
+            *GetVarPointer(VAR_STARTER_MON) = 2;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 8;
+            break;
+        default:
+            *GetVarPointer(VAR_STARTER_MON) = 0;
+            *GetVarPointer(VAR_STARTER_MON_NATDEX) = 0;
+            break;
+    }
+
+    ScriptGiveMon(starterMon, 5, ITEM_NONE, 0, 0, 0);
+    ResetTasks();
+    PlayBattleBGM();
+    SetMainCallback2(CB2_StartFirstBattle);
+    BattleTransition_Start(B_TRANSITION_BLUR);
 }
 
 static void CB2_GiveStarter(void)
@@ -1303,6 +1417,19 @@ void BattleSetup_StartTrainerBattle(void)
         DoBattlePyramidTrainerHillBattle();
     else
         DoTrainerBattle();
+
+    ScriptContext_Stop();
+}
+
+void BattleSetup_StartTrainerBattle_Debug(void)
+{
+    sNoOfPossibleTrainerRetScripts = gNoOfApproachingTrainers;
+    gNoOfApproachingTrainers = 0;
+    sShouldCheckTrainerBScript = FALSE;
+    gWhichTrainerToFaceAfterBattle = 0;
+    gMain.savedCallback = CB2_EndTrainerBattle;
+
+    CreateBattleStartTask_Debug(GetWildBattleTransition(), 0);
 
     ScriptContext_Stop();
 }

@@ -72,7 +72,8 @@
 #define NUM_NATURES     25
 
 // Flag value for Hidden Natures
-#define MON_DATA_HIDDEN_NATURE     90
+#define MON_DATA_NATURE            90
+#define MON_DATA_HIDDEN_NATURE     91
 
 // Pokémon Stats
 #define STAT_HP      0
@@ -128,7 +129,9 @@
 #define ABILITY_HIDDEN 2
 
 // Shiny odds
-#define SHINY_ODDS 8 // Actual probability is SHINY_ODDS/65536
+#define SHINY_ODDS 8                                // Actual probability is SHINY_ODDS/65536
+#define I_SHINY_CHARM_ADDITIONAL_ROLLS  8           // Amount of additional shiny rolls if the player has at least one Shiny Charm in their bag.
+#define I_SHINY_CHARM_MAX_EFFECTIVE  8              // Maximum number of shiny charms used to calculate maximum rolls.
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON       0
@@ -316,5 +319,12 @@
 #define BATTLE_ALIVE_DEF_SIDE       2
 
 #define SKIP_FRONT_ANIM (1 << 7)
+
+#define NUM_ABILITY_SLOTS (NUM_NORMAL_ABILITY_SLOTS)
+#define NUM_NORMAL_ABILITY_SLOTS 2
+//#define NUM_HIDDEN_ABILITY_SLOTS 1
+
+// Used as a signal for givemon to generate a default ability by personality.
+#define NUM_ABILITY_PERSONALITY 0xFF
 
 #endif // GUARD_CONSTANTS_POKEMON_H

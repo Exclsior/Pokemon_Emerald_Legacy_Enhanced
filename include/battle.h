@@ -512,6 +512,7 @@ struct BattleScripting
     u8 windowsType; // B_WIN_TYPE_*
     u8 multiplayerId;
     u8 specialTrainerBattleType;
+    u8 heldItemReducedEffect;
 };
 
 struct BattleSpriteInfo
@@ -577,6 +578,7 @@ struct BattleHealthboxInfo
 struct BattleBarInfo
 {
     u8 healthboxSpriteId;
+    u8 oddFrame; // For more speed control in moving hp bar down.
     s32 maxValue;
     s32 oldValue;
     s32 receivedValue;
@@ -695,6 +697,7 @@ extern u16 gIntroSlideFlags;
 extern u8 gSentPokesToOpponent[2];
 extern u16 gDynamicBasePower;
 extern u16 gExpShareExp;
+extern bool8 gExpAllMessCheck;
 extern struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT];
 extern struct BattleScripting gBattleScripting;
 extern struct BattleStruct *gBattleStruct;

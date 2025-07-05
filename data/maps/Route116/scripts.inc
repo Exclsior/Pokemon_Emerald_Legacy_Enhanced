@@ -457,17 +457,15 @@ Route116_Text_TunnelersRestHouse:
 
 Route116_Text_TrainerTipsBToStopEvolution:
 	.string "TRAINER TIPS\p"
-	.string "If you want to stop a POKéMON from\n"
-	.string "evolving, press the B Button while it\l"
-	.string "is trying to evolve.\l"
-	.string "The startled POKéMON will stop.\p"
-	.string "This is called an evolution cancel.$"
+	.string "POKéMON can learn new moves in several\n"
+	.string "ways. Use your POKéDEX to see your\l"
+	.string "POKéMON's potential!$"
 
 Route116_Text_TrainerTipsBagHasPockets:
 	.string "TRAINER TIPS\p"
-	.string "Your BAG has several POCKETS.\p"
-	.string "Items you obtain are automatically\n"
-	.string "placed in the appropriate POCKETS.\p"
-	.string "No TRAINER can afford to be without\n"
-	.string "a BAG of their own.$"
-
+	.string "Each POKéMON NATURE increases one of\n"
+	.string "their stats by 10% and lowers another\l"
+	.string "by the same amount.\p"
+	.string "When looking at their SUMMARY screen,\n"
+	.string "the raised stat is shown in RED, while\l"
+	.string "the lowered stat will be BLUE.$"

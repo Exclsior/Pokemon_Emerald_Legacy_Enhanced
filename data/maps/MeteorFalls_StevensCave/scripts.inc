@@ -5,6 +5,7 @@ MeteorFalls_StevensCave_MapScripts::
 
 MeteorFalls_StevensCave_EventScript_Steven::
 	lock
+	goto_if_set FLAG_REMATCH_METEOR_FALLS_STEVEN, MeteorFalls_StevensCave_EventScript_RematchSteven
 	goto_if_set FLAG_DEFEATED_METEOR_FALLS_STEVEN, MeteorFalls_StevensCave_EventScript_Defeated
 	waitse
 	playse SE_PIN
@@ -18,6 +19,26 @@ MeteorFalls_StevensCave_EventScript_Steven::
 	trainerbattle_no_intro TRAINER_STEVEN_2, MeteorFalls_StevensCave_Text_StevenDefeat
 	msgbox MeteorFalls_StevensCave_Text_MyPredictionCameTrue, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_METEOR_FALLS_STEVEN
+	clearflag FLAG_REMATCH_METEOR_FALLS_STEVEN
+	addpcitem ITEM_SHINY_CHARM, 1
+	goto_if_unset FLAG_RECEIVED_EON_TICKET, MeteorFalls_StevensCave_EventScript_GiveEonTicket
+	release
+	end
+
+MeteorFalls_StevensCave_EventScript_RematchSteven::
+	waitse
+	playse SE_PIN
+	applymovement LOCALID_STEVEN, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_STEVEN, Common_Movement_Delay48
+	waitmovement 0
+	applymovement LOCALID_STEVEN, Common_Movement_FacePlayer
+	waitmovement 0
+	msgbox MeteorFalls_StevensCave_Text_RematchExpectWorst, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_STEVEN_3, MeteorFalls_StevensCave_Text_StevenDefeat
+	msgbox MeteorFalls_StevensCave_Text_MyPredictionCameTrue, MSGBOX_DEFAULT
+	setflag FLAG_DEFEATED_METEOR_FALLS_STEVEN
+	clearflag FLAG_REMATCH_METEOR_FALLS_STEVEN
 	goto_if_unset FLAG_RECEIVED_EON_TICKET, MeteorFalls_StevensCave_EventScript_GiveEonTicket
 	release
 	end
@@ -53,9 +74,16 @@ MeteorFalls_StevensCave_Text_ShouldKnowHowGoodIAmExpectWorst:
 	.string "just a rock maniac?\p"
 	.string "No, that can't be right.\p"
 	.string "We battled alongside each other at\n"
-	.string "the SOOTOPOLIS SPACE CENTER.\p"
+	.string "the MOSSDEEP SPACE CENTER.\p"
 	.string "You should have a very good idea\n"
 	.string "about how good I am.\p"
+	.string "Okay, {PLAYER}{KUN}, if you're going to mount\n"
+	.string "a serious challenge, expect the worst!$"
+
+MeteorFalls_StevensCave_Text_RematchExpectWorst:
+	.string "STEVEN: Oh, hello {PLAYER}{KUN}.\n"
+	.string "You've come a long way again.\p"
+	.string "Did you want another rematch?\p"
 	.string "Okay, {PLAYER}{KUN}, if you're going to mount\n"
 	.string "a serious challenge, expect the worst!$"
 
