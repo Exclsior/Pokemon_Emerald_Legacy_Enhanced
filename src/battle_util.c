@@ -1979,6 +1979,7 @@ enum
     CANCELLER_IN_LOVE,
     CANCELLER_BIDE,
     CANCELLER_THAW,
+    CANCELLER_ATTACKBOOSTEDBYABILITY,
     CANCELLER_END,
 };
 
@@ -1986,6 +1987,11 @@ u8 AtkCanceller_UnableToUseMove(void)
 {
     u8 effect = 0;
     s32 *bideDmg = &gBattleScripting.bideDmg;
+    u32 moveType;
+    u8 ability = gBattleMons[gBattlerAttacker].ability;
+
+    GET_MOVE_TYPE(gCurrentMove, moveType);
+
     do
     {
         switch (gBattleStruct->atkCancellerTracker)
@@ -2241,6 +2247,48 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DEFROSTED_BY_MOVE;
                 }
                 effect = 2;
+            }
+            gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_ATTACKBOOSTEDBYABILITY: //14 - Added new Attack Canceller to provide text for Overgrow, Blaze, Torrent and Swarm
+            if (gBattleMons[gBattlerAttacker].hp <= (gBattleMons[gBattlerAttacker].maxHP / 3))
+            {
+                switch (ability)
+                {
+                    case ABILITY_OVERGROW:
+                        if (moveType == TYPE_GRASS)
+                        {
+                            BattleScriptPushCursor();
+                            gBattleCommunication[MSG_DISPLAY] = 1;
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                        }
+                        break;
+                    case ABILITY_BLAZE:
+                        if (moveType == TYPE_FIRE)
+                        {
+                            BattleScriptPushCursor();
+                            gBattleCommunication[MSG_DISPLAY] = 1;
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                        }
+                        break;
+                    case ABILITY_TORRENT:
+                        if (moveType == TYPE_WATER)
+                        {
+                            BattleScriptPushCursor();
+                            gBattleCommunication[MSG_DISPLAY] = 1;
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                        }
+                        break;
+                    case ABILITY_SWARM:
+                        if (moveType == TYPE_BUG)
+                        {
+                            BattleScriptPushCursor();
+                            gBattleCommunication[MSG_DISPLAY] = 1;
+                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                        }
+                        break;
+                }
+                effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
             break;
@@ -3173,43 +3221,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u8 ability, u8 special, u16 moveA
                 {
                     gLastUsedAbility = ability;
                     effect++;
-                }
-            }
-            break;
-        case ABILITYEFFECT_MOVE_BOOSTED: //20 - Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
-            if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3))
-            {
-                switch (ability)
-                {
-                    case ABILITY_OVERGROW:
-                        if (moveType == TYPE_GRASS)
-                        {
-                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
-                            effect++;
-                        }
-                        break;
-                    case ABILITY_BLAZE:
-                        if (moveType == TYPE_FIRE)
-                        {
-                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
-                            effect++;
-                        }
-                        break;
-                    case ABILITY_TORRENT:
-                        if (moveType == TYPE_WATER)
-                        {
-                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
-                            effect++;
-                        }
-                        break;
-                    case ABILITY_SWARM:
-                        if (moveType == TYPE_BUG)
-                        {
-                            gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
-                            effect++;
-                            
-                        }
-                        break;
                 }
             }
             break;
