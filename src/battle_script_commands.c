@@ -2115,6 +2115,10 @@ static void Cmd_effectivenesssound(void)
 static void Cmd_resultmessage(void)
 {
     u32 stringId = 0;
+    u32 moveType;
+    u8 ability = gBattleMons[gBattlerAttacker].ability;
+
+    GET_MOVE_TYPE(gCurrentMove, moveType);
 
     if (gBattleControllerExecFlags)
         return;
@@ -2125,7 +2129,47 @@ static void Cmd_resultmessage(void)
         gBattleCommunication[MSG_DISPLAY] = 1;
     }
     else
-    {
+    {        
+        if (gBattleMons[gBattlerAttacker].hp <= (gBattleMons[gBattlerAttacker].maxHP / 3) && !gCheckedMoveBoostedByAbility)
+        {
+            switch (ability)
+            {
+                case ABILITY_OVERGROW:
+                    if (moveType == TYPE_GRASS)
+                    {
+                        BattleScriptPushCursor();
+                        gBattleCommunication[MSG_DISPLAY] = 1;
+                        gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                    }
+                    break;
+                case ABILITY_BLAZE:
+                    if (moveType == TYPE_FIRE)
+                    {
+                        BattleScriptPushCursor();
+                        gBattleCommunication[MSG_DISPLAY] = 1;
+                        gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                    }
+                    break;
+                case ABILITY_TORRENT:
+                    if (moveType == TYPE_WATER)
+                    {
+                        BattleScriptPushCursor();
+                        gBattleCommunication[MSG_DISPLAY] = 1;
+                        gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                    }
+                    break;
+                case ABILITY_SWARM:
+                    if (moveType == TYPE_BUG)
+                    {
+                        BattleScriptPushCursor();
+                        gBattleCommunication[MSG_DISPLAY] = 1;
+                        gBattlescriptCurrInstr = BattleScript_AttackBoostedByAbility;
+                    }
+                    break;
+            }
+            gCheckedMoveBoostedByAbility = TRUE;
+            return;
+        }
         gBattleCommunication[MSG_DISPLAY] = 1;
         switch (gMoveResultFlags & (u8)(~MOVE_RESULT_MISSED))
         {
@@ -4321,6 +4365,8 @@ static void Cmd_moveend(void)
     u16 *choicedMoveAtk = NULL;
     u8 endMode, endState;
     u16 originallyUsedMove;
+
+    gCheckedMoveBoostedByAbility = FALSE;
 
     if (gChosenMove == MOVE_UNAVAILABLE)
         originallyUsedMove = MOVE_NONE;
