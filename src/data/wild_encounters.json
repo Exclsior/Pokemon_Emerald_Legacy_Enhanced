@@ -2014,9 +2014,9 @@
                 "species": "SPECIES_MEDITITE"
               },
               {
-                "min_level": 19,
-                "max_level": 19,
-                "species": "SPECIES_MARILL"
+                "min_level": 5,
+                "max_level": 13,
+                "species": "SPECIES_CHIKORITA"
               },
               {
                 "min_level": 19,
@@ -2333,7 +2333,7 @@
               {
                 "min_level": 5,
                 "max_level": 13,
-                "species": "SPECIES_BULBASAUR"
+                "species": "SPECIES_TOTODILE"
               },
               {
                 "min_level": 19,
@@ -4422,9 +4422,9 @@
                 "species": "SPECIES_SLUGMA"
               },
               {
-                "min_level": 19,
-                "max_level": 19,
-                "species": "SPECIES_KOFFING"
+                "min_level": 5,
+                "max_level": 13,
+                "species": "SPECIES_CYNDAQUIL"
               },
               {
                 "min_level": 18,
@@ -4878,9 +4878,9 @@
                 "species": "SPECIES_PARAS"
               },
               {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CHARMANDER"
+                "min_level": 22,
+                "max_level": 22,
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 22,
@@ -4888,9 +4888,9 @@
                 "species": "SPECIES_SPOINK"
               },
               {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CHARMANDER"
+                "min_level": 22,
+                "max_level": 22,
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 22,
@@ -5581,9 +5581,9 @@
                 "species": "SPECIES_WINGULL"
               },
               {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_SQUIRTLE"
+                "min_level": 15,
+                "max_level": 25,
+                "species": "SPECIES_WINGULL"
               },
               {
                 "min_level": 25,
@@ -5984,7 +5984,7 @@
               {
                 "min_level": 5,
                 "max_level": 13,
-                "species": "SPECIES_CHIKORITA"
+                "species": "SPECIES_BULBASAUR"
               },
               {
                 "min_level": 24,
@@ -6337,7 +6337,7 @@
               {
                 "min_level": 5,
                 "max_level": 13,
-                "species": "SPECIES_TOTODILE"
+                "species": "SPECIES_SQUIRTLE"
               },
               {
                 "min_level": 30,
@@ -7933,9 +7933,9 @@
                 "species": "SPECIES_VULPIX"
               },
               {
-                "min_level": 28,
-                "max_level": 28,
-                "species": "SPECIES_VULPIX"
+                "min_level": 5,
+                "max_level": 13,
+                "species": "SPECIES_CHARMANDER"
               },
               {
                 "min_level": 29,
