@@ -1754,8 +1754,16 @@ static void DecompressGlyph_Narrow(u16 glyphId, bool32 isJapanese)
     }
     else
     {
-        glyphs = gFontNarrowLatinGlyphs + (0x20 * glyphId);
-        gCurGlyph.width = gFontNarrowLatinGlyphWidths[glyphId];
+        if (!FlagGet(FLAG_SWAP_FONT))
+        {
+            glyphs = gFontNarrowLatinGlyphs + (0x20 * glyphId);
+            gCurGlyph.width = gFontNarrowLatinGlyphWidths[glyphId];
+        }
+        else
+        {
+            glyphs = gFontSmallLatinGlyphs + (0x20 * glyphId);
+            gCurGlyph.width = gFontSmallLatinGlyphWidths[glyphId];
+        }
 
         if (gCurGlyph.width <= 8)
         {
@@ -1779,7 +1787,12 @@ static u32 GetGlyphWidth_Narrow(u16 glyphId, bool32 isJapanese)
     if (isJapanese == TRUE)
         return 8;
     else
-        return gFontNarrowLatinGlyphWidths[glyphId];
+    {
+        if (!FlagGet(FLAG_SWAP_FONT))
+            return gFontNarrowLatinGlyphWidths[glyphId];
+        else
+            return gFontSmallLatinGlyphWidths[glyphId];
+    }
 }
 
 static void DecompressGlyph_SmallNarrow(u16 glyphId, bool32 isJapanese)

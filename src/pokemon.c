@@ -2285,7 +2285,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
                 {
                     maxShinyRolls += I_SHINY_CHARM_ADDITIONAL_ROLLS;
                     itemCount++;
-                } while (CheckBagHasItem(ITEM_SHINY_CHARM, itemCount) && itemCount < I_SHINY_CHARM_MAX_EFFECTIVE);
+                } while (CheckBagHasItem(ITEM_SHINY_CHARM, itemCount));
 
                 do
                 {
@@ -6648,6 +6648,7 @@ u16 GetBattleBGM(void)
             if (!StringCompare(gTrainers[gTrainerBattleOpponent_A].trainerName, gText_BattleWallyName))
                 return MUS_VS_TRAINER;
             return MUS_VS_RIVAL;
+        case TRAINER_CLASS_PKMN_TRAINER_2:
         case TRAINER_CLASS_ELITE_FOUR:
             return MUS_VS_ELITE_FOUR;
         case TRAINER_CLASS_SALON_MAIDEN:

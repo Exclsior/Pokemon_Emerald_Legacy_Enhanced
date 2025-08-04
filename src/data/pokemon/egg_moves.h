@@ -544,6 +544,7 @@ const u16 gEggMoves[] = {
               MOVE_GRASS_WHISTLE),
 
     egg_moves(CYNDAQUIL,
+              MOVE_EXTRASENSORY,
               MOVE_FURY_SWIPES,
               MOVE_QUICK_ATTACK,
               MOVE_REVERSAL,
@@ -997,6 +998,7 @@ const u16 gEggMoves[] = {
 
     egg_moves(ZIGZAGOON,
               MOVE_CHARM,
+              MOVE_EXTREME_SPEED,
               MOVE_PURSUIT,
               MOVE_PIN_MISSILE,
               MOVE_SUBSTITUTE,

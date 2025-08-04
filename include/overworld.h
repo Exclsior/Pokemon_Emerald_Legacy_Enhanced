@@ -30,6 +30,16 @@
 #define TIME_OF_DAY_DAY 2
 #define TIME_OF_DAY_MAX TIME_OF_DAY_DAY
 
+#define OPTIONS_OVERWORLD_SPEED_1X                          0
+#define OPTIONS_OVERWORLD_SPEED_2X                          1
+#define OPTIONS_OVERWORLD_SPEED_4X                          2
+#define OPTIONS_OVERWORLD_SPEED_8X                          3
+#define OPTIONS_OVERWORLD_SPEED_1X_EXTRA_ITERATIONS         0
+#define OPTIONS_OVERWORLD_SPEED_2X_EXTRA_ITERATIONS         1
+#define OPTIONS_OVERWORLD_SPEED_4X_EXTRA_ITERATIONS         3
+#define OPTIONS_OVERWORLD_SPEED_8X_EXTRA_ITERATIONS         7
+u8 OverworldSpeedup_AdditionalIterations(u16 speed, bool32 overworld);
+
 struct InitialPlayerAvatarState
 {
     u8 transitionFlags;

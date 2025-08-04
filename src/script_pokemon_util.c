@@ -72,17 +72,29 @@ void HealPlayerParty(void)
     }
 }
 
-u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3)
+u8 ScriptGiveMon(u16 species, u8 level, u16 item, u16 move1, u16 move2, u16 move3, u16 move4, u8 unused)
 {
     u16 nationalDexNum;
     int sentToPc;
     u8 heldItem[2];
     struct Pokemon mon;
+    u16 moves[] = {move1, move2, move3, move4};
+    u8 i;
 
     CreateMon(&mon, species, level, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
     heldItem[0] = item;
     heldItem[1] = item >> 8;
     SetMonData(&mon, MON_DATA_HELD_ITEM, heldItem);
+    
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] == MOVE_NONE || moves[i] == 0xFF || moves[i] >= MOVES_COUNT)
+            continue;
+        
+        if (GiveMoveToMon(&mon, moves[i]) == MON_HAS_MAX_MOVES) // Move will be added to empty slot if not Max Moves
+            DeleteFirstMoveAndGiveMoveToMon(&mon, moves[i]); // First move deleted and new move added
+    }
+    
     sentToPc = GiveMonToPlayer(&mon);
     nationalDexNum = SpeciesToNationalPokedexNum(species);
 

@@ -578,7 +578,7 @@ BattleFrontier_OutsideWest_Text_EvePostBattle:
 	.string "was some great training!$"
 
 BattleFrontier_OutsideWest_Text_Umbreon:
-	.string "UMBREON!$"
+	.string "UMBREON: Uu uu um bre on!$"
 
 BattleFrontier_OutsideWest_Text_Eevee:
-	.string "EEVEE!$"
+	.string "EEVEE: Vee-vee!$"

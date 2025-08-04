@@ -2352,7 +2352,17 @@ void ShowScrollableMultichoice(void)
         break;
     case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR:
         task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-        task->tNumItems = 9;
+        task->tNumItems = 10;
+        task->tLeft = 14;
+        task->tTop = 1;
+        task->tWidth = 15;
+        task->tHeight = 12;
+        task->tKeepOpenAfterSelect = FALSE;
+        task->tTaskId = taskId;
+        break;
+    case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR_SILVER_SYMBOLS:
+        task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
+        task->tNumItems = 11;
         task->tLeft = 14;
         task->tTop = 1;
         task->tWidth = 15;
@@ -2503,6 +2513,21 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_ZincCost,
         gText_CarbosCost,
         gText_HpUpCost,
+        gText_PpUpCost,
+        gText_RareCandyCost,
+        gText_AbilityCapsuleCost,
+        gText_Exit
+    },
+    [SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR_SILVER_SYMBOLS] =
+    {
+        gText_ProteinCost,
+        gText_CalciumCost,
+        gText_IronCost,
+        gText_ZincCost,
+        gText_CarbosCost,
+        gText_HpUpCost,
+        gText_PpUpCost,
+        gText_PpMaxCost,
         gText_RareCandyCost,
         gText_AbilityCapsuleCost,
         gText_Exit
@@ -3089,7 +3114,7 @@ static void FillFrontierExchangeCornerWindowAndItemIcon(u16 menu, u16 selection)
 {
     #include "data/battle_frontier/battle_frontier_exchange_corner.h"
 
-    if ((menu >= SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_1 && menu <= SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR) || menu == SCROLL_MULTI_BF_EXCHANGE_CORNER_BERRY_VENDOR)
+    if ((menu >= SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_1 && menu <= SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR) || menu == SCROLL_MULTI_BF_EXCHANGE_CORNER_BERRY_VENDOR || menu == SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR_SILVER_SYMBOLS)
     {
         FillWindowPixelRect(0, PIXEL_FILL(1), 0, 0, 216, 32);
         switch (menu)
@@ -3124,6 +3149,10 @@ static void FillFrontierExchangeCornerWindowAndItemIcon(u16 menu, u16 selection)
             AddTextPrinterParameterized2(0, FONT_NORMAL, sFrontierExchangeCorner_VitaminsDescriptions[selection], 0, NULL, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
             ShowFrontierExchangeCornerItemIcon(sFrontierExchangeCorner_Vitamins[selection]);
             break;
+        case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR_SILVER_SYMBOLS:
+            AddTextPrinterParameterized2(0, FONT_NORMAL, sFrontierExchangeCorner_VitaminsDescriptions_SilverSymbols[selection], 0, NULL, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+            ShowFrontierExchangeCornerItemIcon(sFrontierExchangeCorner_Vitamins_SilverSymbols[selection]);
+            break;        
         case SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR:
             AddTextPrinterParameterized2(0, FONT_NORMAL, sFrontierExchangeCorner_HoldItemsDescriptions[selection], 0, NULL, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
             ShowFrontierExchangeCornerItemIcon(sFrontierExchangeCorner_HoldItems[selection]);
@@ -3159,10 +3188,12 @@ static void HideFrontierExchangeCornerItemIcon(u16 menu, u16 unused)
         case SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_1:
         case SCROLL_MULTI_BF_EXCHANGE_CORNER_DECOR_VENDOR_2:
         case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR:
+        case SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR_SILVER_SYMBOLS:
         case SCROLL_MULTI_BF_EXCHANGE_CORNER_HOLD_ITEM_VENDOR:
         case SCROLL_MULTI_BF_EXCHANGE_CORNER_BERRY_VENDOR:
             // This makes sure deleting the icon will not clear palettes in use by object events
-            FieldEffectFreeGraphicsResources(&gSprites[sScrollableMultichoice_ItemSpriteId]);            break;
+            FieldEffectFreeGraphicsResources(&gSprites[sScrollableMultichoice_ItemSpriteId]);
+            break;
         }
         sScrollableMultichoice_ItemSpriteId = MAX_SPRITES;
     }

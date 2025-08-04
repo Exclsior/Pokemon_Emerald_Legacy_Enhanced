@@ -67,6 +67,7 @@ TrainerHill_Roof_EventScript_GiveSnorlax::
 	msgbox TrainerHill_Roof_Text_SnorlaxReward, MSGBOX_DEFAULT
 	waitmessage
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_SNORLAX
+	setflag FLAG_SHINY_CREATION
 	givemon SPECIES_SNORLAX, 25
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, TrainerHill_Roof_EventScript_ReceiveSnorlaxParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, TrainerHill_Roof_EventScript_ReceiveSnorlaxPC

@@ -54,7 +54,8 @@
 #include "constants/trainer_types.h"
 #include "constants/union_room.h"
 #include "constants/weather.h"
-
+#include "constants/metatile_behaviors.h"
+#include "bike.h"
 // this file was known as evobjmv.c in Game Freak's original source
 
 enum {
@@ -2124,9 +2125,14 @@ void UpdateFollowingPokemon(void) { // Update following pokemon if any
     // 1. GetFollowerInfo returns FALSE
     // 2. Map is indoors and gfx is larger than 32x32
     // 3. flag is set
-    if (!GetFollowerInfo(&species, &form, &shiny) ||
-        (gMapHeader.mapType == MAP_TYPE_INDOOR && SpeciesToGraphicsInfo(species, 0)->oam->size > ST_OAM_SIZE_2) ||
-        FlagGet(FLAG_TEMP_HIDE_FOLLOWER) || !FlagGet(FLAG_ENABLE_FOLLOWER))
+    if (
+        !GetFollowerInfo(&species, &form, &shiny)
+        || (gMapHeader.mapType == MAP_TYPE_INDOOR && SpeciesToGraphicsInfo(species, 0)->oam->size > ST_OAM_SIZE_2)
+        || FlagGet(FLAG_TEMP_HIDE_FOLLOWER)
+        || !FlagGet(FLAG_ENABLE_FOLLOWER)
+        || gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE
+        || gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE
+    )
     {
         RemoveFollowingPokemon();
         return;
@@ -9156,6 +9162,7 @@ u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
 
     u8 behavior;
     u8 index = direction;
+    struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
 
     if (index == DIR_NONE)
         return DIR_NONE;
@@ -9167,6 +9174,14 @@ u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
 
     if (ledgeBehaviorFuncs[index](behavior) == TRUE)
         return index + 1;
+
+   if (gPlayerAvatar.acroBikeState == ACRO_STATE_BUNNY_HOP && 
+        MB_JUMP_EAST <= behavior && behavior <= MB_JUMP_SOUTH && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING))
+   {
+       MoveCoords(direction, &x, &y);
+       if (GetCollisionAtCoords(playerObjEvent, x, y, direction) == COLLISION_NONE)
+           return index + 1;
+   }
 
     return DIR_NONE;
 }

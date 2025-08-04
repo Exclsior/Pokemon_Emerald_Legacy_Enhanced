@@ -84,8 +84,8 @@ MeteorFalls_StevensCave_Text_RematchExpectWorst:
 	.string "STEVEN: Oh, hello {PLAYER}{KUN}.\n"
 	.string "You've come a long way again.\p"
 	.string "Did you want another rematch?\p"
-	.string "Okay, {PLAYER}{KUN}, if you're going to mount\n"
-	.string "a serious challenge, expect the worst!$"
+	.string "So be it, {PLAYER}{KUN}.\n"
+	.string "Few ever glimpse my true self.$"
 
 MeteorFalls_StevensCave_Text_StevenDefeat:
 	.string "You…\n"

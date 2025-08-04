@@ -1676,6 +1676,11 @@ static void OpenContextMenu(u8 taskId)
                 memcpy(&gBagMenu->contextMenuItemsBuffer, &sContextMenuItems_ItemsPocket, sizeof(sContextMenuItems_ItemsPocket));
                 if (ItemIsMail(gSpecialVar_ItemId) == TRUE)
                     gBagMenu->contextMenuItemsBuffer[0] = ACTION_CHECK;
+                if (gSpecialVar_ItemId == ITEM_SHINY_CHARM) // Only allow Give if Item is Shiny Charm
+                {
+                    gBagMenu->contextMenuItemsPtr = sContextMenuItems_Give;                    
+                    gBagMenu->contextMenuNumItems = ARRAY_COUNT(sContextMenuItems_Give);
+                }
                 break;
             case KEYITEMS_POCKET:
                 gBagMenu->contextMenuItemsPtr = gBagMenu->contextMenuItemsBuffer;

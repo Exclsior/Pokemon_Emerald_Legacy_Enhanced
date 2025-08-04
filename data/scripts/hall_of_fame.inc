@@ -4,6 +4,7 @@ EverGrandeCity_HallOfFame_EventScript_SetGameClearFlags::
 	setflag FLAG_ENABLE_SHIP_NAVEL_ROCK
 	setflag FLAG_ENABLE_SHIP_BIRTH_ISLAND
 	call EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries
+	call EverGrandeCity_HallOfFame_EventScript_ResetDefeatedStaticEncounters
 	call_if_eq VAR_FOSSIL_MANIAC_STATE, 0, EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady
 	clearflag FLAG_HIDE_LILYCOVE_MOTEL_GAME_DESIGNERS
 	call EverGrandeCity_HallOfFame_EventScript_ResetEliteFour
@@ -59,6 +60,14 @@ EverGrandeCity_HallOfFame_EventScript_ResetDefeatedEventLegendaries::
 	clearflag FLAG_DEFEATED_ARTICUNO
 	clearflag FLAG_DEFEATED_ZAPDOS
 	clearflag FLAG_DEFEATED_MOLTRES
+	clearflag FLAG_DEFEATED_SHINY_LATIAS_OR_LATIOS
+	return
+
+EverGrandeCity_HallOfFame_EventScript_ResetDefeatedStaticEncounters::
+	clearflag FLAG_CAUGHT_SUDOWOODO
+	clearflag FLAG_DEFEATED_SUDOWOODO
+	clearflag FLAG_CAUGHT_OVERWORLD_SNORLAX
+	clearflag FLAG_DEFEATED_OVERWORLD_SNORLAX
 	return
 
 EverGrandeCity_HallOfFame_EventScript_SetDesertUnderpassCommentReady::

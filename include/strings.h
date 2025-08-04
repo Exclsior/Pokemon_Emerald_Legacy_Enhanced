@@ -530,6 +530,7 @@ extern const u8 gText_SpDef[];
 extern const u8 gText_Speed[];
 extern const u8 gText_Dash[];
 extern const u8 gText_Plus[];
+extern const u8 gText_Nickname[];
 extern const u8 gText_StatEditor[];
 
 //Pokédex text
@@ -823,6 +824,8 @@ extern const u8 gText_IronCost[];
 extern const u8 gText_ZincCost[];
 extern const u8 gText_CarbosCost[];
 extern const u8 gText_HpUpCost[];
+extern const u8 gText_PpUpCost[];
+extern const u8 gText_PpMaxCost[];
 extern const u8 gText_RareCandyCost[];
 extern const u8 gText_AbilityCapsuleCost[];
 
@@ -1035,6 +1038,8 @@ extern const u8 BattleFrontier_ExchangeServiceCorner_Text_IronDesc[];
 extern const u8 BattleFrontier_ExchangeServiceCorner_Text_ZincDesc[];
 extern const u8 BattleFrontier_ExchangeServiceCorner_Text_CarbosDesc[];
 extern const u8 BattleFrontier_ExchangeServiceCorner_Text_HPUpDesc[];
+extern const u8 BattleFrontier_ExchangeServiceCorner_Text_PPUpDesc[];
+extern const u8 BattleFrontier_ExchangeServiceCorner_Text_PPMaxDesc[];
 extern const u8 BattleFrontier_ExchangeServiceCorner_Text_RareCandyDesc[];
 extern const u8 BattleFrontier_ExchangeServiceCorner_Text_AbilityCapsuleDesc[];
 extern const u8 BattleFrontier_ExchangeServiceCorner_Text_LeftoversDesc[];
@@ -1493,6 +1498,7 @@ extern const u8 gText_PokemonOrder[];
 extern const u8 gText_GoOn[];
 extern const u8 gText_Red[];
 extern const u8 gText_Blue[];
+extern const u8 gText_Teal[];
 extern const u8 gText_IllBattleNow[];
 extern const u8 gText_IWon[];
 extern const u8 gText_ILost[];
@@ -2329,6 +2335,8 @@ extern const u8 gText_InUseAlready_PM[];
 extern const u8 gText_CantUseHere[];
 extern const u8 gText_NoPokemonForBattle[];
 extern const u8 gText_ChoosePokemonSelectToMove[]; // Updates from ChoosePokemon2 to account for Select to Move
+extern const u8 gText_SelectToMove[];
+extern const u8 gText_ConfirmMove[];
 extern const u8 gText_NotEnoughHp[];
 extern const u8 gText_PokemonAreNeeded[];
 extern const u8 gText_PokemonCantBeSame[];

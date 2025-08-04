@@ -630,8 +630,13 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING)
     {
         // same speed as running
-        if ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_FASTSURF))
+        if (
+            ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_FASTSURF))
+            && !((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_FASTSURF)) // Invert B Button to surf slower if Fast Surf setting On
+            )
             PlayerWalkFaster(direction);
+        else if(((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_FASTSURF))) // Invert B Button to surf slower if Fast Surf setting On
+            PlayerWalkFast(direction);
         else
             PlayerWalkFast(direction);
         return;
@@ -654,12 +659,21 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
         }
     }
 
-    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER) && ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_AUTORUN)) && FlagGet(FLAG_SYS_B_DASH)
-     && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0)
+    if (
+        !(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER)
+        && FlagGet(FLAG_SYS_B_DASH)
+        && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0
+        && ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_AUTORUN)) // If AutoRun setting On, run as default without holding B
+        && !((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_AUTORUN)) // Invert B Button to walk if Auto Run setting On
+        )
     {
         PlayerRun(direction);
         gPlayerAvatar.flags |= PLAYER_AVATAR_FLAG_DASH;
         return;
+    }
+    else if(((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_AUTORUN))) // Invert B Button to walk if Auto Run setting On
+    {
+        PlayerWalkNormal(direction);
     }
     else
     {
@@ -1844,8 +1858,7 @@ static bool8 Fishing_CheckForBite(struct Task *task)
 
         if (!bite)
         {
-            // If Option setting enabled, fish will bite a fill will always eventually bite
-            if ((Random() & 1) && !FlagGet(FLAG_ENABLE_FISHALWAYSBITE))
+            if ((Random() & 1))
                 task->tStep = FISHING_NO_BITE;
             else
                 bite = TRUE;
@@ -1879,7 +1892,7 @@ static bool8 Fishing_WaitForA(struct Task *task)
     task->tFrameCounter++;
 
     // If Option setting enabled, fish can't get away, wait until player presses A to start encounter
-    if ((task->tFrameCounter >= reelTimeouts[task->tFishingRod]) && !FlagGet(FLAG_ENABLE_FISHALWAYSBITE))
+    if ((task->tFrameCounter >= reelTimeouts[task->tFishingRod]) && !FlagGet(FLAG_ENABLE_FISHCANTESCAPE))
         task->tStep = FISHING_GOT_AWAY;
     else if (JOY_NEW(A_BUTTON))
         task->tStep++;

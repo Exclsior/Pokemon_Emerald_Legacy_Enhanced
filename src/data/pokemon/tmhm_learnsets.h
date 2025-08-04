@@ -284,6 +284,7 @@ const union {
         .ATTRACT = TRUE,
         .THIEF = TRUE,
         .SKILL_SWAP = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -313,6 +314,7 @@ const union {
         .ATTRACT = TRUE,
         .THIEF = TRUE,
         .CUT = TRUE,
+        .FLY = TRUE,
         .ROCK_SMASH = TRUE,
     } },
 
@@ -1217,6 +1219,7 @@ const union {
         .ATTRACT = TRUE,
         .THIEF = TRUE,
         .SKILL_SWAP = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -3176,6 +3179,7 @@ const union {
         .THIEF = TRUE,
         .STEEL_WING = TRUE,
         .CUT = TRUE,
+        .FLY = TRUE,
         .ROCK_SMASH = TRUE,
     } },
 
@@ -4345,6 +4349,7 @@ const union {
         .REST = TRUE,
         .ATTRACT = TRUE,
         .THIEF = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -4371,6 +4376,7 @@ const union {
         .REST = TRUE,
         .ATTRACT = TRUE,
         .THIEF = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -4943,6 +4949,7 @@ const union {
         .SECRET_POWER = TRUE,
         .REST = TRUE,
         .ATTRACT = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -5042,6 +5049,7 @@ const union {
         .ATTRACT = TRUE,
         .THIEF = TRUE,
         .STEEL_WING = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -5385,6 +5393,7 @@ const union {
         .THIEF = TRUE,
         .STEEL_WING = TRUE,
         .CUT = TRUE,
+        .FLY = TRUE,
         .STRENGTH = TRUE,
         .ROCK_SMASH = TRUE,
     } },
@@ -5905,6 +5914,7 @@ const union {
         .SECRET_POWER = TRUE,
         .REST = TRUE,
         .ATTRACT = TRUE,
+        .FLY = TRUE,
         .SURF = TRUE,
         .WATERFALL = TRUE,
         .DIVE = TRUE,
@@ -6591,6 +6601,7 @@ const union {
         .REST = TRUE,
         .SKILL_SWAP = TRUE,
         .CUT = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -7088,6 +7099,7 @@ const union {
         .REST = TRUE,
         .ATTRACT = TRUE,
         .THIEF = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -7304,6 +7316,7 @@ const union {
         .ATTRACT = TRUE,
         .THIEF = TRUE,
         .CUT = TRUE,
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -9554,6 +9567,7 @@ const union {
         .ATTRACT = TRUE,
         .THIEF = TRUE,
         .CUT = TRUE, 
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 
@@ -9584,6 +9598,7 @@ const union {
         .THIEF = TRUE,
         .REFLECT = TRUE,
         .CUT = TRUE, 
+        .FLY = TRUE,
         .FLASH = TRUE,
     } },
 

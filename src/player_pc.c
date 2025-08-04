@@ -1458,7 +1458,10 @@ static void ItemStorage_DoItemToss(u8 taskId)
     s16 *data = gTasks[taskId].data;
     u16 pos = gPlayerPCItemPageInfo.cursorPos + gPlayerPCItemPageInfo.itemsAbove;
 
-    if (!ItemId_GetImportance(gSaveBlock1Ptr->pcItems[pos].itemId))
+    if (
+        !ItemId_GetImportance(gSaveBlock1Ptr->pcItems[pos].itemId)
+        && !(gSaveBlock1Ptr->pcItems[pos].itemId == ITEM_SHINY_CHARM)
+        )
     {
         // Show toss confirmation prompt
         CopyItemName(gSaveBlock1Ptr->pcItems[pos].itemId, gStringVar1);

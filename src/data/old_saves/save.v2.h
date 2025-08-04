@@ -327,6 +327,12 @@ bool8 UpdateSave_v2_v3(const struct SaveSectorLocation *locations)
      * The pokemon structure hasn't changed at all this version, so
      * we can just assign across the old box storage to the new.  */
     *gPokemonStoragePtr = *sOldPokemonStoragePtr;
+
+    // Swap L=A and LR Options from older save if set due to definition swap in v3
+    if (gSaveBlock2Ptr->optionsButtonMode == 1)
+        gSaveBlock2Ptr->optionsButtonMode = 2;
+    else if (gSaveBlock2Ptr->optionsButtonMode == 2)         
+        gSaveBlock2Ptr->optionsButtonMode = 1;
     
     // Update Flags moved from Saveblock
     !FlagGet(FLAG_ENABLE_FOLLOWER)  ? FlagSet(FLAG_ENABLE_FOLLOWER)         : FlagClear(FLAG_ENABLE_FOLLOWER); // For consistency with other similar flags the flag name has been changed and use has been inverted throughout the code between V2 and V3 (same Flag dataslot hence not needing to change the name)
@@ -349,6 +355,14 @@ bool8 UpdateSave_v2_v3(const struct SaveSectorLocation *locations)
     FlagGet(FLAG_NATIONAL_DEX_COMPLETE)         ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Complete the National Dex (not including Mew, Celebi, Jirachi or Deoxys)
     FlagGet(FLAG_COLLECTED_ALL_SILVER_SYMBOLS)  ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Get all Silver Symbols
     FlagGet(FLAG_COLLECTED_ALL_GOLD_SYMBOLS)    ? AddPCItem(ITEM_SHINY_CHARM, 1) : 0; // Get all Gold Symbols
+    
+    if (FlagGet(FLAG_TRICK_HOUSE_PRIZE_EEVEE))
+    {
+        FlagClear(FLAG_TRICK_HOUSE_PRIZE_EEVEE);
+        *GetVarPointer(VAR_TRICK_HOUSE_PRIZE_PICKUP) = 1;
+    }
+    
+    FlagClear(FLAG_GOT_TRAINER_HILL_SNORLAX);
 
     /**
      * The most common kind of change that might happen between major versions are 

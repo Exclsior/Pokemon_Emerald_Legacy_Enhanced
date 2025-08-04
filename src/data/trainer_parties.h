@@ -15062,6 +15062,71 @@ static const struct TrainerMon sParty_Weebra[] = {
     }
 };
 
+// Exclsior
+static const struct TrainerMon sParty_Exclsior[] = {
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_TYPHLOSION,
+    .heldItem = ITEM_CHARCOAL,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 0, 0, 252, 252, 0},
+    .moves = {MOVE_THUNDER_PUNCH, MOVE_FLAMETHROWER, MOVE_ERUPTION, MOVE_EXTRASENSORY},
+    .nature = NATURE_RASH
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_BRELOOM,
+    .heldItem = ITEM_BRIGHT_POWDER,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 252, 0, 252, 0, 0},
+    .moves = {MOVE_SPORE, MOVE_SKY_UPPERCUT, MOVE_MACH_PUNCH, MOVE_SLUDGE_BOMB},
+    .nature = NATURE_JOLLY
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_SCIZOR,
+    .heldItem = ITEM_SILVER_POWDER,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 252, 126, 0, 126, 0},
+    .moves = {MOVE_TWINEEDLE, MOVE_STEEL_WING, MOVE_AERIAL_ACE, MOVE_SWORDS_DANCE},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_GARDEVOIR,
+    .heldItem = ITEM_TWISTED_SPOON,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 0, 0, 252, 252, 0},
+    .moves = {MOVE_PSYCHIC, MOVE_THUNDERBOLT, MOVE_SHADOW_BALL, MOVE_CALM_MIND},
+    .nature = NATURE_MODEST
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_TYRANITAR,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 252, 0, 252, 0, 0},
+    .moves = {MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE, MOVE_CRUNCH, MOVE_BRICK_BREAK},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_LATIOS,
+    .heldItem = ITEM_SOUL_DEW,
+    .ability = ABILITY_SLOT_1,
+    .evs = {0, 0, 0, 252, 252, 0},
+    .moves = {MOVE_LUSTER_PURGE, MOVE_DRAGON_CLAW, MOVE_THUNDERBOLT, MOVE_SURF},
+    .nature = NATURE_MODEST,
+    .shiny = TRUE
+    }
+};
+
 // Battle Frontier HP EV trainer
 static const struct TrainerMon sParty_Eva[] = {
     {
