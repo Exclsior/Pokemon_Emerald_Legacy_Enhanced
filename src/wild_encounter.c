@@ -446,6 +446,11 @@ static u16 GetCurrentMapWildMonHeaderId(void)
             {
                 i += VarGet(VAR_JAGGED_PASS_WILD_SET);
             }
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_1F) &&
+                gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_1F))
+            {
+                i += VarGet(VAR_JAGGED_PASS_WILD_SET); // Re-using Jagged Pass Variable to prevent new variable on save file migration from older versions.
+            }
             if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAGMA_HIDEOUT_2F_1R) &&
                 gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAGMA_HIDEOUT_2F_1R))
             {

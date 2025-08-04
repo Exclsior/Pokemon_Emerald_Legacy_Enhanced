@@ -14975,9 +14975,9 @@
                 "species": "SPECIES_TORKOAL"
               },
               {
-                "min_level": 28,
-                "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "min_level": 26,
+                "max_level": 26,
+                "species": "SPECIES_SLUGMA"
               },
               {
                 "min_level": 30,
@@ -14992,17 +14992,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15028,6 +15028,75 @@
           }
         },
         {
+          "map": "MAP_MAGMA_HIDEOUT_1F",
+          "base_label": "gMagmaHideout_1F_2",
+          "land_mons": {
+            "encounter_rate": 10,
+            "mons": [
+              {
+                "min_level": 27,
+                "max_level": 27,
+                "species": "SPECIES_GEODUDE"
+              },
+              {
+                "min_level": 28,
+                "max_level": 28,
+                "species": "SPECIES_TORKOAL"
+              },
+              {
+                "min_level": 26,
+                "max_level": 26,
+                "species": "SPECIES_SLUGMA"
+              },
+              {
+                "min_level": 30,
+                "max_level": 30,
+                "species": "SPECIES_TORKOAL"
+              },
+              {
+                "min_level": 29,
+                "max_level": 29,
+                "species": "SPECIES_GEODUDE"
+              },
+              {
+                "min_level": 30,
+                "max_level": 30,
+                "species": "SPECIES_NUMEL"
+              },
+              {
+                "min_level": 30,
+                "max_level": 30,
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 30,
+                "max_level": 30,
+                "species": "SPECIES_GRAVELER"
+              },
+              {
+                "min_level": 31,
+                "max_level": 31,
+                "species": "SPECIES_MAGMAR"
+              },
+              {
+                "min_level": 32,
+                "max_level": 32,
+                "species": "SPECIES_GRAVELER"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_MAGMAR"
+              }
+            ]
+          }
+        },
+        {
           "map": "MAP_MAGMA_HIDEOUT_2F_1R",
           "base_label": "gMagmaHideout_2F_1R",
           "land_mons": {
@@ -15046,7 +15115,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15061,17 +15130,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15115,7 +15184,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15130,17 +15199,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15150,7 +15219,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15160,7 +15229,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
@@ -15184,7 +15253,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15199,17 +15268,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15253,7 +15322,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15268,17 +15337,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15288,7 +15357,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15298,7 +15367,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
@@ -15322,7 +15391,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15337,17 +15406,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15391,7 +15460,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15406,17 +15475,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15426,7 +15495,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15436,7 +15505,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
@@ -15460,7 +15529,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15475,17 +15544,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15529,7 +15598,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15544,17 +15613,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15564,7 +15633,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15574,7 +15643,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
@@ -15598,7 +15667,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15613,17 +15682,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15650,7 +15719,7 @@
         },
         {
           "map": "MAP_MAGMA_HIDEOUT_4F",
-          "base_label": "gMagmaHideout_4F_2F",
+          "base_label": "gMagmaHideout_4F_2",
           "land_mons": {
             "encounter_rate": 10,
             "mons": [
@@ -15667,7 +15736,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15682,17 +15751,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15702,7 +15771,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15712,7 +15781,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
@@ -15736,7 +15805,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15751,17 +15820,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15805,7 +15874,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15820,17 +15889,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15840,7 +15909,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15850,7 +15919,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
@@ -15874,7 +15943,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15889,17 +15958,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_BALTOY"
               },
               {
-                "min_level": 30,
-                "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15943,7 +16012,7 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_GEODUDE"
+                "species": "SPECIES_MAGCARGO"
               },
               {
                 "min_level": 30,
@@ -15958,17 +16027,17 @@
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GEODUDE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 13,
-                "species": "SPECIES_CYNDAQUIL"
+                "species": "SPECIES_NUMEL"
               },
               {
                 "min_level": 30,
                 "max_level": 30,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_BALTOY"
+              },
+              {
+                "min_level": 33,
+                "max_level": 33,
+                "species": "SPECIES_BALTOY"
               },
               {
                 "min_level": 30,
@@ -15978,7 +16047,7 @@
               {
                 "min_level": 31,
                 "max_level": 31,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               },
               {
                 "min_level": 32,
@@ -15988,7 +16057,7 @@
               {
                 "min_level": 33,
                 "max_level": 33,
-                "species": "SPECIES_GRAVELER"
+                "species": "SPECIES_MAGMAR"
               }
             ]
           }
