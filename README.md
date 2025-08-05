@@ -758,6 +758,16 @@ A combination of Enhanced Starters with Physical Dragon type.
 * All changes in optional Enhanced Starters patch.
 * All changes in Physical Dragon Grovyle and Sceptile patch.
 
+## Exclsior Edition - v1.1.4
+*Branch: exclsior-edition*
+
+Enhanced Starters with one additional feature well out of Legacy scope.
+
+### Implemented Changes
+* All changes already present in Base patch.
+* All changes in optional Enhanced Starters patch.
+* Wild Pokémon with a held item will drop the item if fainted.
+
 ## Pokémon Emerald Legacy Enhanced Credits List:
 * Credit to devolov (Discord: devolov#4853) for [Only Pokemon that can Learn HM can Use Field Move so Long as HM is in Bag](https://github.com/pret/pokeemerald/wiki/Use-HMs-Without-Any-Pokemon-in-your-Party-Knowing-Them#only-pokemon-that-can-learn-hm-can-use-field-move-so-long-as-hm-is-in-bag)
 * Credit to [ScyrousFX](https://www.pokecommunity.com/member.php?u=980149) for [Use Fly/Flash from party menu if Pokémon is compatible](https://www.pokecommunity.com/showpost.php?p=10420068)
