@@ -3,6 +3,7 @@
 SafariZone_South_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, SafariZone_South_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, SafariZone_South_OnFrame
+	map_script MAP_SCRIPT_ON_LOAD, SafariZone_South_OnLoad
 	.byte 0
 
 SafariZone_South_OnFrame:
@@ -23,6 +24,14 @@ SafariZone_South_EventScript_EnterSafariZone::
 SafariZone_South_OnTransition:
 	call_if_eq VAR_SAFARI_ZONE_STATE, 2, SafariZone_South_EventScript_SetExitAttendantAside
 	end
+
+SafariZone_South_OnLoad:
+	call_if_set FLAG_NATIONAL_DEX_MODE, SafariZone_South_EventScript_UnlockPostgameSafariZone
+	return
+
+SafariZone_South_EventScript_UnlockPostgameSafariZone::
+	setflag FLAG_HIDE_SAFARI_ZONE_SOUTH_CONSTRUCTION_WORKERS
+	return
 
 SafariZone_South_EventScript_SetExitAttendantAside::
 	setobjectxyperm LOCALID_ATTENDANT, 31, 34

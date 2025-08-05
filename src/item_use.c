@@ -41,6 +41,7 @@
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/songs.h"
+#include "debug.h"
 
 static void SetUpItemUseCallback(u8);
 static void FieldCB_UseItemOnField(void);
@@ -674,6 +675,27 @@ void ItemUseOutOfBattle_PowderJar(u8 taskId)
     }
 }
 
+void ItemUseOutOfBattle_SootSack(u8 taskId)
+{
+	ConvertIntToDecimalStringN(gStringVar1, GetAshCount(), STR_CONV_MODE_LEFT_ALIGN, 4);
+	StringExpandPlaceholders(gStringVar4, gText_AshQty);
+	if (!gTasks[taskId].tUsingRegisteredKeyItem)
+	{
+		DisplayItemMessage(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
+	}
+	else
+	{
+		DisplayItemMessageOnField(taskId, gStringVar4, Task_CloseCantUseKeyItemMessage);
+	}
+}		
+
+u16 GetAshCount(void)
+{
+	u16 *ashGatherCount;
+	ashGatherCount = GetVarPointer(VAR_ASH_GATHER_COUNT);
+	return *ashGatherCount;
+}
+
 void ItemUseOutOfBattle_Berry(u8 taskId)
 {
     if (IsPlayerFacingEmptyBerryTreePatch() == TRUE)
@@ -941,7 +963,15 @@ void ItemUseOutOfBattle_EvolutionStone(u8 taskId)
 }
 
 void ItemUseInBattle_PokeBall(u8 taskId)
-{
+{    
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+    if (FlagGet(FLAG_SYS_NO_CATCHING)){
+        static const u8 sText_BallsCannotBeUsed[] = _("Poké Balls cannot be used\nright now!\p");
+        DisplayItemMessage(taskId, 1, sText_BallsCannotBeUsed, CloseItemMessage);
+        return;
+    }
+#endif
+
     if (IsPlayerPartyAndPokemonStorageFull() == FALSE) // have room for mon?
     {
         RemoveBagItem(gSpecialVar_ItemId, 1);
@@ -1134,7 +1164,11 @@ void ItemUseOutOfBattle_Mints(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
-#undef tUsingRegisteredKeyItem
+void ItemUseOutOfBattle_AbilityCapsule(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_AbilityCapsule;
+    SetUpItemUseCallback(taskId);
+}
 
 void ItemUseOutOfBattle_PokeBall(u8 taskId)
 {
@@ -1142,3 +1176,29 @@ void ItemUseOutOfBattle_PokeBall(u8 taskId)
     gBagMenu->newScreenCallback = CB2_ShowPartyMenuForItemUse;
     Task_FadeAndCloseBagMenu(taskId);
 }
+
+void ItemUseOutOfBattle_ExpAll(u8 taskId)
+{
+    bool8 expAllOn = FlagGet(FLAG_EXP_ALL);
+    
+    if (!expAllOn)
+    {
+        FlagSet(FLAG_EXP_ALL);
+        PlaySE(SE_EXP_MAX);
+        if (gTasks[taskId].tUsingRegisteredKeyItem) // to account for pressing select in the overworld
+            DisplayItemMessageOnField(taskId, gText_ExpAllTurnOn, Task_CloseCantUseKeyItemMessage);
+        else
+            DisplayItemMessage(taskId, 1, gText_ExpAllTurnOn, CloseItemMessage);
+    }
+    else
+    {
+        FlagClear(FLAG_EXP_ALL);
+        PlaySE(SE_PC_OFF);
+        if (gTasks[taskId].tUsingRegisteredKeyItem) // to account for pressing select in the overworld
+            DisplayItemMessageOnField(taskId, gText_ExpAllTurnOff, Task_CloseCantUseKeyItemMessage);
+        else
+            DisplayItemMessage(taskId, 1, gText_ExpAllTurnOff, CloseItemMessage);
+    }
+}
+
+#undef tUsingRegisteredKeyItem

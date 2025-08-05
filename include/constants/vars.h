@@ -99,10 +99,10 @@
 #define VAR_LOTAD_SIZE_RECORD                            0x404F
 #define VAR_LITTLEROOT_TOWN_STATE                        0x4050
 #define VAR_OLDALE_TOWN_STATE                            0x4051
-#define VAR_DEWFORD_TOWN_STATE                           0x4052 // Unused Var
+#define VAR_STARTER_MON_NAT_DEX                          0x4052 // Replaced unused VAR_DEWFORD_TOWN_STATE - Hold National Dex Starter Selection_Nat -  // 0=Treecko, 1=Torchic, 2=Mudkip, 3=Bulbasaur, 4=Charmander, 5=Squirtle, 6=Chikorita, 7=Cyndaquil, 8=Totodile
 #define VAR_LAVARIDGE_TOWN_STATE                         0x4053
 #define VAR_CURRENT_SECRET_BASE                          0x4054 // was probably allocated for VAR_FALLARBOR_TOWN_STATE at one point
-#define VAR_VERDANTURF_TOWN_STATE                        0x4055 // Unused Var
+#define VAR_OVERWORLD_SPEEDUP                            0x4055 // Replaced unused 'VAR_VERDANTURF_TOWN_STATE' for Overworld Speedup
 #define VAR_PACIFIDLOG_TOWN_STATE                        0x4056 // Unused Var
 #define VAR_PETALBURG_CITY_STATE                         0x4057
 #define VAR_SLATEPORT_CITY_STATE                         0x4058

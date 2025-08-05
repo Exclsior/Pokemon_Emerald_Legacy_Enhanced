@@ -733,6 +733,11 @@ static const u8 sExpShareDesc[] = _(
     "gets EXP. points\n"
     "from battles.");
 
+static const u8 sExpAllDesc[] = _(
+    "Turning this on\n"
+    "gives all in party\n"
+    "EXP. points.");
+
 static const u8 sQuickClawDesc[] = _(
     "A hold item that\n"
     "occasionally allows\n"
@@ -764,9 +769,9 @@ static const u8 sSilverPowderDesc[] = _(
     "BUG-type moves.");
 
 static const u8 sAmuletCoinDesc[] = _(
-    "Doubles money in\n"
-    "battle if the\n"
-    "holder takes part.");
+    "A hold item that\n"
+    "doubles prize money\n"
+    "if holder in party.");
 
 static const u8 sCleanseTagDesc[] = _(
     "A hold item that\n"
@@ -1660,3 +1665,13 @@ static const u8 sTimidMintDesc[] = _(
     "Changes the nature\n"
     "of a Pokémon to\n"
     "Timid");
+
+static const u8 sAbilityCapsuleDesc[] = _(
+    "Changes the ability\n"
+    "of a Pokémon.");
+
+static const u8 sShinyCharmDesc[] = _(
+    "A charm that will\n"
+    "raise the chance\n"
+    "of Shiny Pokémon.");
+    

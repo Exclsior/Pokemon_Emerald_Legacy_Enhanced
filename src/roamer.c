@@ -3,6 +3,7 @@
 #include "pokemon.h"
 #include "random.h"
 #include "roamer.h"
+#include "pokedex.h"
 
 // Despite having a variable to track it, the roamer is
 // hard-coded to only ever be in map group 0
@@ -102,6 +103,7 @@ static void CreateInitialRoamerMon(bool16 createLatios)
     ROAMER->tough = GetMonData(&gEnemyParty[0], MON_DATA_TOUGH);
     sRoamerLocation[MAP_GRP] = ROAMER_MAP_GROUP;
     sRoamerLocation[MAP_NUM] = sRoamerLocations[Random() % NUM_LOCATION_SETS][0];
+    HandleSetPokedexFlag(SpeciesToNationalPokedexNum(ROAMER->species), FLAG_SET_SEEN, ROAMER->personality);
 }
 
 // gSpecialVar_0x8004 here corresponds to the options in the multichoice MULTI_TV_LATI (0 for 'Red', 1 for 'Blue')
@@ -129,7 +131,16 @@ void RoamerMoveToOtherLocationSet(void)
     u8 mapNum = 0;
 
     if (!ROAMER->active)
+    {
         return;
+    }
+    else
+    {
+        // Attempts to mark Roamer as Seen, if already seen does nothing.
+        // For users who have moved save file from older version of game, already set the roamer and not yet seen them in the wild.
+        HandleSetPokedexFlag(SpeciesToNationalPokedexNum(ROAMER->species), FLAG_SET_SEEN, ROAMER->personality);
+    }
+        
 
     sRoamerLocation[MAP_GRP] = ROAMER_MAP_GROUP;
 

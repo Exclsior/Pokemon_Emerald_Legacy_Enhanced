@@ -9,6 +9,7 @@
 #include "sprite.h"
 #include "strings.h"
 #include "decompress.h"
+#include "event_data.h"
 
 #define MAX_MONEY 999999
 
@@ -132,7 +133,12 @@ void SubtractMoneyFromVar0x8005(void)
 
 void PrintMoneyAmountInMoneyBox(u8 windowId, int amount, u8 speed)
 {
-    PrintMoneyAmount(windowId, 38, 1, amount, speed);
+    u8 x = 38;
+
+    if (FlagGet(FLAG_SWAP_FONT)) // Font change offset fix
+        x = x - 2;
+    
+    PrintMoneyAmount(windowId, x, 1, amount, speed);
 }
 
 void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
@@ -149,6 +155,10 @@ void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
         *(txtPtr++) = CHAR_SPACER;
 
     StringExpandPlaceholders(txtPtr, gText_PokedollarVar1);
+    
+    if (FlagGet(FLAG_SWAP_FONT)) // Font change offset fix
+        x = x - 3;
+    
     AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar4, x, y, speed, NULL);
 }
 

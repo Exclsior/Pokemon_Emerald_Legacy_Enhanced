@@ -42,6 +42,7 @@
 #include "random.h"
 #include "roamer.h"
 #include "rotating_gate.h"
+#include "rtc.h"
 #include "safari_zone.h"
 #include "save.h"
 #include "save_location.h"
@@ -189,6 +190,7 @@ bool8 (*gFieldCallback2)(void);
 u8 gLocalLinkPlayerId; // This is our player id in a multiplayer mode.
 u8 gFieldLinkPlayerCount;
 
+// EWRAM vars
 EWRAM_DATA static u8 sObjectEventLoadFlag = 0;
 EWRAM_DATA struct WarpData gLastUsedWarp = {0};
 EWRAM_DATA static struct WarpData sWarpDestination = {0};  // new warp position
@@ -657,6 +659,18 @@ void SetDynamicWarpWithCoords(s32 unused, s8 mapGroup, s8 mapNum, s8 warpId, s8 
 void SetWarpDestinationToDynamicWarp(u8 unusedWarpId)
 {
     sWarpDestination = gSaveBlock1Ptr->dynamicWarp;
+}
+
+// Function to store coordinates for Player's Secret Base Entrance
+void SetPlayerSecretBaseCoords(s8 mapGroup, s8 mapNum, s8 warpId, s8 x, s8 y)
+{
+    SetWarpData(&gSaveBlock1Ptr->secretBaseWarp, mapGroup, mapNum, warpId, x, y);
+}
+
+// Function to Set warp destination to Player's Secret Base Entrance
+void SetWarpDestinationToPlayerSecretBase()
+{
+    sWarpDestination = gSaveBlock1Ptr->secretBaseWarp;
 }
 
 void SetWarpDestinationToHealLocation(u8 healLocationId)
@@ -1153,7 +1167,7 @@ void Overworld_PlaySpecialMapMusic(void)
             music = gSaveBlock1Ptr->savedMusic;
         else if (GetCurrentMapType() == MAP_TYPE_UNDERWATER)
             music = MUS_UNDERWATER;
-        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !gSaveBlock2Ptr->optionsSurfMusic)
+        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !FlagGet(FLAG_DISABLE_SURFMUSIC))
             music = MUS_SURF;
     }
 
@@ -1181,7 +1195,7 @@ static void TransitionMapMusic(void)
         {
             if (currentMusic == MUS_UNDERWATER || currentMusic == MUS_SURF)
                 return;
-            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !gSaveBlock2Ptr->optionsSurfMusic)
+            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING) && !FlagGet(FLAG_DISABLE_SURFMUSIC))
                 newMusic = MUS_SURF;
         }
         if (newMusic != currentMusic)
@@ -1466,6 +1480,26 @@ void CB1_Overworld(void)
         DoCB1_Overworld(gMain.newKeys, gMain.heldKeys);
 }
 
+u8 OverworldSpeedup_AdditionalIterations(u16 speed, bool32 overworld)
+{
+    if (overworld
+        && VAR_OVERWORLD_SPEEDUP != 0
+        && (JOY_HELD(R_BUTTON))
+        )
+    {
+        return OPTIONS_OVERWORLD_SPEED_1X_EXTRA_ITERATIONS;
+    }
+
+    switch (speed)
+    {
+        case OPTIONS_OVERWORLD_SPEED_8X: return OPTIONS_OVERWORLD_SPEED_8X_EXTRA_ITERATIONS;
+        case OPTIONS_OVERWORLD_SPEED_4X: return OPTIONS_OVERWORLD_SPEED_4X_EXTRA_ITERATIONS;
+        case OPTIONS_OVERWORLD_SPEED_2X: return OPTIONS_OVERWORLD_SPEED_2X_EXTRA_ITERATIONS;
+        case OPTIONS_OVERWORLD_SPEED_1X: return OPTIONS_OVERWORLD_SPEED_1X_EXTRA_ITERATIONS;
+        default: return OPTIONS_OVERWORLD_SPEED_1X_EXTRA_ITERATIONS;
+    }
+}
+
 static void OverworldBasic(void)
 {
     ScriptContext_RunScript();
@@ -1488,9 +1522,18 @@ void CB2_OverworldBasic(void)
 void CB2_Overworld(void)
 {
     bool32 fading = (gPaletteFade.active != 0);
+    u8 loops;
     if (fading)
         SetVBlankCallback(NULL);
     OverworldBasic();
+
+    for (loops = 0; loops < OverworldSpeedup_AdditionalIterations(VarGet(VAR_OVERWORLD_SPEEDUP), TRUE); loops++)
+    {
+        AnimateSprites();
+        CameraUpdate();
+        UpdateCameraPanning();
+    }
+    
     if (fading)
         SetFieldVBlankCallback();
 }
@@ -1973,6 +2016,10 @@ static bool32 ReturnToFieldLocal(u8 *state)
         ResetScreenForMapLoad();
         ResumeMap(FALSE);
         InitObjectEventsReturnToField();
+        if (gFieldCallback == FieldCallback_Fly)
+            RemoveFollowingPokemon();
+        else
+            UpdateFollowingPokemon();
         SetCameraToTrackPlayer();
         (*state)++;
         break;
@@ -2143,10 +2190,7 @@ static void ResumeMap(bool32 a1)
     ResetAllPicSprites();
     ResetCameraUpdateInfo();
     InstallCameraPanAheadCallback();
-    if (!a1)
-        InitObjectEventPalettes(0);
-    else
-        InitObjectEventPalettes(1);
+    FreeAllSpritePalettes();
 
     FieldEffectActiveListClear();
     StartWeather();
@@ -2180,6 +2224,7 @@ static void InitObjectEventsLocal(void)
     SetPlayerAvatarTransitionFlags(player->transitionFlags);
     ResetInitialPlayerAvatarState();
     TrySpawnObjectEvents(0, 0);
+    UpdateFollowingPokemon();
     TryRunOnWarpIntoMapScript();
 }
 
@@ -2969,7 +3014,7 @@ static void InitLinkPlayerObjectEventPos(struct ObjectEvent *objEvent, s16 x, s1
     objEvent->previousCoords.y = y;
     SetSpritePosToMapCoords(x, y, &objEvent->initialCoords.x, &objEvent->initialCoords.y);
     objEvent->initialCoords.x += 8;
-    ObjectEventUpdateElevation(objEvent);
+    ObjectEventUpdateElevation(objEvent, NULL);
 }
 
 static void UNUSED SetLinkPlayerObjectRange(u8 linkPlayerId, u8 dir)
@@ -3109,7 +3154,7 @@ static bool8 FacingHandler_DpadMovement(struct LinkPlayerObjectEvent *linkPlayer
     {
         objEvent->directionSequenceIndex = 16;
         ShiftObjectEventCoords(objEvent, x, y);
-        ObjectEventUpdateElevation(objEvent);
+        ObjectEventUpdateElevation(objEvent, NULL);
         return TRUE;
     }
 }

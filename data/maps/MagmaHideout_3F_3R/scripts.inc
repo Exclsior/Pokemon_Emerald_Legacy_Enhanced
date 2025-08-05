@@ -35,6 +35,7 @@ MagmaHideout_3F_3R_EventScript_TryRemoveMoltres::
 	return
 
 MagmaHideout_3F_3R_EventScript_Moltres::
+	faceplayer
 	playmoncry SPECIES_MOLTRES, CRY_MODE_ENCOUNTER
 	delay 40
 	waitmoncry

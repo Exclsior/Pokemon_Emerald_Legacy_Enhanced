@@ -71,7 +71,6 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId);
 static bool8 ShouldGetStatBadgeBoost(u16 flagId, u8 battlerId);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 static bool8 ShouldSkipFriendshipChange(void);
-static u8 CopyMonToPC(struct Pokemon *mon);
 
 EWRAM_DATA static u8 sLearningMoveTableID = 0;
 EWRAM_DATA u8 gPlayerPartyCount = 0;
@@ -2230,7 +2229,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     else
         personality = Random32();
 
-SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
+    SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality); // Battle Frontier Nature Fix
 
     // Determine original trainer ID
     switch (otIdType)
@@ -2273,18 +2272,27 @@ SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
                     personality = ((((Random() % SHINY_ODDS) ^ (HIHALF(value) ^ LOHALF(value))) ^ LOHALF(personality)) << 16) | LOHALF(personality);
                 } while (nature != GetNatureFromPersonality(personality));
             }
-
 #ifdef ITEM_SHINY_CHARM
-            if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
+            else if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
             {
                 u32 shinyValue;
+                u32 maxShinyRolls = 0;
                 u32 rolls = 0;
+                u32 itemCount = 0;
+
+                // Add Additional Rolls for each Shiny Charm in bag
+                do
+                {
+                    maxShinyRolls += I_SHINY_CHARM_ADDITIONAL_ROLLS;
+                    itemCount++;
+                } while (CheckBagHasItem(ITEM_SHINY_CHARM, itemCount));
+
                 do
                 {
                     personality = Random32();
                     shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
                     rolls++;
-                } while (shinyValue >= SHINY_ODDS && rolls < I_SHINY_CHARM_REROLLS);
+                } while (shinyValue >= SHINY_ODDS && rolls < maxShinyRolls);
             }
 #endif
         }
@@ -4143,6 +4151,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
     case MON_DATA_HIDDEN_NATURE:
         retVal = substruct0->hiddenNature;
         break;
+    case MON_DATA_NATURE:
+        return boxMon->personality % 25;
+        break;
     default:
         break;
     }
@@ -4196,6 +4207,10 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
         SET8(mon->mail);
         break;
     case MON_DATA_SPECIES_OR_EGG:
+        break;
+    case MON_DATA_NATURE: // Calculate stats after settings
+        SetBoxMonData(&mon->box, field, data);
+        CalculateMonStats(mon);
         break;
     default:
         SetBoxMonData(&mon->box, field, data);
@@ -4469,6 +4484,81 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
     case MON_DATA_HIDDEN_NATURE:
         SET8(substruct0->hiddenNature);
         break;
+    case MON_DATA_NATURE:
+    {
+      u32 pid = boxMon->personality;
+      u32 otId = boxMon->otId;
+      s8 diff = (data[0] % 25) - (pid % 25); // difference between new nature and current nature, [-24,24]
+      bool8 preserveShiny = FALSE;
+      bool8 preserveLetter = FALSE;
+      u16 shinyValue = HIHALF(pid) ^ LOHALF(pid);
+      s32 tweak;
+      u32 pidTemp;
+      // See https://bulbapedia.bulbagarden.net/wiki/Personality_value#Nature
+      // Goal here is to preserve as much of the PID as possible
+      // To preserve gender & substruct order, we add/subtract multiples of 5376 that is 0 % 256, 0 % 24, 1 % 25
+      // i.e, to increase the nature by n % 25, we add n*5376 % 19200 (LCM of 24, 25, 256) to the pid
+      // Ability number is determined by parity and so adding multiples of 5376 preserves it
+      // TODO: For genderless pokemon, 576/600 can be used instead of 5376/19200
+      if (diff == 0) // No change
+        break;
+      else if (diff < 0)
+        diff = 25+diff;
+      tweak = (diff*5376) % 19200;
+      pidTemp = pid + tweak;
+      // If the pokemon is shiny or if changing the PID would make it shiny, preserve its shiny value
+      if (IsShinyOtIdPersonality(otId, pid) || IsShinyOtIdPersonality(otId, pidTemp))
+        preserveShiny = TRUE;
+      if (substruct0->species == SPECIES_UNOWN) // Preserve Unown letter
+        preserveLetter = TRUE;
+      if (preserveShiny && preserveLetter) { // honestly though, how many shiny Unown are out there ?
+        while (pidTemp > pid) {
+          if ((HIHALF(pidTemp) ^ LOHALF(pidTemp) ^ shinyValue) < SHINY_ODDS)
+            if (GET_UNOWN_LETTER(pidTemp) == GET_UNOWN_LETTER(pid))
+              break;
+          pidTemp += 19200;
+        }
+      } else if (preserveShiny) {
+        while (pidTemp > pid) {
+          if ((HIHALF(pidTemp) ^ LOHALF(pidTemp) ^ shinyValue) < SHINY_ODDS)
+            break;
+          pidTemp += 19200;
+        }
+      } else if (preserveLetter) {
+        while (pidTemp > pid) {
+          if (GET_UNOWN_LETTER(pidTemp) == GET_UNOWN_LETTER(pid))
+            break;
+          pidTemp += 19200;
+        }
+      }
+      if (pidTemp < pid) { // overflow; search backwards
+        tweak -= 19200;
+        pidTemp = pid + tweak;
+        if (preserveShiny && preserveLetter) {
+          while (pidTemp < pid) {
+            if ((HIHALF(pidTemp) ^ LOHALF(pidTemp) ^ shinyValue) < SHINY_ODDS)
+              if (GET_UNOWN_LETTER(pidTemp) == GET_UNOWN_LETTER(pid))
+                break;
+            pidTemp -= 19200;
+          }
+        } else if (preserveShiny) {
+          while (pidTemp < pid) {
+            if ((HIHALF(pidTemp) ^ LOHALF(pidTemp) ^ shinyValue) < SHINY_ODDS)
+              break;
+            pidTemp -= 19200;
+          }
+        } else if (preserveLetter) {
+          while (pidTemp < pid) {
+            if (GET_UNOWN_LETTER(pidTemp) == GET_UNOWN_LETTER(pid))
+              break;
+            pidTemp -= 19200;
+          }
+        }
+      }
+      if (pid % 24 == pidTemp % 24 || pid % 256 == pidTemp % 256)
+        boxMon->personality = pidTemp;
+      break;
+    }
     default:
         break;
     }
@@ -4507,7 +4597,7 @@ u8 GiveMonToPlayer(struct Pokemon *mon)
     return MON_GIVEN_TO_PARTY;
 }
 
-static u8 CopyMonToPC(struct Pokemon *mon)
+u8 CopyMonToPC(struct Pokemon *mon)
 {
     s32 boxNo, boxPos;
 
@@ -6558,6 +6648,7 @@ u16 GetBattleBGM(void)
             if (!StringCompare(gTrainers[gTrainerBattleOpponent_A].trainerName, gText_BattleWallyName))
                 return MUS_VS_TRAINER;
             return MUS_VS_RIVAL;
+        case TRAINER_CLASS_PKMN_TRAINER_2:
         case TRAINER_CLASS_ELITE_FOUR:
             return MUS_VS_ELITE_FOUR;
         case TRAINER_CLASS_SALON_MAIDEN:

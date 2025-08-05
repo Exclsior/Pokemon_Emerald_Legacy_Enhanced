@@ -113,6 +113,7 @@ static void Task_Glacia(u8);
 static void Task_Drake(u8);
 static void Task_Champion(u8);
 static void Task_Champion_Steven(u8);
+static void Task_Red(u8);
 static void Task_Aqua(u8);
 static void Task_Magma(u8);
 static void Task_Regice(u8);
@@ -390,6 +391,7 @@ static const TaskFunc sTasks_Main[B_TRANSITION_COUNT] =
     [B_TRANSITION_FRONTIER_CIRCLES_CROSS_IN_SEQ] = Task_FrontierCirclesCrossInSeq,
     [B_TRANSITION_FRONTIER_CIRCLES_ASYMMETRIC_SPIRAL_IN_SEQ] = Task_FrontierCirclesAsymmetricSpiralInSeq,
     [B_TRANSITION_FRONTIER_CIRCLES_SYMMETRIC_SPIRAL_IN_SEQ] = Task_FrontierCirclesSymmetricSpiralInSeq,
+    [B_TRANSITION_RED] = Task_Red,
 };
 
 static const TransitionStateFunc sTaskHandlers[] =
@@ -551,6 +553,7 @@ static const u8 sMugshotsTrainerPicIDsTable[MUGSHOTS_COUNT] =
     [MUGSHOT_DRAKE]    = TRAINER_PIC_ELITE_FOUR_DRAKE,
     [MUGSHOT_CHAMPION] = TRAINER_PIC_CHAMPION_WALLACE,
     [MUGSHOT_CHAMPION_STEVEN] = TRAINER_PIC_STEVEN,
+    [MUGSHOT_RED] = TRAINER_PIC_RED,
 };
 static const s16 sMugshotsOpponentRotationScales[MUGSHOTS_COUNT][2] =
 {
@@ -560,6 +563,7 @@ static const s16 sMugshotsOpponentRotationScales[MUGSHOTS_COUNT][2] =
     [MUGSHOT_DRAKE] =    {0x1A0, 0x1A0},
     [MUGSHOT_CHAMPION] = {0x188, 0x188},
     [MUGSHOT_CHAMPION_STEVEN] = {0x188, 0x188},
+    [MUGSHOT_RED] = {0x188, 0x188},
 };
 static const s16 sMugshotsOpponentCoords[MUGSHOTS_COUNT][2] =
 {
@@ -569,6 +573,7 @@ static const s16 sMugshotsOpponentCoords[MUGSHOTS_COUNT][2] =
     [MUGSHOT_DRAKE] =    { 0,  5},
     [MUGSHOT_CHAMPION] = {-8,  7},
     [MUGSHOT_CHAMPION_STEVEN] = {-8,  7},
+    [MUGSHOT_RED] = {-8,  7},
 };
 
 static const TransitionSpriteCallback sMugshotTrainerPicFuncs[] =
@@ -906,7 +911,8 @@ static const u16 *const sOpponentMugshotsPals[MUGSHOTS_COUNT] =
     [MUGSHOT_GLACIA] = sMugshotPal_Glacia,
     [MUGSHOT_DRAKE] = sMugshotPal_Drake,
     [MUGSHOT_CHAMPION] = sMugshotPal_Champion,
-    [MUGSHOT_CHAMPION_STEVEN] = sMugshotPal_Champion
+    [MUGSHOT_CHAMPION_STEVEN] = sMugshotPal_Champion,
+    [MUGSHOT_RED] = sMugshotPal_Sidney
 };
 
 static const u16 *const sPlayerMugshotsPals[GENDER_COUNT] =
@@ -2298,6 +2304,12 @@ static void Task_Champion(u8 taskId)
 static void Task_Champion_Steven(u8 taskId)
 {
     gTasks[taskId].tMugshotId = MUGSHOT_CHAMPION_STEVEN;
+    DoMugshotTransition(taskId);
+}
+
+static void Task_Red(u8 taskId)
+{
+    gTasks[taskId].tMugshotId = MUGSHOT_RED;
     DoMugshotTransition(taskId);
 }
 

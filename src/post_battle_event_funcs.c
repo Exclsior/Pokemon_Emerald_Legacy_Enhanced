@@ -8,6 +8,7 @@
 #include "script_pokemon_util.h"
 #include "tv.h"
 #include "constants/heal_locations.h"
+#include "item.h"
 
 int GameClear(void)
 {
@@ -28,6 +29,7 @@ int GameClear(void)
     {
         gHasHallOfFameRecords = FALSE;
         FlagSet(FLAG_SYS_GAME_CLEAR);
+        AddPCItem(ITEM_SHINY_CHARM, 1); // Added Shiny Charm to PC for beating the game
     }
 
     if (GetGameStat(GAME_STAT_FIRST_HOF_PLAY_TIME) == 0)

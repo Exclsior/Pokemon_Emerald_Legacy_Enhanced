@@ -585,8 +585,8 @@
       "flag": "FLAG_HIDE_ROUTE_119_SCOTT"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_RAIKOU",
-      "x": 3,
+      "graphics_id": "OBJ_EVENT_GFX_MON_BASE+SPECIES_RAIKOU",
+      "x": 4,
       "y": 16,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",

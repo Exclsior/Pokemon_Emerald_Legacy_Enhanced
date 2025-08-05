@@ -4329,7 +4329,7 @@ BattleScript_BerryCurePrlzEnd2::
 	end2
 
 BattleScript_BerryCureParRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMCUREDPARALYSIS
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -4341,7 +4341,7 @@ BattleScript_BerryCurePsnEnd2::
 	end2
 
 BattleScript_BerryCurePsnRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMCUREDPOISON
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -4353,7 +4353,7 @@ BattleScript_BerryCureBrnEnd2::
 	end2
 
 BattleScript_BerryCureBrnRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMHEALEDBURN
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -4365,7 +4365,7 @@ BattleScript_BerryCureFrzEnd2::
 	end2
 
 BattleScript_BerryCureFrzRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMDEFROSTEDIT
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -4377,7 +4377,7 @@ BattleScript_BerryCureSlpEnd2::
 	end2
 
 BattleScript_BerryCureSlpRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMWOKEIT
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -4389,7 +4389,7 @@ BattleScript_BerryCureConfusionEnd2::
 	end2
 
 BattleScript_BerryCureConfusionRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMSNAPPEDOUT
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_SCRIPTING
@@ -4400,7 +4400,7 @@ BattleScript_BerryCureChosenStatusEnd2::
 	end2
 
 BattleScript_BerryCureChosenStatusRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printfromtable gBerryEffectStringIds
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -4412,14 +4412,14 @@ BattleScript_WhiteHerbEnd2::
 	end2
 
 BattleScript_WhiteHerbRet::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Scripting
 	printstring STRINGID_PKMNSITEMRESTOREDSTATUS
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_SCRIPTING
 	return
 
 BattleScript_ItemHealHP_RemoveItem::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Attacker
 	printstring STRINGID_PKMNSITEMRESTOREDHEALTH
 	waitmessage B_WAIT_TIME_LONG
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
@@ -4429,7 +4429,7 @@ BattleScript_ItemHealHP_RemoveItem::
 	end2
 
 BattleScript_BerryPPHealEnd2::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Attacker
 	printstring STRINGID_PKMNSITEMRESTOREDPP
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
@@ -4440,7 +4440,7 @@ BattleScript_ItemHealHP_End2::
 	end2
 
 BattleScript_ItemHealHP_Ret::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Attacker
 	printstring STRINGID_PKMNSITEMRESTOREDHPALITTLE
 	waitmessage B_WAIT_TIME_LONG
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
@@ -4459,7 +4459,7 @@ BattleScript_FocusBandActivates::
 	return
 
 BattleScript_BerryConfuseHealEnd2::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Attacker
 	printstring STRINGID_PKMNSITEMRESTOREDHEALTH
 	waitmessage B_WAIT_TIME_LONG
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
@@ -4473,7 +4473,7 @@ BattleScript_BerryConfuseHealEnd2::
 	end2
 
 BattleScript_BerryStatRaiseEnd2::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Attacker
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_BerryStatRaiseDoStatUp
 BattleScript_BerryStatRaiseDoStatUp::
 	setbyte cMULTISTRING_CHOOSER, B_MSG_STAT_ROSE_ITEM
@@ -4482,7 +4482,7 @@ BattleScript_BerryStatRaiseDoStatUp::
 	end2
 
 BattleScript_BerryFocusEnergyEnd2::
-	call BattleScript_HeldItemAnimation
+	call BattleScript_HeldItemAnimation_Attacker
 	printstring STRINGID_PKMNUSEDXTOGETPUMPED
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
@@ -4626,20 +4626,46 @@ BattleScript_PrintPlayerForfeitedLinkBattle::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_HeldItemAnimation::
-	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_NORMAL, BattleScript_HeldItemAnimationNormal
-	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_REDUCED, BattleScript_HeldItemAnimationReduced
-	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_MINIMAL, BattleScript_HeldItemAnimationMinimal
+BattleScript_AttackBoostedByAbility::
+	printstring STRINGID_ATTACKBOOSTEDBYABILITY
 	return
 
-BattleScript_HeldItemAnimationNormal::
+BattleScript_MagmaArmorActivated::
+	printstring STRINGID_MAGMAARMORACTIVATED
+	return
+
+BattleScript_HeldItemAnimation_Scripting::
+	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_NORMAL, BattleScript_HeldItemAnimationNormal_Scripting
+	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_REDUCED, BattleScript_HeldItemAnimationReduced_Scripting
+	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_MINIMAL, BattleScript_HeldItemAnimationMinimal_Scripting
+	return
+
+BattleScript_HeldItemAnimationNormal_Scripting::
+	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT
+	return
+
+BattleScript_HeldItemAnimationReduced_Scripting::
+	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_REDUCED_EFFECT
+	return
+
+BattleScript_HeldItemAnimationMinimal_Scripting::
+	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_MIN_EFFECT
+	return
+
+BattleScript_HeldItemAnimation_Attacker::
+	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_NORMAL, BattleScript_HeldItemAnimationNormal_Attacker
+	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_REDUCED, BattleScript_HeldItemAnimationReduced_Attacker
+	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_MINIMAL, BattleScript_HeldItemAnimationMinimal_Attacker
+	return
+
+BattleScript_HeldItemAnimationNormal_Attacker::
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT
 	return
 
-BattleScript_HeldItemAnimationReduced::
+BattleScript_HeldItemAnimationReduced_Attacker::
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_REDUCED_EFFECT
 	return
 
-BattleScript_HeldItemAnimationMinimal::
-	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_REDUCED_MIN
+BattleScript_HeldItemAnimationMinimal_Attacker::
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_MIN_EFFECT
 	return
