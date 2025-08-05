@@ -11,8 +11,8 @@ VerdanturfTown_Mart_EventScript_Clerk_MainGame::
 	faceplayer
 	message gText_HowMayIServeYou
 	waitmessage
-	pokemart VerdanturfTown_Mart_Pokemart
 	goto_if_set FLAG_RUSTURF_TUNNEL_OPENED, VerdanturfTown_Mart_EventScript_Clerk_ExpandedItems
+	pokemart VerdanturfTown_Mart_Pokemart
 	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
 	release
 	end

@@ -243,6 +243,9 @@
 #define METATILE_General_TallGrass_TreeUp      0x025
 #define METATILE_General_YellowCaveIndent      0x1A8
 #define METATILE_General_YellowCaveOpen        0x1A9
+#define METATILE_General_GreyLargeRocksShaded  0x207  // Added for dynamically moving some Sky Pillar Rocks
+#define METATILE_General_GreyLargeRocks        0x20F  // Added for dynamically moving some Sky Pillar Rocks
+#define METATILE_General_GreySmallRocks        0x21F  // Added for dynamically moving some Sky Pillar Rocks
 
 // gTileset_GenericBuilding
 #define METATILE_GenericBuilding_TableEdge               0x2F1
@@ -351,6 +354,9 @@
 #define METATILE_MauvilleGym_RedBeamV1_On     0x241
 #define METATILE_MauvilleGym_RedBeamV2_On     0x249
 
+// gTileset_MirageTower
+#define METATILE_Route111_MirageTower_SandFloor   0x211 // Added for dynamically removing some Mirage Tower Cracked Floor Tiles
+
 // gTileset_MeteorFalls
 #define METATILE_MeteorFalls_CaveEntrance_Bottom  0x24E
 #define METATILE_MeteorFalls_CaveEntrance_Left    0x24D
@@ -387,6 +393,7 @@
 #define METATILE_Pacifidlog_SubmergedLogs_HorizontalRight      0x255
 #define METATILE_Pacifidlog_SubmergedLogs_VerticalBottom       0x262
 #define METATILE_Pacifidlog_SubmergedLogs_VerticalTop          0x25A
+#define METATILE_Pacifidlog_SkyPillar_GreyFloor                0x234 // Added for dynamically moving some Sky Pillar Rocks
 
 // gTileset_Petalburg
 #define METATILE_Petalburg_Door_BirchsLab   0x249

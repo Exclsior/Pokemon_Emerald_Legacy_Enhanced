@@ -33,6 +33,7 @@ ScorchedSlab_EventScript_TryRemoveEntei::
 	return
 
 ScorchedSlab_EventScript_Entei::
+	faceplayer
 	playmoncry SPECIES_ENTEI, CRY_MODE_ENCOUNTER
 	delay 40
 	waitmoncry

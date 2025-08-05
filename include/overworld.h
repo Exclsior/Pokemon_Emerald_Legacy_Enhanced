@@ -25,6 +25,20 @@
 #define MOVEMENT_MODE_SCRIPTED 2
 
 #define SKIP_OBJECT_EVENT_LOAD  1
+#define TIME_OF_DAY_NIGHT 0
+#define TIME_OF_DAY_TWILIGHT 1
+#define TIME_OF_DAY_DAY 2
+#define TIME_OF_DAY_MAX TIME_OF_DAY_DAY
+
+#define OPTIONS_OVERWORLD_SPEED_1X                          0
+#define OPTIONS_OVERWORLD_SPEED_2X                          1
+#define OPTIONS_OVERWORLD_SPEED_4X                          2
+#define OPTIONS_OVERWORLD_SPEED_8X                          3
+#define OPTIONS_OVERWORLD_SPEED_1X_EXTRA_ITERATIONS         0
+#define OPTIONS_OVERWORLD_SPEED_2X_EXTRA_ITERATIONS         1
+#define OPTIONS_OVERWORLD_SPEED_4X_EXTRA_ITERATIONS         3
+#define OPTIONS_OVERWORLD_SPEED_8X_EXTRA_ITERATIONS         7
+u8 OverworldSpeedup_AdditionalIterations(u16 speed, bool32 overworld);
 
 struct InitialPlayerAvatarState
 {
@@ -77,6 +91,8 @@ void SetWarpDestinationToMapWarp(s8 mapGroup, s8 mapNum, s8 warpId);
 void SetDynamicWarp(s32 unused, s8 mapGroup, s8 mapNum, s8 warpId);
 void SetDynamicWarpWithCoords(s32 unused, s8 mapGroup, s8 mapNum, s8 warpId, s8 x, s8 y);
 void SetWarpDestinationToDynamicWarp(u8 unused);
+void SetPlayerSecretBaseCoords(s8 mapGroup, s8 mapNum, s8 warpId, s8 x, s8 y);
+void SetWarpDestinationToPlayerSecretBase();
 void SetWarpDestinationToHealLocation(u8 healLocationId);
 void SetWarpDestinationToLastHealLocation(void);
 void SetLastHealLocationWarp(u8 healLocationId);

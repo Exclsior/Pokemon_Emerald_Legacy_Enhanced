@@ -145,10 +145,12 @@ SlateportCity_Movement_ScottExit:
 SlateportCity_EventScript_EnergyGuru::
 	lock
 	faceplayer
+	specialvar VAR_RESULT, LeadMonHasEffortRibbon
+	call_if_eq VAR_RESULT, TRUE, SlateportCity_EventScript_EnergyGuru_AbilityCapsule
 	message SlateportCity_Text_EnergyGuruSellWhatYouNeed
 	waitmessage
 	pokemart SlateportCity_Pokemart_EnergyGuru
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	msgbox SlateportCity_Text_EnergyGuruAblityCapsuleHint, MSGBOX_DEFAULT
 	release
 	end
 
@@ -160,6 +162,27 @@ SlateportCity_Pokemart_EnergyGuru:
 	.2byte ITEM_ZINC
 	.2byte ITEM_CALCIUM
 	.2byte ITEM_HP_UP
+	.2byte ITEM_NONE
+	release
+	end
+
+SlateportCity_EventScript_EnergyGuru_AbilityCapsule::
+	message SlateportCity_Text_EnergyGuruSellWhatYouNeed_AbilityCapsule
+	waitmessage
+	pokemart SlateportCity_Pokemart_EnergyGuru_AbilityCapsule
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+	.align 2
+SlateportCity_Pokemart_EnergyGuru_AbilityCapsule:
+	.2byte ITEM_PROTEIN
+	.2byte ITEM_IRON
+	.2byte ITEM_CARBOS
+	.2byte ITEM_ZINC
+	.2byte ITEM_CALCIUM
+	.2byte ITEM_HP_UP
+	.2byte ITEM_ABILITY_CAPSULE
 	.2byte ITEM_NONE
 	release
 	end
@@ -179,6 +202,7 @@ SlateportCity_EventScript_EffortRibbonWoman::
 	waitfanfare
 	msgbox SlateportCity_Text_PutEffortRibbonOnMon, MSGBOX_DEFAULT
 	special GiveLeadMonEffortRibbon
+	msgbox SlateportCity_Text_NewItemSold, MSGBOX_DEFAULT
 	release
 	end
 
@@ -1013,6 +1037,16 @@ SlateportCity_Text_EnergyGuruSellWhatYouNeed:
 	.string "I'm the ENERGY GURU! I'll go for it and\n"
 	.string "sell you what you need!$"
 
+SlateportCity_Text_EnergyGuruAblityCapsuleHint:
+	.string "If your POKéMON has an EFFORT RIBBON\n"
+	.string "then I'll have an extra item to sell you!$"
+
+SlateportCity_Text_EnergyGuruSellWhatYouNeed_AbilityCapsule:
+	.string "I'm the ENERGY GURU! I'll go for it and\n"
+	.string "sell you what you need!\p"
+	.string "Oh? An EFFORT RIBBON!\n"
+	.string "I have an extra item to sell you!$"
+
 SlateportCity_Text_OhYourPokemon:
 	.string "Oh?\n"
 	.string "Your {STR_VAR_1}…$"
@@ -1029,14 +1063,22 @@ SlateportCity_Text_PutEffortRibbonOnMon:
 	.string "{PLAYER} put the EFFORT RIBBON\n"
 	.string "on {STR_VAR_1}.$"
 
+SlateportCity_Text_NewItemSold:
+	.string "The ENERGY GURU has something special\n"
+	.string "to sell you now!$"
+
 SlateportCity_Text_GoForItLittleHarder:
 	.string "You have to go for it a little harder.\p"
 	.string "If you do, I'll give your POKéMON\n"
-	.string "something nice.$"
+	.string "something nice.\p"
+	.string "The ENERGY GURU will sell you something\n"
+	.string "special as well!$"
 
 SlateportCity_Text_EffortRibbonLooksGoodOnIt:
 	.string "Oh! Your {STR_VAR_1}, that EFFORT\n"
-	.string "RIBBON looks good on it!$"
+	.string "RIBBON looks good on it!\p"
+	.string "The ENERGY GURU has something special\n"
+	.string "to sell you now!$"
 
 SlateportCity_Text_WonderIfLighthouseStartlesPokemon:
 	.string "The light of the lighthouse reaches\n"

@@ -742,6 +742,16 @@ const u32 gItemIconPalette_GreenMint[] = INCBIN_U32("graphics/items/icon_palette
 const u32 gItemIconPalette_LightBlueMint[] = INCBIN_U32("graphics/items/icon_palettes/light_blue_mint.gbapal.lz");
 const u32 gItemIconPalette_YellowMint[] = INCBIN_U32("graphics/items/icon_palettes/yellow_mint.gbapal.lz");
 
+// Ability Capsule
+
+const u32 gItemIcon_AbilityCapsule[] = INCBIN_U32("graphics/items/icons/ability_capsule.4bpp.lz");
+const u32 gItemIconPalette_AbilityCapsule[] = INCBIN_U32("graphics/items/icon_palettes/ability_capsule.gbapal.lz");
+
+// Shiny Charm
+
+const u32 gItemIcon_ShinyCharm[] = INCBIN_U32("graphics/items/icons/shiny_charm.4bpp.lz");
+const u32 gItemIconPalette_ShinyCharm[] = INCBIN_U32("graphics/items/icon_palettes/shiny_charm.gbapal.lz");
+
 // Emerald-only key items
 
 const u32 gItemIcon_MagmaEmblem[] = INCBIN_U32("graphics/items/icons/magma_emblem.4bpp.lz");

@@ -38,13 +38,15 @@ EventScript_PkmnCenterNurse_IllTakeYourPkmn2::
 	return
 
 EventScript_PkmnCenterNurse_TakeAndHealPkmn::
-	applymovement VAR_0x800B, Common_Movement_WalkInPlaceFasterLeft
+	hidefollower 0
+	applymovement VAR_0x800B, Movement_PkmnCenterNurse_Turn
 	waitmovement 0
 	dofieldeffect FLDEFF_POKECENTER_HEAL
 	waitfieldeffect FLDEFF_POKECENTER_HEAL
 	applymovement VAR_0x800B, Common_Movement_WalkInPlaceFasterDown
 	waitmovement 0
 	special HealPlayerParty
+	callnative UpdateFollowingPokemon
 	return
 
 EventScript_PkmnCenterNurse_CheckTrainerHillAndUnionRoom::
@@ -122,6 +124,10 @@ EventScript_PkmnCenterNurse_GoldCardHealPkmn::
 	setvar VAR_0x8004, 1
 	goto EventScript_PkmnCenterNurse_HealPkmn
 	end
+
+Movement_PkmnCenterNurse_Turn:
+  walk_in_place_faster_left
+  step_end
 
 Movement_PkmnCenterNurse_Bow:
 	nurse_joy_bow

@@ -739,6 +739,12 @@ static const struct MenuAction MultichoiceList_TVLati[] =
     {gText_Blue},
 };
 
+static const struct MenuAction MultichoiceList_ShinyLati[] =
+{
+    {gText_Gold},
+    {gText_Teal},
+};
+
 static const struct MenuAction MultichoiceList_BattleTowerFeelings[] =
 {
     {gText_IllBattleNow},
@@ -912,6 +918,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_SLATEPORT_TENT_RULES]       = MULTICHOICE(MultichoiceList_SlateportTentRules),
     [MULTI_FALLARBOR_TENT_RULES]       = MULTICHOICE(MultichoiceList_FallarborTentRules),
     [MULTI_TAG_MATCH_TYPE]             = MULTICHOICE(MultichoiceList_TagMatchType),
+    [MULTI_SHINY_LATI]                 = MULTICHOICE(MultichoiceList_ShinyLati),
 };
 
 const u8 *const gStdStrings[] =

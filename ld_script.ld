@@ -107,6 +107,8 @@ SECTIONS {
         src/random.o(.text);
         src/util.o(.text);
         src/daycare.o(.text);
+        src/debug.o(.rodata);
+        src/debug_pokemon_creator.o(.rodata);
         src/egg_hatch.o(.text);
         src/battle_interface.o(.text);
         src/battle_anim_smokescreen.o(.text);
@@ -123,6 +125,7 @@ SECTIONS {
         src/field_door.o(.text);
         src/field_player_avatar.o(.text);
         src/event_object_movement.o(.text);
+        src/follower_helper.o(.text);
         src/field_message_box.o(.text);
         src/event_object_lock.o(.text);
         src/text_window.o(.text);
@@ -343,6 +346,7 @@ SECTIONS {
         src/international_string_util.o(.text);
         src/ui_stat_editor.o(.text);
         src/surfable.o(.text);
+        src/ui_birch_case.o(.text);
     } > ROM =0
 
     script_data :
@@ -495,6 +499,8 @@ SECTIONS {
         src/trig.o(.rodata);
         src/util.o(.rodata);
         src/daycare.o(.rodata);
+        src/debug.o(.rodata);
+        src/debug_pokemon_creator.o(.rodata);
         src/egg_hatch.o(.rodata);
         src/battle_gfx_sfx_util.o(.rodata);
         src/battle_interface.o(.rodata);
@@ -510,6 +516,7 @@ SECTIONS {
         src/field_door.o(.rodata);
         src/field_player_avatar.o(.rodata);
         src/event_object_movement.o(.rodata);
+        src/follower_helper.o(.rodata);        
         src/text_window.o(.rodata);
         src/scrcmd.o(.rodata);
         src/field_control_avatar.o(.rodata);
@@ -707,6 +714,7 @@ SECTIONS {
         data/sound_data.o(.rodata);
         src/ui_stat_editor.o(.rodata);
         src/surfable.o(.rodata);
+        src/ui_birch_case.o(.rodata);
     } > ROM =0
 
     song_data :
@@ -1307,13 +1315,13 @@ SECTIONS {
         data/multiboot_pokemon_colosseum.o(.rodata);
     } > ROM =0
 
-    anim_mon_front_pic_data __anim_mon_load_address :
+    anim_mon_front_pic_data  :
     ALIGN(4)
     {
         src/anim_mon_front_pics.o(.rodata);
     } > ROM =0
 
-    gfx_data __gfx_load_address :
+    gfx_data :
     ALIGN(4)
     {
         src/graphics.o(.rodata);

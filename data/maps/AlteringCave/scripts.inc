@@ -36,6 +36,7 @@ AlteringCave_EventScript_TryRemoveMewtwo::
 	return
 
 AlteringCave_EventScript_Mewtwo::
+	faceplayer
 	playmoncry SPECIES_MEWTWO, CRY_MODE_ENCOUNTER
 	delay 40
 	waitmoncry
@@ -61,5 +62,17 @@ AlteringCave_EventScript_DefeatedMewtwo::
 
 AlteringCave_EventScript_RanFromMewtwo::
 	setvar VAR_0x8004, SPECIES_MEWTWO
-	goto Common_EventScript_LegendaryFlewAway
+	goto AlteringCave_EventScript_MewtwoTeleportedAway
 	end
+
+AlteringCave_EventScript_MewtwoTeleportedAway::
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreenswapbuffers FADE_FROM_BLACK
+	bufferspeciesname STR_VAR_1, VAR_0x8004
+	msgbox AlteringCave_Text_MewtwoTeleportedAway, MSGBOX_DEFAULT
+	release
+	end
+
+AlteringCave_Text_MewtwoTeleportedAway::
+	.string "{STR_VAR_1} teleported away!$"

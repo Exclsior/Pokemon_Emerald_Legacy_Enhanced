@@ -26,11 +26,6 @@ SlateportCity_NameRatersHouse_EventScript_RateMonNickname::
 	specialvar VAR_RESULT, ScriptGetPartyMonSpecies
 	goto_if_eq VAR_RESULT, SPECIES_EGG, SlateportCity_NameRatersHouse_EventScript_CantRateEgg
 	special BufferMonNickname
-	special IsMonOTIDNotPlayers
-	goto_if_eq VAR_RESULT, TRUE, SlateportCity_NameRatersHouse_EventScript_PlayerNotMonsOT
-	specialvar VAR_RESULT, MonOTNameNotPlayer
-	special BufferMonNickname
-	goto_if_eq VAR_RESULT, TRUE, SlateportCity_NameRatersHouse_EventScript_PlayerNotMonsOT
 	msgbox SlateportCity_NameRatersHouse_Text_FineNameSuggestBetterOne, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, SlateportCity_NameRatersHouse_EventScript_ChangeNickname
 	goto_if_eq VAR_RESULT, NO, SlateportCity_NameRatersHouse_EventScript_DeclineNameRate
@@ -73,9 +68,9 @@ SlateportCity_NameRatersHouse_Text_CritiqueWhichMonNickname:
 
 SlateportCity_NameRatersHouse_Text_FineNameSuggestBetterOne:
 	.string "Hmmm… {STR_VAR_1}, is it? That is\n"
-	.string "quite a fine name you bestowed.\p"
-	.string "But! What say you, if I were to\n"
-	.string "suggest a slightly better name?$"
+	.string "quite a fine name bestowed.\p"
+	.string "But! What say you, do you want\n"
+	.string "a slightly better name?$"
 
 SlateportCity_NameRatersHouse_Text_WhatShallNewNameBe:
 	.string "Ah, good. Then, what shall the new\n"

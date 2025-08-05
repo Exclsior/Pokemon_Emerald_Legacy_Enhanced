@@ -12,7 +12,7 @@
   "allow_running": false,
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": 0,
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_WOMAN_2",
@@ -26,6 +26,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route114_LanettesHouse_EventScript_Lanette",
       "flag": "FLAG_HIDE_LANETTES_HOUSE_LANETTE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_MON_BASE+SPECIES_EEVEE",
+      "x": 3,
+      "y": 4,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 7,
+      "movement_range_y": 7,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Route114_LanettesHouse_EventScript_Eevee",
+      "flag": "FLAG_TEMP_1"
     }
   ],
   "warp_events": [
@@ -44,7 +57,9 @@
       "dest_warp_id": "2"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+
+  ],
   "bg_events": [
     {
       "type": "sign",

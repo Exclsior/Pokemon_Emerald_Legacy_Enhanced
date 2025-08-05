@@ -11,6 +11,7 @@ enum
     NORMAL_FADE,
     FAST_FADE,
     HARDWARE_FADE,
+    TIME_OF_DAY_FADE,
 };
 
 // These are structs for some unused palette system.
@@ -49,6 +50,7 @@ static void PaletteStruct_TryEnd(struct PaletteStruct *);
 static void PaletteStruct_Reset(u8);
 static u8 PaletteStruct_GetPalNum(u16);
 static u8 UpdateNormalPaletteFade(void);
+static u8 UpdateTimeOfDayPaletteFade(void);
 static void BeginFastPaletteFadeInternal(u8);
 static u8 UpdateFastPaletteFade(void);
 static u8 UpdateHardwarePaletteFade(void);
@@ -125,6 +127,8 @@ u8 UpdatePaletteFade(void)
         result = UpdateNormalPaletteFade();
     else if (gPaletteFade.mode == FAST_FADE)
         result = UpdateFastPaletteFade();
+    else if (gPaletteFade.mode == TIME_OF_DAY_FADE)
+        result = UpdateTimeOfDayPaletteFade();
     else
         result = UpdateHardwarePaletteFade();
 
@@ -403,6 +407,95 @@ static u8 PaletteStruct_GetPalNum(u16 id)
             return i;
 
     return NUM_PALETTE_STRUCTS;
+}
+
+// Like normal palette fade, but respects sprite/tile palettes immune to time of day fading
+static u8 UpdateTimeOfDayPaletteFade(void) // Like normal, but respects sprite palettes immune to fading
+{
+    u8 paletteNum;
+    u16 paletteOffset;
+    u16 selectedPalettes;
+
+    if (!gPaletteFade.active)
+        return PALETTE_FADE_STATUS_DONE;
+
+    if (IsSoftwarePaletteFadeFinishing())
+        return gPaletteFade.active ? PALETTE_FADE_STATUS_ACTIVE : PALETTE_FADE_STATUS_DONE;
+
+    if (!gPaletteFade.objPaletteToggle)
+    {
+        if (gPaletteFade.delayCounter < gPaletteFade_delay)
+        {
+            gPaletteFade.delayCounter++;
+            return 2;
+        }
+        gPaletteFade.delayCounter = 0;
+    }
+
+    paletteOffset = 0;
+
+    if (!gPaletteFade.objPaletteToggle)
+    {
+        selectedPalettes = gPaletteFade_selectedPalettes;
+    }
+    else
+    {
+        selectedPalettes = gPaletteFade_selectedPalettes >> 16;
+        paletteOffset = 256;
+    }
+
+    for (paletteNum = 0; paletteNum < 16; paletteNum++, selectedPalettes >>= 1, paletteOffset += 16) {
+        if (selectedPalettes & 1) {
+            if (gPaletteFade.yDec) {
+                // sprite palettes
+                if (gPaletteFade.objPaletteToggle) {
+                    if (gPaletteFade.y >= gPaletteFade.targetY || GetSpritePaletteTagByPaletteNum(paletteNum) & 0x8000)
+                        BlendPalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+                // tile palettes
+                } else if (gPaletteFade.y >= gPaletteFade.targetY || (paletteNum >= 13 && paletteNum <= 15)) {
+                    BlendPalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+                }
+            } else {
+                BlendPalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+            }
+        }
+    }
+
+    gPaletteFade.objPaletteToggle ^= 1;
+
+    if (!gPaletteFade.objPaletteToggle)
+    {
+        if ((gPaletteFade.yDec && gPaletteFade.y == 0) || (!gPaletteFade.yDec && gPaletteFade.y == gPaletteFade.targetY))
+        {
+            gPaletteFade_selectedPalettes = 0;
+            gPaletteFade.softwareFadeFinishing = 1;
+        }
+        else
+        {
+            s8 val;
+
+            if (!gPaletteFade.yDec)
+            {
+                val = gPaletteFade.y;
+                val += gPaletteFade.deltaY;
+                if (val > gPaletteFade.targetY)
+                    val = gPaletteFade.targetY;
+                gPaletteFade.y = val;
+            }
+            else
+            {
+                val = gPaletteFade.y;
+                val -= gPaletteFade.deltaY;
+                if (val < 0)
+                    val = 0;
+                gPaletteFade.y = val;
+            }
+        }
+    }
+
+    // gPaletteFade.active cannot change since the last time it was checked. So this
+    // is equivalent to `return PALETTE_FADE_STATUS_ACTIVE;`
+    return PALETTE_FADE_STATUS_ACTIVE;
 }
 
 static u8 UpdateNormalPaletteFade(void)

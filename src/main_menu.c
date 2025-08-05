@@ -13,6 +13,7 @@
 #include "international_string_util.h"
 #include "link.h"
 #include "main.h"
+#include "main_menu.h"
 #include "menu.h"
 #include "list_menu.h"
 #include "mystery_event_menu.h"
@@ -136,6 +137,11 @@
  * Task_NewGameBirchSpeech_Nuzlocke
  * Task_NewGameBirchSpeech_WaitToShowNuzlockeMenu
  * Task_NewGameBirchSpeech_ChooseNuzlocke
+ *  Advances to Task_NewGameBirchSpeech_DexType when done.
+ * 
+ * Task_NewGameBirchSpeech_DexType
+ * Task_NewGameBirchSpeech_WaitToShowNationalDexMenu
+ * Task_NewGameBirchSpeech_ChooseDexType
  *  Advances to Task_NewGameBirchSpeech_WhatsYourName when done.
  *
  * Task_NewGameBirchSpeech_WhatsYourName
@@ -216,6 +222,7 @@ static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8);
 static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8);
 static void Task_NewGameBirchSpeech_BoyOrGirl(u8);
 static void Task_NewGameBirchSpeech_Nuzlocke(u8);
+static void Task_NewGameBirchSpeech_DexType(u8);
 static void LoadMainMenuWindowFrameTiles(u8, u16);
 static void DrawMainMenuWindowBorder(const struct WindowTemplate *, u16);
 static void Task_HighlightSelectedMainMenuItem(u8);
@@ -228,12 +235,21 @@ static void Task_NewGameBirchSpeech_HardText(u8);
 static void Task_NewGameBirchSpeech_HardcoreText(u8);
 static void Task_NewGameBirchSpeech_AreYouSure(u8);
 static void Task_NewGameBirchSpeech_AreYouSureSelection(u8);
+static void Task_NewGameBirchSpeech_WaitToShowNationalDexMenu(u8);
+static void Task_NewGameBirchSpeech_ChooseDexType(u8);
+static void Task_NewGameBirchSpeech_HoennDexText(u8);
+static void Task_NewGameBirchSpeech_NationalDexText(u8);
+static void Task_NewGameBirchSpeech_AreYouSure_Dex(u8);
+static void Task_NewGameBirchSpeech_AreYouSureSelection_Dex(u8);
 static void NewGameBirchSpeech_ShowGenderMenu(void);
 static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void);
 static void NewGameBirchSpeech_ClearGenderWindow(u8, u8);
 static void NewGameBirchSpeech_ShowNuzlockeMenu(void);
 static s8 NewGameBirchSpeech_ProcessNuzlockeMenuInput(void);
 static void NewGameBirchSpeech_ClearNuzlockeWindow(u8, u8);
+static void NewGameBirchSpeech_ShowDexTypeMenu(void);
+static s8 NewGameBirchSpeech_ProcessDexTypeMenuInput(void);
+static void NewGameBirchSpeech_ClearDexTypeWindow(u8, u8);
 static void Task_NewGameBirchSpeech_WhatsYourName(u8);
 static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8);
 static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8);
@@ -241,7 +257,6 @@ static void Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint(u8);
 static void Task_NewGameBirchSpeech_WaitPressBeforeNameChoice(u8);
 static void Task_NewGameBirchSpeech_StartNamingScreen(u8);
 static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void);
-static void NewGameBirchSpeech_SetDefaultPlayerName(u8);
 static void Task_NewGameBirchSpeech_CreateNameYesNo(u8);
 static void Task_NewGameBirchSpeech_ProcessNameYesNoMenu(u8);
 void CreateYesNoMenuParameterized(u8, u8, u16, u16, u8, u8);
@@ -427,6 +442,15 @@ static const struct WindowTemplate sNewGameBirchSpeechTextWindows[] =
         .paletteNum = 15,
         .baseBlock = 0x6D
     },
+    {
+        .bg = 0,
+        .tilemapLeft = 3,
+        .tilemapTop = 5,
+        .width = 10,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 0x6D
+    },
     DUMMY_WIN_TEMPLATE
 };
 
@@ -488,6 +512,11 @@ static const struct MenuAction sMenuActions_Nuzlocke[] = {
     {gText_Normal, NULL},
     {gText_Hard, NULL},
     {gText_Hardcore, NULL}
+};
+
+static const struct MenuAction sMenuActions_DexMode[] = {
+    {gText_Birch_HoennDex, {NULL}},
+    {gText_Birch_NationalDex, {NULL}}
 };
 
 static const u8 *const sMalePresetNames[] = {
@@ -825,32 +854,42 @@ static void Task_DisplayMainMenu(u8 taskId)
             default:
                 FillWindowPixelBuffer(0, PIXEL_FILL(0xA));
                 FillWindowPixelBuffer(1, PIXEL_FILL(0xA));
+                FillWindowPixelBuffer(5, PIXEL_FILL(0xA));
                 AddTextPrinterParameterized3(0, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(1, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuOption);
+                AddTextPrinterParameterized3(5, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuGameAndVersion);
                 PutWindowTilemap(0);
                 PutWindowTilemap(1);
+                PutWindowTilemap(5);
                 CopyWindowToVram(0, COPYWIN_GFX);
                 CopyWindowToVram(1, COPYWIN_GFX);
+                CopyWindowToVram(5, COPYWIN_GFX);
                 DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[0], MAIN_MENU_BORDER_TILE);
                 DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[1], MAIN_MENU_BORDER_TILE);
+                DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[5], MAIN_MENU_BORDER_TILE);
                 break;
             case HAS_SAVED_GAME:
                 FillWindowPixelBuffer(2, PIXEL_FILL(0xA));
                 FillWindowPixelBuffer(3, PIXEL_FILL(0xA));
                 FillWindowPixelBuffer(4, PIXEL_FILL(0xA));
+                FillWindowPixelBuffer(5, PIXEL_FILL(0xA));
                 AddTextPrinterParameterized3(2, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuContinue);
                 AddTextPrinterParameterized3(3, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(4, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuOption);
+                AddTextPrinterParameterized3(5, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuGameAndVersion);
                 MainMenu_FormatSavegameText();
                 PutWindowTilemap(2);
                 PutWindowTilemap(3);
                 PutWindowTilemap(4);
+                PutWindowTilemap(5);
                 CopyWindowToVram(2, COPYWIN_GFX);
                 CopyWindowToVram(3, COPYWIN_GFX);
                 CopyWindowToVram(4, COPYWIN_GFX);
+                CopyWindowToVram(5, COPYWIN_GFX);
                 DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[2], MAIN_MENU_BORDER_TILE);
                 DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[3], MAIN_MENU_BORDER_TILE);
                 DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[4], MAIN_MENU_BORDER_TILE);
+                DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[5], MAIN_MENU_BORDER_TILE);
                 break;
             case HAS_MYSTERY_GIFT:
                 FillWindowPixelBuffer(2, PIXEL_FILL(0xA));
@@ -860,7 +899,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 AddTextPrinterParameterized3(2, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuContinue);
                 AddTextPrinterParameterized3(3, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(4, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuMysteryGift);
-                AddTextPrinterParameterized3(5, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuOption);
+                AddTextPrinterParameterized3(5, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuOptionGameAndVersion);
                 MainMenu_FormatSavegameText();
                 PutWindowTilemap(2);
                 PutWindowTilemap(3);
@@ -885,7 +924,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 AddTextPrinterParameterized3(3, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(4, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuMysteryGift2);
                 AddTextPrinterParameterized3(5, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuMysteryEvents);
-                AddTextPrinterParameterized3(6, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuOption);
+                AddTextPrinterParameterized3(6, FONT_NORMAL, 0, 1, sTextColor_Headers, TEXT_SKIP_DRAW, gText_MainMenuOptionGameAndVersion);
                 MainMenu_FormatSavegameText();
                 PutWindowTilemap(2);
                 PutWindowTilemap(3);
@@ -1700,6 +1739,89 @@ static void Task_NewGameBirchSpeech_AreYouSureSelection(u8 taskId)
         case 0:
             PlaySE(SE_SELECT);
             gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+            //NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
+            //NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_DexType;
+            break;
+        case MENU_B_PRESSED:
+        case 1:
+            PlaySE(SE_SELECT);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            break;
+    }
+}
+
+// National Dex Mode
+static void Task_NewGameBirchSpeech_DexType(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_DexType);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowNationalDexMenu;
+}
+
+static void Task_NewGameBirchSpeech_WaitToShowNationalDexMenu(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        NewGameBirchSpeech_ShowDexTypeMenu();
+        gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseDexType;
+    }
+}
+
+static void Task_NewGameBirchSpeech_ChooseDexType(u8 taskId)
+{
+    int dexType = NewGameBirchSpeech_ProcessDexTypeMenuInput();
+    switch (dexType)
+    {
+        case 0:
+            NewGameBirchSpeech_ClearDexTypeWindow(4, 1);
+            PlaySE(SE_SELECT);
+            FlagClear(FLAG_NATIONAL_DEX_MODE);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_HoennDexText;
+            break;
+    
+        case 1:
+            NewGameBirchSpeech_ClearDexTypeWindow(4, 1);
+            PlaySE(SE_SELECT);
+            FlagSet(FLAG_NATIONAL_DEX_MODE);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_NationalDexText;
+            break;
+    }
+}
+
+static void Task_NewGameBirchSpeech_HoennDexText(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_AreYouSure_HoennDex);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_AreYouSure_Dex;
+}
+
+static void Task_NewGameBirchSpeech_NationalDexText(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_AreYouSure_NationalDex);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_AreYouSure_Dex;
+}
+
+static void Task_NewGameBirchSpeech_AreYouSure_Dex(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        CreateYesNoMenuParameterized(2, 1, 0xF3, 0xDF, 2, 15);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_AreYouSureSelection_Dex;
+    }
+}
+
+static void Task_NewGameBirchSpeech_AreYouSureSelection_Dex(u8 taskId)
+{
+    switch (Menu_ProcessInputNoWrapClearOnChoose())
+    {
+        case 0:
+            PlaySE(SE_SELECT);
+            gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
             NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
             NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
             gTasks[taskId].func = Task_NewGameBirchSpeech_WhatsYourName;
@@ -1707,7 +1829,7 @@ static void Task_NewGameBirchSpeech_AreYouSureSelection(u8 taskId)
         case MENU_B_PRESSED:
         case 1:
             PlaySE(SE_SELECT);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_DexType;
             break;
     }
 }
@@ -2259,7 +2381,23 @@ static s8 NewGameBirchSpeech_ProcessNuzlockeMenuInput(void)
     return Menu_ProcessInputNoWrap();
 }
 
-static void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
+// National Dex Mode
+static void NewGameBirchSpeech_ShowDexTypeMenu(void)
+{
+    DrawMainMenuWindowBorder(&sNewGameBirchSpeechTextWindows[4], 0xF3);
+    FillWindowPixelBuffer(4, PIXEL_FILL(1));
+    PrintMenuTable(4, ARRAY_COUNT(sMenuActions_DexMode), sMenuActions_DexMode);
+    InitMenuInUpperLeftCornerNormal(4, ARRAY_COUNT(sMenuActions_DexMode), 0);
+    PutWindowTilemap(4);
+    CopyWindowToVram(4, COPYWIN_FULL);
+}
+
+static s8 NewGameBirchSpeech_ProcessDexTypeMenuInput(void)
+{
+    return Menu_ProcessInputNoWrap();
+}
+
+void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
 {
     const u8 *name;
     u8 i;
@@ -2402,6 +2540,20 @@ static void NewGameBirchSpeech_ClearNuzlockeWindowTilemap(u8 bg, u8 x, u8 y, u8 
 static void NewGameBirchSpeech_ClearNuzlockeWindow(u8 windowId, bool8 copyToVram)
 {
     CallWindowFunction(windowId, NewGameBirchSpeech_ClearNuzlockeWindowTilemap);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+    ClearWindowTilemap(windowId);
+    if (copyToVram == TRUE)
+        CopyWindowToVram(windowId, COPYWIN_FULL);
+}
+
+static void NewGameBirchSpeech_ClearDexTypeWindowTilemap(u8 bg, u8 x, u8 y, u8 width, u8 height, u8 unused)
+{
+    FillBgTilemapBufferRect(bg, 0, x + 255, y + 255, width + 2, height + 2, 2);
+}
+
+static void NewGameBirchSpeech_ClearDexTypeWindow(u8 windowId, bool8 copyToVram)
+{
+    CallWindowFunction(windowId, NewGameBirchSpeech_ClearDexTypeWindowTilemap);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     ClearWindowTilemap(windowId);
     if (copyToVram == TRUE)

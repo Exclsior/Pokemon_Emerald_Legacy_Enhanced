@@ -28,6 +28,7 @@
 #include "trig.h"
 #include "util.h"
 #include "constants/field_effects.h"
+#include "constants/event_objects.h"
 #include "constants/event_object_movement.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/rgb.h"
@@ -67,7 +68,6 @@ static void PokeballGlowEffect_WaitForSound(struct Sprite *);
 static void PokeballGlowEffect_Idle(struct Sprite *);
 static void SpriteCB_PokeballGlow(struct Sprite *);
 
-static void FieldCallback_UseFly(void);
 static void Task_UseFly(u8);
 static void FieldCallback_FlyIntoMap(void);
 static void Task_FlyIntoMap(u8);
@@ -936,12 +936,14 @@ u8 CreateMonSprite_FieldMove(u16 species, u32 otId, u32 personality, s16 x, s16 
 
 void FreeResourcesAndDestroySprite(struct Sprite *sprite, u8 spriteId)
 {
+    u8 paletteNum = sprite->oam.paletteNum;
     ResetPreservedPalettesInWeather();
     if (sprite->oam.affineMode != ST_OAM_AFFINE_OFF)
     {
         FreeOamMatrix(sprite->oam.matrixNum);
     }
-    FreeAndDestroyMonPicSprite(spriteId);
+    FreeAndDestroyMonPicSpriteNoPalette(spriteId);
+    FieldEffectFreePaletteIfUnused(paletteNum); // Clear palette only if unused, in case follower is using it
 }
 
 // r, g, b are between 0 and 16
@@ -1294,7 +1296,8 @@ static void CreateHofMonitorSprite(s16 taskId, s16 x, s16 y, bool8 isSmallMonito
     {
         spriteId = CreateSpriteAtEnd(&sSpriteTemplate_HofMonitorBig, x, y, 0);
         SetSubspriteTables(&gSprites[spriteId], &sSubspriteTable_HofMonitorBig);
-    } else
+    }
+    else
     {
         spriteId = CreateSpriteAtEnd(&sSpriteTemplate_HofMonitorSmall, x, y, 0);
     }
@@ -1339,10 +1342,10 @@ static void SpriteCB_HallOfFameMonitor(struct Sprite *sprite)
 void ReturnToFieldFromFlyMapSelect(void)
 {
     SetMainCallback2(CB2_ReturnToField);
-    gFieldCallback = FieldCallback_UseFly;
+    gFieldCallback = FieldCallback_Fly;
 }
 
-static void FieldCallback_UseFly(void)
+void FieldCallback_Fly(void)
 {
     FadeInFromBlack();
     CreateTask(Task_UseFly, 0);
@@ -1559,6 +1562,14 @@ static bool8 FallWarpEffect_End(struct Task *task)
 #define tState   data[0]
 #define tGoingUp data[1]
 
+void HideFollowerForFieldEffect(void) {
+    struct ObjectEvent *followerObj = GetFollowerObject();
+    if (!followerObj || followerObj->invisible)
+        return;
+    ClearObjectEventMovement(followerObj, &gSprites[followerObj->spriteId]);
+    ObjectEventSetHeldMovement(followerObj, MOVEMENT_ACTION_ENTER_POKEBALL);
+}
+
 void StartEscalatorWarp(u8 metatileBehavior, u8 priority)
 {
     u8 taskId;
@@ -1582,6 +1593,7 @@ static bool8 EscalatorWarpOut_Init(struct Task *task)
     FreezeObjectEvents();
     CameraObjectFreeze();
     StartEscalator(task->tGoingUp);
+    HideFollowerForFieldEffect(); // Hide follower before warping
     task->tState++;
     return FALSE;
 }
@@ -1964,6 +1976,8 @@ static bool8 LavaridgeGymB1FWarpEffect_Init(struct Task *task, struct ObjectEven
     objectEvent->fixedPriority = 1;
     task->data[1] = 1;
     task->data[0]++;
+    if (objectEvent->localId == OBJ_EVENT_ID_PLAYER) // Hide follower before warping
+        HideFollowerForFieldEffect();
     return TRUE;
 }
 
@@ -2004,7 +2018,8 @@ static bool8 LavaridgeGymB1FWarpEffect_Rise(struct Task *task, struct ObjectEven
         {
             task->data[1] <<= 1;
         }
-    } else if (!(task->data[2] & 4) && (task->data[1] > 0))
+    }
+    else if (!(task->data[2] & 4) && (task->data[1] > 0))
     {
         task->data[1] >>= 1;
     }
@@ -2018,7 +2033,8 @@ static bool8 LavaridgeGymB1FWarpEffect_Rise(struct Task *task, struct ObjectEven
             {
                 task->data[3]++;
             }
-        } else
+        }
+        else
         {
             task->data[4] = 1;
         }
@@ -2155,6 +2171,8 @@ static bool8 LavaridgeGym1FWarpEffect_Init(struct Task *task, struct ObjectEvent
     gPlayerAvatar.preventStep = TRUE;
     objectEvent->fixedPriority = 1;
     task->data[0]++;
+    if (objectEvent->localId == OBJ_EVENT_ID_PLAYER) // Hide follower before warping
+        HideFollowerForFieldEffect();
     return FALSE;
 }
 
@@ -2170,7 +2188,8 @@ static bool8 LavaridgeGym1FWarpEffect_AshPuff(struct Task *task, struct ObjectEv
             gFieldEffectArguments[3] = sprite->oam.priority;
             task->data[1] = FieldEffectStart(FLDEFF_ASH_PUFF);
             task->data[0]++;
-        } else
+        }
+        else
         {
             task->data[1]++;
             ObjectEventSetHeldMovement(objectEvent, GetWalkInPlaceFasterMovementAction(objectEvent->facingDirection));
@@ -2240,6 +2259,7 @@ void StartEscapeRopeFieldEffect(void)
 {
     LockPlayerFieldControls();
     FreezeObjectEvents();
+    HideFollowerForFieldEffect(); // hide follower before warping
     CreateTask(Task_EscapeRopeWarpOut, 80);
 }
 
@@ -2500,7 +2520,8 @@ static void TeleportWarpInFieldEffect_SpinEnter(struct Task *task)
             objectEvent->triggerGroundEffectsOnMove = TRUE;
             sprite->subspriteMode = task->data[14];
         }
-    } else
+    }
+    else
     {
         sprite->oam.priority = 1;
         if (sprite->subspriteMode != SUBSPRITES_OFF)
@@ -2983,7 +3004,7 @@ u8 FldEff_UseSurf(void)
     u8 taskId = CreateTask(Task_SurfFieldEffect, 0xff);
     gTasks[taskId].tMonId = gFieldEffectArguments[0];
     VarSet(VAR_SURF_MON_SLOT, gFieldEffectArguments[0]);
-    if (!gSaveBlock2Ptr->optionsSurfMusic)
+    if (!FlagGet(FLAG_DISABLE_SURFMUSIC))
     {
         Overworld_ClearSavedMusic();
         Overworld_ChangeMusicTo(MUS_SURF);
@@ -3009,6 +3030,8 @@ static void SurfFieldEffect_Init(struct Task *task)
     VarSet(VAR_FREEZE_SURF_BLOB, 1);
     LockPlayerFieldControls();
     FreezeObjectEvents();
+    // Put follower into pokeball before using Surf
+    HideFollowerForFieldEffect();
     gPlayerAvatar.preventStep = TRUE;
     SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_SURFING);
     PlayerGetDestCoords(&task->tDestX, &task->tDestY);
@@ -3059,13 +3082,15 @@ static void SurfFieldEffect_JumpOnSurfBlob(struct Task *task)
 
 static void SurfFieldEffect_End(struct Task *task)
 {
-    struct ObjectEvent *objectEvent;
-    objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent *followerObject = GetFollowerObject();
     if (ObjectEventClearHeldMovementIfFinished(objectEvent))
     {
         gPlayerAvatar.preventStep = FALSE;
         gPlayerAvatar.flags &= ~PLAYER_AVATAR_FLAG_CONTROLLABLE;
         ObjectEventSetHeldMovement(objectEvent, GetFaceDirectionMovementAction(objectEvent->movementDirection));
+        if (followerObject)
+            ObjectEventClearHeldMovementIfFinished(followerObject);
         SetSurfBlob_BobState(objectEvent->fieldEffectSpriteId, BOB_PLAYER_AND_MON);
         UnfreezeObjectEvents();
         UnlockPlayerFieldControls();
@@ -3122,10 +3147,10 @@ u8 FldEff_NPCFlyOut(void)
     u8 spriteId = CreateSprite(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_BIRD], 0x78, 0, 1);
     struct Sprite *sprite = &gSprites[spriteId];
 
-    sprite->oam.paletteNum = 0;
     sprite->oam.priority = 1;
     sprite->callback = SpriteCB_NPCFlyOut;
     sprite->data[1] = gFieldEffectArguments[0];
+    sprite->oam.paletteNum = LoadObjectEventPalette(gSaveBlock2Ptr->playerGender ? FLDEFF_PAL_TAG_MAY : FLDEFF_PAL_TAG_BRENDAN);
     PlaySE(SE_M_FLY);
     return spriteId;
 }
@@ -3304,9 +3329,9 @@ static u8 CreateFlyBirdSprite(void)
     struct Sprite *sprite;
     spriteId = CreateSprite(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_BIRD], 0xff, 0xb4, 0x1);
     sprite = &gSprites[spriteId];
-    sprite->oam.paletteNum = 0;
     sprite->oam.priority = 1;
     sprite->callback = SpriteCB_FlyBirdLeaveBall;
+    sprite->oam.paletteNum = LoadObjectEventPalette(gSaveBlock2Ptr->playerGender ? FLDEFF_PAL_TAG_MAY : FLDEFF_PAL_TAG_BRENDAN);
     return spriteId;
 }
 
