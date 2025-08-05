@@ -473,7 +473,7 @@ static const u8 sText_Desc_FontType_Hoenn[]         = _("Original Experience.\nS
 static const u8 sText_Desc_FontType_Kanto[]         = _("POKéMON FIRERED/LEAFGREEN Font.\nMay not show correctly for all text.");
 static const u8 sText_Desc_ButtonMode[]             = _("All buttons work as normal.\nLR Mode inactive.");
 static const u8 sText_Desc_ButtonMode_LA[]          = _("The {L_BUTTON} button acts as another\n{A_BUTTON} button for one-handed play.");
-static const u8 sText_Desc_ButtonMode_LR[]          = _("{L_BUTTON} and {R_BUTTON} mainly act as left and right.\nActive on all Button Modes except L=A.");
+static const u8 sText_Desc_ButtonMode_LR[]          = _("{L_BUTTON} and {R_BUTTON} mainly act as {LEFT_ARROW} and {RIGHT_ARROW}.\nActive on all Button Modes excl. L=A.");
 static const u8 sText_Desc_ButtonMode_Context[]     = _("The {L_BUTTON} button contextually changes\nRUN, BIKE, SURF, or DIVE settings.");
 static const u8 sText_Desc_ButtonMode_World[]       = _("The {L_BUTTON} button steps through each\nWORLD SPEED option.");
 static const u8 sText_Desc_ButtonMode_World2x[]     = _("The {L_BUTTON} button toggles\nWORLD SPEED at 2x on and off.");
