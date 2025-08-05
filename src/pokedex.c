@@ -19,6 +19,7 @@
 #include "palette.h"
 #include "party_menu.h"
 #include "pokedex.h"
+#include "pokedex_plus_hgss.h"
 #include "pokedex_area_screen.h"
 #include "pokedex_cry_screen.h"
 #include "pokemon_icon.h"
@@ -1685,11 +1686,19 @@ static void ResetPokedexView(struct PokedexView *pokedexView)
         pokedexView->unkArr3[i] = 0;
 }
 
+#define HGSS_DEX TRUE
+
 void CB2_OpenPokedex(void)
 {
     u8 *addr;
     u32 size;
 
+    if (HGSS_DEX)
+    {
+        CB2_OpenPokedexPlusHGSS();
+        return;
+    }
+    
     switch (gMain.state)
     {
     case 0:
@@ -3591,7 +3600,7 @@ static void Task_HandleInfoScreenInput(u8 taskId)
     //     return;
     // }
     // if ((JOY_NEW(DPAD_LEFT)
-    //  || (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR))
+    //  || (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR))
     //  && sPokedexView->selectedScreen > 0)
     // {
     //     sPokedexView->selectedScreen--;
@@ -3600,7 +3609,7 @@ static void Task_HandleInfoScreenInput(u8 taskId)
     //     return;
     // }
     // if ((JOY_NEW(DPAD_RIGHT)
-    //  || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR))
+    //  || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR))
     //  && sPokedexView->selectedScreen < CANCEL_SCREEN)
     // {
     //     sPokedexView->selectedScreen++;
@@ -3609,7 +3618,7 @@ static void Task_HandleInfoScreenInput(u8 taskId)
     //     return;
     // }
 
-    if ((JOY_NEW(DPAD_RIGHT) || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR)))
+    if ((JOY_NEW(DPAD_RIGHT) || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR)))
     {
         sPokedexView->selectedScreen = AREA_SCREEN;
         BeginNormalPaletteFade(0xFFFFFFEB, 0, 0, 0x10, RGB_BLACK);
@@ -3851,7 +3860,7 @@ static void Task_HandleCryScreenInput(u8 taskId)
             return;
         }
         if ((JOY_NEW(DPAD_LEFT))
-         || ((JOY_NEW(L_BUTTON)) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR))
+         || ((JOY_NEW(L_BUTTON)) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR))
         {
             BeginNormalPaletteFade(0xFFFFFFEB, 0, 0, 0x10, RGB_BLACK);
             m4aMPlayContinue(&gMPlayInfo_BGM);
@@ -3861,7 +3870,7 @@ static void Task_HandleCryScreenInput(u8 taskId)
             return;
         }
         if (JOY_NEW(DPAD_RIGHT)
-         || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR))
+         || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR))
         {
             if (!sPokedexListItem->owned)
             {
@@ -4021,7 +4030,7 @@ static void Task_HandleSizeScreenInput(u8 taskId)
         PlaySE(SE_PC_OFF);
     }
     else if ((JOY_NEW(DPAD_LEFT))
-     || ((JOY_NEW(L_BUTTON)) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR))
+     || ((JOY_NEW(L_BUTTON)) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR))
     {
         BeginNormalPaletteFade(0xFFFFFFEB, 0, 0, 0x10, RGB_BLACK);
         sPokedexView->screenSwitchState = 2;
@@ -4687,6 +4696,17 @@ bool16 HasAllHoennMons(void)
         if (!GetSetPokedexFlag(HoennToNationalOrder(i + 1), FLAG_GET_CAUGHT))
             return FALSE;
     }
+
+    // If first check after getting all Hoenn Pokemon, add Shiny Charm to Item PC
+    if (!FlagGet(FLAG_HOENN_DEX_COMPLETE))
+    {
+        FlagSet(FLAG_HOENN_DEX_COMPLETE);
+        AddPCItem(ITEM_SHINY_CHARM, 1);
+    }
+
+    // Run HasAllMons for each Hoenn Dex check to trigger National Dex check in the background.
+    HasAllMons();
+
     return TRUE;
 }
 
@@ -4727,6 +4747,14 @@ bool16 HasAllMons(void)
         if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
             return FALSE;
     }
+
+    // If first check after getting all National Dex Pokemon, add Shiny Charm to Item PC
+    if (!FlagGet(FLAG_NATIONAL_DEX_COMPLETE))
+    {
+        FlagSet(FLAG_NATIONAL_DEX_COMPLETE);
+        AddPCItem(ITEM_SHINY_CHARM, 1);
+    }
+
     return TRUE;
 }
 
@@ -6198,7 +6226,7 @@ static void Task_HandleStatsScreenInput(u8 taskId)
     }
 
     //Switch screens
-    if ((JOY_NEW(DPAD_LEFT) || (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR)))
+    if ((JOY_NEW(DPAD_LEFT) || (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR)))
     {
         sPokedexView->selectedScreen = INFO_SCREEN;
         BeginNormalPaletteFade(0xFFFFFFEB, 0, 0, 0x10, RGB_BLACK);
@@ -6207,7 +6235,7 @@ static void Task_HandleStatsScreenInput(u8 taskId)
         PlaySE(SE_PIN);
     }
 
-    if ((JOY_NEW(DPAD_RIGHT) || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR)))
+    if ((JOY_NEW(DPAD_RIGHT) || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode >= OPTIONS_BUTTON_MODE_LR)))
     {
         if (!sPokedexListItem->owned)
             PlaySE(SE_FAILURE);
@@ -6530,7 +6558,7 @@ static void PrintMonStatsToggle(u8 taskId)
     FillWindowPixelRect(0, PIXEL_FILL(0), base_x, base_y, 90, 100); //bottom stats
     FillWindowPixelRect(0, PIXEL_FILL(0), abilities_x, 99, 130, 58); //abilities
 
-
+    /* Commented out due to HGSS Upgrade removing many global strings used.
     //Base stats
     if (gTasks[taskId].data[5] == 0)
     {
@@ -6547,7 +6575,7 @@ static void PrintMonStatsToggle(u8 taskId)
         ConvertIntToDecimalStringN(strBase, gSpeciesInfo[species].baseAttack, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_first_row, base_y + base_offset*base_i);
 
-        PrintInfoScreenTextSmall(gText_Stats_SpAtk, base_x+base_x_second_row, base_y + base_offset*base_i);
+        PrintInfoScreenTextSmall(gText_Stats_SpAttack, base_x+base_x_second_row, base_y + base_offset*base_i);
         ConvertIntToDecimalStringN(strBase, gSpeciesInfo[species].baseSpAttack, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_offset, base_y + base_offset*base_i);
 
@@ -6556,7 +6584,7 @@ static void PrintMonStatsToggle(u8 taskId)
         ConvertIntToDecimalStringN(strBase, gSpeciesInfo[species].baseDefense, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_first_row, base_y + base_offset*base_i);
 
-        PrintInfoScreenTextSmall(gText_Stats_SpDef, base_x+base_x_second_row, base_y + base_offset*base_i);
+        PrintInfoScreenTextSmall(gText_Stats_SpDefense, base_x+base_x_second_row, base_y + base_offset*base_i);
         ConvertIntToDecimalStringN(strBase, gSpeciesInfo[species].baseSpDefense, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_offset, base_y + base_offset*base_i);
         base_i++;
@@ -6767,7 +6795,7 @@ static void PrintMonStatsToggle(u8 taskId)
         }
         PrintInfoScreenTextSmall(gStringVar1, base_x + 37, base_y + base_offset*base_i);
     }
-
+    */
 
 
     //Abilitie(s)

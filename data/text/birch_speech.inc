@@ -38,6 +38,9 @@ gText_Birch_BoyOrGirl::
 gText_Birch_Nuzlocke::
 	.string "Select difficulty.$"
 
+gText_Birch_DexType::
+	.string "Select POKéDEX mode.$"
+
 gText_Birch_AreYouSure_Normal::
 	.string "Are you sure?\n"
 	.string "Classic POKéMON rules.$"
@@ -51,6 +54,16 @@ gText_Birch_AreYouSure_Hardcore::
 	.string "Are you sure?\n"
 	.string "Hard mode, but POKéMON can't\l"
 	.string "be revived.$"
+
+gText_Birch_AreYouSure_HoennDex::
+	.string "Are you sure?\n"
+	.string "HOENN POKéMON starter options\l"
+	.string "and HOENN wild encounters.$"
+
+gText_Birch_AreYouSure_NationalDex::
+	.string "Are you sure?\n"
+	.string "More POKéMON starter options\l"
+	.string "and wider wild encounters.$"
 
 gText_Birch_WhatsYourName::
 	.string "All right.\n"

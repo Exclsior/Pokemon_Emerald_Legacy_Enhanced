@@ -380,6 +380,11 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves)
 
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         AI_THINKING_STRUCT->aiFlags |= AI_SCRIPT_DOUBLE_BATTLE; // act smart in doubles and don't attack your partner
+    
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+    if (gIsDebugBattle)
+        AI_THINKING_STRUCT->aiFlags = gDebugAIFlags;
+#endif
 }
 
 u8 BattleAI_ChooseMoveOrAction(void)

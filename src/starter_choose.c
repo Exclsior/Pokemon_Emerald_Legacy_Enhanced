@@ -25,6 +25,7 @@
 #include "constants/rgb.h"
 
 #define STARTER_MON_COUNT   3
+#define STARTER_MON_COUNT_NATDEX 9
 
 // Position of the sprite of the selected starter Pokémon
 #define STARTER_PKMN_POS_X (DISPLAY_WIDTH / 2)
@@ -115,6 +116,19 @@ static const u16 sStarterMon[STARTER_MON_COUNT] =
     SPECIES_TREECKO,
     SPECIES_TORCHIC,
     SPECIES_MUDKIP,
+};
+
+static const u16 sStarterMon_NatDex[STARTER_MON_COUNT_NATDEX] =
+{
+    SPECIES_TREECKO,
+    SPECIES_TORCHIC,
+    SPECIES_MUDKIP,
+    SPECIES_BULBASAUR,
+    SPECIES_CHARMANDER,
+    SPECIES_SQUIRTLE,
+    SPECIES_CHIKORITA,
+    SPECIES_CYNDAQUIL,
+    SPECIES_TOTODILE,
 };
 
 static const struct BgTemplate sBgTemplates[3] =
@@ -353,6 +367,13 @@ u16 GetStarterPokemon(u16 chosenStarterId)
     if (chosenStarterId > STARTER_MON_COUNT)
         chosenStarterId = 0;
     return sStarterMon[chosenStarterId];
+}
+
+u16 GetStarterPokemon_NatDex(u16 chosenStarterId)
+{
+    if (chosenStarterId > STARTER_MON_COUNT_NATDEX)
+        chosenStarterId = 0;
+    return sStarterMon_NatDex[chosenStarterId];
 }
 
 static void VblankCB_StarterChoose(void)

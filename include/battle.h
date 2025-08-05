@@ -441,6 +441,8 @@ struct BattleStruct
     u8 arenaLostPlayerMons; // Bits for party member, lost as in referee's decision, not by fainting.
     u8 arenaLostOpponentMons;
     u8 alreadyStatusedMoveAttempt; // As bits for battlers; For example when using Thunder Wave on an already paralyzed Pokémon.
+    bool8 checkedMoveBoostedByAbility:1;
+    bool8 checkedMagmaArmor:1;
 };
 
 // The palaceFlags member of struct BattleStruct contains 1 flag per move to indicate which moves the AI should consider,
@@ -578,6 +580,7 @@ struct BattleHealthboxInfo
 struct BattleBarInfo
 {
     u8 healthboxSpriteId;
+    u8 oddFrame; // For more speed control in moving hp bar down.
     s32 maxValue;
     s32 oldValue;
     s32 receivedValue;
@@ -696,6 +699,7 @@ extern u16 gIntroSlideFlags;
 extern u8 gSentPokesToOpponent[2];
 extern u16 gDynamicBasePower;
 extern u16 gExpShareExp;
+extern bool8 gExpAllMessCheck;
 extern struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT];
 extern struct BattleScripting gBattleScripting;
 extern struct BattleStruct *gBattleStruct;

@@ -73,13 +73,23 @@ MossdeepCity_EventScript_Woman::
 	goto_if_set FLAG_BATTLED_JIRACHI, MossdeepCity_Text_SpecialSpaceCenterRockPostJirachi
 	msgbox MossdeepCity_Text_SpecialSpaceCenterRock, MSGBOX_NPC
 	end
+
 MossdeepCity_Text_SpecialSpaceCenterRockPostJirachi::
 	msgbox MossdeepCity_Text_SpecialSpaceCenterRockAfterEvent, MSGBOX_NPC
 	end
 
 MossdeepCity_EventScript_WhiteRock::
+	call_if_set FLAG_BATTLED_JIRACHI, MossdeepCity_EventScript_WhiteRock_CheckJirachi
 	msgbox MossdeepCity_Text_ItsAWhiteRock, MSGBOX_SIGN
 	end
+
+MossdeepCity_EventScript_WhiteRock_CheckJirachi::
+	call_if_unset FLAG_CAUGHT_JIRACHI, MossdeepCity_EventScript_WhiteRock_CheckJirachiDefeated
+	return
+
+MossdeepCity_EventScript_WhiteRock_CheckJirachiDefeated::
+	goto_if_unset FLAG_DEFEATED_JIRACHI, MossdeepCity_EventScript_RematchJirachiAppears
+	return
 
 MossdeepCity_EventScript_GymSign::
 	msgbox MossdeepCity_Text_GymSign, MSGBOX_SIGN
@@ -330,7 +340,7 @@ MossdeepCity_SceneWithBirch_EventScript_Birch::
 	msgbox MossdeepCity_SceneWithBirch_Text_WhoKnowsWhatMightHappen, MSGBOX_DEFAULT
 	msgbox MossdeepCity_SceneWithBirch_Text_MakeAWish, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, MossdeepCity_SceneWithBirch_EventScript_JustTryIt
-	goto_if_eq VAR_RESULT, YES, MossdeepCity_SceneWithBirch_Text_JirachiAppears
+	goto_if_eq VAR_RESULT, YES, MossdeepCity_SceneWithBirch_EventScript_JirachiAppears
 	closemessage
 	releaseall
 	end
@@ -339,11 +349,12 @@ MossdeepCity_SceneWithBirch_EventScript_JustTryIt::
 	msgbox MossdeepCity_SceneWithBirch_Text_JustTryIt, MSGBOX_DEFAULT
 	msgbox MossdeepCity_SceneWithBirch_Text_MakeAWish, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, MossdeepCity_SceneWithBirch_EventScript_JustTryIt
-	goto_if_eq VAR_RESULT, YES, MossdeepCity_SceneWithBirch_Text_JirachiAppears
+	goto_if_eq VAR_RESULT, YES, MossdeepCity_SceneWithBirch_EventScript_JirachiAppears
 	end
 
-MossdeepCity_SceneWithBirch_Text_JirachiAppears::
+MossdeepCity_SceneWithBirch_EventScript_JirachiAppears::
 	closemessage
+	hidefollower
 	fadescreen FADE_TO_WHITE
 	addobject LOCALID_JIRACHI
 	special Script_FadeOutMapMusic
@@ -421,11 +432,17 @@ MossdeepCity_SceneWithBirch_Text_JirachiAppears::
 	waitstate
 	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, MossdeepCity_EventScript_JirachiRunsAway
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, MossdeepCity_EventScript_JirachiDefeated
 	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, MossdeepCity_EventScript_JirachiRunsAway
 	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, MossdeepCity_EventScript_JirachiRunsAway
 	setflag FLAG_BATTLED_JIRACHI
+	setflag FLAG_CAUGHT_JIRACHI
 	goto MossdeepCity_EventScript_EndJirachiEvent
+	end
+
+MossdeepCity_EventScript_JirachiDefeated::
+	setflag FLAG_DEFEATED_JIRACHI
+	goto MossdeepCity_EventScript_JirachiRunsAway
 	end
 
 MossdeepCity_EventScript_JirachiRunsAway::
@@ -495,6 +512,61 @@ MossdeepCity_EventScript_EndJirachiEvent:
 	setvar VAR_ARTISAN_CAVE_B1F_WILD_SET, 1
 	setvar VAR_SHOAL_CAVE_LOW_TIDE_INNER_ROOM_WILD_SET, 1
 	releaseall
+	end
+
+MossdeepCity_EventScript_RematchJirachiAppears::
+	fadescreen FADE_TO_WHITE
+	addobject LOCALID_JIRACHI
+	special Script_FadeOutMapMusic
+	fadescreen FADE_FROM_WHITE
+	applymovement LOCALID_JIRACHI, MossdeepCity_Movement_JirachiAppears
+	waitmovement 0
+	playmoncry SPECIES_JIRACHI, CRY_MODE_ENCOUNTER
+	delay 20
+	fadescreen FADE_TO_WHITE
+	delay 20
+	applymovement LOCALID_JIRACHI, MossdeepCity_Movement_JirachiJump
+	waitmovement 0
+	fadescreen FADE_FROM_WHITE
+	applymovement LOCALID_JIRACHI, MossdeepCity_Movement_JirachiJump
+	waitmovement 0
+	playmoncry SPECIES_JIRACHI, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	msgbox MossdeepCity_Text_Jirachi, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp
+	applymovement LOCALID_JIRACHI, MossdeepCity_Movement_JirachiWantsToFight
+	waitmovement 0
+	playmoncry SPECIES_JIRACHI, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	setvar VAR_LAST_TALKED, LOCALID_JIRACHI
+	seteventmon SPECIES_JIRACHI, 30
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	special BattleSetup_StartLegendaryBattle
+	waitstate
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, MossdeepCity_EventScript_RematchJirachiDefeated
+	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, MossdeepCity_EventScript_RematchJirachiRunsAway
+	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, MossdeepCity_EventScript_RematchJirachiRunsAway
+	setflag FLAG_BATTLED_JIRACHI
+	setflag FLAG_CAUGHT_JIRACHI
+	releaseall
+	end
+
+MossdeepCity_EventScript_RematchJirachiDefeated::
+	setflag FLAG_BATTLED_JIRACHI
+	setflag FLAG_DEFEATED_JIRACHI
+	setvar VAR_0x8004, SPECIES_JIRACHI
+	goto Common_EventScript_LegendaryFlewAway
+	end
+
+MossdeepCity_EventScript_RematchJirachiRunsAway::
+	setflag FLAG_BATTLED_JIRACHI
+	setvar VAR_0x8004, SPECIES_JIRACHI
+	goto Common_EventScript_LegendaryFlewAway
 	end
 
 MossdeepCity_Movement_BirchWalksToPlayerL:
@@ -598,7 +670,7 @@ MossdeepCity_Movement_JirachiJump:
 	step_end
 
 MossdeepCity_Movement_JirachiJumpsAroundBirch1:
-	walk_right
+	walk_fast_right
 	walk_down
 	jump_special_in_place_down_up
 	jump_special_in_place_down_up
@@ -866,8 +938,8 @@ MossdeepCity_Text_BirchJirachiFled:
 	.string "PROF. BIRCH: Oh… It seems JIRACHI has\n"
 	.string "disappeared.\p"
 	.string "But don't be disheartened, {PLAYER}{KUN}.\n"
-	.string "Even witnessing such a rare POKéMON is\l"
-	.string "an incredible experience.$"
+	.string "Perhaps JIRACHI will return to test\l"
+	.string "your bond again in the future!$"
 
 MossdeepCity_Text_BirchLeaves:
 	.string "PROF. BIRCH: What an extraordinary\n"

@@ -6,47 +6,70 @@ BattleFrontier_Lounge7_EventScript_LeftMoveTutor::
 	faceplayer
 	setvar VAR_TEMP_C, SCROLL_MULTI_BF_MOVE_TUTOR_1
 	goto_if_set FLAG_MET_FRONTIER_BEAUTY_MOVE_TUTOR, BattleFrontier_Lounge7_EventScript_AlreadyMetLeftTutor
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_LeftMoveTutorFreeMove
 	msgbox BattleFrontier_Lounge7_Text_LeftTutorIntro, MSGBOX_DEFAULT
 	setflag FLAG_MET_FRONTIER_BEAUTY_MOVE_TUTOR
 	goto BattleFrontier_Lounge7_EventScript_ChooseLeftTutorMove
 	end
 
+BattleFrontier_Lounge7_EventScript_LeftMoveTutorFreeMove::
+	msgbox BattleFrontier_Lounge7_Text_LeftTutorIntroFreeMove, MSGBOX_DEFAULT
+	setflag FLAG_MET_FRONTIER_BEAUTY_MOVE_TUTOR
+	goto BattleFrontier_Lounge7_EventScript_ChooseLeftTutorMove
+	end
+
 BattleFrontier_Lounge7_EventScript_AlreadyMetLeftTutor::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_AlreadyMetLeftTutorSilverSymbols
 	msgbox BattleFrontier_Lounge7_Text_LeftTutorWelcomeBack, MSGBOX_DEFAULT
 	goto BattleFrontier_Lounge7_EventScript_ChooseLeftTutorMove
 	end
 
+BattleFrontier_Lounge7_EventScript_AlreadyMetLeftTutorSilverSymbols::
+	msgbox BattleFrontier_Lounge7_Text_LeftTutorWelcomeBackSilverSymbols, MSGBOX_DEFAULT
+	goto BattleFrontier_Lounge7_EventScript_ChooseLeftTutorMove
+	end
+
 BattleFrontier_Lounge7_EventScript_ChooseLeftTutorMove::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_SetLeftTutorMovesFree
 	message BattleFrontier_Lounge7_Text_TeachWhichMove
 	waitmessage
 	special ShowBattlePointsWindow
 	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 0
-	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_1
 	setvar VAR_0x8006, 0
-	special ShowScrollableMultichoice
-	waitstate
-	copyvar VAR_TEMP_FRONTIER_TUTOR_SELECTION, VAR_RESULT
-	switch VAR_RESULT
-	case 0, BattleFrontier_Lounge7_EventScript_Softboiled
-	case 1, BattleFrontier_Lounge7_EventScript_SeismicToss
-	case 2, BattleFrontier_Lounge7_EventScript_DreamEater
-	case 3, BattleFrontier_Lounge7_EventScript_MegaPunch
-	case 4, BattleFrontier_Lounge7_EventScript_MegaKick
-	case 5, BattleFrontier_Lounge7_EventScript_BodySlam
-	case 6, BattleFrontier_Lounge7_EventScript_RockSlide
-	case 7, BattleFrontier_Lounge7_EventScript_Counter
-	case 8, BattleFrontier_Lounge7_EventScript_ThunderWave
-	case 9, BattleFrontier_Lounge7_EventScript_SwordsDance
-	case 10, BattleFrontier_Lounge7_EventScript_ExitTutorMoveSelect
-	case MULTI_B_PRESSED, BattleFrontier_Lounge7_EventScript_ExitTutorMoveSelect
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_1
+	goto BattleFrontier_Lounge7_EventScript_ShowLeftTutorMoves
+	end
+
+BattleFrontier_Lounge7_EventScript_SetLeftTutorMovesFree::
+	message BattleFrontier_Lounge7_Text_TeachWhichMoveFree
+	waitmessage
+	special ShowBattlePointsWindow
+	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 0
+	setvar VAR_0x8006, 0
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_1_FREE
+	goto BattleFrontier_Lounge7_EventScript_ShowLeftTutorMoves
 	end
 
 BattleFrontier_Lounge7_EventScript_ChooseNewLeftTutorMove::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_SetNewLeftTutorMovesFree
 	message BattleFrontier_Lounge7_Text_TeachWhichMove
 	waitmessage
 	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 0
-	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_1
 	setvar VAR_0x8006, 1
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_1
+	goto BattleFrontier_Lounge7_EventScript_ShowLeftTutorMoves
+	end
+
+BattleFrontier_Lounge7_EventScript_SetNewLeftTutorMovesFree::
+	message BattleFrontier_Lounge7_Text_TeachWhichMoveFree
+	waitmessage
+	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 0
+	setvar VAR_0x8006, 1
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_1_FREE
+	goto BattleFrontier_Lounge7_EventScript_ShowLeftTutorMoves
+	end
+
+BattleFrontier_Lounge7_EventScript_ShowLeftTutorMoves::
 	special ShowScrollableMultichoice
 	waitstate
 	copyvar VAR_TEMP_FRONTIER_TUTOR_SELECTION, VAR_RESULT
@@ -66,52 +89,52 @@ BattleFrontier_Lounge7_EventScript_ChooseNewLeftTutorMove::
 	end
 
 BattleFrontier_Lounge7_EventScript_Softboiled::
-	setvar VAR_0x8008, 16
+	setvar VAR_0x8008, 4
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_SeismicToss::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_DreamEater::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_MegaPunch::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_MegaKick::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_BodySlam::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_RockSlide::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_Counter::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_ThunderWave::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_SwordsDance::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
@@ -120,47 +143,70 @@ BattleFrontier_Lounge7_EventScript_RightMoveTutor::
 	faceplayer
 	setvar VAR_TEMP_C, SCROLL_MULTI_BF_MOVE_TUTOR_2
 	goto_if_set FLAG_MET_FRONTIER_SWIMMER_MOVE_TUTOR, BattleFrontier_Lounge7_EventScript_AlreadyMetRightTutor
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_RightMoveTutorFreeMove
 	msgbox BattleFrontier_Lounge7_Text_RightTutorIntro, MSGBOX_DEFAULT
 	setflag FLAG_MET_FRONTIER_SWIMMER_MOVE_TUTOR
 	goto BattleFrontier_Lounge7_EventScript_ChooseRightTutorMove
 	end
 
+BattleFrontier_Lounge7_EventScript_RightMoveTutorFreeMove::
+	msgbox BattleFrontier_Lounge7_Text_RightTutorIntroFreeMove, MSGBOX_DEFAULT
+	setflag FLAG_MET_FRONTIER_SWIMMER_MOVE_TUTOR
+	goto BattleFrontier_Lounge7_EventScript_ChooseRightTutorMove
+	end
+
 BattleFrontier_Lounge7_EventScript_AlreadyMetRightTutor::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_AlreadyMetRightTutorSilverSymbols
 	msgbox BattleFrontier_Lounge7_Text_RightTutorWelcomeBack, MSGBOX_DEFAULT
 	goto BattleFrontier_Lounge7_EventScript_ChooseRightTutorMove
 	end
 
+BattleFrontier_Lounge7_EventScript_AlreadyMetRightTutorSilverSymbols::
+	msgbox BattleFrontier_Lounge7_Text_RightTutorWelcomeBackSilverSymbols, MSGBOX_DEFAULT
+	goto BattleFrontier_Lounge7_EventScript_ChooseRightTutorMove
+	end
+
 BattleFrontier_Lounge7_EventScript_ChooseRightTutorMove::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_SetRightTutorMovesFree
 	message BattleFrontier_Lounge7_Text_TeachWhichMove
 	waitmessage
 	special ShowBattlePointsWindow
 	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 1
-	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_2
 	setvar VAR_0x8006, 0
-	special ShowScrollableMultichoice
-	waitstate
-	copyvar VAR_TEMP_FRONTIER_TUTOR_SELECTION, VAR_RESULT
-	switch VAR_RESULT
-	case 0, BattleFrontier_Lounge7_EventScript_DefenseCurl
-	case 1, BattleFrontier_Lounge7_EventScript_Snore
-	case 2, BattleFrontier_Lounge7_EventScript_MudSlap
-	case 3, BattleFrontier_Lounge7_EventScript_Swift
-	case 4, BattleFrontier_Lounge7_EventScript_IcyWind
-	case 5, BattleFrontier_Lounge7_EventScript_Endure
-	case 6, BattleFrontier_Lounge7_EventScript_PsychUp
-	case 7, BattleFrontier_Lounge7_EventScript_IcePunch
-	case 8, BattleFrontier_Lounge7_EventScript_ThunderPunch
-	case 9, BattleFrontier_Lounge7_EventScript_FirePunch
-	case 10, BattleFrontier_Lounge7_EventScript_ExitTutorMoveSelect
-	case MULTI_B_PRESSED, BattleFrontier_Lounge7_EventScript_ExitTutorMoveSelect
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_2
+	goto BattleFrontier_Lounge7_EventScript_ShowRightTutorMoves
+	end
+
+BattleFrontier_Lounge7_EventScript_SetRightTutorMovesFree::
+	message BattleFrontier_Lounge7_Text_TeachWhichMoveFree
+	waitmessage
+	special ShowBattlePointsWindow
+	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 1
+	setvar VAR_0x8006, 0
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE
+	goto BattleFrontier_Lounge7_EventScript_ShowRightTutorMoves
 	end
 
 BattleFrontier_Lounge7_EventScript_ChooseNewRightTutorMove::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_SetNewRightTutorMovesFree
 	message BattleFrontier_Lounge7_Text_TeachWhichMove
 	waitmessage
 	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 1
-	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_2
 	setvar VAR_0x8006, 1
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_2
+	goto BattleFrontier_Lounge7_EventScript_ShowRightTutorMoves
+	end
+
+BattleFrontier_Lounge7_EventScript_SetNewRightTutorMovesFree::
+	message BattleFrontier_Lounge7_Text_TeachWhichMoveFree
+	waitmessage
+	setvar VAR_TEMP_FRONTIER_TUTOR_ID, 1
+	setvar VAR_0x8006, 1
+	setvar VAR_0x8004, SCROLL_MULTI_BF_MOVE_TUTOR_2_FREE
+	goto BattleFrontier_Lounge7_EventScript_ShowRightTutorMoves
+	end
+
+BattleFrontier_Lounge7_EventScript_ShowRightTutorMoves::
 	special ShowScrollableMultichoice
 	waitstate
 	copyvar VAR_TEMP_FRONTIER_TUTOR_SELECTION, VAR_RESULT
@@ -180,52 +226,52 @@ BattleFrontier_Lounge7_EventScript_ChooseNewRightTutorMove::
 	end
 
 BattleFrontier_Lounge7_EventScript_DefenseCurl::
-	setvar VAR_0x8008, 16
+	setvar VAR_0x8008, 4
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_Snore::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_MudSlap::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_Swift::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_IcyWind::
-	setvar VAR_0x8008, 24
+	setvar VAR_0x8008, 6
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_Endure::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_PsychUp::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_IcePunch::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_ThunderPunch::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
 BattleFrontier_Lounge7_EventScript_FirePunch::
-	setvar VAR_0x8008, 48
+	setvar VAR_0x8008, 12
 	goto BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection
 	end
 
@@ -251,12 +297,19 @@ BattleFrontier_Lounge7_EventScript_ConfirmMoveSelection::
 	special BufferBattleFrontierTutorMoveName
 	buffernumberstring STR_VAR_2, VAR_0x8008
 	copyvar VAR_0x8004, VAR_TEMP_C
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_ConfirmMoveSelectionFree
 	msgbox BattleFrontier_Lounge7_Text_MoveWillBeXBattlePoints, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, BattleFrontier_Lounge7_EventScript_ChooseNewMove
 	specialvar VAR_TEMP_1, GetFrontierBattlePoints
 	goto_if_ge VAR_TEMP_1, VAR_0x8008, BattleFrontier_Lounge7_EventScript_TeachTutorMove
 	msgbox BattleFrontier_Lounge7_Text_HaventGotEnoughPoints, MSGBOX_DEFAULT
 	goto BattleFrontier_Lounge7_EventScript_ChooseNewMove
+	end
+
+BattleFrontier_Lounge7_EventScript_ConfirmMoveSelectionFree::
+	msgbox BattleFrontier_Lounge7_Text_MoveConfirm, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_Lounge7_EventScript_ChooseNewMove
+	goto BattleFrontier_Lounge7_EventScript_TeachTutorMove
 	end
 
 BattleFrontier_Lounge7_EventScript_TeachTutorMove::
@@ -268,9 +321,15 @@ BattleFrontier_Lounge7_EventScript_TeachTutorMove::
 	special ChooseMonForMoveTutor
 	waitstate
 	goto_if_eq VAR_RESULT, FALSE, BattleFrontier_Lounge7_EventScript_CancelChooseMon
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_Lounge7_EventScript_TeachTutorMoveFree
 	msgbox BattleFrontier_Lounge7_Text_IllTakeBattlePoints, MSGBOX_DEFAULT
 	copyvar VAR_0x8004, VAR_0x8008
 	special TakeFrontierBattlePoints
+	release
+	end
+
+BattleFrontier_Lounge7_EventScript_TeachTutorMoveFree::
+	msgbox BattleFrontier_Lounge7_Text_SeeHowSkilled, MSGBOX_DEFAULT
 	release
 	end
 
@@ -305,10 +364,38 @@ BattleFrontier_Lounge7_Text_LeftTutorIntro:
 	.string "How about paying for the moves I teach\l"
 	.string "with a wee bit of Battle Points?$"
 
+BattleFrontier_Lounge7_Text_LeftTutorIntroFreeMove:
+	.string "Buhahaha!\p"
+	.string "You couldn't tell it from looking now,\n"
+	.string "but I used to be one tough TRAINER.\p"
+	.string "I had a reputation as the toughest\n"
+	.string "BEAUTY around, I tell you!\p"
+	.string "… … … … … …\p"
+	.string "What is it now?\n"
+	.string "You don't believe me.\p"
+	.string "I'm not like that blowhard woman over\n"
+	.string "there. I'm actually talented!\p"
+	.string "Let me prove it to you.\n"
+	.string "I can teach your POKéMON special and\l"
+	.string "yet cute moves.\p"
+	.string "You've collected all of the silver\n"
+	.string "symbols...$"
+
 BattleFrontier_Lounge7_Text_LeftTutorWelcomeBack:
 	.string "Buhahaha!\p"
 	.string "Are you back to learn special and\n"
 	.string "yet cute POKéMON moves?$"
+
+BattleFrontier_Lounge7_Text_LeftTutorWelcomeBackSilverSymbols:
+	.string "Buhahaha!\p"
+	.string "Are you back to learn special and\n"
+	.string "yet cute POKéMON moves?\p"
+	.string "And, you've collected all of the silver\n"
+	.string "symbols...$"
+
+BattleFrontier_Lounge7_Text_TeachWhichMoveFree:
+	.string "Fine, I'll teach the moves for free!\n"
+	.string "Which move should I teach?$"
 
 BattleFrontier_Lounge7_Text_TeachWhichMove:
 	.string "Fine, fine, look here!\n"
@@ -317,6 +404,9 @@ BattleFrontier_Lounge7_Text_TeachWhichMove:
 BattleFrontier_Lounge7_Text_MoveWillBeXBattlePoints:
 	.string "The move {STR_VAR_1}, is it?\n"
 	.string "That will be {STR_VAR_2} Battle Points, okay?$"
+
+BattleFrontier_Lounge7_Text_MoveConfirm:
+	.string "The move {STR_VAR_1}, is it?$"
 
 BattleFrontier_Lounge7_Text_TeachMoveToWhichMon:
 	.string "Fine, fine, now pick the POKéMON\n"
@@ -328,7 +418,13 @@ BattleFrontier_Lounge7_Text_HaventGotEnoughPoints:
 
 BattleFrontier_Lounge7_Text_IllTakeBattlePoints:
 	.string "Do you see how skilled I am now?\n"
-	.string "I'll take your Battle Points, thanks!$"
+	.string "I'll take your Battle Points, thanks!\p"
+	.string "If you manage to collect all of the\n"
+	.string "silver symbols...\p"
+	.string "I'll teach you the moves for free!$"
+
+BattleFrontier_Lounge7_Text_SeeHowSkilled:
+	.string "Do you see how skilled I am now?$"
 
 BattleFrontier_Lounge7_Text_YouDontWantTo:
 	.string "What's that?\n"
@@ -354,10 +450,34 @@ BattleFrontier_Lounge7_Text_RightTutorIntro:
 	.string "How about paying for the moves I teach\l"
 	.string "with a wee bit of Battle Points?$"
 
+BattleFrontier_Lounge7_Text_RightTutorIntroFreeMove:
+	.string "Ihihihi!\p"
+	.string "I know it's hard to see now, but I used\n"
+	.string "to be one fantastic TRAINER.\p"
+	.string "I had a reputation as the most\n"
+	.string "invincible SWIMMER around, I tell you!\p"
+	.string "… … … … … …\p"
+	.string "What's wrong?\n"
+	.string "You don't believe me.\p"
+	.string "I'm not like that buffoonish woman over\n"
+	.string "there. I'm actually experienced!\p"
+	.string "I can prove it to you.\n"
+	.string "I can teach your POKéMON hard and\l"
+	.string "yet pretty moves.\p"
+	.string "You've collected all of the silver\n"
+	.string "symbols...$"
+
 BattleFrontier_Lounge7_Text_RightTutorWelcomeBack:
 	.string "Ihihihi!\p"
 	.string "Have you come to learn hard and\n"
 	.string "yet pretty POKéMON moves?$"
+
+BattleFrontier_Lounge7_Text_RightTutorWelcomeBackSilverSymbols:
+	.string "Ihihihi!\p"
+	.string "Have you come to learn hard and\n"
+	.string "yet pretty POKéMON moves?\p"
+	.string "And, you've collected all of the silver\n"
+	.string "symbols...$"
 
 BattleFrontier_Lounge7_Text_ThinkLadiesDontGetAlong:
 	.string "Those ladies, the way they bad-mouth\n"
