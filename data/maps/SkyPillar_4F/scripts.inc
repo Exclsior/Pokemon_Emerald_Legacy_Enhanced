@@ -2,6 +2,7 @@ SkyPillar_4F_MapScripts::
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, CaveHole_CheckFallDownHole
 	map_script MAP_SCRIPT_ON_TRANSITION, SkyPillar_4F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, SkyPillar_4F_SetHoleWarp
+	map_script MAP_SCRIPT_ON_LOAD, SkyPillar_4F_OnLoad
 	.byte 0
 
 SkyPillar_4F_OnTransition:
@@ -11,6 +12,22 @@ SkyPillar_4F_OnTransition:
 
 SkyPillar_4F_EventScript_CleanFloor::
 	setmaplayoutindex LAYOUT_SKY_PILLAR_4F_CLEAN
+	return
+
+SkyPillar_4F_OnLoad:
+	call_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, SkyPillar_4F_EventScript_MoveRocksAndFloor
+	return
+
+SkyPillar_4F_EventScript_MoveRocksAndFloor::
+	setmetatile 12, 2, METATILE_General_GreyLargeRocksShaded, TRUE
+	setmetatile 13, 3, METATILE_Pacifidlog_SkyPillar_GreyFloor, FALSE
+	setmetatile 13, 8, METATILE_Pacifidlog_SkyPillar_GreyFloor, FALSE
+	setmetatile 13, 9, METATILE_General_GreyLargeRocks, TRUE
+	setmetatile 13, 10, METATILE_General_GreySmallRocks, TRUE
+	setmetatile 11, 12, METATILE_Pacifidlog_SkyPillar_GreyFloor, FALSE
+	setmetatile 2, 12, METATILE_Pacifidlog_SkyPillar_GreyFloor, FALSE
+	setmetatile 0, 11, METATILE_General_GreyLargeRocks, TRUE
+	setmetatile 4, 4, METATILE_Pacifidlog_SkyPillar_GreyFloor, FALSE
 	return
 
 SkyPillar_4F_SetHoleWarp:

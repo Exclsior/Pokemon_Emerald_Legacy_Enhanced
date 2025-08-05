@@ -99,9 +99,19 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
-    gSaveBlock2Ptr->optionsBikeMusic = FALSE; // Added flag for Bike Music toggle (defaults to on with FALSE)
-    gSaveBlock2Ptr->optionsSurfMusic = FALSE; // Added flag for Surf Music toggle (defaults to on with FALSE)
-    gSaveBlock2Ptr->optionsBattleItemAnimation = OPTIONS_ITEM_ANIMATION_NORMAL; // Added flag for Surf Music toggle (defaults to on with FALSE)
+    gSaveBlock2Ptr->optionsBattleItemAnimation = OPTIONS_ITEM_ANIMATION_NORMAL; // Added option to change Item Use Battle animation
+    FlagSet(FLAG_ENABLE_SURFOVERWORLD); // Set the Surfing Overworld Sprites enabled by default
+    FlagSet(FLAG_ENABLE_FOLLOWER); // Set the Overworld Follower enabled by default
+    /*
+    Other Options using Flags not touched as they default to 0/FALSE and don't need to be manually cleared:
+    FLAG_SHOW_STAT_EDITOR (Also relies on FLAG_ENABLE_STAT_EDITOR unlocked in post-game)
+    FLAG_DISABLE_BIKEMUSIC
+    FLAG_DISABLE_SURFMUSIC
+    FLAG_ENABLE_AUTORUN
+    FLAG_ENABLE_FASTSURF
+    FLAG_SWAP_FONT
+    FLAG_ENABLE_FISHCANTESCAPE
+    */
 }
 
 static void ClearPokedexFlags(void)

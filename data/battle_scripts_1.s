@@ -4626,6 +4626,14 @@ BattleScript_PrintPlayerForfeitedLinkBattle::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
+BattleScript_AttackBoostedByAbility::
+	printstring STRINGID_ATTACKBOOSTEDBYABILITY
+	return
+
+BattleScript_MagmaArmorActivated::
+	printstring STRINGID_MAGMAARMORACTIVATED
+	return
+
 BattleScript_HeldItemAnimation_Scripting::
 	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_NORMAL, BattleScript_HeldItemAnimationNormal_Scripting
 	jumpifbyte CMP_EQUAL, sBATTLE_ITEM_ANIMATION, OPTIONS_ITEM_ANIMATION_REDUCED, BattleScript_HeldItemAnimationReduced_Scripting

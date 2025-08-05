@@ -1,5 +1,21 @@
+.set LOCALID_TRADEMON, 3
+
 RustboroCity_House1_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, RustboroCity_House1_OnResume
 	.byte 0
+
+RustboroCity_House1_OnResume:
+	call_if_set FLAG_RUSTBORO_NPC_TRADE_COMPLETED, RustboroCity_House1_EventScript_SetUpShroomish
+	call_if_unset FLAG_RUSTBORO_NPC_TRADE_COMPLETED, RustboroCity_House1_EventScript_SetUpNumel
+	return
+
+RustboroCity_House1_EventScript_SetUpShroomish::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_SHROOMISH
+	return
+
+RustboroCity_House1_EventScript_SetUpNumel::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_NUMEL
+	return
 
 RustboroCity_House1_EventScript_Trader::
 	lock
@@ -22,9 +38,17 @@ RustboroCity_House1_EventScript_Trader::
 	copyvar VAR_0x8004, VAR_0x8008
 	copyvar VAR_0x8005, VAR_0x800A
 	special CreateInGameTradePokemon
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	special DoInGameTradeScene
 	waitstate
 	msgbox RustboroCity_House1_Text_PleaseBeGoodToMyPokemon, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	call RustboroCity_House1_EventScript_SetUpShroomish
+	addobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	setflag FLAG_RUSTBORO_NPC_TRADE_COMPLETED
 	release
 	end
@@ -47,6 +71,31 @@ RustboroCity_House1_EventScript_TradeCompleted::
 
 RustboroCity_House1_EventScript_Hiker::
 	msgbox RustboroCity_House1_Text_AllSortsOfPlaces, MSGBOX_NPC
+	end
+
+RustboroCity_House1_EventScript_Mon::
+	call_if_set FLAG_RUSTBORO_NPC_TRADE_COMPLETED, RustboroCity_House1_EventScript_Shroomish
+	call_if_unset FLAG_RUSTBORO_NPC_TRADE_COMPLETED, RustboroCity_House1_EventScript_Numel
+	end
+
+RustboroCity_House1_EventScript_Shroomish::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_SHROOMISH, CRY_MODE_NORMAL
+	msgbox RustboroCity_House1_Text_Shroomish, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+RustboroCity_House1_EventScript_Numel::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_NUMEL, CRY_MODE_NORMAL
+	msgbox RustboroCity_House1_Text_Numel, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 RustboroCity_House1_Text_IllTradeIfYouWant:
@@ -79,3 +128,8 @@ RustboroCity_House1_Text_AllSortsOfPlaces:
 	.string "I find that fascinating, so I go to all\n"
 	.string "sorts of places.$"
 
+RustboroCity_House1_Text_Shroomish:
+	.string "SHROOMISH: Shroooooo.$"
+
+RustboroCity_House1_Text_Numel:
+	.string "MEL: Nu mu nu!$"

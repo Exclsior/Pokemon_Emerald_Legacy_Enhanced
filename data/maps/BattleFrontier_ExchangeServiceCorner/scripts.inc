@@ -250,6 +250,7 @@ BattleFrontier_ExchangeServiceCorner_EventScript_VitaminClerk::
 	end
 
 BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin::
+	goto_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin_SilverSymbols
 	setvar VAR_0x8004, SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR
 	special ShowFrontierExchangeCornerItemIconWindow
 	special ShowScrollableMultichoice
@@ -262,9 +263,31 @@ BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin::
 	case 3, BattleFrontier_ExchangeServiceCorner_EventScript_Zinc
 	case 4, BattleFrontier_ExchangeServiceCorner_EventScript_Carbos
 	case 5, BattleFrontier_ExchangeServiceCorner_EventScript_HPUp
-	case 6, BattleFrontier_ExchangeServiceCorner_EventScript_RareCandy
-	case 7, BattleFrontier_ExchangeServiceCorner_EventScript_AbilityCapsule
-	case 8, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
+	case 6, BattleFrontier_ExchangeServiceCorner_EventScript_PPUp
+	case 7, BattleFrontier_ExchangeServiceCorner_EventScript_RareCandy
+	case 8, BattleFrontier_ExchangeServiceCorner_EventScript_AbilityCapsule
+	case 9, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
+	case MULTI_B_PRESSED, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin_SilverSymbols::
+	setvar VAR_0x8004, SCROLL_MULTI_BF_EXCHANGE_CORNER_VITAMIN_VENDOR_SILVER_SYMBOLS
+	special ShowFrontierExchangeCornerItemIconWindow
+	special ShowScrollableMultichoice
+	waitstate
+	special CloseFrontierExchangeCornerItemIconWindow
+	switch VAR_RESULT
+	case 0, BattleFrontier_ExchangeServiceCorner_EventScript_Protein
+	case 1, BattleFrontier_ExchangeServiceCorner_EventScript_Calcium
+	case 2, BattleFrontier_ExchangeServiceCorner_EventScript_Iron
+	case 3, BattleFrontier_ExchangeServiceCorner_EventScript_Zinc
+	case 4, BattleFrontier_ExchangeServiceCorner_EventScript_Carbos
+	case 5, BattleFrontier_ExchangeServiceCorner_EventScript_HPUp
+	case 6, BattleFrontier_ExchangeServiceCorner_EventScript_PPUp
+	case 7, BattleFrontier_ExchangeServiceCorner_EventScript_PPMax
+	case 8, BattleFrontier_ExchangeServiceCorner_EventScript_RareCandy
+	case 9, BattleFrontier_ExchangeServiceCorner_EventScript_AbilityCapsule
+	case 10, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	case MULTI_B_PRESSED, BattleFrontier_ExchangeServiceCorner_EventScript_ClerkGoodbye
 	end
 
@@ -313,6 +336,22 @@ BattleFrontier_ExchangeServiceCorner_EventScript_HPUp::
 	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin
 	setvar VAR_0x8008, 1
 	setvar VAR_0x8009, ITEM_HP_UP
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_PPUp::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmPPUp, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin
+	setvar VAR_0x8008, 1
+	setvar VAR_0x8009, ITEM_PP_UP
+	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
+	end
+
+BattleFrontier_ExchangeServiceCorner_EventScript_PPMax::
+	msgbox BattleFrontier_ExchangeServiceCorner_Text_ConfirmPPMax, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, BattleFrontier_ExchangeServiceCorner_EventScript_ChooseVitamin
+	setvar VAR_0x8008, 1
+	setvar VAR_0x8009, ITEM_PP_MAX
 	goto BattleFrontier_ExchangeServiceCorner_EventScript_TryPurchasePrize
 	end
 
@@ -748,6 +787,14 @@ BattleFrontier_ExchangeServiceCorner_Text_ConfirmHPUp:
 	.string "You've chosen the HP UP.\n"
 	.string "Is that correct?$"
 
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmPPUp:
+	.string "You've chosen the PP UP.\n"
+	.string "Is that correct?$"
+
+BattleFrontier_ExchangeServiceCorner_Text_ConfirmPPMax:
+	.string "You've chosen the PP MAX.\n"
+	.string "Is that correct?$"
+
 BattleFrontier_ExchangeServiceCorner_Text_ConfirmRareCandy:
 	.string "You've chosen a RARE CANDY.\n"
 	.string "Is that correct?$"
@@ -994,6 +1041,14 @@ BattleFrontier_ExchangeServiceCorner_Text_CarbosDesc::
 
 BattleFrontier_ExchangeServiceCorner_Text_HPUpDesc::
 	.string "Raises the HP of one POKéMON.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_PPUpDesc::
+	.string "Raises the maximum PP of\n"
+	.string "a selected move.$"
+
+BattleFrontier_ExchangeServiceCorner_Text_PPMaxDesc::
+	.string "Raises the PP of a move to\n"
+	.string "its maximum points.$"
 
 BattleFrontier_ExchangeServiceCorner_Text_RareCandyDesc::
 	.string "A candy that instantly raises\n"

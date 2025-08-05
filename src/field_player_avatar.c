@@ -630,19 +630,50 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING)
     {
         // same speed as running
-        if (heldKeys & B_BUTTON)
+        if (
+            ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_FASTSURF))
+            && !((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_FASTSURF)) // Invert B Button to surf slower if Fast Surf setting On
+            )
             PlayerWalkFaster(direction);
+        else if(((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_FASTSURF))) // Invert B Button to surf slower if Fast Surf setting On
+            PlayerWalkFast(direction);
         else
             PlayerWalkFast(direction);
         return;
     }
 
-    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER) && (heldKeys & B_BUTTON) && FlagGet(FLAG_SYS_B_DASH)
-     && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0)
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER)
+    {
+        switch (gSaveBlock2Ptr->optionsDiveSpeed)
+        {
+            case 2:
+                PlayerWalkFaster(direction);
+                break;
+            case 1:
+                PlayerWalkFast(direction);
+                break;
+            case 0:
+            default:
+                PlayerWalkNormal(direction);
+                break;
+        }
+    }
+
+    if (
+        !(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER)
+        && FlagGet(FLAG_SYS_B_DASH)
+        && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0
+        && ((heldKeys & B_BUTTON) || FlagGet(FLAG_ENABLE_AUTORUN)) // If AutoRun setting On, run as default without holding B
+        && !((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_AUTORUN)) // Invert B Button to walk if Auto Run setting On
+        )
     {
         PlayerRun(direction);
         gPlayerAvatar.flags |= PLAYER_AVATAR_FLAG_DASH;
         return;
+    }
+    else if(((heldKeys & B_BUTTON) && FlagGet(FLAG_ENABLE_AUTORUN))) // Invert B Button to walk if Auto Run setting On
+    {
+        PlayerWalkNormal(direction);
     }
     else
     {
@@ -1827,7 +1858,7 @@ static bool8 Fishing_CheckForBite(struct Task *task)
 
         if (!bite)
         {
-            if (Random() & 1)
+            if ((Random() & 1))
                 task->tStep = FISHING_NO_BITE;
             else
                 bite = TRUE;
@@ -1859,7 +1890,9 @@ static bool8 Fishing_WaitForA(struct Task *task)
 
     AlignFishingAnimationFrames();
     task->tFrameCounter++;
-    if (task->tFrameCounter >= reelTimeouts[task->tFishingRod])
+
+    // If Option setting enabled, fish can't get away, wait until player presses A to start encounter
+    if ((task->tFrameCounter >= reelTimeouts[task->tFishingRod]) && !FlagGet(FLAG_ENABLE_FISHCANTESCAPE))
         task->tStep = FISHING_GOT_AWAY;
     else if (JOY_NEW(A_BUTTON))
         task->tStep++;

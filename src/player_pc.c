@@ -29,6 +29,8 @@
 #include "task.h"
 #include "window.h"
 #include "menu_specialized.h"
+#include "constants/field_specials.h"
+#include "event_data.h"
 
 // Top level PC menu options
 enum {
@@ -380,8 +382,18 @@ void BedroomPC(void)
 
 void PlayerPC(void)
 {
-    sTopMenuOptionOrder = sPlayerPC_OptionOrder;
-    sTopMenuNumOptions = NUM_PLAYER_PC_OPTIONS;
+    // Due to added Lanette PC to Player Home after beating the game,
+    // added check for Player PC Location to support Decorations in Bedroom PC
+    if ((gSpecialVar_0x8004 == PC_LOCATION_BRENDANS_HOUSE) || gSpecialVar_0x8004 == PC_LOCATION_MAYS_HOUSE)
+    {
+        sTopMenuOptionOrder = sBedroomPC_OptionOrder;
+        sTopMenuNumOptions = NUM_BEDROOM_PC_OPTIONS;
+    }
+    else
+    {        
+        sTopMenuOptionOrder = sPlayerPC_OptionOrder;
+        sTopMenuNumOptions = NUM_PLAYER_PC_OPTIONS;
+    }        
     DisplayItemMessageOnField(CreateTask(TaskDummy, 0), gText_WhatWouldYouLike, InitPlayerPCMenu);
 }
 
@@ -1446,7 +1458,10 @@ static void ItemStorage_DoItemToss(u8 taskId)
     s16 *data = gTasks[taskId].data;
     u16 pos = gPlayerPCItemPageInfo.cursorPos + gPlayerPCItemPageInfo.itemsAbove;
 
-    if (!ItemId_GetImportance(gSaveBlock1Ptr->pcItems[pos].itemId))
+    if (
+        !ItemId_GetImportance(gSaveBlock1Ptr->pcItems[pos].itemId)
+        && !(gSaveBlock1Ptr->pcItems[pos].itemId == ITEM_SHINY_CHARM)
+        )
     {
         // Show toss confirmation prompt
         CopyItemName(gSaveBlock1Ptr->pcItems[pos].itemId, gStringVar1);

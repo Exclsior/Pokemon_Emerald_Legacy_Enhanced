@@ -1,5 +1,21 @@
+.set LOCALID_TRADEMON, 3
+
 PacifidlogTown_House3_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, PacifidlogTown_House3_OnResume
 	.byte 0
+
+PacifidlogTown_House3_OnResume:
+	call_if_set FLAG_PACIFIDLOG_NPC_TRADE_COMPLETED, PacifidlogTown_House3_EventScript_SetUpRelicanth
+	call_if_unset FLAG_PACIFIDLOG_NPC_TRADE_COMPLETED, PacifidlogTown_House3_EventScript_SetUpBagon
+	return
+
+PacifidlogTown_House3_EventScript_SetUpRelicanth::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_RELICANTH
+	return
+
+PacifidlogTown_House3_EventScript_SetUpBagon::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_BAGON
+	return
 
 PacifidlogTown_House3_EventScript_Trader::
 	lock
@@ -22,10 +38,18 @@ PacifidlogTown_House3_EventScript_Trader::
 	copyvar VAR_0x8004, VAR_0x8008
 	copyvar VAR_0x8005, VAR_0x800A
 	special CreateInGameTradePokemon
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	special DoInGameTradeScene
 	waitstate
 	bufferspeciesname STR_VAR_1, VAR_0x8009
 	msgbox PacifidlogTown_House3_Text_ItsSubtlyDifferentThankYou, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	call PacifidlogTown_House3_EventScript_SetUpRelicanth
+	addobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	setflag FLAG_PACIFIDLOG_NPC_TRADE_COMPLETED
 	release
 	end
@@ -48,6 +72,31 @@ PacifidlogTown_House3_EventScript_TradeCompleted::
 
 PacifidlogTown_House3_EventScript_Girl::
 	msgbox PacifidlogTown_House3_Text_IsThatAPokedex, MSGBOX_NPC
+	end
+
+PacifidlogTown_House3_EventScript_Mon::
+	call_if_set FLAG_PACIFIDLOG_NPC_TRADE_COMPLETED, PacifidlogTown_House3_EventScript_Relicanth
+	call_if_unset FLAG_PACIFIDLOG_NPC_TRADE_COMPLETED, PacifidlogTown_House3_EventScript_Bagon
+	end
+
+PacifidlogTown_House3_EventScript_Relicanth::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_RELICANTH, CRY_MODE_NORMAL
+	msgbox PacifidlogTown_House3_Text_Relicanth, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+PacifidlogTown_House3_EventScript_Bagon::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_BAGON, CRY_MODE_NORMAL
+	msgbox PacifidlogTown_House3_Text_Bagon, MSGBOX_DEFAULT
+	waitmoncry
+	release
 	end
 
 PacifidlogTown_House3_Text_WillingToTradeIt:
@@ -87,3 +136,8 @@ PacifidlogTown_House3_Text_IsThatAPokedex:
 	.string "POKéMON?\p"
 	.string "I wish I was like you.$"
 
+PacifidlogTown_House3_Text_Relicanth:
+	.string "RELICANTH: Re li rel!$"
+
+PacifidlogTown_House3_Text_Bagon:
+	.string "SEASOR: Ba-go!$"

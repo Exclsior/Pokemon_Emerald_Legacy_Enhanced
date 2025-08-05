@@ -5,7 +5,7 @@
 #include "constants/heal_locations.h"
 #include "constants/flags.h"
 
-struct SaveBlock2_v1
+struct SaveBlock2_v2
 {
     u8 _saveSentinel; // 0xFF
     u16 saveVersion;
@@ -45,7 +45,7 @@ struct SaveBlock2_v1
     struct BattleFrontier frontier;
 };
 
-struct SaveBlock1_v1
+struct SaveBlock1_v2
 {
     struct Coords16 pos;
     struct WarpData location;
@@ -53,6 +53,7 @@ struct SaveBlock1_v1
     struct WarpData dynamicWarp;
     struct WarpData lastHealLocation; // used by white-out and teleport
     struct WarpData escapeWarp; // used by Dig and Escape Rope
+    struct WarpData secretBaseWarp; // used to fly to Secret Base
     u16 savedMusic;
     u8 weather;
     u8 weatherCycleStage;
@@ -144,10 +145,10 @@ struct SaveBlock1_v1
                struct RegisteredItemSlot registeredItems[10];               
 };
 
-bool8 UpdateSave_v1_v3(const struct SaveSectorLocation *locations)
+bool8 UpdateSave_v2_v3(const struct SaveSectorLocation *locations)
 {
-    const struct SaveBlock2_v1* sOldSaveBlock2Ptr = (struct SaveBlock2_v1*)(locations[SECTOR_ID_SAVEBLOCK2].data);
-    const struct SaveBlock1_v1* sOldSaveBlock1Ptr = (struct SaveBlock1_v1*)(locations[SECTOR_ID_SAVEBLOCK1_START].data);
+    const struct SaveBlock2_v2* sOldSaveBlock2Ptr = (struct SaveBlock2_v2*)(locations[SECTOR_ID_SAVEBLOCK2].data);
+    const struct SaveBlock1_v2* sOldSaveBlock1Ptr = (struct SaveBlock1_v2*)(locations[SECTOR_ID_SAVEBLOCK1_START].data);
     const struct PokemonStorage* sOldPokemonStoragePtr = (struct PokemonStorage*)(locations[SECTOR_ID_PKMN_STORAGE_START].data);
 
     u32 arg, i, j, k;
@@ -163,9 +164,6 @@ bool8 UpdateSave_v1_v3(const struct SaveSectorLocation *locations)
     gSaveBlock2Ptr->_saveSentinel = 0xFF;
     gSaveBlock2Ptr->saveVersion = 3;
     gSaveBlock2Ptr->optionsDiveSpeed = 0;
-
-    // Set Secret Base Entrance Warp to -1 until Secret Base entered.
-    SetPlayerSecretBaseCoords(-1, -1, WARP_ID_NONE, -1, -1);
 
     // Copy V1 items - SaveBlock2
 
@@ -219,6 +217,9 @@ bool8 UpdateSave_v1_v3(const struct SaveSectorLocation *locations)
     COPY_FIELD(registeredItemListCount);
     COPY_ARRAY(registeredItems);
 
+    // Copy V2 items - SaveBlock 1
+    COPY_FIELD(secretBaseWarp);
+    
     COPY_FIELD(pos);
     COPY_FIELD(location);
     COPY_FIELD(continueGameWarp);
@@ -333,10 +334,8 @@ bool8 UpdateSave_v1_v3(const struct SaveSectorLocation *locations)
     else if (gSaveBlock2Ptr->optionsButtonMode == 2)         
         gSaveBlock2Ptr->optionsButtonMode = 1;
     
-    // Set Option Flag Defaults
-    FlagSet(FLAG_ENABLE_FOLLOWER); // Turns Pokemon following On
-    
     // Update Flags moved from Saveblock
+    !FlagGet(FLAG_ENABLE_FOLLOWER)  ? FlagSet(FLAG_ENABLE_FOLLOWER)         : FlagClear(FLAG_ENABLE_FOLLOWER); // For consistency with other similar flags the flag name has been changed and use has been inverted throughout the code between V2 and V3 (same Flag dataslot hence not needing to change the name)
     tempOptionSurfOverworld == 0    ? FlagSet(FLAG_ENABLE_SURFOVERWORLD)    : FlagClear(FLAG_ENABLE_SURFOVERWORLD); // Inverse Flag setting due to 0 defaulting to on in saveblock configuration
     tempOptionSurfMusic == 0        ? FlagClear(FLAG_DISABLE_SURFMUSIC)     : FlagSet(FLAG_DISABLE_SURFMUSIC);
     tempOptionBikeMusic == 0        ? FlagClear(FLAG_DISABLE_BIKEMUSIC)     : FlagSet(FLAG_DISABLE_BIKEMUSIC);

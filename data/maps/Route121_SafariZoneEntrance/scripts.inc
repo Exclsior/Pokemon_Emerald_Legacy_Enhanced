@@ -30,8 +30,8 @@ Route121_SafariZoneEntrance_EventScript_WelcomeAttendant::
 	end
 
 Route121_SafariZoneEntrance_EventScript_RareItemSeller::
-	call_if_unset FLAG_SYS_GAME_CLEAR, Route121_SafariZoneEntrance_EventScript_RareItemSeller_MainGame
-	call_if_set FLAG_SYS_GAME_CLEAR, Route121_SafariZoneEntrance_EventScript_RareItemSeller_PostGame
+	goto_if_set FLAG_SYS_GAME_CLEAR, Route121_SafariZoneEntrance_EventScript_RareItemSeller_PostGame
+	goto_if_unset FLAG_SYS_GAME_CLEAR, Route121_SafariZoneEntrance_EventScript_RareItemSeller_MainGame
 	end
 
 Route121_SafariZoneEntrance_EventScript_RareItemSeller_MainGame::
@@ -44,6 +44,7 @@ Route121_SafariZoneEntrance_EventScript_RareItemSeller_MainGame::
 	end
 
 Route121_SafariZoneEntrance_EventScript_SellRareItems_MainGame::
+	goto_if_set FLAG_NATIONAL_DEX_MODE, Route121_SafariZoneEntrance_EventScript_SellRareItems_NatDexMode
 	msgbox SafariZoneEntrance_Text_RareItemSellerBuyRareItems, MSGBOX_DEFAULT
 	pokemart SafariZoneEntrance_Pokemart_RareItemMart
 	msgbox SafariZoneEntrance_Text_ImpressMeNextTime, MSGBOX_DEFAULT
@@ -54,6 +55,13 @@ Route121_SafariZoneEntrance_EventScript_SellRareItems_MainGame::
 SafariZoneEntrance_Pokemart_RareItemMart:
 	.2byte ITEM_LIGHT_BALL
 	.2byte ITEM_NONE
+	release
+	end
+
+Route121_SafariZoneEntrance_EventScript_SellRareItems_NatDexMode::
+	msgbox SafariZoneEntrance_Text_RareItemSellerBuyRareItems, MSGBOX_DEFAULT
+	pokemart SafariZoneEntrance_Pokemart_RareItemMart_PostGame
+	msgbox SafariZoneEntrance_Text_RareItemSellerComeAgain, MSGBOX_DEFAULT
 	release
 	end
 
@@ -197,6 +205,17 @@ Route121_SafariZoneEntrance_EventScript_MovePlayerBackFromCounter::
 	releaseall
 	end
 
+Route121_SafariZoneEntrance_EventScript_Pikachu::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_PIKACHU, CRY_MODE_NORMAL
+	msgbox SafariZoneEntrance_Text_Pikachu, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+
 Route121_SafariZoneEntrance_Movement_BackAwayFromCounter:
 	walk_right
 	step_end
@@ -258,3 +277,6 @@ SafariZoneEntrance_Text_RareItemSellerThankYou:
 	.string "Thank you for bringing the EON POKéMON.\l"
 	.string "It turns out that there are some\n"
 	.string "POKéMON rarer than items.$"
+
+SafariZoneEntrance_Text_Pikachu:
+	.string "PIKACHU: Pika pika!$"

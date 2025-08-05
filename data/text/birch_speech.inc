@@ -39,7 +39,7 @@ gText_Birch_Nuzlocke::
 	.string "Select difficulty.$"
 
 gText_Birch_DexType::
-	.string "Select Pokedex mode.$"
+	.string "Select POKéDEX mode.$"
 
 gText_Birch_AreYouSure_Normal::
 	.string "Are you sure?\n"

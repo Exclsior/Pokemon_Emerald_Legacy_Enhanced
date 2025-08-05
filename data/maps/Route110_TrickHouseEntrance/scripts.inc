@@ -430,7 +430,8 @@ Route110_TrickHouseEntrance_EventScript_GiveBlueTent::
 
 Route110_TrickHouseEntrance_EventScript_GiveEevee::
 	setvar VAR_TEMP_TRANSFERRED_SPECIES, SPECIES_EEVEE
-	givemon SPECIES_EEVEE, 25
+	setflag FLAG_SHINY_CREATION
+	givemon SPECIES_EEVEE, 25, ITEM_NONE, MOVE_WISH
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, Route110_TrickHouseEntrance_EventScript_ReceiveEeveeParty
 	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, Route110_TrickHouseEntrance_EventScript_ReceiveEeveePC
 	setvar VAR_TRICK_HOUSE_PRIZE_PICKUP, 1

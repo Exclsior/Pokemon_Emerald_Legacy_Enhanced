@@ -4819,7 +4819,7 @@ const struct Item gItems[] =
         .price = 0,
         .description = sShinyCharmDesc,
         .pocket = POCKET_ITEMS,
-        .type = ITEM_USE_PARTY_MENU,
+        .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 };

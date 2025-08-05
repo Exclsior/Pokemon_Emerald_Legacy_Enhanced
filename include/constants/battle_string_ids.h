@@ -378,12 +378,14 @@
 #define STRINGID_PKMNBOXLANETTESPCFULL      378
 #define STRINGID_TRAINER1WINTEXT            379
 #define STRINGID_TRAINER2WINTEXT            380
-#define STRINGID_PKMNGAINEDEXPALL           381
-#define STRINGID_PKMNDROPPEDITEM            382
-#define STRINGID_ADDEDTOBAG                 383
-#define STRINGID_BAGISFULL                  384
+#define STRINGID_ATTACKBOOSTEDBYABILITY     381 // Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
+#define STRINGID_MAGMAARMORACTIVATED        382  // Added new Battle result message to provide text for Magma Armor activation
+#define STRINGID_PKMNGAINEDEXPALL           383
+#define STRINGID_PKMNDROPPEDITEM            384
+#define STRINGID_ADDEDTOBAG                 385
+#define STRINGID_BAGISFULL                  386
 
-#define BATTLESTRINGS_COUNT                 385
+#define BATTLESTRINGS_COUNT                 387
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,

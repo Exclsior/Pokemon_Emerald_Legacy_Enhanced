@@ -7805,7 +7805,7 @@ static const struct TrainerMon sParty_BrendanRoute110Mudkip[] = {
     .iv = 100,
     .lvl = 22,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_FALSE_SWIPE, MOVE_RAZOR_LEAF}
+    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_TWISTER, MOVE_RAZOR_LEAF}
     }
 };
 // Route 119 Rival 4 w Treecko
@@ -7832,7 +7832,7 @@ static const struct TrainerMon sParty_BrendanRoute119Mudkip[] = {
     .iv = 150,
     .lvl = 35,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_SLASH}
+    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_DRAGON_BREATH}
     }
 };
 // Rival 1
@@ -7973,7 +7973,7 @@ static const struct TrainerMon sParty_MayRoute110Mudkip[] = {
     .iv = 100,
     .lvl = 22,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_FALSE_SWIPE, MOVE_RAZOR_LEAF}
+    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_TWISTER, MOVE_RAZOR_LEAF}
     }
 };
 // Route 119 Rival 4 w Treecko
@@ -8000,7 +8000,7 @@ static const struct TrainerMon sParty_MayRoute119Mudkip[] = {
     .iv = 150,
     .lvl = 35,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_SLASH}
+    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_DRAGON_BREATH}
     }
 };
 // Rival 1
@@ -10242,7 +10242,7 @@ static const struct TrainerMon sParty_BrendanLilycoveMudkip[] = {
     .iv = 200,
     .lvl = 38,
     .species = SPECIES_SCEPTILE,
-    .moves = {MOVE_GROWTH, MOVE_SLASH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
+    .moves = {MOVE_GROWTH, MOVE_DRAGON_BREATH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
     }
 };
 // Lilycove Rival 5
@@ -10341,7 +10341,7 @@ static const struct TrainerMon sParty_MayLilycoveMudkip[] = {
     .iv = 200,
     .lvl = 38,
     .species = SPECIES_SCEPTILE,
-    .moves = {MOVE_GROWTH, MOVE_SLASH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
+    .moves = {MOVE_GROWTH, MOVE_DRAGON_BREATH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
     }
 };
 // Lilycove Rival 5
@@ -13350,6 +13350,65 @@ static const struct TrainerMon sParty_Steven2[] = {
     }
 };
 
+// Post Game Boss Rematch
+static const struct TrainerMon sParty_Steven3[] = {
+    {
+    .iv = 255,
+    .lvl = 80,
+    .species = SPECIES_TYRANITAR,
+    .heldItem = ITEM_SALAC_BERRY,
+    .evs = {0, 252, 252, 0, 0, 0},
+    .moves = {MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_CRUNCH, MOVE_THUNDERBOLT},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .iv = 255,
+    .lvl = 81,
+    .species = SPECIES_ARMALDO,
+    .heldItem = ITEM_SCOPE_LENS,
+    .evs = {0, 252, 252, 0, 0, 0},
+    .moves = {MOVE_ROCK_BLAST, MOVE_TWINEEDLE, MOVE_EARTHQUAKE, MOVE_SWORDS_DANCE},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .iv = 255,
+    .lvl = 82,
+    .species = SPECIES_AERODACTYL,
+    .heldItem = ITEM_CHOICE_BAND,
+    .evs = {0, 252, 0, 252, 0, 0},
+    .moves = {MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE, MOVE_SKY_ATTACK, MOVE_DOUBLE_EDGE},
+    .nature = NATURE_JOLLY
+    },
+    {
+    .iv = 255,
+    .lvl = 81,
+    .species = SPECIES_CRADILY,
+    .heldItem = ITEM_LEFTOVERS,
+    .evs = {252, 0, 0, 0, 0, 252},
+    .moves = {MOVE_REST, MOVE_CURSE, MOVE_SLEEP_TALK, MOVE_ANCIENT_POWER},
+    .nature = NATURE_CALM
+    },
+    {
+    .iv = 255,
+    .lvl = 81,
+    .species = SPECIES_STEELIX,
+    .heldItem = ITEM_QUICK_CLAW,
+    .evs = {252, 252, 0, 0, 0, 0},
+    .moves = {MOVE_EARTHQUAKE, MOVE_IRON_TAIL, MOVE_EXPLOSION, MOVE_CRUNCH},
+    .nature = NATURE_IMPISH
+    },
+    {
+    .iv = 255,
+    .lvl = 83,
+    .species = SPECIES_METAGROSS,
+    .heldItem = ITEM_LUM_BERRY,
+    .evs = {252, 252, 0, 0, 0, 0},
+    .moves = {MOVE_EARTHQUAKE, MOVE_ROCK_SLIDE, MOVE_METEOR_MASH, MOVE_REST},
+    .nature = NATURE_ADAMANT,
+    .shiny = TRUE
+    }
+};
+
 static const struct TrainerMon sParty_Anabel[] = {
     {
     .iv = 0,
@@ -15000,6 +15059,71 @@ static const struct TrainerMon sParty_Weebra[] = {
     .ability = ABILITY_SLOT_1,
     .evs = {252, 0, 0, 252, 0, 0},
     .moves = {MOVE_FAKE_OUT, MOVE_TRIPLE_KICK, MOVE_BULK_UP, MOVE_ROCK_SLIDE}
+    }
+};
+
+// Exclsior
+static const struct TrainerMon sParty_Exclsior[] = {
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_TYPHLOSION,
+    .heldItem = ITEM_CHARCOAL,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 0, 0, 252, 252, 0},
+    .moves = {MOVE_THUNDER_PUNCH, MOVE_FLAMETHROWER, MOVE_ERUPTION, MOVE_EXTRASENSORY},
+    .nature = NATURE_RASH
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_BRELOOM,
+    .heldItem = ITEM_BRIGHT_POWDER,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 252, 0, 252, 0, 0},
+    .moves = {MOVE_SPORE, MOVE_SKY_UPPERCUT, MOVE_MACH_PUNCH, MOVE_SLUDGE_BOMB},
+    .nature = NATURE_JOLLY
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_SCIZOR,
+    .heldItem = ITEM_SILVER_POWDER,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 252, 126, 0, 126, 0},
+    .moves = {MOVE_TWINEEDLE, MOVE_STEEL_WING, MOVE_AERIAL_ACE, MOVE_SWORDS_DANCE},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_GARDEVOIR,
+    .heldItem = ITEM_TWISTED_SPOON,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 0, 0, 252, 252, 0},
+    .moves = {MOVE_PSYCHIC, MOVE_THUNDERBOLT, MOVE_SHADOW_BALL, MOVE_CALM_MIND},
+    .nature = NATURE_MODEST
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_TYRANITAR,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = ABILITY_SLOT_1,
+    .evs = {4, 252, 0, 252, 0, 0},
+    .moves = {MOVE_ROCK_SLIDE, MOVE_EARTHQUAKE, MOVE_CRUNCH, MOVE_BRICK_BREAK},
+    .nature = NATURE_ADAMANT
+    },
+    {
+    .ivs = BEST_IV_SPREAD,
+    .lvl = 80,
+    .species = SPECIES_LATIOS,
+    .heldItem = ITEM_SOUL_DEW,
+    .ability = ABILITY_SLOT_1,
+    .evs = {0, 0, 0, 252, 252, 0},
+    .moves = {MOVE_LUSTER_PURGE, MOVE_DRAGON_CLAW, MOVE_THUNDERBOLT, MOVE_SURF},
+    .nature = NATURE_MODEST,
+    .shiny = TRUE
     }
 };
 

@@ -40,7 +40,7 @@ void FieldCB_FallWarpExit(void);
 void StartEscalatorWarp(u8 metatileBehavior, u8 priority);
 void StartLavaridgeGymB1FWarp(u8 priority);
 void StartLavaridgeGym1FWarp(u8 priority);
-
+void HideFollowerForFieldEffect(void);
 void SpriteCB_AshPuff(struct Sprite *);
 void SpriteCB_AshLaunch(struct Sprite *);
 
