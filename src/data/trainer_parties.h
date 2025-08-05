@@ -7805,7 +7805,7 @@ static const struct TrainerMon sParty_BrendanRoute110Mudkip[] = {
     .iv = 100,
     .lvl = 22,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_FALSE_SWIPE, MOVE_RAZOR_LEAF}
+    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_TWISTER, MOVE_RAZOR_LEAF}
     }
 };
 // Route 119 Rival 4 w Treecko
@@ -7832,7 +7832,7 @@ static const struct TrainerMon sParty_BrendanRoute119Mudkip[] = {
     .iv = 150,
     .lvl = 35,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_SLASH}
+    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_DRAGON_BREATH}
     }
 };
 // Rival 1
@@ -7973,7 +7973,7 @@ static const struct TrainerMon sParty_MayRoute110Mudkip[] = {
     .iv = 100,
     .lvl = 22,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_FALSE_SWIPE, MOVE_RAZOR_LEAF}
+    .moves = {MOVE_ABSORB, MOVE_QUICK_ATTACK, MOVE_TWISTER, MOVE_RAZOR_LEAF}
     }
 };
 // Route 119 Rival 4 w Treecko
@@ -8000,7 +8000,7 @@ static const struct TrainerMon sParty_MayRoute119Mudkip[] = {
     .iv = 150,
     .lvl = 35,
     .species = SPECIES_GROVYLE,
-    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_SLASH}
+    .moves = {MOVE_ROCK_TOMB, MOVE_RAZOR_LEAF, MOVE_GROWTH, MOVE_DRAGON_BREATH}
     }
 };
 // Rival 1
@@ -10242,7 +10242,7 @@ static const struct TrainerMon sParty_BrendanLilycoveMudkip[] = {
     .iv = 200,
     .lvl = 38,
     .species = SPECIES_SCEPTILE,
-    .moves = {MOVE_GROWTH, MOVE_SLASH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
+    .moves = {MOVE_GROWTH, MOVE_DRAGON_BREATH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
     }
 };
 // Lilycove Rival 5
@@ -10341,7 +10341,7 @@ static const struct TrainerMon sParty_MayLilycoveMudkip[] = {
     .iv = 200,
     .lvl = 38,
     .species = SPECIES_SCEPTILE,
-    .moves = {MOVE_GROWTH, MOVE_SLASH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
+    .moves = {MOVE_GROWTH, MOVE_DRAGON_BREATH, MOVE_ROCK_TOMB, MOVE_LEAF_BLADE}
     }
 };
 // Lilycove Rival 5
