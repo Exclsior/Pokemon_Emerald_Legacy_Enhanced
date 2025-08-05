@@ -9172,16 +9172,9 @@ u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
     index--;
     behavior = MapGridGetMetatileBehaviorAt(x, y);
 
-    if (ledgeBehaviorFuncs[index](behavior) == TRUE)
+    if (ledgeBehaviorFuncs[index](behavior) == TRUE || (gPlayerAvatar.acroBikeState == ACRO_STATE_BUNNY_HOP &&
+    MB_JUMP_EAST <= behavior && behavior <= MB_JUMP_SOUTH && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING)))
         return index + 1;
-
-   if (gPlayerAvatar.acroBikeState == ACRO_STATE_BUNNY_HOP && 
-        MB_JUMP_EAST <= behavior && behavior <= MB_JUMP_SOUTH && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING))
-   {
-       MoveCoords(direction, &x, &y);
-       if (GetCollisionAtCoords(playerObjEvent, x, y, direction) == COLLISION_NONE)
-           return index + 1;
-   }
 
     return DIR_NONE;
 }
