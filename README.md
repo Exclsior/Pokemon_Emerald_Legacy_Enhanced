@@ -6,15 +6,16 @@ I have **no official affiliation** with TheSmithPlays or his incredible project 
 
 Quality of Life features are included in the base patch (such as using select in the party menu to switch Pokémon positions and HMs only requiring Badge, HM in bag and a Pokémon able to learn the move (not taking up a move slot) to use them), whilst some larger deviations from the legacy vision will be separated as their own patches (such as Enhanced Starters which adds the starters for early route availability and buffs signature moves.)
 
-**Warning for MyBoy! Android Emulator Players:**
-Testers have found issues with the Stat Editor and some overworld visual glitches on MyBoy! Android Emulator. Unfortunately I have been unable to replicate or find the issue on other emulators.
-
-My recommended emulator for Android is RetroArch with mGBA core. This is however more complex to setup and has mixed reviews for User Experience. Though I have not personally tested, PizzaBoy! for Android appears to work effectively on Android from some beta testing reports.
-
-## Download and Play
+### Download and Play
 
 * To download the latest patches, see [RELEASES > Latest](https://github.com/Exclsior/Pokemon_Emerald_Legacy_Enhanced/releases/latest) and download the zip file with the latest patches. Unzip the folder, then follow the instructions in the 'README.md' file.
 * To set up the repository, see [INSTALL.md](INSTALL.md).
+
+**Warning for MyBoy! Android Emulator Players:**
+
+Testers have found issues with the Stat Editor and some overworld visual glitches on MyBoy! Android Emulator. Unfortunately I have been unable to replicate or find the issue on other emulators.
+
+My recommended emulator for Android is RetroArch with mGBA core. This is however more complex to setup and has mixed reviews for User Experience. Though I have not personally tested, PizzaBoy! for Android appears to work effectively on Android from some beta testing reports.
 
 ### For the tech-savvy
 
@@ -24,6 +25,7 @@ Without any further ado, below are the features added to Base Patch (main branch
 
 ## Base Patch - v1.1.4:
 *Branch: main*
+
 The Base Emerald Legacy Enhanced version which primarily focuses on quality of life additions such as HM improvements, Pokémon Followers, National Dex Mode, Shiny Charms, Stat Editor for IVs and EVs, Nature Mints and an Egg Move Tutor.
 
 This Base patch includes all updates to Pokémon Emerald Legacy source code as of 27 Feb 2025.
