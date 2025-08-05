@@ -151,7 +151,7 @@ RustboroCity_DevonCorp_3F_Movement_PlayerApproachDesk:
 RustboroCity_DevonCorp_3F_EventScript_MrStone::
 	lock
 	faceplayer
-	goto_if_set FLAG_RECEIVED_EXP_SHARE, RustboroCity_DevonCorp_3F_EventScript_MrStoneAfterFavor
+	goto_if_set FLAG_RECEIVED_EXP_SHARE, RustboroCity_DevonCorp_3F_EventScript_CheckExpAllFlag
 	goto_if_set FLAG_DELIVERED_STEVEN_LETTER, RustboroCity_DevonCorp_3F_EventScript_GiveExpShare
 	msgbox RustboroCity_DevonCorp_3F_Text_CountingOnYou, MSGBOX_DEFAULT
 	closemessage
@@ -166,6 +166,40 @@ RustboroCity_DevonCorp_3F_EventScript_GiveExpShare::
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	setflag FLAG_RECEIVED_EXP_SHARE
 	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpShare, MSGBOX_DEFAULT
+	giveitem ITEM_EXP_ALL
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_EXP_ALL
+	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAll, MSGBOX_DEFAULT
+	msgbox RustboroCity_DevonCorp_3F_Text_ExpItemsUseful, MSGBOX_DEFAULT	
+	closemessage
+	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
+	waitmovement 0
+	release
+	end
+
+RustboroCity_DevonCorp_3F_EventScript_CheckExpAllFlag::
+	goto_if_unset FLAG_RECEIVED_EXP_ALL, RustboroCity_DevonCorp_3F_EventScript_GiveExpAll
+	goto_if_unset FLAG_TEMP_1, RustboroCity_DevonCorp_3F_EventScript_MrStoneExpItems
+	goto_if_set FLAG_TEMP_1, RustboroCity_DevonCorp_3F_EventScript_MrStoneAfterFavor
+	release
+	end
+
+RustboroCity_DevonCorp_3F_EventScript_GiveExpAll::
+	msgbox RustboroCity_DevonCorp_3F_Text_NewItemForYou, MSGBOX_DEFAULT
+	giveitem ITEM_EXP_ALL
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setflag FLAG_RECEIVED_EXP_ALL
+	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAll, MSGBOX_DEFAULT
+	msgbox RustboroCity_DevonCorp_3F_Text_ExpItemsUseful, MSGBOX_DEFAULT
+	closemessage
+	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
+	waitmovement 0
+	release
+	end
+
+RustboroCity_DevonCorp_3F_EventScript_MrStoneExpItems::
+	msgbox RustboroCity_DevonCorp_3F_Text_ExpItemsUseful, MSGBOX_DEFAULT
+	setflag FLAG_TEMP_1
 	closemessage
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
@@ -174,6 +208,7 @@ RustboroCity_DevonCorp_3F_EventScript_GiveExpShare::
 
 RustboroCity_DevonCorp_3F_EventScript_MrStoneAfterFavor::
 	msgbox RustboroCity_DevonCorp_3F_Text_NotFamiliarWithTrends, MSGBOX_DEFAULT
+	clearflag FLAG_TEMP_1
 	closemessage
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
@@ -248,16 +283,33 @@ RustboroCity_DevonCorp_3F_Text_ThankYouForDeliveringLetter:
 	.string "MR. STONE: You delivered my LETTER?\n"
 	.string "Thank you kindly!\p"
 	.string "This is my way of thanking you.\n"
-	.string "It should help you, a TRAINER.$"
+	.string "These should help you, a TRAINER.$"
 
 RustboroCity_DevonCorp_3F_Text_ExplainExpShare:
 	.string "MR. STONE: A POKéMON holding that\n"
 	.string "EXP. SHARE will be given some of the\l"
-	.string "EXP Points from battle.\p"
-	.string "It will get EXP Points even if it didn't\n"
-	.string "actually battle.\p"
-	.string "I would say EXP. SHARE is quite useful\n"
-	.string "for raising weak POKéMON.$"
+	.string "EXP Points from battle.$"
+
+RustboroCity_DevonCorp_3F_Text_NewItemForYou:
+	.string "MR. STONE: I hope that EXP. SHARE has\n"
+	.string "been useful!\p"
+	.string "We've been hard at work here and I have\n"
+	.string "another item to thank you.$"
+
+RustboroCity_DevonCorp_3F_Text_ExplainExpAll:
+	.string "MR. STONE: If you turn that EXP. ALL on,\n"
+	.string "all POKéMON in your party will share\l"
+	.string "half the EXP Points from battle.$"
+
+RustboroCity_DevonCorp_3F_Text_ExpItemsUseful:
+	.string "With those EXP. SHARE and EXP. ALL your\n"
+	.string "POKéMON will get EXP Points even if\l"
+	.string "they didn't actually battle!\p"
+	.string "I would say they are quite useful\n"
+	.string "for raising weak POKéMON.\p"
+	.string "They don't work together though!\n"
+	.string "If the EXP. ALL is on, any held EXP.\l"
+	.string "SHARE won't give any extra EXP. Points.$"
 
 RustboroCity_DevonCorp_3F_Text_NotFamiliarWithTrends:
 	.string "MR. STONE: Since my youth, I've immersed\n"

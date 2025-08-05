@@ -1,4 +1,5 @@
 .set LOCALID_NURSE, 1
+.set LOCALID_TRADEMON, 6
 
 BattleFrontier_PokemonCenter_1F_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, BattleFrontier_PokemonCenter_1F_OnTransition
@@ -7,7 +8,17 @@ BattleFrontier_PokemonCenter_1F_MapScripts::
 
 BattleFrontier_PokemonCenter_1F_OnTransition:
 	setrespawn HEAL_LOCATION_BATTLE_FRONTIER_OUTSIDE_EAST
+	call_if_set FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED, BattleFrontier_PokemonCenter_1F_EventScript_SetUpRalts
+	call_if_unset FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED, BattleFrontier_PokemonCenter_1F_EventScript_SetUpSeedot
 	end
+
+BattleFrontier_PokemonCenter_1F_EventScript_SetUpRalts::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_RALTS
+	return
+
+BattleFrontier_PokemonCenter_1F_EventScript_SetUpSeedot::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_SEEDOT
+	return
 
 BattleFrontier_PokemonCenter_1F_EventScript_Nurse::
 	setvar VAR_0x800B, LOCALID_NURSE
@@ -38,9 +49,17 @@ BattleFrontier_PokemonCenter_1F_EventScript_SchoolKid::
 	copyvar VAR_0x8004, VAR_0x8008
 	copyvar VAR_0x8005, VAR_0x800A
 	special CreateInGameTradePokemon
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	special DoInGameTradeScene
 	waitstate
 	msgbox BattleFrontier_PokemonCenter_1F_Text_PleaseBeGoodToMyPokemon, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	call BattleFrontier_PokemonCenter_1F_EventScript_SetUpRalts
+	addobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	setflag FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED
 	release
 	end
@@ -75,6 +94,31 @@ BattleFrontier_PokemonCenter_1F_EventScript_Skitty::
 	waitse
 	playmoncry SPECIES_SKITTY, CRY_MODE_NORMAL
 	msgbox BattleFrontier_PokemonCenter_1F_Text_Skitty, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+BattleFrontier_PokemonCenter_1F_EventScript_Mon::
+	call_if_set FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED, BattleFrontier_PokemonCenter_1F_EventScript_Ralts
+	call_if_unset FLAG_FRONTIER_SEEDOT_NPC_TRADE_COMPLETED, BattleFrontier_PokemonCenter_1F_EventScript_Seedot
+	end
+
+BattleFrontier_PokemonCenter_1F_EventScript_Ralts::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_RALTS, CRY_MODE_NORMAL
+	msgbox BattleFrontier_PokemonCenter_1F_Text_Ralts, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+BattleFrontier_PokemonCenter_1F_EventScript_Seedot::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_SEEDOT, CRY_MODE_NORMAL
+	msgbox BattleFrontier_PokemonCenter_1F_Text_Seedot, MSGBOX_DEFAULT
 	waitmoncry
 	release
 	end
@@ -117,3 +161,9 @@ BattleFrontier_PokemonCenter_1F_Text_GoingThroughEveryChallenge:
 
 BattleFrontier_PokemonCenter_1F_Text_Skitty:
 	.string "SKITTY: Mya myaaah!$"
+
+BattleFrontier_PokemonCenter_1F_Text_Ralts:
+	.string "RALTS: Ra ru!$"
+
+BattleFrontier_PokemonCenter_1F_Text_Seedot:
+	.string "DOTS: Sesesese!$"

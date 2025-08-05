@@ -1,5 +1,21 @@
+.set LOCALID_TRADEMON, 2
+
 BattleFrontier_Lounge6_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, BattleFrontier_Lounge6_OnResume
 	.byte 0
+
+BattleFrontier_Lounge6_OnResume:
+	call_if_set FLAG_BATTLE_FRONTIER_TRADE_DONE, BattleFrontier_Lounge6_EventScript_SetUpSkitty
+	call_if_unset FLAG_BATTLE_FRONTIER_TRADE_DONE, BattleFrontier_Lounge6_EventScript_SetUpMeowth
+	return
+
+BattleFrontier_Lounge6_EventScript_SetUpSkitty::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_SKITTY
+	return
+
+BattleFrontier_Lounge6_EventScript_SetUpMeowth::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_MEOWTH
+	return
 
 BattleFrontier_Lounge6_EventScript_Trader::
 	lock
@@ -22,9 +38,17 @@ BattleFrontier_Lounge6_EventScript_Trader::
 	copyvar VAR_0x8004, VAR_0x8008
 	copyvar VAR_0x8005, VAR_0x800A
 	special CreateInGameTradePokemon
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	special DoInGameTradeScene
 	waitstate
 	msgbox BattleFrontier_Lounge6_Text_PromiseIllBeGoodToIt, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	call BattleFrontier_Lounge6_EventScript_SetUpSkitty
+	addobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	setflag FLAG_BATTLE_FRONTIER_TRADE_DONE
 	release
 	end
@@ -42,6 +66,31 @@ BattleFrontier_Lounge6_EventScript_NotRequestedMon::
 
 BattleFrontier_Lounge6_EventScript_TradeCompleted::
 	msgbox BattleFrontier_Lounge6_Text_SkittySoMuchCuterThanImagined, MSGBOX_DEFAULT
+	release
+	end
+
+BattleFrontier_Lounge6_EventScript_Mon::
+	call_if_set FLAG_BATTLE_FRONTIER_TRADE_DONE, BattleFrontier_Lounge6_EventScript_Skitty
+	call_if_unset FLAG_BATTLE_FRONTIER_TRADE_DONE, BattleFrontier_Lounge6_EventScript_Meowth
+	end
+
+BattleFrontier_Lounge6_EventScript_Skitty::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_SKITTY, CRY_MODE_NORMAL
+	msgbox BattleFrontier_Lounge6_Text_Skitty, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+BattleFrontier_Lounge6_EventScript_Meowth::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_MEOWTH, CRY_MODE_NORMAL
+	msgbox BattleFrontier_Lounge6_Text_Meowth, MSGBOX_DEFAULT
+	waitmoncry
 	release
 	end
 
@@ -75,3 +124,9 @@ BattleFrontier_Lounge6_Text_SkittySoMuchCuterThanImagined:
 	.string "Giggle!\n"
 	.string "A SKITTY is so much cuter than I had\l"
 	.string "imagined. I'm delighted!$"
+
+BattleFrontier_Lounge6_Text_Skitty:
+	.string "SKITTY: Skii!$"
+
+BattleFrontier_Lounge6_Text_Meowth:
+	.string "MEOWOW: Meow!$"

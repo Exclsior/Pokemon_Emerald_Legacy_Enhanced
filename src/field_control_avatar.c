@@ -13,6 +13,7 @@
 #include "field_poison.h"
 #include "field_screen_effect.h"
 #include "field_specials.h"
+#include "field_effect.h"
 #include "fldeff_misc.h"
 #include "item_menu.h"
 #include "link.h"
@@ -36,6 +37,7 @@
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
 #include "constants/items.h"
+#include "debug.h"
 
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
 static EWRAM_DATA u16 sPrevMetatileBehavior = 0;
@@ -87,6 +89,7 @@ void FieldClearPlayerInput(struct FieldInput *input)
     input->input_field_1_3 = FALSE;
     input->dpadDirection = 0;
     input->pressedRButton = FALSE;
+    input->pressedLButton = FALSE;
 }
 
 void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
@@ -117,6 +120,9 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
 
         if (newKeys & R_BUTTON)
             input->pressedRButton = TRUE;
+
+        if (newKeys & L_BUTTON)
+            input->pressedLButton = TRUE;
     }
 
     if (forcedMove == FALSE)
@@ -135,6 +141,14 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
         input->dpadDirection = DIR_WEST;
     else if (heldKeys & DPAD_RIGHT)
         input->dpadDirection = DIR_EAST;
+
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
+    if ((heldKeys & TX_DEBUG_SYSTEM_HELD_KEYS) && input->TX_DEBUG_SYSTEM_TRIGGER_EVENT)
+    {
+        input->input_field_1_2 = TRUE;
+        input->TX_DEBUG_SYSTEM_TRIGGER_EVENT = FALSE;
+    }
+#endif        
 }
 
 int ProcessPlayerFieldInput(struct FieldInput *input)
@@ -206,7 +220,12 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         }
     }
 
-    if (input->pressedRButton && TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE) && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING))
+    if (
+        input->pressedRButton
+        && TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE)
+        && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING)
+        && !(gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_SETTINGS)
+        )
     {
         if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
         {
@@ -223,6 +242,159 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
             PlaySE(SE_BIKE_BELL);
         }
     }
+
+    if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_SETTINGS)
+    {
+        if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+        {
+            FlagGet(FLAG_ENABLE_FASTSURF) ? FlagClear(FLAG_ENABLE_FASTSURF) : FlagSet(FLAG_ENABLE_FASTSURF);
+            PlaySE(SE_SELECT);
+        }
+        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_UNDERWATER))
+        {
+            u8 diveSpeed = gSaveBlock2Ptr->optionsDiveSpeed;
+            
+            if (diveSpeed != 2)
+                diveSpeed++;
+            else
+                diveSpeed = 0;
+
+            gSaveBlock2Ptr->optionsDiveSpeed = diveSpeed;
+            PlaySE(SE_SELECT);
+        }
+        else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE))
+        {
+            if (!FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING))
+            {
+                PlaySE(SE_BOO);                
+            }
+            else if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
+            {
+                gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_MACH_BIKE;
+                gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_ACRO_BIKE;
+                SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ACRO_BIKE);
+                PlaySE(SE_BIKE_HOP);
+            }
+            else
+            {
+                gPlayerAvatar.flags -= PLAYER_AVATAR_FLAG_ACRO_BIKE;
+                gPlayerAvatar.flags += PLAYER_AVATAR_FLAG_MACH_BIKE;
+                SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_MACH_BIKE);
+                PlaySE(SE_BIKE_BELL);
+            }
+        }
+        else
+        {
+            FlagGet(FLAG_ENABLE_AUTORUN) ? FlagClear(FLAG_ENABLE_AUTORUN) : FlagSet(FLAG_ENABLE_AUTORUN);
+            PlaySE(SE_SELECT);
+        }
+
+    }
+    else if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_OVERWORLD_SPEED)
+    {
+        u8 overworldSpeed = VarGet(VAR_OVERWORLD_SPEEDUP);
+        
+        if (overworldSpeed != OPTIONS_OVERWORLD_SPEED_8X)
+            overworldSpeed++;
+        else
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
+        
+        *GetVarPointer(VAR_OVERWORLD_SPEEDUP) = overworldSpeed;
+
+        PlaySE(SE_SELECT);
+    }
+    else if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_OVERWORLD_SPEED_2X)
+    {
+        u8 overworldSpeed = VarGet(VAR_OVERWORLD_SPEEDUP);
+        
+        if (overworldSpeed != OPTIONS_OVERWORLD_SPEED_2X)
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_2X;
+        else
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
+        
+        *GetVarPointer(VAR_OVERWORLD_SPEEDUP) = overworldSpeed;
+
+        PlaySE(SE_SELECT);
+    }
+    else if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_OVERWORLD_SPEED_4X)
+    {
+        u8 overworldSpeed = VarGet(VAR_OVERWORLD_SPEEDUP);
+        
+        if (overworldSpeed != OPTIONS_OVERWORLD_SPEED_4X)
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_4X;
+        else
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
+        
+        *GetVarPointer(VAR_OVERWORLD_SPEEDUP) = overworldSpeed;
+
+        PlaySE(SE_SELECT);
+    }
+    else if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_OVERWORLD_SPEED_8X)
+    {
+        u8 overworldSpeed = VarGet(VAR_OVERWORLD_SPEEDUP);
+        
+        if (overworldSpeed != OPTIONS_OVERWORLD_SPEED_8X)
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_8X;
+        else
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
+        
+        *GetVarPointer(VAR_OVERWORLD_SPEEDUP) = overworldSpeed;
+
+        PlaySE(SE_SELECT);
+    }
+    else if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_FASTMODE)
+    {
+        u8 overworldSpeed = VarGet(VAR_OVERWORLD_SPEEDUP);
+        u8 diveSpeed = gSaveBlock2Ptr->optionsDiveSpeed;
+
+        if (
+            !FlagGet(FLAG_ENABLE_AUTORUN)
+            || !FlagGet(FLAG_ENABLE_FASTSURF)
+            || diveSpeed != 2
+            || overworldSpeed != OPTIONS_OVERWORLD_SPEED_8X
+            )
+        {
+            FlagSet(FLAG_ENABLE_AUTORUN);
+            FlagSet(FLAG_ENABLE_FASTSURF);
+            diveSpeed = 2;
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_8X;
+        }
+        else
+        {
+            FlagClear(FLAG_ENABLE_AUTORUN);
+            FlagClear(FLAG_ENABLE_FASTSURF);
+            diveSpeed = 0;
+            overworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
+        }
+        gSaveBlock2Ptr->optionsDiveSpeed = diveSpeed;
+        *GetVarPointer(VAR_OVERWORLD_SPEEDUP) = overworldSpeed;
+        PlaySE(SE_SELECT);
+    }
+    else if (input->pressedLButton && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_FOLLOWER)
+    {
+        if (FlagGet(FLAG_ENABLE_FOLLOWER))
+        {
+            FlagClear(FLAG_ENABLE_FOLLOWER);
+            HideFollowerForFieldEffect();
+        }
+        else
+        {
+            RemoveFollowingPokemon();
+            FlagSet(FLAG_ENABLE_FOLLOWER);
+            UpdateFollowingPokemon();
+        }
+        PlaySE(SE_SELECT);
+    }
+
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
+    if (input->input_field_1_2)
+    {
+        PlaySE(SE_WIN_OPEN);
+        FreezeObjectEvents();
+        Debug_ShowMainMenu();
+        return TRUE;
+    }
+#endif
 
     return FALSE;
 }
@@ -713,6 +885,11 @@ void RestartWildEncounterImmunitySteps(void)
 
 static bool8 CheckStandardWildEncounter(u16 metatileBehavior)
 {
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+    if (FlagGet(FLAG_SYS_NO_ENCOUNTER))
+        return FALSE;
+#endif
+
     if (sWildEncounterImmunitySteps < 4)
     {
         sWildEncounterImmunitySteps++;

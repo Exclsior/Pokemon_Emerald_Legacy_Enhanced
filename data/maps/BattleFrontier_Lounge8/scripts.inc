@@ -1,6 +1,21 @@
+.set LOCALID_TRADEMON, 4
+
 BattleFrontier_Lounge8_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, BattleFrontier_Lounge8_OnResume
 	.byte 0
 
+BattleFrontier_Lounge8_OnResume:
+	call_if_set FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED, BattleFrontier_Lounge8_EventScript_SetUpVolbeat
+	call_if_unset FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED, BattleFrontier_Lounge8_EventScript_SetUpPlusle
+	return
+
+BattleFrontier_Lounge8_EventScript_SetUpVolbeat::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_VOLBEAT
+	return
+
+BattleFrontier_Lounge8_EventScript_SetUpPlusle::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_PLUSLE
+	return
 BattleFrontier_Lounge8_EventScript_Man::
 	msgbox BattleFrontier_Lounge8_Text_WhatATrainerNeeds, MSGBOX_NPC
 	end
@@ -30,10 +45,18 @@ BattleFrontier_Lounge8_EventScript_NinjaBoy::
 	copyvar VAR_0x8004, VAR_0x8008
 	copyvar VAR_0x8005, VAR_0x800A
 	special CreateInGameTradePokemon
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	special DoInGameTradeScene
 	waitstate
 	bufferspeciesname STR_VAR_1, VAR_0x8009
 	msgbox BattleFrontier_Lounge8_Text_MonYouTakeCare, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	call BattleFrontier_Lounge8_EventScript_SetUpVolbeat
+	addobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	setflag FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED
 	release
 	end
@@ -51,6 +74,31 @@ BattleFrontier_Lounge8_EventScript_NotRequestedMon::
 
 BattleFrontier_Lounge8_EventScript_TradeCompleted::
 	msgbox BattleFrontier_Lounge8_Text_GoingToMakeVolbeatStrong, MSGBOX_DEFAULT
+	release
+	end
+
+BattleFrontier_Lounge8_EventScript_Mon::
+	call_if_set FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED, BattleFrontier_Lounge8_EventScript_Volbeat
+	call_if_unset FLAG_FRONTIER_PLUSLE_NPC_TRADE_COMPLETED, BattleFrontier_Lounge8_EventScript_Plusle
+	end
+
+BattleFrontier_Lounge8_EventScript_Volbeat::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_VOLBEAT, CRY_MODE_NORMAL
+	msgbox BattleFrontier_Lounge8_Text_Volbeat, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+BattleFrontier_Lounge8_EventScript_Plusle::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_PLUSLE, CRY_MODE_NORMAL
+	msgbox BattleFrontier_Lounge8_Text_Plusle, MSGBOX_DEFAULT
+	waitmoncry
 	release
 	end
 
@@ -105,3 +153,9 @@ BattleFrontier_Lounge8_Text_KnowAboutFrontierBrains:
 	.string "That's what SCOTT calls the seven\n"
 	.string "special TRAINERS that run the seven\l"
 	.string "facilities in the BATTLE FRONTIER.$"
+
+BattleFrontier_Lounge8_Text_Volbeat:
+	.string "VOLBEAT: Vovo vol!$"
+
+BattleFrontier_Lounge8_Text_Plusle:
+	.string "PLUSES: Plu lulu!$"

@@ -792,7 +792,7 @@ bool32 Link_AnyPartnersPlayingRubyOrSapphire(void)
     {
         return TRUE;
     }
-    return FALSE;
+    return TRUE; //Changed to True to skip Emerald specific record mixing to bypass Emerald record mixing bugs
 }
 
 bool32 Link_AnyPartnersPlayingFRLG_JP(void)

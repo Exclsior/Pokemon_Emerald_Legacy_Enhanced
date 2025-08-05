@@ -984,15 +984,18 @@
 	.byte \textTop
 	.endm
 
-	@ Gives the player a Pokémon of the specified species and level, holding the specified item. The trailing 0s are unused parameters.
+	@ Gives the player a Pokémon of the specified species and level, holding the specified item and specific moves.
+	@ Move selection is buggy and may not apply all moves correctly.
 	@ VAR_RESULT will be set to MON_GIVEN_TO_PARTY, MON_GIVEN_TO_PC, or MON_CANT_GIVE depending on the outcome.
-	.macro givemon species:req, level:req, item=ITEM_NONE
+	.macro givemon species:req, level:req, item=ITEM_NONE, move1=MOVE_NONE, move2=MOVE_NONE, move3=MOVE_NONE, move4=MOVE_NONE
 	.byte 0x79
 	.2byte \species
 	.byte \level
 	.2byte \item
-	.4byte 0
-	.4byte 0
+	.2byte \move1
+	.2byte \move2
+	.2byte \move3
+	.2byte \move4
 	.byte 0
 	.endm
 
@@ -1737,6 +1740,12 @@
 	.2byte \quantity
 	.endm
 
+	@ Like callnative, but function expects a ctx
+	.macro callfunc func:req
+	.byte 0xe4
+	.4byte \func
+    .endm
+
 @ Supplementary
 
 	.macro goto_if_unset flag:req, dest:req
@@ -1945,4 +1954,12 @@
 	setvar VAR_0x8005, \level
 	setvar VAR_0x8006, \item
 	special CreateEnemyEventMon
+	.endm
+
+		@ hide any follower pokemon if present,
+	@ putting them into their pokeball;
+	@ by default waits for their movement to finish
+	.macro hidefollower wait=1
+	callfunc ScrFunc_hidefollower
+	.2byte \wait
 	.endm

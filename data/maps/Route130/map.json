@@ -78,7 +78,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_CELEBI",
+      "graphics_id": "OBJ_EVENT_GFX_MON_BASE+SPECIES_CELEBI",
       "x": 37,
       "y": 0,
       "elevation": 1,

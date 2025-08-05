@@ -43,7 +43,7 @@ NavelRock_Top_EventScript_HoOh::
 	applymovement OBJ_EVENT_ID_CAMERA, NavelRock_Top_Movement_CameraPanUp
 	waitmovement 0
 	delay 50
-	setweather WEATHER_NONE
+	setweather WEATHER_DROUGHT
 	doweather
 	waitse
 	playmoncry SPECIES_HO_OH, CRY_MODE_ENCOUNTER

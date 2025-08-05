@@ -1,5 +1,21 @@
+.set LOCALID_TRADEMON, 4
+
 FortreeCity_House1_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, FortreeCity_House1_OnResume
 	.byte 0
+
+FortreeCity_House1_OnResume:
+	call_if_set FLAG_FORTREE_NPC_TRADE_COMPLETED, FortreeCity_House1_EventScript_SetUpKecleon
+	call_if_unset FLAG_FORTREE_NPC_TRADE_COMPLETED, FortreeCity_House1_EventScript_SetUpLoudred
+	return
+
+FortreeCity_House1_EventScript_SetUpKecleon::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_KECLEON
+	return
+
+FortreeCity_House1_EventScript_SetUpLoudred::
+	setvar VAR_OBJ_GFX_ID_1, OBJ_EVENT_GFX_MON_BASE+SPECIES_LOUDRED
+	return
 
 FortreeCity_House1_EventScript_Trader::
 	lock
@@ -22,10 +38,18 @@ FortreeCity_House1_EventScript_Trader::
 	copyvar VAR_0x8004, VAR_0x8008
 	copyvar VAR_0x8005, VAR_0x800A
 	special CreateInGameTradePokemon
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	special DoInGameTradeScene
 	waitstate
 	bufferspeciesname STR_VAR_1, VAR_0x8009
 	msgbox FortreeCity_House1_Text_MonYouTakeCare, MSGBOX_DEFAULT
+	closemessage
+	fadescreen FADE_TO_BLACK
+	call FortreeCity_House1_EventScript_SetUpKecleon
+	addobject LOCALID_TRADEMON
+	fadescreen FADE_FROM_BLACK
 	setflag FLAG_FORTREE_NPC_TRADE_COMPLETED
 	release
 	end
@@ -56,6 +80,31 @@ FortreeCity_House1_EventScript_Zigzagoon::
 	waitse
 	playmoncry SPECIES_ZIGZAGOON, CRY_MODE_NORMAL
 	msgbox FortreeCity_House1_Text_Zigzagoon, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+FortreeCity_House1_EventScript_Mon::
+	call_if_set FLAG_FORTREE_NPC_TRADE_COMPLETED, FortreeCity_House1_EventScript_Kecleon
+	call_if_unset FLAG_FORTREE_NPC_TRADE_COMPLETED, FortreeCity_House1_EventScript_Loudred
+	end
+
+FortreeCity_House1_EventScript_Kecleon::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_KECLEON, CRY_MODE_NORMAL
+	msgbox FortreeCity_House1_Text_Kecleon, MSGBOX_DEFAULT
+	waitmoncry
+	release
+	end
+
+FortreeCity_House1_EventScript_Loudred::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_LOUDRED, CRY_MODE_NORMAL
+	msgbox FortreeCity_House1_Text_Loudred, MSGBOX_DEFAULT
 	waitmoncry
 	release
 	end
@@ -98,3 +147,8 @@ FortreeCity_House1_Text_TradingMemoriesWithOthers:
 FortreeCity_House1_Text_Zigzagoon:
 	.string "ZIGZAGOON: Gumomoh?$"
 
+FortreeCity_House1_Text_Kecleon:
+	.string "KECLEON: Puu puhyaah.$"
+
+FortreeCity_House1_Text_Loudred:
+	.string "ECHO: Lo lo LO!!$"

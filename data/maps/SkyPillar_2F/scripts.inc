@@ -4,6 +4,7 @@ SkyPillar_2F_MapScripts::
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, CaveHole_CheckFallDownHole
 	map_script MAP_SCRIPT_ON_TRANSITION, SkyPillar_2F_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, SkyPillar_2F_SetHoleWarp
+	map_script MAP_SCRIPT_ON_LOAD, SkyPillar_2F_OnLoad
 	.byte 0
 
 SkyPillar_2F_OnTransition:
@@ -13,6 +14,16 @@ SkyPillar_2F_OnTransition:
 
 SkyPillar_2F_EventScript_CleanFloor::
 	setmaplayoutindex LAYOUT_SKY_PILLAR_2F_CLEAN
+	return
+
+SkyPillar_2F_OnLoad:
+	call_if_set FLAG_COLLECTED_ALL_SILVER_SYMBOLS, SkyPillar_2F_EventScript_MoveRocks
+	return
+
+SkyPillar_2F_EventScript_MoveRocks::
+	setmetatile 0, 6, METATILE_Pacifidlog_SkyPillar_GreyFloor, FALSE
+	setmetatile 0, 4, METATILE_General_GreySmallRocks, TRUE
+	setmetatile 2, 5, METATILE_General_GreySmallRocks, TRUE
 	return
 
 SkyPillar_2F_SetHoleWarp:

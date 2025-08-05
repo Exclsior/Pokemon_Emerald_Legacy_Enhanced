@@ -95,7 +95,7 @@ enum {
     MON_DATA_SPATK2,
     MON_DATA_SPDEF2,
     MON_DATA_DEAD,
-}; // Due to compile errors with ENUM, MON_DATA_HIDDEN_NATURE defined separated in include/constants/pokemon.h
+}; // Due to compile errors with ENUM, MON_DATA_NATURE and MON_DATA_HIDDEN_NATURE defined separated in include/constants/pokemon.h
 
 struct PokemonSubstruct0
 {
@@ -457,6 +457,7 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg);
 void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg);
 void CopyMon(void *dest, void *src, size_t size);
 u8 GiveMonToPlayer(struct Pokemon *mon);
+u8 CopyMonToPC(struct Pokemon* mon);
 u8 CalculatePlayerPartyCount(void);
 u8 CalculateEnemyPartyCount(void);
 u8 GetMonsStateToDoubles(void);
