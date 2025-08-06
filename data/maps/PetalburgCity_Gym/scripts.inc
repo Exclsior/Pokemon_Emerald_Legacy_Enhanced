@@ -1680,7 +1680,7 @@ PetalburgCity_Gym_Text_NormanRematchCall:
 	.string "… … … … … Beep!\p"
 	.string "NORMAN: Hello, {PLAYER}?\n"
 	.string "I heard that you've collected\l"
-	.string "all eight GYM BADGES.\p"
+	.string "the SOOTOPOLIS GYM BADGE.\p"
 	.string "That's an impressive feat, I\n"
 	.string "can't tell you how proud I am.\p"
 	.string "But, as a GYM LEADER, I won't\n"
