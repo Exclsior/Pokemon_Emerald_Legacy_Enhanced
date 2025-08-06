@@ -100,7 +100,7 @@ static const u8 sCreditsText_PkmnEmeraldVersionEnhanced[]    = _("POKéMON EMERA
 
 static const u8 sCreditsText_Developer[]                     = _("Developer");
 static const u8 sCreditsText_Exclsior[]                      = _("Exclsior");
-static const u8 sCreditsText_AZ2K[]                          = _("AZ2K");
+static const u8 sCreditsText_AJ2K[]                          = _("AJ2K");
 static const u8 sCreditsText_OmegaBlazerX[]                  = _("OmegaBlazerX");
 static const u8 sCreditsText_Saitama[]                       = _("Saitama");
 static const u8 sCreditsText_zububu[]                        = _("zububu");
@@ -391,7 +391,7 @@ static const struct CreditsEntry sCreditsEntry_EmptyString                      
 static const struct CreditsEntry sCreditsEntry_PkmnEmeraldLegacyEnhanced        = { 7,  TRUE, sCreditsText_PkmnEmeraldVersionEnhanced};
 static const struct CreditsEntry sCreditsEntry_Developer                        = { 9,  TRUE, sCreditsText_Developer};
 static const struct CreditsEntry sCreditsEntry_Exclsior                         = {10,  FALSE, sCreditsText_Exclsior};
-static const struct CreditsEntry sCreditsEntry_AZ2K                             = { 9,  FALSE, sCreditsText_AZ2K};
+static const struct CreditsEntry sCreditsEntry_AJ2K                             = { 9,  FALSE, sCreditsText_AJ2K};
 static const struct CreditsEntry sCreditsEntry_OmegaBlazerX                     = { 9,  FALSE, sCreditsText_OmegaBlazerX};
 static const struct CreditsEntry sCreditsEntry_Saitama                          = { 9,  FALSE, sCreditsText_Saitama};
 static const struct CreditsEntry sCreditsEntry_zububu                           = { 9,  FALSE, sCreditsText_zububu};
@@ -681,7 +681,7 @@ static const struct CreditsEntry *const sCreditsEntryPointerTable[PAGE_COUNT][EN
     },
     [PAGE_ELE_PLAYTESTERS] = {
         &sCreditsEntry_Playtesters,
-        &sCreditsEntry_AZ2K,
+        &sCreditsEntry_AJ2K,
         &sCreditsEntry_OmegaBlazerX,
         &sCreditsEntry_Saitama,
         &sCreditsEntry_zububu,
