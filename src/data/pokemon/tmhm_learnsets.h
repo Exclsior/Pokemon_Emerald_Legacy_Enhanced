@@ -9154,6 +9154,7 @@ const union {
         .REST = TRUE,
         .ATTRACT = TRUE,
         .OVERHEAT = TRUE,
+        .SURF = TRUE,
         .STRENGTH = TRUE,
         .ROCK_SMASH = TRUE,
     } },
