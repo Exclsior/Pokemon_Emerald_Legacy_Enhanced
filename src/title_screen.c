@@ -20,7 +20,10 @@
 #include "gpu_regs.h"
 #include "trig.h"
 #include "graphics.h"
+#include "random.h"
+#include "save.h"
 #include "constants/rgb.h"
+#include "constants/flags.h"
 #include "constants/songs.h"
 
 enum {
@@ -51,7 +54,9 @@ static void CB2_GoToClearSaveDataScreen(void);
 static void CB2_GoToResetRtcScreen(void);
 static void CB2_GoToBerryFixScreen(void);
 static void CB2_GoToCopyrightScreen(void);
-static void UpdateLegendaryMarkingColor(u8);
+static void UpdateLegendaryMarkingColorYellow(u8);
+static void UpdateLegendaryMarkingColorBlue(u8);
+static void UpdateLegendaryMarkingColorRed(u8);
 
 static void SpriteCB_VersionBannerLeft(struct Sprite *sprite);
 static void SpriteCB_VersionBannerRight(struct Sprite *sprite);
@@ -66,6 +71,29 @@ static const u32 sTitleScreenRayquazaTilemap[] = INCBIN_U32("graphics/title_scre
 static const u32 sTitleScreenLogoShineGfx[] = INCBIN_U32("graphics/title_screen/logo_shine.4bpp.lz");
 static const u32 sTitleScreenCloudsGfx[] = INCBIN_U32("graphics/title_screen/clouds.4bpp.lz");
 
+// Randomized title selection for background/animation
+// 0 = Rayquaza, 1 = Kyogre, 2 = Groudon
+static u8 sTitleLegendary;
+
+//sapphire title const data
+static const u16 sTitleScreenKyogrePalettes[][16] =
+{
+    INCBIN_U16("graphics/title_screen/kyogre_dark.gbapal"),
+        INCBIN_U16("graphics/title_screen/kyogre_glow.gbapal"),
+};
+static const u32 sTitleScreenKyogrePixelData[] = INCBIN_U32("graphics/title_screen/kyogre.4bpp.lz");
+static const u32 sTitleScreenKyogreTilemap[] = INCBIN_U32("graphics/title_screen/kyogre_map.bin.lz");
+static const u32 sTitleScreenKyogreBackdropTilemap[] = INCBIN_U32("graphics/title_screen/water_map.bin.lz");
+
+//ruby title const data
+static const u16 sTitleScreenGroudonPalettes[][16] =
+{
+    INCBIN_U16("graphics/title_screen/groudon_dark.gbapal"),
+    INCBIN_U16("graphics/title_screen/groudon_glow.gbapal"),
+};
+static const u32 sTitleScreenGroudonPixelData[] = INCBIN_U32("graphics/title_screen/groudon.4bpp.lz");
+static const u32 sTitleScreenGroudonTilemap[] = INCBIN_U32("graphics/title_screen/groudon_map.bin.lz");
+static const u32 sTitleScreenGroudonBackdropTilemap[] = INCBIN_U32("graphics/title_screen/lava_map.bin.lz");
 
 
 // Used to blend "Emerald Version" as it passes over over the Pokémon banner.
@@ -603,6 +631,38 @@ void CB2_InitTitleScreen(void)
         DmaFill32(3, 0, (void *)OAM, OAM_SIZE);
         DmaFill16(3, 0, (void *)(PLTT + 2), PLTT_SIZE - 2);
         ResetPaletteFade();
+        // Pick which legendary/title variant to display this time.
+        // Selection depends on story progression:
+        // - No save or no legendaries awakened: Rayquaza only
+        // - Groudon awakened (Magma Hideout): Random between Rayquaza and Groudon
+        // - Kyogre escaped (Seafloor Cavern): Random between all three
+        if (gSaveFileStatus == SAVE_STATUS_OK
+         || gSaveFileStatus == SAVE_STATUS_UPDATED
+         || gSaveFileStatus == SAVE_STATUS_ERROR)
+        {
+            bool8 groudonAwakened = FlagGet(FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT);
+            bool8 kyogreEscaped = FlagGet(FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN);
+
+            if (kyogreEscaped)
+            {
+                // All three legendaries available
+                sTitleLegendary = Random() % 3; // 0=Rayquaza, 1=Kyogre, 2=Groudon
+            }
+            else if (groudonAwakened)
+            {
+                // Only Rayquaza and Groudon available
+                sTitleLegendary = (Random() % 2) ? 2 : 0; // 0=Rayquaza, 2=Groudon
+            }
+            else
+            {
+                // No legendaries awakened yet
+                sTitleLegendary = 0; // Rayquaza only
+            }
+        }
+        else
+        {
+            sTitleLegendary = 0; // Rayquaza when no usable save is present
+        }
         gMain.state = 1;
         break;
     case 1:
@@ -610,12 +670,31 @@ void CB2_InitTitleScreen(void)
         LZ77UnCompVram(gTitleScreenPokemonLogoGfx, (void *)(BG_CHAR_ADDR(0)));
         LZ77UnCompVram(gTitleScreenPokemonLogoTilemap, (void *)(BG_SCREEN_ADDR(9)));
         LoadPalette(gTitleScreenBgPalettes, BG_PLTT_ID(0), 15 * PLTT_SIZE_4BPP);
-        // bg3
-        LZ77UnCompVram(sTitleScreenRayquazaGfx, (void *)(BG_CHAR_ADDR(2)));
-        LZ77UnCompVram(sTitleScreenRayquazaTilemap, (void *)(BG_SCREEN_ADDR(26)));
-        // bg1
-        LZ77UnCompVram(sTitleScreenCloudsGfx, (void *)(BG_CHAR_ADDR(3)));
-        LZ77UnCompVram(gTitleScreenCloudsTilemap, (void *)(BG_SCREEN_ADDR(27)));
+        if (sTitleLegendary == 0) { // Rayquaza
+            LZ77UnCompVram(sTitleScreenRayquazaGfx, (void *)(BG_CHAR_ADDR(2))); 
+            LZ77UnCompVram(sTitleScreenRayquazaTilemap, (void *)(BG_SCREEN_ADDR(26))); 
+            LZ77UnCompVram(sTitleScreenCloudsGfx, (void *)(BG_CHAR_ADDR(3))); 
+            LZ77UnCompVram(gTitleScreenCloudsTilemap, (void *)(BG_SCREEN_ADDR(27))); 
+        } else if (sTitleLegendary == 1) { // Kyogre        
+            LoadPalette(sTitleScreenKyogrePalettes, 0xE0, sizeof(sTitleScreenKyogrePalettes)); //ta funcionando e ta carregando a paleta certa  
+            // Load Kyogre tiles into both BG0 and BG1 charbases so the RS overlay
+            // (water_map) can reference the same tiles on BG1.
+            LZ77UnCompVram(sTitleScreenKyogrePixelData, (void *)(BG_CHAR_ADDR(2)));
+            LZ77UnCompVram(sTitleScreenKyogrePixelData, (void *)(BG_CHAR_ADDR(3)));
+            LZ77UnCompVram(sTitleScreenKyogreTilemap, (void *)(BG_SCREEN_ADDR(26)));
+            // Use RS water overlay tilemap on BG1 instead of Emerald clouds
+            LZ77UnCompVram(sTitleScreenKyogreBackdropTilemap, (void *)(BG_SCREEN_ADDR(27))); 
+        } else { // sTitleLegendary == 2, Groudon
+            LoadPalette(sTitleScreenGroudonPalettes, 0xE0, sizeof(sTitleScreenGroudonPalettes));  //ta funcionando e ta carregando a paleta certa   
+            // Load Groudon tiles into both BG0 and BG1 charbases so the RS overlay
+            // (lava_map) can reference the same tiles on BG1.
+            LZ77UnCompVram(sTitleScreenGroudonPixelData, (void *)(BG_CHAR_ADDR(2))); 
+            LZ77UnCompVram(sTitleScreenGroudonPixelData, (void *)(BG_CHAR_ADDR(3))); 
+            LZ77UnCompVram(sTitleScreenGroudonTilemap, (void *)(BG_SCREEN_ADDR(26))); 
+            // Use RS lava overlay tilemap on BG1 instead of Emerald clouds
+            LZ77UnCompVram(sTitleScreenGroudonBackdropTilemap, (void *)(BG_SCREEN_ADDR(27))); 
+        }
+        
         ScanlineEffect_Stop();
         ResetTasks();
         ResetSpriteData();
@@ -824,7 +903,13 @@ static void Task_TitleScreenPhase3(u8 taskId)
             gBattle_BG1_Y = gTasks[taskId].tBg1Y / 2;
             gBattle_BG1_X = 0;
         }
-        UpdateLegendaryMarkingColor(gTasks[taskId].tCounter);
+        // Update the color pulse for the selected legendary
+        if (sTitleLegendary == 0)
+            UpdateLegendaryMarkingColorYellow(gTasks[taskId].tCounter); // Rayquaza
+        else if (sTitleLegendary == 1)
+            UpdateLegendaryMarkingColorRed(gTasks[taskId].tCounter);  // Kyogre
+        else
+            UpdateLegendaryMarkingColorBlue(gTasks[taskId].tCounter);   // Groudon
         if ((gMPlayInfo_BGM.status & 0xFFFF) == 0)
         {
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_WHITEALPHA);
@@ -866,7 +951,7 @@ static void CB2_GoToBerryFixScreen(void)
     }
 }
 
-static void UpdateLegendaryMarkingColor(u8 frameNum)
+static void UpdateLegendaryMarkingColorYellow(u8 frameNum)
 {
     if ((frameNum % 4) == 0) // Change color every 4th frame
     {
@@ -878,4 +963,32 @@ static void UpdateLegendaryMarkingColor(u8 frameNum)
         u16 color = RGB(r, g, b);
         LoadPalette(&color, BG_PLTT_ID(14) + 15, sizeof(color));
    }
+}
+
+static void UpdateLegendaryMarkingColorRed(u8 frameNum)
+{
+    if ((frameNum % 4) == 0)
+    {
+        s32 intensity = Cos(frameNum, 128) + 128;
+        s32 r = 21 - ((intensity * 21) / 256);  // vermelho pulsante
+        s32 g = 0;
+        s32 b = 0;
+
+        u16 color = RGB(r, g, b);
+        LoadPalette(&color, BG_PLTT_ID(14) + 15, sizeof(color));
+    }
+}
+
+static void UpdateLegendaryMarkingColorBlue(u8 frameNum)
+{
+    if ((frameNum % 4) == 0)
+    {
+        s32 intensity = Cos(frameNum, 128) + 128;
+        s32 r = 0;
+        s32 g = 4 - ((intensity * 4) / 256);    // verde mínimo
+        s32 b = 25 - ((intensity * 25) / 256);  // azul pulsante
+
+        u16 color = RGB(r, g, b);
+        LoadPalette(&color, BG_PLTT_ID(14) + 15, sizeof(color));
+    }
 }
