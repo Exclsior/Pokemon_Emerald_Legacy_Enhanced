@@ -14,6 +14,16 @@
 #include "new_game.h"
 #include "m4a.h"
 #include "random.h"
+#include "rtc.h"
+
+// RTC-based randomness for intro animation selection (doesn't affect game RNG)
+// Cloned from the BUGFIX SeedRngWithRtc function but returns value instead of seeding
+static u32 GetIntroRtcRandom(void)
+{
+    u32 seed = RtcGetMinuteCount();
+    seed = (seed >> 16) ^ (seed & 0xFFFF);
+    return seed;
+}
 #include "decompress.h"
 #include "constants/songs.h"
 #include "intro_credits_graphics.h"
@@ -25,6 +35,18 @@
 #include "title_screen.h"
 #include "constants/rgb.h"
 #include "constants/battle_anim.h"
+
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroBrendan[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroMay[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroBrendanRS[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroMayRS[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroBicycle[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroFlygon[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroLatios[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroLatias[];
+extern const struct SpritePalette gSpritePalettes_IntroPlayerFlygon[];
+extern const struct SpritePalette gSpritePalette_IntroLatios[];
+extern const struct SpritePalette gSpritePalette_IntroLatias[];
 
 /*
     The intro is grouped into the following scenes
@@ -125,6 +147,7 @@ extern const struct SpriteTemplate gAncientPowerRockSpriteTemplate[];
 
 #define TAG_FLYGON_SILHOUETTE 2002
 #define TAG_RAYQUAZA_ORB      2003
+#define TAG_LATI_SILHOUETTE   2004
 
 #define COLOSSEUM_GAME_CODE 0x65366347 // "Gc6e" in ASCII
 
@@ -171,6 +194,9 @@ extern const struct SpriteTemplate gAncientPowerRockSpriteTemplate[];
 static EWRAM_DATA u16 sIntroCharacterGender = 0;
 static EWRAM_DATA u16 UNUSED sUnusedVar = 0;
 static EWRAM_DATA u16 sFlygonYOffset = 0;
+
+static EWRAM_DATA u8 sIntroStyle = 0;
+static EWRAM_DATA u8 sPlayerSpriteStyle = 0;  // 0=Emerald Brendan, 1=Emerald May, 2=RS Brendan, 3=RS May
 
 u32 gIntroFrameCounter;
 struct GcmbStruct gMultibootProgramStruct;
@@ -413,6 +439,7 @@ static const struct SpriteTemplate sSpriteTemplate_Manectric =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_Manectric,
 };
+
 static const struct CompressedSpriteSheet sSpriteSheet_Lightning[] =
 {
     {gIntroLightning_Gfx, 0xC00, TAG_LIGHTNING},
@@ -961,6 +988,16 @@ static const struct SpriteTemplate sSpriteTemplate_FlygonSilhouette =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_FlygonSilhouette,
 };
+static const struct SpriteTemplate sSpriteTemplate_LatiSilhouette =
+{
+    .tileTag = TAG_LATI_SILHOUETTE,
+    .paletteTag = TAG_LATI_SILHOUETTE,
+    .oam = &sOamData_FlygonSilhouette, // Same size/shape as Flygon silhouette
+    .anims = sAnims_FlygonSilhouette,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_FlygonSilhouette, // Same animation behavior
+};
 static const struct CompressedSpriteSheet sSpriteSheet_WaterDropsAndLogo[] =
 {
     {sIntroDropsLogo_Gfx, 0x1400, GFXTAG_DROPS_LOGO},
@@ -971,11 +1008,17 @@ static const struct CompressedSpriteSheet sSpriteSheet_FlygonSilhouette[] =
     {gIntroFlygonSilhouette_Gfx, 0x400, TAG_FLYGON_SILHOUETTE},
     {},
 };
+static const struct CompressedSpriteSheet sSpriteSheet_LatiSilhouette[] =
+{
+    {sIntroLati_Gfx, 0x400, TAG_LATI_SILHOUETTE},
+    {},
+};
 static const struct SpritePalette sSpritePalettes_Intro1[] =
 {
     {sIntroDrops_Pal, PALTAG_DROPS},
     {sIntroLogo_Pal, PALTAG_LOGO},
     {sIntroFlygonSilhouette_Pal, TAG_FLYGON_SILHOUETTE},
+    {sIntroFlygonSilhouette_Pal, TAG_LATI_SILHOUETTE}, // Reuse Flygon silhouette palette for Lati
     {},
 };
 static const struct OamData sOamData_RayquazaOrb =
@@ -1168,7 +1211,20 @@ void CB2_InitCopyrightScreenAfterTitleScreen(void)
 static void Task_Scene1_Load(u8 taskId)
 {
     SetVBlankCallback(NULL);
+
     sIntroCharacterGender = gSaveBlock2Ptr->playerGender; // Loads the gender in the save file to show in into. If no save file, defaults to male
+
+    // Randomly select intro style using RTC (doesn't affect game RNG, preserves RNG manipulation)
+    {
+        u32 rtcRandom = GetIntroRtcRandom();
+        // 0 = Emerald (Flygon), 1 = Ruby (Latios), 2 = Sapphire (Latias)
+        sIntroStyle = rtcRandom % 3;
+        // Randomly select player sprite style
+        if (sIntroStyle == 0)
+            sPlayerSpriteStyle = (rtcRandom / 3) % 2;  // 50% Emerald Brendan, 50% Emerald May
+        else
+            sPlayerSpriteStyle = 2 + ((rtcRandom / 3) % 2);  // 50% RS Brendan, 50% RS May
+    }
     IntroResetGpuRegs();
     SetGpuReg(REG_OFFSET_BG3VOFS, 0);
     SetGpuReg(REG_OFFSET_BG2VOFS, 80);
@@ -1189,7 +1245,17 @@ static void Task_Scene1_Load(u8 taskId)
     SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(1) | BGCNT_CHARBASE(0) | BGCNT_SCREENBASE(18) | BGCNT_16COLOR | BGCNT_TXT256x512);
     SetGpuReg(REG_OFFSET_BG0CNT, BGCNT_PRIORITY(0) | BGCNT_CHARBASE(0) | BGCNT_SCREENBASE(16) | BGCNT_16COLOR | BGCNT_TXT256x512);
     LoadCompressedSpriteSheet(sSpriteSheet_WaterDropsAndLogo);
-    LoadCompressedSpriteSheet(sSpriteSheet_FlygonSilhouette);
+    // Load silhouette sprite based on intro style
+    if (sIntroStyle == 0)
+    {
+        // Emerald style: Flygon
+        LoadCompressedSpriteSheet(sSpriteSheet_FlygonSilhouette);
+    }
+    else
+    {
+        // RS style: Lati (Latios/Latias share same silhouette)
+        LoadCompressedSpriteSheet(sSpriteSheet_LatiSilhouette);
+    }
     LoadSpritePalettes(sSpritePalettes_Intro1);
     LoadCompressedSpriteSheet(sSpriteSheet_Sparkle);
     LoadSpritePalettes(sSpritePalette_Sparkle);
@@ -1331,8 +1397,18 @@ static void Task_Scene1_PanUp(u8 taskId)
 
         if (gIntroFrameCounter == TIMER_FLYGON_SILHOUETTE_APPEAR)
         {
-            // Show Flygon silhouette
-            u8 spriteId = CreateSprite(&sSpriteTemplate_FlygonSilhouette, 120, DISPLAY_HEIGHT, 10);
+            u8 spriteId;
+            // Create silhouette sprite based on intro style
+            if (sIntroStyle == 0)
+            {
+                // Emerald style: Flygon
+                spriteId = CreateSprite(&sSpriteTemplate_FlygonSilhouette, 120, DISPLAY_HEIGHT, 10);
+            }
+            else
+            {
+                // RS style: Lati (Latios/Latias)
+                spriteId = CreateSprite(&sSpriteTemplate_LatiSilhouette, 120, DISPLAY_HEIGHT, 10);
+            }
             gSprites[spriteId].invisible = TRUE;
         }
     }
@@ -1362,7 +1438,17 @@ static void Task_Scene2_Load(u8 taskId)
     gIntroCredits_MovingSceneryVBase = 0;
     gIntroCredits_MovingSceneryVOffset = 0;
     sFlygonYOffset = 0;
-    LoadIntroPart2Graphics(1);
+    // Load scenery based on intro style: 0 = clouds (RS), 1 = trees (Emerald)
+    if (sIntroStyle == 0)
+    {
+        // Emerald style: Trees
+        LoadIntroPart2Graphics(1);
+    }
+    else
+    {
+        // RS style: Clouds/Ocean
+        LoadIntroPart2Graphics(0);
+    }
     gTasks[taskId].func = Task_Scene2_CreateSprites;
 }
 
@@ -1375,44 +1461,118 @@ static void Task_Scene2_CreateSprites(u8 taskId)
 {
     u8 spriteId;
 
-    // Load sprite sheets
-    if (sIntroCharacterGender == MALE)
+    // Load player sprite sheets based on random selection (25% each)
+    // 0=Emerald Brendan, 1=Emerald May, 2=RS Brendan, 3=RS May
+    switch (sPlayerSpriteStyle)
+    {
+    case 0:
         LoadCompressedSpriteSheet(gSpriteSheet_IntroBrendan);
-    else
+        break;
+    case 1:
         LoadCompressedSpriteSheet(gSpriteSheet_IntroMay);
+        break;
+    case 2:
+        LoadCompressedSpriteSheet(gSpriteSheet_IntroBrendanRS);
+        break;
+    case 3:
+        LoadCompressedSpriteSheet(gSpriteSheet_IntroMayRS);
+        break;
+    }
 
     LoadCompressedSpriteSheet(gSpriteSheet_IntroBicycle);
-    LoadCompressedSpriteSheet(gSpriteSheet_IntroFlygon);
 
-    // Load sprite palettes
-    for (spriteId = 0; spriteId < ARRAY_COUNT(sSpriteSheet_RunningPokemon) - 1; spriteId++)
-        LoadCompressedSpriteSheet(&sSpriteSheet_RunningPokemon[spriteId]);
+    // Load flying Pokemon and other sprites based on intro style
+    if (sIntroStyle == 0)
+    {
+        // Emerald style: Load Flygon and running Pokemon
+        LoadCompressedSpriteSheet(gSpriteSheet_IntroFlygon);
+        for (spriteId = 0; spriteId < ARRAY_COUNT(sSpriteSheet_RunningPokemon) - 1; spriteId++)
+            LoadCompressedSpriteSheet(&sSpriteSheet_RunningPokemon[spriteId]);
+        LoadSpritePalettes(gSpritePalettes_IntroPlayerFlygon);
+        LoadSpritePalettes(sSpritePalettes_RunningPokemon);
 
-    LoadSpritePalettes(gSpritePalettes_IntroPlayerFlygon);
-    LoadSpritePalettes(sSpritePalettes_RunningPokemon);
+        // Create running Pokemon sprites
+        CreateSprite(&sSpriteTemplate_Manectric, DISPLAY_WIDTH + 32, 128, 0);
+        CreateSprite(&sSpriteTemplate_Torchic, DISPLAY_WIDTH + 48, 110, 1);
+    }
+    else if (sIntroStyle == 1)
+    {
+        // Ruby style: Load Latios
+        LoadCompressedSpriteSheet(gSpriteSheet_IntroLatios);
+        LoadSpritePalettes(gSpritePalettes_IntroPlayerFlygon);
+        LoadSpritePalettes(gSpritePalette_IntroLatios);
+    }
+    else // sIntroStyle == 2
+    {
+        // Sapphire style: Load Latias
+        LoadCompressedSpriteSheet(gSpriteSheet_IntroLatias);
+        LoadSpritePalettes(gSpritePalettes_IntroPlayerFlygon);
+        LoadSpritePalettes(gSpritePalette_IntroLatias);
+    }
 
-    // Create Pokémon and player sprites
-    CreateSprite(&sSpriteTemplate_Manectric, DISPLAY_WIDTH + 32, 128, 0);
-    CreateSprite(&sSpriteTemplate_Torchic, DISPLAY_WIDTH + 48, 110, 1);
-
-    if (sIntroCharacterGender == MALE)
+    // Create player sprite based on random selection
+    switch (sPlayerSpriteStyle)
+    {
+    case 0:
         spriteId = CreateIntroBrendanSprite(DISPLAY_WIDTH + 32, 100);
-    else
+        break;
+    case 1:
         spriteId = CreateIntroMaySprite(DISPLAY_WIDTH + 32, 100);
+        break;
+    case 2:
+        spriteId = CreateIntroBrendanRSSprite(DISPLAY_WIDTH + 32, 100);
+        break;
+    case 3:
+        spriteId = CreateIntroMayRSSprite(DISPLAY_WIDTH + 32, 100);
+        break;
+    }
 
     gSprites[spriteId].callback = SpriteCB_PlayerOnBicycle;
     gSprites[spriteId].anims = sAnims_PlayerBicycle;
     gTasks[taskId].tPlayerSpriteId = spriteId;
-    CreateSprite(&sSpriteTemplate_Volbeat, DISPLAY_WIDTH + 32, 80, 4);
-    spriteId = CreateIntroFlygonSprite(-64, 60);
-    gSprites[spriteId].callback = SpriteCB_Flygon;
-    gTasks[taskId].tFlygonSpriteId = spriteId;
+
+    // Create flying Pokemon based on intro style
+    if (sIntroStyle == 0)
+    {
+        // Emerald style: Create Volbeat and Flygon
+        CreateSprite(&sSpriteTemplate_Volbeat, DISPLAY_WIDTH + 32, 80, 4);
+        spriteId = CreateIntroFlygonSprite(-64, 60);
+        gSprites[spriteId].callback = SpriteCB_Flygon;
+        gTasks[taskId].tFlygonSpriteId = spriteId;
+    }
+    else if (sIntroStyle == 1)
+    {
+        // Ruby style: Create Latios
+        spriteId = CreateIntroLatiosSprite(-64, 60);
+        gSprites[spriteId].callback = SpriteCB_Flygon;
+        gTasks[taskId].tFlygonSpriteId = spriteId;
+    }
+    else // sIntroStyle == 2
+    {
+        // Sapphire style: Create Latias
+        spriteId = CreateIntroLatiasSprite(-64, 60);
+        gSprites[spriteId].callback = SpriteCB_Flygon;
+        gTasks[taskId].tFlygonSpriteId = spriteId;
+    }
 
     // Fade in and start bike ride
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_WHITEALPHA);
     SetVBlankCallback(VBlankCB_Intro);
-    gTasks[taskId].tBgAnimTaskId = CreateBicycleBgAnimationTask(1, 0x4000, 0x400, 0x10);
-    SetIntroPart2BgCnt(1);
+
+    // Set up background animation with appropriate parameters for scenery type
+    if (sIntroStyle == 0)
+    {
+        // Emerald style: Trees (mode 1, faster BG2 scroll)
+        gTasks[taskId].tBgAnimTaskId = CreateBicycleBgAnimationTask(1, 0x4000, 0x400, 0x10);
+        SetIntroPart2BgCnt(1);
+    }
+    else
+    {
+        // RS style: Clouds (mode 0, slower BG2 scroll)
+        gTasks[taskId].tBgAnimTaskId = CreateBicycleBgAnimationTask(0, 0x4000, 0x40, 0x10);
+        SetIntroPart2BgCnt(0);
+    }
+
     gTasks[taskId].func = Task_Scene2_BikeRide;
 }
 
@@ -1420,28 +1580,31 @@ static void Task_Scene2_BikeRide(u8 taskId)
 {
     u16 offset;
 
-    if (gIntroFrameCounter == TIMER_TORCHIC_EXIT)
+    // Emerald style: Stop scenery when Torchic exits
+    if (sIntroStyle == 0 && gIntroFrameCounter == TIMER_TORCHIC_EXIT)
     {
-        // Stop the moving scenery/backgrounds, for when the camera fixes on Torchic
         gIntroCredits_MovingSceneryState = INTROCRED_SCENERY_FROZEN;
         DestroyTask(gTasks[taskId].tBgAnimTaskId);
     }
 
+    // Both intros end at same time for consistent Scene 3 transition
     if (gIntroFrameCounter > TIMER_END_SCENE_2)
     {
-        // Fade out to next scene
-        BeginNormalPaletteFade(PALETTES_ALL, 8, 0, 16, RGB_WHITEALPHA);
+        // Slower fade for Lati intros
+        if (sIntroStyle == 0)
+            BeginNormalPaletteFade(PALETTES_ALL, 8, 0, 16, RGB_WHITEALPHA);
+        else
+            BeginNormalPaletteFade(PALETTES_ALL, 3, 0, 16, RGB_WHITEALPHA);
         gTasks[taskId].func = Task_Scene2_End;
     }
 
-    // Check for updates to player/flygon sprites
-    // These states are for SpriteCB_PlayerOnBicycle and SpriteCB_Flygon respectively
+    // Check for updates to player/flygon/lati sprites
     if (gIntroFrameCounter == TIMER_PLAYER_DRIFT_BACK)
         gSprites[gTasks[taskId].tPlayerSpriteId].sState = 1;
     if (gIntroFrameCounter == TIMER_PLAYER_MOVE_FORWARD)
         gSprites[gTasks[taskId].tPlayerSpriteId].sState = 0;
     if (gIntroFrameCounter == TIMER_FLYGON_ENTER)
-        gSprites[gTasks[taskId].tFlygonSpriteId].sState = 1;
+        gSprites[gTasks[taskId].tFlygonSpriteId].sState = 1; // Works for both Flygon and Lati
     if (gIntroFrameCounter == TIMER_PLAYER_MOVE_BACKWARD)
         gSprites[gTasks[taskId].tPlayerSpriteId].sState = 2;
     if (gIntroFrameCounter == TIMER_PLAYER_HOLD_POSITION)
@@ -1449,20 +1612,37 @@ static void Task_Scene2_BikeRide(u8 taskId)
     if (gIntroFrameCounter == TIMER_PLAYER_EXIT)
         gSprites[gTasks[taskId].tPlayerSpriteId].sState = 4;
 
-    // Handle flygon's y movement
+    // Handle flygon/lati y movement offset
     offset = Sin(gTasks[taskId].tFlygonTimer >> 2 & 0x7F, 48);
     sFlygonYOffset = offset;
     if (gTasks[taskId].tFlygonTimer < 512)
         gTasks[taskId].tFlygonTimer++;
 
-    // Alternate colors of the trees
-    CycleSceneryPalette(0);
+    // Cycle scenery palette based on intro style
+    if (sIntroStyle == 0)
+        CycleSceneryPalette(1);  // Emerald: Trees (mode 1)
+    else
+        CycleSceneryPalette(0);  // RS: Clouds (mode 0)
 }
 
 static void Task_Scene2_End(u8 taskId)
 {
-    if (gIntroFrameCounter > TIMER_START_SCENE_3)
+    // Both intros now end at same time, so Scene 3 starts at same time
+    // Wait for both frame counter AND fade to complete before starting Scene 3
+    if (gIntroFrameCounter > TIMER_START_SCENE_3 && !gPaletteFade.active)
+    {
+        // CRITICAL: Destroy BG animation task for Lati intros right before Scene 3
+        // Flygon intro already destroyed it at TIMER_TORCHIC_EXIT
+        // This keeps camera moving during fade but prevents Scene 3 corruption
+        if (sIntroStyle != 0)
+        {
+            gIntroCredits_MovingSceneryState = INTROCRED_SCENERY_FROZEN;
+            DestroyTask(gTasks[taskId].tBgAnimTaskId);
+        }
+
+        // Transition to Scene 3
         gTasks[taskId].func = Task_Scene3_Load;
+    }
 }
 
 #define sStateDelay data[1]
@@ -1724,10 +1904,12 @@ static void Task_Scene3_Load(u8 taskId)
     LZ77UnCompVram(sIntroPokeball_Tilemap, (void *)(BG_CHAR_ADDR(1)));
     LoadPalette(sIntroPokeball_Pal, BG_PLTT_ID(0), sizeof(sIntroPokeball_Pal));
     gTasks[taskId].tAlpha = 0;
-    gTasks[taskId].tZoomDiv = 0;
+    // Initialize tZoomDiv to 0x100 to prevent SAFE_DIV from returning 0 in first frames
+    // This ensures zoom starts at 0x100 (normal scale) instead of 0 (invalid)
+    gTasks[taskId].tZoomDiv = 0x100;
     gTasks[taskId].tZoomDivSpeed = 0;
     gTasks[taskId].data[3] = 0;
-    PanFadeAndZoomScreen(DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, 0, 0);
+    PanFadeAndZoomScreen(DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, 0x100, 0);
     ResetSpriteData();
     FreeAllSpritePalettes();
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_WHITEALPHA);
@@ -2708,6 +2890,17 @@ static void IntroResetGpuRegs(void)
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
     SetGpuReg(REG_OFFSET_BLDY, 0);
+
+    // Reset BG2 affine transformation registers to prevent pokeball teleporting
+    // These hold leftover values from Scene 2 causing incorrect screen positioning
+    SetGpuReg(REG_OFFSET_BG2PA, 0x100);  // Identity matrix (1.0 scale)
+    SetGpuReg(REG_OFFSET_BG2PB, 0);
+    SetGpuReg(REG_OFFSET_BG2PC, 0);
+    SetGpuReg(REG_OFFSET_BG2PD, 0x100);  // Identity matrix (1.0 scale)
+    SetGpuReg(REG_OFFSET_BG2X_L, 0);
+    SetGpuReg(REG_OFFSET_BG2X_H, 0);
+    SetGpuReg(REG_OFFSET_BG2Y_L, 0);
+    SetGpuReg(REG_OFFSET_BG2Y_H, 0);
 }
 
 static void Task_BlendLogoIn(u8 taskId)
@@ -3086,15 +3279,24 @@ static void SpriteCB_PlayerOnBicycle(struct Sprite *sprite)
         sprite->x++;
         break;
     case 2:
-        // Move backwards
+        // Move backwards and start looking back (RS sprites only)
+        if (sPlayerSpriteStyle >= 2)
+            StartSpriteAnimIfDifferent(sprite, 2);
+        else
+            StartSpriteAnimIfDifferent(sprite, 0);
         if (sprite->x <= 120 || gIntroFrameCounter & 7)
             sprite->x++;
         break;
     case 3:
-        // Bike in place
+        // Bike in place, looking back at legendary (RS sprites only)
+        if (sPlayerSpriteStyle >= 2)
+            StartSpriteAnimIfDifferent(sprite, 3);
+        else
+            StartSpriteAnimIfDifferent(sprite, 0);
         break;
     case 4:
-        // Exit to the left
+        // Exit to the left, return to normal cycling
+        StartSpriteAnimIfDifferent(sprite, 0);
         if (sprite->x > -32)
             sprite->x -= 2;
         break;
@@ -3147,9 +3349,25 @@ static void SpriteCB_Flygon(struct Sprite *sprite)
         if (sprite->x2 + sprite->x > 120)
             sprite->x2 -= 1;
         else
-            sprite->sState = 3;
+        {
+            // Latis hold position longer to match Emerald scene duration
+            if (sIntroStyle == 0)
+                sprite->sState = 4;  // Flygon: exit immediately
+            else
+            {
+                sprite->sState = 3;  // Lati: hold position
+                sprite->data[2] = 0;  // Reset hold timer
+            }
+        }
         break;
     case 3:
+        // Hold at position 120 (Lati only, extends scene duration)
+        sprite->data[2]++;
+        if (sprite->data[2] > 40)  // Hold for 40 frames, then fly off
+            sprite->sState = 4;
+        break;
+    case 4:
+        // Fly off screen
         if (sprite->x2 > 0)
             sprite->x2 -= 2;
         break;

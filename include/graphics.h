@@ -4778,6 +4778,10 @@ extern const u32 gIntroMay_Gfx[];
 extern const u16 gIntroPlayer_Pal[];
 extern const u16 gIntroFlygon_Pal[];
 extern const u32 gIntroFlygon_Gfx[];
+extern const u32 gIntroBrendanRS_Gfx[];
+extern const u32 gIntroMayRS_Gfx[];
+extern const u16 gIntroBrendanRS_Pal[];
+extern const u16 gIntroMayRS_Pal[];
 
 // party menu graphics
 extern const u32 gPartyMenuBg_Gfx[];
