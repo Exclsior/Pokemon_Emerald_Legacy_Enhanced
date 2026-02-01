@@ -27,6 +27,7 @@
 #include "constants/map_types.h"
 #include "constants/rgb.h"
 #include "constants/weather.h"
+#include "constants/flags.h"
 
 /*
  *  This file handles region maps generally, and the map used when selecting a fly destination.
@@ -131,6 +132,11 @@ static const u16 sRegionMapPlayerIcon_MayPal[] = INCBIN_U16("graphics/pokenav/re
 static const u8 sRegionMapPlayerIcon_MayGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_icon.4bpp");
 static const u16 sRegionMapPlayerGrayscaleIcon_MayPal[] = INCBIN_U16("graphics/pokenav/region_map/may_grayscale_icon.gbapal");
 static const u8 sRegionMapPlayerGrayscaleIcon_MayGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_grayscale_icon.4bpp");
+// RS/Classic player style icons
+static const u16 sRegionMapPlayerIcon_BrendanRsPal[] = INCBIN_U16("graphics/pokenav/region_map/brendan_icon_rs.gbapal");
+static const u8 sRegionMapPlayerIcon_BrendanRsGfx[] = INCBIN_U8("graphics/pokenav/region_map/brendan_icon_rs.4bpp");
+static const u16 sRegionMapPlayerIcon_MayRsPal[] = INCBIN_U16("graphics/pokenav/region_map/may_icon_rs.gbapal");
+static const u8 sRegionMapPlayerIcon_MayRsGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_icon_rs.4bpp");
 
 #include "data/region_map/region_map_layout.h"
 #include "data/region_map/region_map_entries.h"
@@ -1467,16 +1473,31 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
     struct SpriteSheet sheet = {sRegionMapPlayerIcon_BrendanGfx, 0x80, tileTag};
     struct SpritePalette palette = {sRegionMapPlayerIcon_BrendanPal, paletteTag};
     struct SpriteTemplate template = {tileTag, paletteTag, &sRegionMapPlayerIconOam, sRegionMapPlayerIconAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy};
+    bool8 useRsStyle = FlagGet(FLAG_PLAYER_STYLE_RS);
 
     if (IsEventIslandMapSecId(gMapHeader.regionMapSectionId))
     {
         sRegionMap->playerIconSprite = NULL;
         return;
     }
+    // Select icon based on gender and player style (Emerald vs RS/Classic)
     if (gSaveBlock2Ptr->playerGender == FEMALE)
     {
-        sheet.data = sRegionMapPlayerIcon_MayGfx;
-        palette.data = sRegionMapPlayerIcon_MayPal;
+        if (useRsStyle)
+        {
+            sheet.data = sRegionMapPlayerIcon_MayRsGfx;
+            palette.data = sRegionMapPlayerIcon_MayRsPal;
+        }
+        else
+        {
+            sheet.data = sRegionMapPlayerIcon_MayGfx;
+            palette.data = sRegionMapPlayerIcon_MayPal;
+        }
+    }
+    else if (useRsStyle)
+    {
+        sheet.data = sRegionMapPlayerIcon_BrendanRsGfx;
+        palette.data = sRegionMapPlayerIcon_BrendanRsPal;
     }
     LoadSpriteSheet(&sheet);
     LoadSpritePalette(&palette);

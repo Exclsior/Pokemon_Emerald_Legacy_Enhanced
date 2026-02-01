@@ -100,9 +100,10 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
     gSaveBlock2Ptr->optionsBattleItemAnimation = OPTIONS_ITEM_ANIMATION_NORMAL; // Added option to change Item Use Battle animation
-    FlagSet(FLAG_ENABLE_SURFOVERWORLD); // Set the Surfing Overworld Sprites enabled by default
-    FlagSet(FLAG_ENABLE_FOLLOWER); // Set the Overworld Follower enabled by default
     /*
+    Note: FLAG_ENABLE_FOLLOWER and FLAG_ENABLE_SURFOVERWORLD are set in NewGameInitData()
+    after EventScript_ResetAllMapFlags to ensure they're ON by default for new games.
+
     Other Options using Flags not touched as they default to 0/FALSE and don't need to be manually cleared:
     FLAG_SHOW_STAT_EDITOR (Also relies on FLAG_ENABLE_STAT_EDITOR unlocked in post-game)
     FLAG_DISABLE_BIKEMUSIC
@@ -166,8 +167,9 @@ void NewGameInitData(void)
 {
      // A function lower down here clears these, so retain it and reset it at the end
     bool8 nuzlockePrev = FlagGet(FLAG_NUZLOCKE);
-    bool8 hardPrev = FlagGet(FLAG_HARD); 
+    bool8 hardPrev = FlagGet(FLAG_HARD);
     bool8 natDexMode = FlagGet(FLAG_NATIONAL_DEX_MODE);
+    bool8 playerStyleRS = FlagGet(FLAG_PLAYER_STYLE_RS);
 
     if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
         RtcReset();
@@ -232,6 +234,11 @@ void NewGameInitData(void)
     nuzlockePrev ? FlagSet(FLAG_NUZLOCKE) : FlagClear(FLAG_NUZLOCKE);
     hardPrev ? FlagSet(FLAG_HARD) : FlagClear(FLAG_HARD);
     natDexMode ? FlagSet(FLAG_NATIONAL_DEX_MODE) : FlagClear(FLAG_NATIONAL_DEX_MODE);
+    playerStyleRS ? FlagSet(FLAG_PLAYER_STYLE_RS) : FlagClear(FLAG_PLAYER_STYLE_RS);
+
+    // Set follower and surfer flags ON by default for new games
+    FlagSet(FLAG_ENABLE_FOLLOWER);
+    FlagSet(FLAG_ENABLE_SURFOVERWORLD);
 
     // If National Dex Mode selected, set all wild encounters to national Dex
     if (natDexMode)

@@ -2447,7 +2447,8 @@ static void PlayerHandleDrawTrainerPic(void)
     }
     else
     {
-        trainerPicId = gSaveBlock2Ptr->playerGender;
+        // Pick back pic id based on player style (Emerald or RS)
+        trainerPicId = GetPlayerPreferredBackPicId();
     }
 
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
@@ -2529,7 +2530,7 @@ static void PlayerHandleTrainerSlide(void)
     }
     else
     {
-        trainerPicId = gSaveBlock2Ptr->playerGender + TRAINER_BACK_PIC_BRENDAN;
+        trainerPicId = GetPlayerPreferredBackPicId();
     }
 
     DecompressTrainerBackPic(trainerPicId, gActiveBattler);

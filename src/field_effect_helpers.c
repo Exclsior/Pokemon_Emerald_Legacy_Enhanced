@@ -17,6 +17,7 @@
 #include "constants/songs.h"
 
 #define OBJ_EVENT_PAL_TAG_NONE 0x11FF // duplicate of define in event_object_movement.c
+#define OBJ_EVENT_PAL_TAG_BRENDAN 0x1100 // duplicate of define in event_object_movement.c
 #define PAL_TAG_REFLECTION_OFFSET 0x2000 // reflection tag value is paletteTag + 0x2000
 #define PAL_RAW_REFLECTION_OFFSET 0x4000 // raw reflection tag is paletteNum + 0x4000
 #define HIGH_BRIDGE_PAL_TAG 0x4010
@@ -339,11 +340,20 @@ u32 FldEff_Shadow(void)
 
     if (spriteId != MAX_SPRITES)
     {
+        struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+        struct Sprite *linkedSprite = &gSprites[objectEvent->spriteId];
+
         gSprites[spriteId].oam.objMode = 1; // BLEND
         gSprites[spriteId].coordOffsetEnabled = TRUE;
         gSprites[spriteId].sLocalId = gFieldEffectArguments[0];
         gSprites[spriteId].sMapNum = gFieldEffectArguments[1];
         gSprites[spriteId].sMapGroup = gFieldEffectArguments[2];
+        // For player: copy palette from linked sprite (for RS/Emerald style support)
+        // For others: ensure Brendan palette is loaded and use it (has proper shadow colors)
+        if (objectEvent->localId == OBJ_EVENT_ID_PLAYER)
+            gSprites[spriteId].oam.paletteNum = linkedSprite->oam.paletteNum;
+        else
+            gSprites[spriteId].oam.paletteNum = LoadObjectEventPalette(OBJ_EVENT_PAL_TAG_BRENDAN);
         #if LARGE_OW_SUPPORT
         gSprites[spriteId].sYOffset = gShadowVerticalOffsets[graphicsInfo->shadowSize];
         #else
@@ -366,13 +376,19 @@ void UpdateShadowFieldEffect(struct Sprite *sprite)
         struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
         struct Sprite *linkedSprite = &gSprites[objectEvent->spriteId];
         sprite->oam.priority = linkedSprite->oam.priority;
+        // For player: copy palette from linked sprite (for RS/Emerald style support)
+        // For others: ensure Brendan palette is used (has proper shadow colors)
+        if (objectEvent->localId == OBJ_EVENT_ID_PLAYER)
+            sprite->oam.paletteNum = linkedSprite->oam.paletteNum;
+        else
+            sprite->oam.paletteNum = LoadObjectEventPalette(OBJ_EVENT_PAL_TAG_BRENDAN);
         sprite->x = linkedSprite->x;
-        
+
         #if LARGE_OW_SUPPORT
         // Read 'live' size from linked sprite
         sprite->y = linkedSprite->y - linkedSprite->centerToCornerVecY - sprite->sYOffset;
         #else
-        sprite->y = linkedSprite->y + sprite->sYOffset;        
+        sprite->y = linkedSprite->y + sprite->sYOffset;
         #endif
         sprite->invisible = linkedSprite->invisible;
 

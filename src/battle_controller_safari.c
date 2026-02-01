@@ -359,12 +359,13 @@ static void SafariHandleReturnMonToBall(void)
 
 static void SafariHandleDrawTrainerPic(void)
 {
-    DecompressTrainerBackPic(gSaveBlock2Ptr->playerGender, gActiveBattler);
-    SetMultiuseSpriteTemplateToTrainerBack(gSaveBlock2Ptr->playerGender, GetBattlerPosition(gActiveBattler));
+    u16 backPicId = GetPlayerPreferredBackPicId();
+    DecompressTrainerBackPic(backPicId, gActiveBattler);
+    SetMultiuseSpriteTemplateToTrainerBack(backPicId, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(
       &gMultiuseSpriteTemplate,
       80,
-      (8 - gTrainerBackPicCoords[gSaveBlock2Ptr->playerGender].size) * 4 + 80,
+      (8 - gTrainerBackPicCoords[backPicId].size) * 4 + 80,
       30);
     gSprites[gBattlerSpriteIds[gActiveBattler]].oam.paletteNum = gActiveBattler;
     gSprites[gBattlerSpriteIds[gActiveBattler]].x2 = DISPLAY_WIDTH;

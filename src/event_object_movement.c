@@ -58,6 +58,11 @@
 #include "bike.h"
 // this file was known as evobjmv.c in Game Freak's original source
 
+// Forward declarations for graphics info pointer tables
+struct ObjectEventGraphicsInfo;
+extern const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX];
+extern const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[];
+
 enum {
     MOVE_SPEED_NORMAL, // walking
     MOVE_SPEED_FAST_1, // running / surfing / sliding (ice tile)
@@ -666,6 +671,9 @@ static const u16 sReflectionPaletteTags_PlayerUnderwater[] = {
 static const struct PairedPalettes sPlayerReflectionPaletteSets[] = {
     {OBJ_EVENT_PAL_TAG_BRENDAN,           sReflectionPaletteTags_Brendan},
     {OBJ_EVENT_PAL_TAG_MAY,               sReflectionPaletteTags_May},
+    // Reuse the vanilla reflections for RS player palettes
+    {OBJ_EVENT_PAL_TAG_RS_BRENDAN,        sReflectionPaletteTags_Brendan},
+    {OBJ_EVENT_PAL_TAG_RS_MAY,            sReflectionPaletteTags_May},
     {OBJ_EVENT_PAL_TAG_PLAYER_UNDERWATER, sReflectionPaletteTags_PlayerUnderwater},
     {OBJ_EVENT_PAL_TAG_NONE,              NULL},
 };

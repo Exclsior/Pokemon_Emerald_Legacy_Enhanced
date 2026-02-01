@@ -29,6 +29,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/trainer_types.h"
+#include "constants/flags.h"
 
 #define NUM_FORCED_MOVEMENTS 18
 #define NUM_ACRO_BIKE_COLLISIONS 5
@@ -268,7 +269,26 @@ static const u16 sRSAvatarGfxIds[GENDER_COUNT] =
     [FEMALE] = OBJ_EVENT_GFX_LINK_RS_MAY
 };
 
-static const u16 sPlayerAvatarGfxToStateFlag[GENDER_COUNT][5][2] =
+struct PlayerGraphicsIdToStateFlag
+{
+    u16 graphicsId;
+    u8 flag;
+};
+
+// Ruby/Sapphire player-style graphics by state and gender
+static const u16 sRSPlayerAvatarGfxIds[][2] =
+{
+    [PLAYER_AVATAR_STATE_NORMAL]     = {OBJ_EVENT_GFX_RS_BRENDAN_NORMAL,     OBJ_EVENT_GFX_RS_MAY_NORMAL},
+    [PLAYER_AVATAR_STATE_MACH_BIKE]  = {OBJ_EVENT_GFX_RS_BRENDAN_MACH_BIKE,  OBJ_EVENT_GFX_RS_MAY_MACH_BIKE},
+    [PLAYER_AVATAR_STATE_ACRO_BIKE]  = {OBJ_EVENT_GFX_RS_BRENDAN_ACRO_BIKE,  OBJ_EVENT_GFX_RS_MAY_ACRO_BIKE},
+    [PLAYER_AVATAR_STATE_SURFING]    = {OBJ_EVENT_GFX_RS_BRENDAN_SURFING,    OBJ_EVENT_GFX_RS_MAY_SURFING},
+    [PLAYER_AVATAR_STATE_UNDERWATER] = {OBJ_EVENT_GFX_RS_BRENDAN_UNDERWATER, OBJ_EVENT_GFX_RS_MAY_UNDERWATER},
+    [PLAYER_AVATAR_STATE_FIELD_MOVE] = {OBJ_EVENT_GFX_RS_BRENDAN_FIELD_MOVE, OBJ_EVENT_GFX_RS_MAY_FIELD_MOVE},
+    [PLAYER_AVATAR_STATE_FISHING]    = {OBJ_EVENT_GFX_RS_BRENDAN_FISHING,    OBJ_EVENT_GFX_RS_MAY_FISHING},
+    [PLAYER_AVATAR_STATE_WATERING]   = {OBJ_EVENT_GFX_RS_BRENDAN_WATERING,   OBJ_EVENT_GFX_RS_MAY_WATERING},
+};
+
+static const struct PlayerGraphicsIdToStateFlag sEmeraldPlayerGfxToStateFlag[GENDER_COUNT][5] =
 {
     [MALE] =
     {
@@ -285,6 +305,26 @@ static const u16 sPlayerAvatarGfxToStateFlag[GENDER_COUNT][5][2] =
         {OBJ_EVENT_GFX_MAY_ACRO_BIKE,      PLAYER_AVATAR_FLAG_ACRO_BIKE},
         {OBJ_EVENT_GFX_MAY_SURFING,        PLAYER_AVATAR_FLAG_SURFING},
         {OBJ_EVENT_GFX_MAY_UNDERWATER,     PLAYER_AVATAR_FLAG_UNDERWATER},
+    }
+};
+
+static const struct PlayerGraphicsIdToStateFlag sRSPlayerGfxToStateFlag[GENDER_COUNT][5] =
+{
+    [MALE] =
+    {
+        {OBJ_EVENT_GFX_RS_BRENDAN_NORMAL,     PLAYER_AVATAR_FLAG_ON_FOOT},
+        {OBJ_EVENT_GFX_RS_BRENDAN_MACH_BIKE,  PLAYER_AVATAR_FLAG_MACH_BIKE},
+        {OBJ_EVENT_GFX_RS_BRENDAN_ACRO_BIKE,  PLAYER_AVATAR_FLAG_ACRO_BIKE},
+        {OBJ_EVENT_GFX_RS_BRENDAN_SURFING,    PLAYER_AVATAR_FLAG_SURFING},
+        {OBJ_EVENT_GFX_RS_BRENDAN_UNDERWATER, PLAYER_AVATAR_FLAG_UNDERWATER},
+    },
+    [FEMALE] =
+    {
+        {OBJ_EVENT_GFX_RS_MAY_NORMAL,         PLAYER_AVATAR_FLAG_ON_FOOT},
+        {OBJ_EVENT_GFX_RS_MAY_MACH_BIKE,      PLAYER_AVATAR_FLAG_MACH_BIKE},
+        {OBJ_EVENT_GFX_RS_MAY_ACRO_BIKE,      PLAYER_AVATAR_FLAG_ACRO_BIKE},
+        {OBJ_EVENT_GFX_RS_MAY_SURFING,        PLAYER_AVATAR_FLAG_SURFING},
+        {OBJ_EVENT_GFX_RS_MAY_UNDERWATER,     PLAYER_AVATAR_FLAG_UNDERWATER},
     }
 };
 
@@ -1253,6 +1293,9 @@ u16 GetRivalAvatarGraphicsIdByStateIdAndGender(u8 state, u8 gender)
 
 u16 GetPlayerAvatarGraphicsIdByStateIdAndGender(u8 state, u8 gender)
 {
+    // If the player selected RS look, use RS-style gfx for each state.
+    if (FlagGet(FLAG_PLAYER_STYLE_RS))
+        return sRSPlayerAvatarGfxIds[state][gender];
     return sPlayerAvatarGfxIds[state][gender];
 }
 
@@ -1283,7 +1326,24 @@ u16 GetPlayerAvatarGenderByGraphicsId(u16 gfxId)
     case OBJ_EVENT_GFX_MAY_UNDERWATER:
     case OBJ_EVENT_GFX_MAY_FISHING:
     case OBJ_EVENT_GFX_MAY_WATERING:
+    case OBJ_EVENT_GFX_RS_MAY_NORMAL:
+    case OBJ_EVENT_GFX_RS_MAY_MACH_BIKE:
+    case OBJ_EVENT_GFX_RS_MAY_ACRO_BIKE:
+    case OBJ_EVENT_GFX_RS_MAY_SURFING:
+    case OBJ_EVENT_GFX_RS_MAY_FIELD_MOVE:
+    case OBJ_EVENT_GFX_RS_MAY_UNDERWATER:
+    case OBJ_EVENT_GFX_RS_MAY_FISHING:
+    case OBJ_EVENT_GFX_RS_MAY_WATERING:
         return FEMALE;
+    case OBJ_EVENT_GFX_RS_BRENDAN_NORMAL:
+    case OBJ_EVENT_GFX_RS_BRENDAN_MACH_BIKE:
+    case OBJ_EVENT_GFX_RS_BRENDAN_ACRO_BIKE:
+    case OBJ_EVENT_GFX_RS_BRENDAN_SURFING:
+    case OBJ_EVENT_GFX_RS_BRENDAN_FIELD_MOVE:
+    case OBJ_EVENT_GFX_RS_BRENDAN_UNDERWATER:
+    case OBJ_EVENT_GFX_RS_BRENDAN_FISHING:
+    case OBJ_EVENT_GFX_RS_BRENDAN_WATERING:
+        return MALE;
     default:
         return MALE;
     }
@@ -1340,29 +1400,62 @@ void SetPlayerAvatarStateMask(u8 flags)
     gPlayerAvatar.flags |= flags;
 }
 
+static const struct PlayerGraphicsIdToStateFlag *GetPlayerGfxToStateFlagTable(u8 gender, u8 *count, bool8 *usingRSStyle)
+{
+    bool8 useRSStyle = FlagGet(FLAG_PLAYER_STYLE_RS);
+
+    if (usingRSStyle != NULL)
+        *usingRSStyle = useRSStyle;
+
+    if (useRSStyle)
+    {
+        *count = ARRAY_COUNT(sRSPlayerGfxToStateFlag[0]);
+        return sRSPlayerGfxToStateFlag[gender];
+    }
+
+    *count = ARRAY_COUNT(sEmeraldPlayerGfxToStateFlag[0]);
+    return sEmeraldPlayerGfxToStateFlag[gender];
+}
+
 static u8 GetPlayerAvatarStateTransitionByGraphicsId(u16 graphicsId, u8 gender)
 {
     u8 i;
+    u8 count;
+    bool8 usingRSStyle;
+    const struct PlayerGraphicsIdToStateFlag *gfxToStateFlags = GetPlayerGfxToStateFlagTable(gender, &count, &usingRSStyle);
 
-    for (i = 0; i < ARRAY_COUNT(sPlayerAvatarGfxToStateFlag[0]); i++)
+    for (i = 0; i < count; i++)
     {
-        if (sPlayerAvatarGfxToStateFlag[gender][i][0] == graphicsId)
-            return sPlayerAvatarGfxToStateFlag[gender][i][1];
+        if (gfxToStateFlags[i].graphicsId == graphicsId)
+            return gfxToStateFlags[i].flag;
     }
+
+    // If we didn't find a match (e.g. style toggled mid-transition), look in the other style's table.
+    gfxToStateFlags = usingRSStyle ? sEmeraldPlayerGfxToStateFlag[gender] : sRSPlayerGfxToStateFlag[gender];
+    count = usingRSStyle ? ARRAY_COUNT(sEmeraldPlayerGfxToStateFlag[0]) : ARRAY_COUNT(sRSPlayerGfxToStateFlag[0]);
+
+    for (i = 0; i < count; i++)
+    {
+        if (gfxToStateFlags[i].graphicsId == graphicsId)
+            return gfxToStateFlags[i].flag;
+    }
+
     return PLAYER_AVATAR_FLAG_ON_FOOT;
 }
 
 u16 GetPlayerAvatarGraphicsIdByCurrentState(void)
 {
     u8 i;
-    u8 flags = gPlayerAvatar.flags;
+    u8 count;
+    const struct PlayerGraphicsIdToStateFlag *gfxToStateFlags = GetPlayerGfxToStateFlagTable(gPlayerAvatar.gender, &count, NULL);
 
-    for (i = 0; i < ARRAY_COUNT(sPlayerAvatarGfxToStateFlag[0]); i++)
+    for (i = 0; i < count; i++)
     {
-        if (sPlayerAvatarGfxToStateFlag[gPlayerAvatar.gender][i][1] & flags)
-            return sPlayerAvatarGfxToStateFlag[gPlayerAvatar.gender][i][0];
+        if (gfxToStateFlags[i].flag & gPlayerAvatar.flags)
+            return gfxToStateFlags[i].graphicsId;
     }
-    return 0;
+
+    return GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_STATE_NORMAL);
 }
 
 void SetPlayerAvatarExtraStateTransition(u16 graphicsId, u8 transitionFlag)

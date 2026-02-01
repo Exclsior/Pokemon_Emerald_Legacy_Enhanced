@@ -223,6 +223,10 @@ static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8);
 static void Task_NewGameBirchSpeech_BoyOrGirl(u8);
 static void Task_NewGameBirchSpeech_Nuzlocke(u8);
 static void Task_NewGameBirchSpeech_DexType(u8);
+static void Task_NewGameBirchSpeech_LookPrompt(u8);
+static void Task_NewGameBirchSpeech_WaitToShowLookMenu(u8);
+static void Task_NewGameBirchSpeech_ChooseLook(u8);
+static void NewGameBirchSpeech_ApplyLookStyleToPlayerSprite(u8);
 static void LoadMainMenuWindowFrameTiles(u8, u16);
 static void DrawMainMenuWindowBorder(const struct WindowTemplate *, u16);
 static void Task_HighlightSelectedMainMenuItem(u8);
@@ -247,12 +251,17 @@ static void NewGameBirchSpeech_ClearGenderWindow(u8, u8);
 static void NewGameBirchSpeech_ShowNuzlockeMenu(void);
 static s8 NewGameBirchSpeech_ProcessNuzlockeMenuInput(void);
 static void NewGameBirchSpeech_ClearNuzlockeWindow(u8, u8);
+static void NewGameBirchSpeech_ShowLookMenu(void);
+static s8 NewGameBirchSpeech_ProcessLookMenuInput(void);
+static void NewGameBirchSpeech_ClearLookWindow(u8, bool8);
 static void NewGameBirchSpeech_ShowDexTypeMenu(void);
 static s8 NewGameBirchSpeech_ProcessDexTypeMenuInput(void);
 static void NewGameBirchSpeech_ClearDexTypeWindow(u8, u8);
 static void Task_NewGameBirchSpeech_WhatsYourName(u8);
 static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8);
 static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8);
+static void Task_NewGameBirchSpeech_SlideOutOldStyleSprite(u8);
+static void Task_NewGameBirchSpeech_SlideInNewStyleSprite(u8);
 static void Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint(u8);
 static void Task_NewGameBirchSpeech_WaitPressBeforeNameChoice(u8);
 static void Task_NewGameBirchSpeech_StartNamingScreen(u8);
@@ -451,6 +460,16 @@ static const struct WindowTemplate sNewGameBirchSpeechTextWindows[] =
         .paletteNum = 15,
         .baseBlock = 0x6D
     },
+    // Window 5: Look menu (same width as difficulty, height for 2 options)
+    {
+        .bg = 0,
+        .tilemapLeft = 3,
+        .tilemapTop = 5,
+        .width = 8,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 0x6D
+    },
     DUMMY_WIN_TEMPLATE
 };
 
@@ -513,6 +532,15 @@ static const struct MenuAction sMenuActions_Nuzlocke[] = {
     {gText_Hard, NULL},
     {gText_Hardcore, NULL}
 };
+
+static const struct MenuAction sMenuActions_Look[] = {
+    {gText_LookEmerald, NULL},
+    {gText_LookRS, NULL},
+};
+
+// Look selector preview sprite holders
+static u8 sLookPreviewEmeraldSpriteId;
+static u8 sLookPreviewRSSpriteId;
 
 static const struct MenuAction sMenuActions_DexMode[] = {
     {gText_Birch_HoennDex, {NULL}},
@@ -1590,13 +1618,13 @@ static void Task_NewGameBirchSpeech_ChooseGender(u8 taskId)
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->playerGender = gender;
             NewGameBirchSpeech_ClearGenderWindow(1, 1);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_LookPrompt;
             break;
         case FEMALE:
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->playerGender = gender;
             NewGameBirchSpeech_ClearGenderWindow(1, 1);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_LookPrompt;
             break;
     }
     gender2 = Menu_GetCursorPos();
@@ -1660,6 +1688,155 @@ static void Task_NewGameBirchSpeech_Nuzlocke(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowNuzlockeMenu;
 }
 
+static void Task_NewGameBirchSpeech_LookPrompt(u8 taskId)
+{
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, gText_Birch_LookLike);
+    AddTextPrinterForMessage(TRUE);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowLookMenu;
+}
+
+static void Task_NewGameBirchSpeech_WaitToShowLookMenu(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        NewGameBirchSpeech_ShowLookMenu();
+        // Initialize last previewed style to current cursor to avoid immediate animation
+        gTasks[taskId].data[3] = Menu_GetCursorPos();
+        gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseLook;
+    }
+}
+
+static void Task_NewGameBirchSpeech_ChooseLook(u8 taskId)
+{
+    int choice = NewGameBirchSpeech_ProcessLookMenuInput();
+    // Animated live preview: when cursor moves, slide out current sprite and slide in new style
+    {
+        s8 cursor = Menu_GetCursorPos();
+        // data[3] is used as the last previewed style; initialize is set in init to 0xFF
+        if (cursor != gTasks[taskId].data[3])
+        {
+            // Store target style and start fade/slide animation
+            gTasks[taskId].data[12] = cursor; // target look style (0 = Emerald, 1 = RS)
+            gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+            NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 0);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_SlideOutOldStyleSprite;
+            // Update last previewed selection to the new target
+            gTasks[taskId].data[3] = cursor;
+        }
+    }
+    switch (choice)
+    {
+        case MENU_B_PRESSED: // Go back to gender selection
+            NewGameBirchSpeech_ClearLookWindow(5, 1);
+            PlaySE(SE_SELECT);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_BoyOrGirl;
+            break;
+        case 0: // Emerald
+            NewGameBirchSpeech_ClearLookWindow(5, 1);
+            PlaySE(SE_SELECT);
+            FlagClear(FLAG_PLAYER_STYLE_RS);
+            NewGameBirchSpeech_ApplyLookStyleToPlayerSprite(taskId);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            break;
+        case 1: // Ruby/Sapphire
+            NewGameBirchSpeech_ClearLookWindow(5, 1);
+            PlaySE(SE_SELECT);
+            FlagSet(FLAG_PLAYER_STYLE_RS);
+            NewGameBirchSpeech_ApplyLookStyleToPlayerSprite(taskId);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_Nuzlocke;
+            break;
+    }
+}
+
+// Style preview animation (similar to gender selection slide)
+static void Task_NewGameBirchSpeech_SlideOutOldStyleSprite(u8 taskId)
+{
+    u8 spriteId = gTasks[taskId].tPlayerSpriteId;
+    if (gTasks[taskId].tIsDoneFadingSprites == 0)
+    {
+        gSprites[spriteId].x += 4;
+    }
+    else
+    {
+        u8 gender = gSaveBlock2Ptr->playerGender;
+        u8 style = gTasks[taskId].data[12]; // target style
+        u8 newClass;
+        u8 newSpriteId;
+
+        // Remove old sprite
+        gSprites[spriteId].invisible = TRUE;
+        DestroySprite(&gSprites[spriteId]);
+
+        if (gender == MALE)
+            newClass = FacilityClassToPicIndex(style ? FACILITY_CLASS_RS_BRENDAN : FACILITY_CLASS_BRENDAN);
+        else
+            newClass = FacilityClassToPicIndex(style ? FACILITY_CLASS_RS_MAY : FACILITY_CLASS_MAY);
+
+        // Create new styled sprite off-screen to the right
+        newSpriteId = CreateTrainerSprite(newClass, DISPLAY_WIDTH, 60, 0, &gDecompressionBuffer[0]);
+        gSprites[newSpriteId].callback = SpriteCB_Null;
+        gSprites[newSpriteId].oam.priority = 0;
+        gSprites[newSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+        gSprites[newSpriteId].invisible = FALSE;
+        gTasks[taskId].tPlayerSpriteId = newSpriteId;
+
+        NewGameBirchSpeech_StartFadeInTarget1OutTarget2(taskId, 0);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_SlideInNewStyleSprite;
+    }
+}
+
+static void Task_NewGameBirchSpeech_SlideInNewStyleSprite(u8 taskId)
+{
+    u8 spriteId = gTasks[taskId].tPlayerSpriteId;
+
+    if (gSprites[spriteId].x > 180)
+    {
+        gSprites[spriteId].x -= 4;
+    }
+    else
+    {
+        gSprites[spriteId].x = 180;
+        if (gTasks[taskId].tIsDoneFadingSprites)
+        {
+            gSprites[spriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseLook;
+        }
+    }
+}
+
+static void NewGameBirchSpeech_ApplyLookStyleToPlayerSprite(u8 taskId)
+{
+    u8 gender = gSaveBlock2Ptr->playerGender;
+    bool8 useRsStyle = FlagGet(FLAG_PLAYER_STYLE_RS); // 0 = Emerald, 1 = RS
+    u8 newClass;
+    u8 oldSpriteId = gTasks[taskId].tPlayerSpriteId;
+    s16 x = gSprites[oldSpriteId].x;
+    s16 y = gSprites[oldSpriteId].y;
+    u8 objMode = gSprites[oldSpriteId].oam.objMode;
+
+    if (gender == MALE)
+        newClass = FacilityClassToPicIndex(useRsStyle ? FACILITY_CLASS_RS_BRENDAN : FACILITY_CLASS_BRENDAN);
+    else
+        newClass = FacilityClassToPicIndex(useRsStyle ? FACILITY_CLASS_RS_MAY : FACILITY_CLASS_MAY);
+
+    // Replace the current player sprite with the selected look
+    DestroySprite(&gSprites[oldSpriteId]);
+
+    {
+        u8 newSpriteId = CreateTrainerSprite(newClass, x, y, 0, &gDecompressionBuffer[0]);
+        gSprites[newSpriteId].callback = SpriteCB_Null;
+        gSprites[newSpriteId].oam.priority = 0;
+        gSprites[newSpriteId].oam.objMode = objMode;
+        gSprites[newSpriteId].invisible = FALSE;
+        gTasks[taskId].tPlayerSpriteId = newSpriteId;
+        if (gender == MALE)
+            gTasks[taskId].tBrendanSpriteId = newSpriteId;
+        else
+            gTasks[taskId].tMaySpriteId = newSpriteId;
+    }
+}
+
 static void Task_NewGameBirchSpeech_WaitToShowNuzlockeMenu(u8 taskId)
 {
     if (!RunTextPrintersAndIsPrinter0Active())
@@ -1681,7 +1858,7 @@ static void Task_NewGameBirchSpeech_ChooseNuzlocke(u8 taskId)
             FlagClear(FLAG_NUZLOCKE);
             gTasks[taskId].func = Task_NewGameBirchSpeech_NormalText;
             break;
-    
+
         case 1:
             NewGameBirchSpeech_ClearNuzlockeWindow(3, 1);
             PlaySE(SE_SELECT);
@@ -1695,6 +1872,12 @@ static void Task_NewGameBirchSpeech_ChooseNuzlocke(u8 taskId)
             FlagSet(FLAG_HARD);
             FlagSet(FLAG_NUZLOCKE);
             gTasks[taskId].func = Task_NewGameBirchSpeech_HardcoreText;
+            break;
+        case MENU_B_PRESSED:
+            // Allow backing out to the Look (style) selection
+            PlaySE(SE_SELECT);
+            NewGameBirchSpeech_ClearNuzlockeWindow(3, 1);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_LookPrompt;
             break;
     }
 }
@@ -2100,6 +2283,36 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
     gSprites[spriteId].y = 60;
     gSprites[spriteId].invisible = FALSE;
     gTasks[taskId].tPlayerSpriteId = spriteId;
+
+    // Apply the player's chosen look style (RS or Emerald)
+    if (FlagGet(FLAG_PLAYER_STYLE_RS))
+    {
+        // Player chose RS style, need to replace the Emerald sprite
+        u8 gender = gSaveBlock2Ptr->playerGender;
+        u8 newClass;
+        u8 oldSpriteId = spriteId;
+        u8 newSpriteId;
+        s16 x = gSprites[oldSpriteId].x;
+        s16 y = gSprites[oldSpriteId].y;
+
+        if (gender == MALE)
+            newClass = FacilityClassToPicIndex(FACILITY_CLASS_RS_BRENDAN);
+        else
+            newClass = FacilityClassToPicIndex(FACILITY_CLASS_RS_MAY);
+
+        DestroySprite(&gSprites[oldSpriteId]);
+
+        newSpriteId = CreateTrainerSprite(newClass, x, y, 0, &gDecompressionBuffer[0]);
+        gSprites[newSpriteId].callback = SpriteCB_Null;
+        gSprites[newSpriteId].oam.priority = 0;
+        gSprites[newSpriteId].invisible = FALSE;
+        gTasks[taskId].tPlayerSpriteId = newSpriteId;
+        if (gender == MALE)
+            gTasks[taskId].tBrendanSpriteId = newSpriteId;
+        else
+            gTasks[taskId].tMaySpriteId = newSpriteId;
+    }
+
     SetGpuReg(REG_OFFSET_BG1HOFS, -60);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     SetGpuReg(REG_OFFSET_WIN0H, 0);
@@ -2159,6 +2372,7 @@ static void AddBirchSpeechObjects(u8 taskId)
     gSprites[lotadSpriteId].oam.priority = 0;
     gSprites[lotadSpriteId].invisible = TRUE;
     gTasks[taskId].tLotadSpriteId = lotadSpriteId;
+    // Always use Emerald style sprites for gender selection
     brendanSpriteId = CreateTrainerSprite(FacilityClassToPicIndex(FACILITY_CLASS_BRENDAN), 120, 60, 0, &gDecompressionBuffer[0]);
     gSprites[brendanSpriteId].callback = SpriteCB_Null;
     gSprites[brendanSpriteId].invisible = TRUE;
@@ -2374,6 +2588,52 @@ static void NewGameBirchSpeech_ShowNuzlockeMenu(void)
     InitMenuInUpperLeftCornerNormal(3, ARRAY_COUNT(sMenuActions_Nuzlocke), 0);
     PutWindowTilemap(3);
     CopyWindowToVram(3, COPYWIN_FULL);
+}
+
+static void NewGameBirchSpeech_ShowLookMenu(void)
+{
+    // Use window 5 (same width as difficulty menu, height for 2 options)
+    DrawMainMenuWindowBorder(&sNewGameBirchSpeechTextWindows[5], 0xF3);
+    FillWindowPixelBuffer(5, PIXEL_FILL(1));
+    PrintMenuTable(5, ARRAY_COUNT(sMenuActions_Look), sMenuActions_Look);
+    InitMenuInUpperLeftCornerNormal(5, ARRAY_COUNT(sMenuActions_Look), 0);
+    PutWindowTilemap(5);
+    CopyWindowToVram(5, COPYWIN_FULL);
+
+    // No separate preview sprites; swap the existing player sprite on selection.
+    sLookPreviewEmeraldSpriteId = 0xFF;
+    sLookPreviewRSSpriteId = 0xFF;
+}
+
+static s8 NewGameBirchSpeech_ProcessLookMenuInput(void)
+{
+    return Menu_ProcessInputNoWrap();
+}
+
+static void NewGameBirchSpeech_ClearLookWindowTilemap(u8 bg, u8 x, u8 y, u8 width, u8 height, u8 unused)
+{
+    FillBgTilemapBufferRect(bg, 0, x + 255, y + 255, width + 2, height + 2, 2);
+}
+
+static void NewGameBirchSpeech_ClearLookWindow(u8 windowId, bool8 copyToVram)
+{
+    CallWindowFunction(windowId, NewGameBirchSpeech_ClearLookWindowTilemap);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+    ClearWindowTilemap(windowId);
+    if (copyToVram == TRUE)
+        CopyWindowToVram(windowId, COPYWIN_FULL);
+
+    // Destroy preview sprites created for the look menu
+    if (sLookPreviewEmeraldSpriteId != 0xFF)
+    {
+        DestroySprite(&gSprites[sLookPreviewEmeraldSpriteId]);
+        sLookPreviewEmeraldSpriteId = 0xFF;
+    }
+    if (sLookPreviewRSSpriteId != 0xFF)
+    {
+        DestroySprite(&gSprites[sLookPreviewRSSpriteId]);
+        sLookPreviewRSSpriteId = 0xFF;
+    }
 }
 
 static s8 NewGameBirchSpeech_ProcessNuzlockeMenuInput(void)

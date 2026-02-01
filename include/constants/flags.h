@@ -698,7 +698,7 @@
 #define FLAG_DEFEATED_EXCLSIOR                                     0x293 // Flag for Exclsior Dev Battle
 #define FLAG_DEFEATED_SHINY_LATIAS_OR_LATIOS                       0x294 // Flag for Shiny Lati Defeated
 #define FLAG_CAUGHT_SHINY_LATIAS_OR_LATIOS                         0x295 // Flag for Shiny Lati Caught
-#define FLAG_UNUSED_0x296                                          0x296 // Unused Flag
+#define FLAG_PLAYER_STYLE_RS                                       0x296 // Player uses Ruby/Sapphire style sprites (0 = Emerald, 1 = RS/Classic)
 #define FLAG_UNUSED_0x297                                          0x297 // Unused Flag
 #define FLAG_UNUSED_0x298                                          0x298 // Unused Flag
 #define FLAG_UNUSED_0x299                                          0x299 // Unused Flag
