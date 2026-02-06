@@ -16,9 +16,52 @@ enum {
     WALLPAPER_MACHINE,
     WALLPAPER_PLAIN,
     WALLPAPER_FRIENDS, // The one received as a gift from Walda's parents.
+    // Special wallpapers (Walda-style with fixed colors)
+    // Pokemon 1
+    WALLPAPER_SPECIAL_ZIGZAGOON,
+    WALLPAPER_SPECIAL_LUVDISC,
+    WALLPAPER_SPECIAL_TOGEPI,
+    WALLPAPER_SPECIAL_AZUMARILL,
+    WALLPAPER_SPECIAL_PIKACHU,
+    WALLPAPER_SPECIAL_DUSCLOPS,
+    // Pokemon 2
+    WALLPAPER_SPECIAL_LUDICOLO,
+    WALLPAPER_SPECIAL_WHISCASH,
+    WALLPAPER_SPECIAL_MINUN,
+    // Other
+    WALLPAPER_SPECIAL_CLASSIC1,
+    // Pokemon 2
+    WALLPAPER_SPECIAL_DIGLETT,
+    WALLPAPER_SPECIAL_PICHU,
+    // Team
+    WALLPAPER_SPECIAL_AQUA1,
+    WALLPAPER_SPECIAL_MAGMA1,
+    WALLPAPER_SPECIAL_AQUA2,
+    WALLPAPER_SPECIAL_MAGMA2,
+    // Contest
+    WALLPAPER_SPECIAL_CUTE,
+    WALLPAPER_SPECIAL_SMART,
+    WALLPAPER_SPECIAL_COOL,
+    WALLPAPER_SPECIAL_TOUGH,
+    WALLPAPER_SPECIAL_BEAUTY,
+    // Legends
+    WALLPAPER_SPECIAL_LEGENDARY,
+    WALLPAPER_SPECIAL_LATIAS,
+    WALLPAPER_SPECIAL_LATIOS,
+    // Other
+    WALLPAPER_SPECIAL_BLOCK,
+    WALLPAPER_SPECIAL_POKECENTER,
+    WALLPAPER_SPECIAL_CIRCLES,
+    // Secret
+    WALLPAPER_SPECIAL_EXCLSIOR,
+    WALLPAPER_SPECIAL_VERITAS,
+    // Other
+    WALLPAPER_SPECIAL_CLASSIC2,
     WALLPAPER_COUNT
 };
 #define MAX_DEFAULT_WALLPAPER WALLPAPER_SAVANNA
+#define WALLPAPER_SPECIAL_START WALLPAPER_SPECIAL_ZIGZAGOON
+#define WALLPAPER_SPECIAL_COUNT (WALLPAPER_COUNT - WALLPAPER_SPECIAL_START)
 
 static const u16 sWallpaperPalettes_Forest[][16] =
 {
@@ -169,7 +212,48 @@ static const u16 sBoxTitleColors[WALLPAPER_COUNT][2] =
     [WALLPAPER_POKECENTER] = {RGB(7, 7, 7), RGB_WHITE},
     [WALLPAPER_MACHINE]    = {RGB(7, 7, 7), RGB_WHITE},
     [WALLPAPER_PLAIN]      = {RGB(7, 7, 7), RGB_WHITE},
-    [WALLPAPER_FRIENDS]    = {RGB(7, 7, 7), RGB_WHITE}
+    [WALLPAPER_FRIENDS]    = {RGB(7, 7, 7), RGB_WHITE},
+    // Special wallpapers (shadow #515151 = RGB(10,10,10), text #FFFFFF = RGB_WHITE)
+    // Pokemon 1
+    [WALLPAPER_SPECIAL_ZIGZAGOON]     = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_LUVDISC]       = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_TOGEPI]        = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_AZUMARILL]     = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_PIKACHU]       = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_DUSCLOPS]      = {RGB(10, 10, 10), RGB_WHITE},
+    // Pokemon 2
+    [WALLPAPER_SPECIAL_LUDICOLO]      = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_WHISCASH]      = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_MINUN]         = {RGB(10, 10, 10), RGB_WHITE},
+    // Other
+    [WALLPAPER_SPECIAL_CLASSIC1]      = {RGB(10, 10, 10), RGB_WHITE},
+    // Pokemon 2
+    [WALLPAPER_SPECIAL_DIGLETT]       = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_PICHU]         = {RGB(10, 10, 10), RGB_WHITE},
+    // Team
+    [WALLPAPER_SPECIAL_AQUA1]         = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_MAGMA1]        = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_AQUA2]         = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_MAGMA2]        = {RGB(10, 10, 10), RGB_WHITE},
+    // Contest
+    [WALLPAPER_SPECIAL_CUTE]          = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_SMART]         = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_COOL]          = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_TOUGH]         = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_BEAUTY]        = {RGB(10, 10, 10), RGB_WHITE},
+    // Legends
+    [WALLPAPER_SPECIAL_LEGENDARY]     = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_LATIAS]        = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_LATIOS]        = {RGB(10, 10, 10), RGB_WHITE},
+    // Other
+    [WALLPAPER_SPECIAL_BLOCK]         = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_POKECENTER]    = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_CIRCLES]       = {RGB(10, 10, 10), RGB_WHITE},
+    // Secret
+    [WALLPAPER_SPECIAL_EXCLSIOR]     = {RGB(10, 10, 10), RGB_WHITE},
+    [WALLPAPER_SPECIAL_VERITAS]       = {RGB(10, 10, 10), RGB_WHITE},
+    // Other
+    [WALLPAPER_SPECIAL_CLASSIC2]      = {RGB(10, 10, 10), RGB_WHITE},
 };
 
 #define WALLPAPER_ENTRY(name) {sWallpaperTiles_##name, sWallpaperTilemap_##name, sWallpaperPalettes_##name[0]}
@@ -390,4 +474,55 @@ static const u32 *const sWaldaWallpaperIcons[] =
     sWallpaperIcon_Minun,
     sWallpaperIcon_Togepi,
     sWallpaperIcon_Magma,
+};
+
+// Special wallpaper configuration (uses Walda-style rendering with fixed values)
+struct SpecialWallpaperConfig {
+    u8 patternId;
+    u8 iconId;
+    u16 bgColor;  // RGB555 format
+    u16 fgColor;  // RGB555 format
+};
+
+static const struct SpecialWallpaperConfig sSpecialWallpapers[WALLPAPER_SPECIAL_COUNT] = {
+    // Pokemon 1: Zigzagoon, Luvdisc, Togepi, Azumarill, Pikachu, Dusclops
+    [WALLPAPER_SPECIAL_ZIGZAGOON - WALLPAPER_SPECIAL_START]   = {0,  11, RGB(28, 26, 21), RGB(21, 15, 11)}, // #e0d0a8, #a87858
+    [WALLPAPER_SPECIAL_LUVDISC - WALLPAPER_SPECIAL_START]     = {2,  22, RGB(9, 27, 31),  RGB(31, 11, 17)}, // #4fd9ff, #f85888
+    [WALLPAPER_SPECIAL_TOGEPI - WALLPAPER_SPECIAL_START]      = {3,  28, RGB(31, 31, 31), RGB(28, 26, 20)}, // #f8f8f8, #e0d0a0
+    [WALLPAPER_SPECIAL_AZUMARILL - WALLPAPER_SPECIAL_START]   = {10, 6,  RGB(11, 21, 28), RGB(31, 31, 31)}, // #58a8e0, #f8f8f8
+    [WALLPAPER_SPECIAL_PIKACHU - WALLPAPER_SPECIAL_START]     = {11, 1,  RGB(26, 14, 11), RGB(31, 11, 17)}, // #d07058, #f85888
+    [WALLPAPER_SPECIAL_DUSCLOPS - WALLPAPER_SPECIAL_START]    = {13, 8,  RGB(11, 10, 14), RGB(17, 18, 19)}, // #5c5270, #8e969e
+    // Pokemon 2: Ludicolo, Whiscash, Minun
+    [WALLPAPER_SPECIAL_LUDICOLO - WALLPAPER_SPECIAL_START]    = {14, 18, RGB(16, 25, 12), RGB(25, 25, 12)}, // #80c860, #c8c860
+    [WALLPAPER_SPECIAL_WHISCASH - WALLPAPER_SPECIAL_START]    = {15, 12, RGB(26, 25, 11), RGB(13, 15, 22)}, // #d0ca5d, #6878b0
+    [WALLPAPER_SPECIAL_MINUN - WALLPAPER_SPECIAL_START]       = {4,  27, RGB(29, 27, 21), RGB(12, 17, 27)}, // #e9ddad, #638fdd
+    // Other: Classic 1
+    [WALLPAPER_SPECIAL_CLASSIC1 - WALLPAPER_SPECIAL_START]    = {4,  9,  RGB(0, 0, 0),    RGB(31, 31, 31)}, // #000000, #ffffff
+    // Pokemon 2: Diglett, Pichu
+    [WALLPAPER_SPECIAL_DIGLETT - WALLPAPER_SPECIAL_START]     = {7,  21, RGB(20, 13, 8),  RGB(28, 22, 18)}, // #a66a42, #e0b192
+    [WALLPAPER_SPECIAL_PICHU - WALLPAPER_SPECIAL_START]       = {3,  20, RGB(1, 0, 0),    RGB(30, 28, 7)},  // #080700, #f6e03a
+    // Team: Aqua 1, Magma 1, Aqua 2, Magma 2
+    [WALLPAPER_SPECIAL_AQUA1 - WALLPAPER_SPECIAL_START]       = {1,  0,  RGB(21, 25, 30), RGB(6, 12, 24)},  // #a8c8f0, #3060c0
+    [WALLPAPER_SPECIAL_MAGMA1 - WALLPAPER_SPECIAL_START]      = {7,  29, RGB(24, 10, 10), RGB(20, 0, 0)},   // #c05656, #a00000
+    [WALLPAPER_SPECIAL_AQUA2 - WALLPAPER_SPECIAL_START]       = {10, 0,  RGB(9, 11, 15),  RGB(31, 31, 31)}, // #4d5d7d, #f8f8f8
+    [WALLPAPER_SPECIAL_MAGMA2 - WALLPAPER_SPECIAL_START]      = {2,  29, RGB(9, 2, 2),    RGB(20, 0, 0)},   // #4d1616, #a00000
+    // Contest: Cute, Smart, Cool, Tough, Beauty (Pattern 5=Ribbon, Icon 15=Ribbon)
+    [WALLPAPER_SPECIAL_CUTE - WALLPAPER_SPECIAL_START]        = {5,  15, RGB(28, 18, 21), RGB(23, 11, 14)}, // #e090a8, #b95875
+    [WALLPAPER_SPECIAL_SMART - WALLPAPER_SPECIAL_START]       = {5,  15, RGB(12, 25, 13), RGB(12, 19, 12)}, // #64ce6e, #609a66
+    [WALLPAPER_SPECIAL_COOL - WALLPAPER_SPECIAL_START]        = {5,  15, RGB(28, 7, 7),   RGB(21, 9, 9)},   // #e53d3d, #ab4b4b
+    [WALLPAPER_SPECIAL_TOUGH - WALLPAPER_SPECIAL_START]       = {5,  15, RGB(27, 21, 0),  RGB(21, 17, 2)},  // #d9ab01, #a98916
+    [WALLPAPER_SPECIAL_BEAUTY - WALLPAPER_SPECIAL_START]      = {5,  15, RGB(3, 24, 29),  RGB(6, 15, 24)},  // #1bc7e9, #357bc0
+    // Legends: Legendary, Latias, Latios
+    [WALLPAPER_SPECIAL_LEGENDARY - WALLPAPER_SPECIAL_START]   = {12, 25, RGB(11, 11, 24), RGB(24, 11, 11)}, // #5959c1, #c15959
+    [WALLPAPER_SPECIAL_LATIAS - WALLPAPER_SPECIAL_START]      = {7,  25, RGB(29, 12, 14), RGB(6, 12, 24)},  // #ed6374, #3060c0
+    [WALLPAPER_SPECIAL_LATIOS - WALLPAPER_SPECIAL_START]      = {7,  25, RGB(6, 12, 24),  RGB(29, 12, 14)}, // #3060c0, #ed6374
+    // Other: Block, Pokecenter, Circles
+    [WALLPAPER_SPECIAL_BLOCK - WALLPAPER_SPECIAL_START]       = {4,  3,  RGB(21, 17, 14), RGB(12, 0, 0)},   // #ae8976, #610000
+    [WALLPAPER_SPECIAL_POKECENTER - WALLPAPER_SPECIAL_START]  = {6,  9,  RGB(29, 29, 29), RGB(29, 12, 14)}, // #ede9ee, #ed6576
+    [WALLPAPER_SPECIAL_CIRCLES - WALLPAPER_SPECIAL_START]     = {9,  24, RGB(28, 26, 20), RGB(11, 8, 6)},   // #e0d0a0, #584030
+    // Secret
+    [WALLPAPER_SPECIAL_EXCLSIOR - WALLPAPER_SPECIAL_START]   = {6,  25, RGB(6, 12, 24),  RGB(29, 12, 14)}, // #3060c0, #ed6374
+    [WALLPAPER_SPECIAL_VERITAS - WALLPAPER_SPECIAL_START]     = {6,  0,  RGB(2, 7, 17),   RGB(0, 1, 8)},    // #163e8f, #000840
+    // Other: Classic 2
+    [WALLPAPER_SPECIAL_CLASSIC2 - WALLPAPER_SPECIAL_START]    = {4,  9,  RGB(22, 24, 17), RGB(16, 17, 14)}, // #b5c08c, #858f76
 };
