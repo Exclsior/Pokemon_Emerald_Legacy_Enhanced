@@ -44,6 +44,7 @@ FallarborTown_Mart_Pokemart_PostGame:
 	.2byte ITEM_GREAT_BALL
 	.2byte ITEM_SUPER_POTION
 	.2byte ITEM_ETHER
+	.2byte ITEM_MAX_ETHER
 	.2byte ITEM_FULL_HEAL
 	.2byte ITEM_ESCAPE_ROPE
 	.2byte ITEM_SUPER_REPEL

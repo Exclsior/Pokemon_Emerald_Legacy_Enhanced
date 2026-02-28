@@ -32,9 +32,9 @@ MauvilleCity_GameCorner_EventScript_CoinsClerk::
 	checkitem ITEM_COIN_CASE
 	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NeedCoinCase
 	checkcoins VAR_TEMP_1
-	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 50), MauvilleCity_GameCorner_EventScript_NoRoomFor50Coins
+	goto_if_ge VAR_TEMP_1, (MAX_COINS + 1 - 50), MauvilleCity_GameCorner_EventScript_NoRoomFor50CoinsBeginning
 	checkmoney COINS_PRICE_50
-	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoneyFor50
+	goto_if_eq VAR_RESULT, FALSE, MauvilleCity_GameCorner_EventScript_NotEnoughMoneyBeginning
 	message MauvilleCity_GameCorner_Text_WereYouLookingForCoins
 	waitmessage
 	showmoneybox 0, 0
@@ -176,6 +176,11 @@ MauvilleCity_GameCorner_EventScript_NeedCoinCase::
 	release
 	end
 
+MauvilleCity_GameCorner_EventScript_NotEnoughMoneyBeginning::
+	msgbox MauvilleCity_GameCorner_Text_DontHaveEnoughMoneyFor50, MSGBOX_DEFAULT
+	release
+	end
+
 MauvilleCity_GameCorner_EventScript_NotEnoughMoneyFor50::
 	msgbox MauvilleCity_GameCorner_Text_DontHaveEnoughMoneyFor50, MSGBOX_DEFAULT
 	clearflag FLAG_TEMP_2
@@ -205,6 +210,11 @@ MauvilleCity_GameCorner_EventScript_ThanksBuyCoins::
 	clearflag FLAG_TEMP_2
 	hidemoneybox
 	hidecoinsbox 0, 5
+	release
+	end
+
+MauvilleCity_GameCorner_EventScript_NoRoomFor50CoinsBeginning::
+	msgbox MauvilleCity_GameCorner_Text_NoRoomFor50Coins, MSGBOX_DEFAULT
 	release
 	end
 
@@ -364,6 +374,7 @@ MauvilleCity_GameCorner_EventScript_GotPorygonPrize::
 	setvar 0x8005, TRAINER_WATTSON_3
 	special HasRematchBeenFought
 	goto_if_eq VAR_RESULT, TRUE, MauvilleCity_Gym_EventScript_PorygonUpgradePrize
+	goto_if_eq FLAG_NATIONAL_DEX_MODE, TRUE, MauvilleCity_Gym_EventScript_PorygonUpgradePrize
 	msgbox MauvilleCity_GameCorner_Text_ClaimedPorygon, MSGBOX_DEFAULT
 	closemessage
 	end

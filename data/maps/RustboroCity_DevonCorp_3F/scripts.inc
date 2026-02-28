@@ -169,7 +169,8 @@ RustboroCity_DevonCorp_3F_EventScript_GiveExpShare::
 	giveitem ITEM_EXP_ALL
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	setflag FLAG_RECEIVED_EXP_ALL
-	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAll, MSGBOX_DEFAULT
+	call_if_unset FLAG_EXP_ALL_UPGRADED RustboroCity_DevonCorp_3F_EventScript_ExplainExpAll
+	call_if_set FLAG_EXP_ALL_UPGRADED RustboroCity_DevonCorp_3F_EventScript_ExplainExpAllUpgraded
 	msgbox RustboroCity_DevonCorp_3F_Text_ExpItemsUseful, MSGBOX_DEFAULT	
 	closemessage
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
@@ -189,13 +190,22 @@ RustboroCity_DevonCorp_3F_EventScript_GiveExpAll::
 	giveitem ITEM_EXP_ALL
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	setflag FLAG_RECEIVED_EXP_ALL
-	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAll, MSGBOX_DEFAULT
+	call_if_unset FLAG_EXP_ALL_UPGRADED RustboroCity_DevonCorp_3F_EventScript_ExplainExpAll
+	call_if_set FLAG_EXP_ALL_UPGRADED RustboroCity_DevonCorp_3F_EventScript_ExplainExpAllUpgraded
 	msgbox RustboroCity_DevonCorp_3F_Text_ExpItemsUseful, MSGBOX_DEFAULT
 	closemessage
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
 	release
 	end
+
+RustboroCity_DevonCorp_3F_EventScript_ExplainExpAll::
+	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAll, MSGBOX_DEFAULT
+	return
+
+RustboroCity_DevonCorp_3F_EventScript_ExplainExpAllUpgraded::
+	msgbox RustboroCity_DevonCorp_3F_Text_ExplainExpAllUpgraded, MSGBOX_DEFAULT
+	return
 
 RustboroCity_DevonCorp_3F_EventScript_MrStoneExpItems::
 	msgbox RustboroCity_DevonCorp_3F_Text_ExpItemsUseful, MSGBOX_DEFAULT
@@ -231,6 +241,27 @@ RustboroCity_DevonCorp_3F_EventScript_EmployeeBalls::
 RustboroCity_DevonCorp_3F_EventScript_RareRocksDisplay::
 	msgbox RustboroCity_DevonCorp_3F_Text_RareRocksDisplay, MSGBOX_SIGN
 	end
+
+RustboroCity_DevonCorp_3F_EventScript_ExpAllUpgradedCall::
+	lockall
+	call_if_unset FLAG_RECEIVED_EXP_ALL RustboroCity_DevonCorp_3F_EventScript_ComeGetExpAll
+	call_if_set FLAG_RECEIVED_EXP_ALL RustboroCity_DevonCorp_3F_EventScript_ExpAllUpgraded
+	clearflag FLAG_ENABLE_EXP_ALL_UPGRADED_CALL
+	setflag FLAG_EXP_ALL_UPGRADED
+	releaseall
+	end
+
+RustboroCity_DevonCorp_3F_EventScript_ComeGetExpAll::
+	pokenavcall RustboroCity_DevonCorp_3F_Text_ComeGetExpAll
+	waitmessage
+	closemessage
+	return
+
+RustboroCity_DevonCorp_3F_EventScript_ExpAllUpgraded::
+	pokenavcall RustboroCity_DevonCorp_3F_Text_ExpAllUpgradedCall
+	waitmessage
+	closemessage
+	return
 
 RustboroCity_DevonCorp_3F_Text_MrStoneIHaveFavor:
 	.string "I'm MR. STONE, the PRESIDENT of\n"
@@ -301,6 +332,11 @@ RustboroCity_DevonCorp_3F_Text_ExplainExpAll:
 	.string "all POKéMON in your party will share\l"
 	.string "half the EXP Points from battle.$"
 
+RustboroCity_DevonCorp_3F_Text_ExplainExpAllUpgraded:
+	.string "MR. STONE: If you turn that EXP. ALL on,\n"
+	.string "all POKéMON in your party will gain\l"
+	.string "half the EXP Points from battle.$"
+
 RustboroCity_DevonCorp_3F_Text_ExpItemsUseful:
 	.string "With those EXP. SHARE and EXP. ALL your\n"
 	.string "POKéMON will get EXP Points even if\l"
@@ -358,3 +394,29 @@ RustboroCity_DevonCorp_3F_Text_RareRocksDisplay:
 	.string "It's a collection of rare rocks and\n"
 	.string "stones assembled by the PRESIDENT.$"
 
+RustboroCity_DevonCorp_3F_Text_ComeGetExpAll:
+	.string "MR. STONE: {PLAYER}{KUN}!\n"
+	.string "I heard you battled my son...\l"
+	.string "And won! I'm very impressed.\p"
+	.string "But that's not why I'm calling.\n"
+	.string "I wanted to let you know that\l"
+	.string "I have a new product for you!\p"
+	.string "Can you come and visit me at\n"
+	.string "Devon Corp?\l"
+	.string "Hope to see you soon!$"
+
+RustboroCity_DevonCorp_3F_Text_ExpAllUpgradedCall:
+	.string "MR. STONE: {PLAYER}{KUN}!\n"
+	.string "I heard you battled my son...\l"
+	.string "And won! I'm very impressed.\p"
+	.string "But that's not why I'm calling.\n"
+	.string "I wanted to let you know that\l"
+	.string "we've upgraded your EXP. ALL!\p"
+	.string "If you turn that EXP. ALL on now\n"
+	.string "all POKéMON in your party will gain\l"
+	.string "at least half the EXP Points from\l"
+	.string "battle instead of sharing them.\p"
+	.string "I hope it helps you next time you\n"
+	.string "battle STEVEN. I'm sure he won't\l"
+	.string "be as easy next time!\p"
+	.string "Go with caution and care!$"

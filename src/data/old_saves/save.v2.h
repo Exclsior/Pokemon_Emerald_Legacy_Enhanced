@@ -145,7 +145,7 @@ struct SaveBlock1_v2
                struct RegisteredItemSlot registeredItems[10];               
 };
 
-bool8 UpdateSave_v2_v3(const struct SaveSectorLocation *locations)
+bool8 UpdateSave_v2_v4(const struct SaveSectorLocation *locations)
 {
     const struct SaveBlock2_v2* sOldSaveBlock2Ptr = (struct SaveBlock2_v2*)(locations[SECTOR_ID_SAVEBLOCK2].data);
     const struct SaveBlock1_v2* sOldSaveBlock1Ptr = (struct SaveBlock1_v2*)(locations[SECTOR_ID_SAVEBLOCK1_START].data);
@@ -162,7 +162,7 @@ bool8 UpdateSave_v2_v3(const struct SaveSectorLocation *locations)
 
     /** We need to fill in any data that's new in this version. */
     gSaveBlock2Ptr->_saveSentinel = 0xFF;
-    gSaveBlock2Ptr->saveVersion = 3;
+    gSaveBlock2Ptr->saveVersion = 4;
     gSaveBlock2Ptr->optionsDiveSpeed = 0;
 
     // Copy V1 items - SaveBlock2
@@ -343,6 +343,9 @@ bool8 UpdateSave_v2_v3(const struct SaveSectorLocation *locations)
     // Check for Game Cleared to unlocked for Stat Editor unlock due to change in flag configuration (Could use National Dex, but due to National Dex flag being used in more areas prefer to use game clear flag)
     FlagGet(FLAG_SYS_GAME_CLEAR)    ? FlagSet(FLAG_ENABLE_STAT_EDITOR)      : FlagClear(FLAG_ENABLE_STAT_EDITOR);
     FlagGet(FLAG_SYS_GAME_CLEAR)    ? FlagSet(FLAG_SHOW_STAT_EDITOR)        : FlagClear(FLAG_SHOW_STAT_EDITOR);
+
+    // Check for Game Cleared to unlocked for EXP. All Upgrade unlock
+    FlagGet(FLAG_SYS_GAME_CLEAR)    ? FlagSet(FLAG_ENABLE_EXP_ALL_UPGRADED_CALL)      : FlagClear(FLAG_ENABLE_EXP_ALL_UPGRADED_CALL);
 
     // Add Shiny Charm to Save Upgrades
     AddPCItem(ITEM_SHINY_CHARM, 1); // One base Shiny Charm for the game

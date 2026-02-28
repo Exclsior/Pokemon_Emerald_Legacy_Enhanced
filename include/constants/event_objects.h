@@ -261,6 +261,25 @@
 #define OBJ_EVENT_GFX_JOLTEON                    257
 #define OBJ_EVENT_GFX_UMBREON                    258
 #define OBJ_EVENT_GFX_ESPEON                     259
+
+// Ruby/Sapphire player-style specific overworld graphics
+// Reserve ids in the extended range so we don’t disturb existing ids.
+#define OBJ_EVENT_GFX_RS_BRENDAN_NORMAL          260
+#define OBJ_EVENT_GFX_RS_BRENDAN_MACH_BIKE       261
+#define OBJ_EVENT_GFX_RS_BRENDAN_ACRO_BIKE       262
+#define OBJ_EVENT_GFX_RS_BRENDAN_SURFING         263
+#define OBJ_EVENT_GFX_RS_BRENDAN_UNDERWATER      264
+#define OBJ_EVENT_GFX_RS_BRENDAN_FIELD_MOVE      265
+#define OBJ_EVENT_GFX_RS_BRENDAN_FISHING         266
+#define OBJ_EVENT_GFX_RS_BRENDAN_WATERING        267
+#define OBJ_EVENT_GFX_RS_MAY_NORMAL              268
+#define OBJ_EVENT_GFX_RS_MAY_MACH_BIKE           269
+#define OBJ_EVENT_GFX_RS_MAY_ACRO_BIKE           270
+#define OBJ_EVENT_GFX_RS_MAY_SURFING             271
+#define OBJ_EVENT_GFX_RS_MAY_UNDERWATER          272
+#define OBJ_EVENT_GFX_RS_MAY_FIELD_MOVE          273
+#define OBJ_EVENT_GFX_RS_MAY_FISHING             274
+#define OBJ_EVENT_GFX_RS_MAY_WATERING            275
 #define OBJ_EVENT_GFX_POKE_BALL                  OBJ_EVENT_GFX_ITEM_BALL // replaces ITEM_BALL
 #define OBJ_EVENT_GFX_OW_MON                     OBJ_EVENT_GFX_REGICE
 

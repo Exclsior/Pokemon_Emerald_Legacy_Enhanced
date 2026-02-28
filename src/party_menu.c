@@ -326,6 +326,8 @@ static const u8 *GetFacilityCancelString(void);
 static void Task_CancelChooseMonYesNo(u8);
 static void PartyMenuDisplayYesNoMenu(void);
 static void Task_HandleCancelChooseMonYesNoInput(u8);
+static bool8 IsInvalidPartyMenuActionType_ForSwitch(u8);
+static bool8 IsInvalidPartyMenuActionType_ForSummary(u8);
 static void Task_ReturnToChooseMonAfterText(u8);
 static void UpdateCurrentPartySelection(s8 *, s8);
 static void UpdatePartySelectionSingleLayout(s8 *, s8);
@@ -346,8 +348,10 @@ static u8 GetPartySlotEntryStatus(s8);
 static void Task_UpdateHeldItemSprite(u8);
 static void Task_HandleSelectionMenuInput(u8);
 static void CB2_ShowPokemonSummaryScreen(void);
+static void CB2_ShowPokemonSummaryScreenSkipMenu(void);
 static void UpdatePartyToBattleOrder(void);
 static void CB2_ReturnToPartyMenuFromSummaryScreen(void);
+static void CB2_ReturnToPartyMenuFromSummaryScreenSkipMenu(void);
 static void CB2_ReturnToPartyMenuFromNicknameScreen(void);
 static void CB2_ReturnToPartyMenuFromStatEdit(void);
 static void SlidePartyMenuBoxOneStep(u8);
@@ -467,6 +471,7 @@ static void ShiftMoveSlot(struct Pokemon *, u8, u8);
 static void BlitBitmapToPartyWindow_LeftColumn(u8, u8, u8, u8, u8, bool8);
 static void BlitBitmapToPartyWindow_RightColumn(u8, u8, u8, u8, u8, bool8);
 static void CursorCb_Summary(u8);
+static void CursorCb_SummarySkipMenu(u8);
 static void CursorCb_Nickname(u8);
 static void CursorCb_StatEdit(u8);
 static void CursorCb_Switch(u8);
@@ -1300,6 +1305,16 @@ void Task_HandleChooseMonInput(u8 taskId)
                 PlaySE(SE_SELECT);
                 MoveCursorToConfirm();
             }
+            else if (
+                    (
+                        gPartyMenu.menuType == PARTY_MENU_TYPE_FIELD
+                        || gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE
+                    )
+                    && !IsInvalidPartyMenuActionType_ForSummary(gPartyMenu.action)
+                )
+            {
+                DestroyTask(taskId);
+            }
             break;
         }
     }
@@ -1476,7 +1491,7 @@ static void Task_HandleCancelChooseMonYesNoInput(u8 taskId)
     }
 }
 
-static bool8 IsInvalidPartyMenuActionType(u8 partyMenuType)
+static bool8 IsInvalidPartyMenuActionType_ForSwitch(u8 partyMenuType)
 {
     return (partyMenuType == PARTY_ACTION_SEND_OUT
          || partyMenuType == PARTY_ACTION_CANT_SWITCH
@@ -1486,6 +1501,23 @@ static bool8 IsInvalidPartyMenuActionType(u8 partyMenuType)
          || partyMenuType == PARTY_ACTION_GIVE_PC_ITEM
          || partyMenuType == PARTY_ACTION_GIVE_MAILBOX_MAIL
          || partyMenuType == PARTY_ACTION_SOFTBOILED
+         || partyMenuType == PARTY_ACTION_CHOOSE_AND_CLOSE
+         || partyMenuType == PARTY_ACTION_MOVE_TUTOR
+         || partyMenuType == PARTY_ACTION_MINIGAME
+         || partyMenuType == PARTY_ACTION_REUSABLE_ITEM);
+}
+
+static bool8 IsInvalidPartyMenuActionType_ForSummary(u8 partyMenuType)
+{
+    return (partyMenuType == PARTY_ACTION_SWITCH
+         || partyMenuType == PARTY_ACTION_USE_ITEM
+         || partyMenuType == PARTY_ACTION_ABILITY_PREVENTS
+         || partyMenuType == PARTY_ACTION_GIVE_ITEM
+         || partyMenuType == PARTY_ACTION_GIVE_PC_ITEM
+         || partyMenuType == PARTY_ACTION_GIVE_MAILBOX_MAIL
+         || partyMenuType == PARTY_ACTION_SOFTBOILED
+         || partyMenuType == PARTY_ACTION_SWITCH
+         || partyMenuType == PARTY_ACTION_SWITCHING
          || partyMenuType == PARTY_ACTION_CHOOSE_AND_CLOSE
          || partyMenuType == PARTY_ACTION_MOVE_TUTOR
          || partyMenuType == PARTY_ACTION_MINIGAME
@@ -1526,7 +1558,7 @@ static u16 PartyMenuButtonHandler(s8 *slotPtr)
         break;
     }
 
-    if (JOY_NEW(SELECT_BUTTON) && CalculatePlayerPartyCount() >= 2 && !IsInvalidPartyMenuActionType(gPartyMenu.action))
+    if (JOY_NEW(SELECT_BUTTON) && CalculatePlayerPartyCount() >= 2 && !IsInvalidPartyMenuActionType_ForSwitch(gPartyMenu.action))
     {
         if (gPartyMenu.menuType != PARTY_MENU_TYPE_FIELD)
             return 0;
@@ -1542,6 +1574,21 @@ static u16 PartyMenuButtonHandler(s8 *slotPtr)
         return A_BUTTON; // Select is allowed to act as the A Button while CursorCb_Switch is active.
     }
     
+    if (JOY_NEW(START_BUTTON) && CalculatePlayerPartyCount() >= 1 && !IsInvalidPartyMenuActionType_ForSummary(gPartyMenu.action))
+    {
+        if (*slotPtr == PARTY_SIZE + 1)
+            return 0;
+        if (
+            gPartyMenu.menuType == PARTY_MENU_TYPE_FIELD
+            || gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE          
+            )
+        {
+            gLastViewedMonIndex = gPartyMenu.slotId;
+            CreateTask(CursorCb_SummarySkipMenu, 1);
+        }
+        return START_BUTTON;
+    }
+
     if (JOY_NEW(START_BUTTON))
         return START_BUTTON;
 
@@ -1807,6 +1854,15 @@ static void Task_ReturnToChooseMonAfterText(u8 taskId)
         if (MenuHelpers_IsLinkActive() == TRUE)
         {
             gTasks[taskId].func = Task_WaitForLinkAndReturnToChooseMon;
+        }
+        else if (gPartyMenu.menuType == PARTY_MENU_TYPE_FIELD)
+        {
+            if (!ShouldUseChooseMonText())
+                DisplayPartyMenuStdMessage(PARTY_MSG_CHOOSE_MON_OR_CANCEL);
+            else
+                DisplayPartyMenuStdMessage(PARTY_MSG_CHOOSE_MON_SEL_MOVE);
+            
+            gTasks[taskId].func = Task_HandleChooseMonInput;
         }
         else
         {
@@ -2551,19 +2607,37 @@ void DisplayPartyMenuStdMessage(u32 stringId)
                 stringId = PARTY_MSG_CHOOSE_MON_AND_CONFIRM;
             else if (!ShouldUseChooseMonText())
                 stringId = PARTY_MSG_CHOOSE_MON_OR_CANCEL;
+            else if (stringId == PARTY_MSG_CHOOSE_MON_SEL_MOVE && InBattlePike())
+                stringId = PARTY_MSG_CHOOSE_MON;
         }
         DrawStdFrameWithCustomTileAndPalette(*windowPtr, FALSE, 0x4F, 13);
         StringExpandPlaceholders(gStringVar4, sActionStringTable[stringId]);
         AddTextPrinterParameterized(*windowPtr, FONT_NORMAL, gStringVar4, 0, 1, 0, 0);
-        if (stringId == PARTY_MSG_CHOOSE_MON_SEL_MOVE && !InBattlePike())
+
+        if (stringId == PARTY_MSG_CHOOSE_MON_SEL_MOVE)
         {
-            x = GetStringRightAlignXOffset(FONT_SMALL, gText_ConfirmMove, 165);
+            x = GetStringRightAlignXOffset(FONT_SMALL, gText_ConfirmMove, 168);
             AddTextPrinterParameterized(*windowPtr, FONT_SMALL, gText_SelectToMove, x, 1, 0, 0);
         }
         else if (stringId == PARTY_MSG_MOVE_TO_WHERE)
         {
-            x = GetStringRightAlignXOffset(FONT_SMALL, gText_ConfirmMove, 165);
+            x = GetStringRightAlignXOffset(FONT_SMALL, gText_ConfirmMove, 168);
             AddTextPrinterParameterized(*windowPtr, FONT_SMALL, gText_ConfirmMove, x, 1, 0, 0);
+        }
+        else if (
+            (
+                stringId == PARTY_MSG_CHOOSE_MON
+                && !IsInvalidPartyMenuActionType_ForSummary(gPartyMenu.action)
+                && (
+                    gPartyMenu.menuType == PARTY_MENU_TYPE_FIELD
+                    || gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE
+                )
+            )
+            || (stringId == PARTY_MSG_CHOOSE_MON && InBattlePike())
+            )
+        {
+            x = GetStringRightAlignXOffset(FONT_SMALL, gText_StartToSummary, 165);
+            AddTextPrinterParameterized(*windowPtr, FONT_SMALL, gText_StartToSummary, x, 1, 0, 0);
         }
         ScheduleBgCopyTilemapToVram(2);
     }
@@ -2883,6 +2957,13 @@ static void CursorCb_Summary(u8 taskId)
     Task_ClosePartyMenu(taskId);
 }
 
+static void CursorCb_SummarySkipMenu(u8 taskId)
+{
+    PlaySE(SE_SELECT);
+    sPartyMenuInternal->exitCallback = CB2_ShowPokemonSummaryScreenSkipMenu;
+    Task_ClosePartyMenu(taskId);
+}
+
 static void ChangePokemonNicknamePartyScreen_CB(void)
 {
     SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar2);
@@ -2917,11 +2998,39 @@ static void CB2_ShowPokemonSummaryScreen(void)
     }
 }
 
+static void CB2_ShowPokemonSummaryScreenSkipMenu(void)
+{
+    if (gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE)
+    {
+        UpdatePartyToBattleOrder();
+        ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreenSkipMenu);
+    }
+    else
+    {
+        ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreenSkipMenu);
+    }
+}
+
 static void CB2_ReturnToPartyMenuFromSummaryScreen(void)
 {
     gPaletteFade.bufferTransferDisabled = TRUE;
     gPartyMenu.slotId = gLastViewedMonIndex;
     InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_MSG_DO_WHAT_WITH_MON, Task_TryCreateSelectionWindow, gPartyMenu.exitCallback);
+}
+
+static void CB2_ReturnToPartyMenuFromSummaryScreenSkipMenu(void)
+{
+    gPaletteFade.bufferTransferDisabled = TRUE;
+    gPartyMenu.slotId = gLastViewedMonIndex;
+    
+    if (gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE)
+    {
+        InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_ACTION_CHOOSE_MON, Task_HandleChooseMonInput, gPartyMenu.exitCallback);
+    }
+    else
+    {
+        InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_MSG_CHOOSE_MON_SEL_MOVE, Task_HandleChooseMonInput, gPartyMenu.exitCallback);
+    }
 }
 
 static void CB2_ReturnToPartyMenuFromNicknameScreen(void)

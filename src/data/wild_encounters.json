@@ -12071,19 +12071,19 @@
                 "species": "SPECIES_GOLBAT"
               },
               {
+                "min_level": 15,
+                "max_level": 35,
+                "species": "SPECIES_SOLROCK"
+              },
+              {
                 "min_level": 25,
                 "max_level": 35,
                 "species": "SPECIES_KABUTO"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_SOLROCK"
-              },
-              {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_SOLROCK"
+                "min_level": 25,
+                "max_level": 35,
+                "species": "SPECIES_OMANYTE"
               }
             ]
           },
@@ -12379,19 +12379,19 @@
                 "species": "SPECIES_GOLBAT"
               },
               {
+                "min_level": 15,
+                "max_level": 35,
+                "species": "SPECIES_LUNATONE"
+              },
+              {
                 "min_level": 25,
                 "max_level": 35,
                 "species": "SPECIES_OMANYTE"
               },
               {
-                "min_level": 15,
-                "max_level": 25,
-                "species": "SPECIES_LUNATONE"
-              },
-              {
-                "min_level": 5,
-                "max_level": 15,
-                "species": "SPECIES_LUNATONE"
+                "min_level": 25,
+                "max_level": 35,
+                "species": "SPECIES_KABUTO"
               }
             ]
           },

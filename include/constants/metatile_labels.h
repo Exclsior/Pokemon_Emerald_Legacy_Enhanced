@@ -213,6 +213,7 @@
 #define METATILE_General_Door                  0x021
 #define METATILE_General_Door_Contest          0x1DB
 #define METATILE_General_Door_Gym              0x1CD
+#define METATILE_General_Door_Gym_Dewford      0x1A2
 #define METATILE_General_Door_PokeCenter       0x061
 #define METATILE_General_Door_PokeMart         0x041
 #define METATILE_General_Grass                 0x001
@@ -440,6 +441,7 @@
 
 // gTileset_Rustboro
 #define METATILE_Rustboro_Door_Gray  0x21F
+#define METATILE_Rustboro_Door_Gym   0x359
 #define METATILE_Rustboro_Door_Tan   0x22F
 
 // gTileset_SecretBase

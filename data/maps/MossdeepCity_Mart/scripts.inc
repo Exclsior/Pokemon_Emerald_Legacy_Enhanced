@@ -50,6 +50,7 @@ MossdeepCity_Mart_Pokemart_PostGame:
 	.2byte ITEM_REVIVE
 	.2byte ITEM_MAX_REPEL
 	.2byte ITEM_ETHER
+	.2byte ITEM_ELIXIR
 	.2byte ITEM_TWISTED_SPOON
 	.2byte ITEM_NEVER_MELT_ICE
 	.2byte ITEM_NONE

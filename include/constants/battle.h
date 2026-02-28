@@ -291,7 +291,8 @@
 #define MOVE_EFFECT_NOTHING_39          57
 #define MOVE_EFFECT_NOTHING_3A          58
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     59
-#define NUM_MOVE_EFFECTS                60
+#define MOVE_EFFECT_BURN_FLINCH         60
+#define NUM_MOVE_EFFECTS                61
 
 #define MOVE_EFFECT_AFFECTS_USER        (1 << 6) // 64
 #define MOVE_EFFECT_CERTAIN             (1 << 7) // 128
@@ -375,5 +376,17 @@
 
 // Indicator for the party summary bar to display an empty slot.
 #define HP_EMPTY_SLOT 0xFFFF
+
+// Battle Exp loop values
+#define EXP_SHOULD_RECEIVE          0
+#define EXP_CALCULATE_ALL           1
+#define EXP_CALCULATE_SINGLE        2
+#define EXP_SET_STATS_AND_GIVE      3
+#define EXP_ALL_MESSAGE             4
+#define EXP_LEVEL_UP                5
+#define EXP_NEXT_MON                6
+#define EXP_CHECK_ITEM              7
+#define EXP_GIVE_ITEM               8
+#define EXP_COMPLETE                9
 
 #endif // GUARD_CONSTANTS_BATTLE_H

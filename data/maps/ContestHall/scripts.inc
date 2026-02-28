@@ -441,10 +441,20 @@ LilycoveCity_ContestLobby_EventScript_SetPlayerGfx::
 	return
 
 LilycoveCity_ContestLobby_EventScript_SetPlayerGfxBrendan::
+	goto_if_set FLAG_PLAYER_STYLE_RS, LilycoveCity_ContestLobby_EventScript_SetPlayerGfxRsBrendan
 	setvar VAR_OBJ_GFX_ID_3, OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL
 	return
 
+LilycoveCity_ContestLobby_EventScript_SetPlayerGfxRsBrendan::
+	setvar VAR_OBJ_GFX_ID_3, OBJ_EVENT_GFX_RS_BRENDAN_NORMAL
+	return
+
 LilycoveCity_ContestLobby_EventScript_SetPlayerGfxMay::
+	goto_if_set FLAG_PLAYER_STYLE_RS, LilycoveCity_ContestLobby_EventScript_SetPlayerGfxRsMay
 	setvar VAR_OBJ_GFX_ID_3, OBJ_EVENT_GFX_RIVAL_MAY_NORMAL
+	return
+
+LilycoveCity_ContestLobby_EventScript_SetPlayerGfxRsMay::
+	setvar VAR_OBJ_GFX_ID_3, OBJ_EVENT_GFX_RS_MAY_NORMAL
 	return
 

@@ -21,7 +21,7 @@
 #define FLAG_TEMP_B                 (TEMP_FLAGS_START + 0xB)  // Unused Flag
 #define FLAG_TEMP_C                 (TEMP_FLAGS_START + 0xC)  // Unused Flag
 #define FLAG_TEMP_D                 (TEMP_FLAGS_START + 0xD)  // Unused Flag
-#define FLAG_TEMP_E                 (TEMP_FLAGS_START + 0xE)  // Unused Flag
+#define FLAG_TEMP_HIDE_SPECIAL      (TEMP_FLAGS_START + 0xE)  // Used for showing and hiding special object events on specific maps.
 #define FLAG_TEMP_HIDE_FOLLOWER     (TEMP_FLAGS_START + 0xF)  // When set, follower pokemon won't be spawned
 #define FLAG_TEMP_10                (TEMP_FLAGS_START + 0x10) // Unused Flag
 #define FLAG_TEMP_11                (TEMP_FLAGS_START + 0x11)
@@ -698,11 +698,11 @@
 #define FLAG_DEFEATED_EXCLSIOR                                     0x293 // Flag for Exclsior Dev Battle
 #define FLAG_DEFEATED_SHINY_LATIAS_OR_LATIOS                       0x294 // Flag for Shiny Lati Defeated
 #define FLAG_CAUGHT_SHINY_LATIAS_OR_LATIOS                         0x295 // Flag for Shiny Lati Caught
-#define FLAG_UNUSED_0x296                                          0x296 // Unused Flag
-#define FLAG_UNUSED_0x297                                          0x297 // Unused Flag
-#define FLAG_UNUSED_0x298                                          0x298 // Unused Flag
-#define FLAG_UNUSED_0x299                                          0x299 // Unused Flag
-#define FLAG_UNUSED_0x29A                                          0x29A // Unused Flag
+#define FLAG_DEFEATED_SHINY_RAYQUAZA                               0x296 // Flag for Shiny Rayquaza Defeated
+#define FLAG_CAUGHT_SHINY_RAYQUAZA                                 0x297 // Flag for Shiny Rayquaza Caught
+#define FLAG_ENABLE_EXP_ALL_UPGRADED_CALL                          0x298 // Flag to enable message to tell players of upgraded EXP. All
+#define FLAG_PLAYER_STYLE_RS                                       0x299 // Player uses Ruby/Sapphire style sprites (0 = Emerald, 1 = RS/Classic)
+#define FLAG_ENABLE_HIDDEN_POWER_70BP                              0x29A // Flag for Hidden Power Toggle to 70BP
 #define FLAG_UNUSED_0x29B                                          0x29B // Unused Flag
 #define FLAG_UNUSED_0x29C                                          0x29C // Unused Flag
 #define FLAG_UNUSED_0x29D                                          0x29D // Unused Flag
@@ -1288,14 +1288,14 @@
 #define FLAG_DISABLE_SURFMUSIC                                      0x4DC // Flag for disabling Surf music when surfing
 #define FLAG_DISABLE_BIKEMUSIC                                      0x4DD // Flag for disabling Bike music when biking
 #define FLAG_ENABLE_NICKNAME                                        0x4DE // Flag for enabling use of Nickname changer within Party Menu
-#define FLAG_UNUSED_0x4DF                                           0x4DF // Unused Flag
-#define FLAG_UNUSED_0x4E0                                           0x4E0 // Unused Flag
-#define FLAG_UNUSED_0x4E1                                           0x4E1 // Unused Flag
-#define FLAG_UNUSED_0x4E2                                           0x4E2 // Unused Flag
-#define FLAG_UNUSED_0x4E3                                           0x4E3 // Unused Flag
-#define FLAG_UNUSED_0x4E4                                           0x4E4 // Unused Flag
-#define FLAG_UNUSED_0x4E5                                           0x4E5 // Unused Flag
-#define FLAG_UNUSED_0x4E6                                           0x4E6 // Unused Flag
+#define FLAG_ENABLE_FASTMODE                                        0x4DF // Flag for enabling and disabling Fast Mode
+#define FLAG_ENABLE_FASTWATERING                                    0x4E0 // Flag for faster berry watering
+#define FLAG_ENABLE_FAST_BATTLE_INTRO                               0x4E1 // Flag for enabling faster battle introduction
+#define FLAG_ENABLE_FAST_BATTLE                                     0x4E2 // Flag for enabling auto skip for battle pauses
+#define FLAG_ENABLE_PICKUP_TEXT                                     0x4E3 // Flag for enabling pickup text
+#define FLAG_EXP_ALL_UPGRADED                                       0x4E4 // Flag for upgraded EXP ALL
+#define FLAG_ENABLE_LEVEL_CAPS                                      0x4E5 // Flag for level caps without Hard or Nuzlocke Mode
+#define FLAG_ENABLE_WILD_HELD_DROP                                  0x4E6 // Flag for enabling wild encounter held items dropping
 #define FLAG_UNUSED_0x4E7                                           0x4E7 // Unused Flag
 #define FLAG_UNUSED_0x4E8                                           0x4E8 // Unused Flag
 #define FLAG_UNUSED_0x4E9                                           0x4E9 // Unused Flag

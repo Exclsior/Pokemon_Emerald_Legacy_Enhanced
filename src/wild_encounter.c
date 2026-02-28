@@ -88,6 +88,7 @@ static const u16 gRoute119MetatileTable[] =
     [0x18A - 0x02C] = 0x31D,
     [0x190 - 0x02C] = 0x310,
     [0x192 - 0x02C] = 0x31E,
+    [0x193 - 0x02C] = 0x308, // Metatile definition for trees able to be surfed underneath, update to three layer metatiles recommended to show shiny sparkle with tree
     [0x198 - 0x02C] = 0x311,
     [0x19A - 0x02C] = 0x30D,
     [0x20F - 0x02C] = 0x2D3,
@@ -212,11 +213,27 @@ void GetFeebasTiles(void)
 
 #undef nWaterTiles
 
+#define OVERHANGING_TREE_METATILE   0x193 // Metatile definition for surfable overhanging tree tile (possible Feebas tile)
+#define SHORELINE_TREE_METATILE     0x284 // Metatile definition for tree with shoreline above. (To replace bottom of overhanging tree)
+
 void HighlightFeebasTiles(void)
 {
     u32 i;
     for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
-        MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1], gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C]);
+    {
+        // Added fix for tile below surfable overhanging tree tiles to show shoreline.
+        // This could be replaced with an upgrade to three layer metatiles and
+        // creating a new metatile with water, overhanging tree and sparkles.
+        if (MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) == OVERHANGING_TREE_METATILE)
+        {
+            MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1] + 1, SHORELINE_TREE_METATILE);
+            MapGridSetMetatileImpassabilityAt(gFeebasTiles[i][0], gFeebasTiles[i][1] + 1, TRUE);
+        }
+
+        // Check whether a real metatile is returned before overriding with new metatile.
+        if (gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C] != 0x000)
+            MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1], gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C]);  
+    }
 }
 
 // LAND_WILD_COUNT

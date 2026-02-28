@@ -580,6 +580,7 @@ extern const u8 LittlerootTown_ProfessorBirchsLab_EventScript_ScottAboardSSTidal
 extern const u8 RustboroCity_Gym_EventScript_RegisterRoxanne[];
 extern const u8 MossdeepCity_SpaceCenter_2F_EventScript_RivalRayquazaCall[];
 extern const u8 PetalburgCity_Gym_EventScript_NormanRematchCall[];
+extern const u8 RustboroCity_DevonCorp_3F_EventScript_ExpAllUpgradedCall[]; //Added PokeNav Call for Exp All Upgraded Call
 extern const u8 SSTidalCorridor_EventScript_ReachedStepCount[];
 extern const u8 EventScript_FallDownHoleMtPyre[];
 

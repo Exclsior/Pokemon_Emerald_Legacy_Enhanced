@@ -475,6 +475,31 @@ bool32 ShouldDoNormanRematchCall(void)
     return TRUE;
 }
 
+bool32 ShouldDoExpAllUpgradedCall(void)
+{
+    if (FlagGet(FLAG_ENABLE_EXP_ALL_UPGRADED_CALL))
+    {
+        switch (gMapHeader.mapType)
+        {
+        case MAP_TYPE_TOWN:
+        case MAP_TYPE_CITY:
+        case MAP_TYPE_ROUTE:
+        case MAP_TYPE_OCEAN_ROUTE:
+            if (++(*GetVarPointer(VAR_EXP_ALL_UPGRADED_CALL_STEP_COUNTER)) < 250)
+                return FALSE;
+            break;
+        default:
+            return FALSE;
+        }
+    }
+    else
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 bool32 ShouldUpdateGymLeaderRematches(void)
 {
     switch (gMapHeader.mapType)
@@ -1413,6 +1438,26 @@ bool8 FoundAbandonedShipRoom6Key(void)
 bool8 LeadMonHasEffortRibbon(void)
 {
     return GetMonData(&gPlayerParty[GetLeadMonIndex()], MON_DATA_EFFORT_RIBBON, NULL);
+}
+
+void LeadMonHiddenPowerType(void)
+{
+    struct Pokemon *mon = &gPlayerParty[GetLeadMonIndex()];
+    u8 typeBits  = ((GetMonData(mon, MON_DATA_HP_IV) & 1) << 0)
+                        | ((GetMonData(mon, MON_DATA_ATK_IV) & 1) << 1)
+                        | ((GetMonData(mon, MON_DATA_DEF_IV) & 1) << 2)
+                        | ((GetMonData(mon, MON_DATA_SPEED_IV) & 1) << 3)
+                        | ((GetMonData(mon, MON_DATA_SPATK_IV) & 1) << 4)
+                        | ((GetMonData(mon, MON_DATA_SPDEF_IV) & 1) << 5);
+
+    u8 type = (15 * typeBits) / 63 + 1;
+    if (type >= TYPE_MYSTERY)
+        type++;
+    
+    if(type == TYPE_PSYCHIC)
+        StringCopy(gStringVar1, "PSYCHIC");
+    else
+        StringCopy(gStringVar1, gTypeNames[type]);
 }
 
 void GiveLeadMonEffortRibbon(void)

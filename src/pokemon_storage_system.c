@@ -36,10 +36,13 @@
 #include "trig.h"
 #include "walda_phrase.h"
 #include "window.h"
+#include "constants/flags.h"
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "debug.h"
+#include "pokedex.h"
 
 /*
     NOTE: This file is large. Some general groups of functions have
@@ -130,7 +133,16 @@ enum {
     MENU_SCENERY_2,
     MENU_SCENERY_3,
     MENU_ETCETERA,
+    MENU_SPECIAL,
     MENU_FRIENDS,
+    // Special wallpaper categories
+    MENU_POKEMON_1,
+    MENU_POKEMON_2,
+    MENU_TEAM,
+    MENU_CONTEST,
+    MENU_LEGENDS,
+    MENU_OTHER,
+    MENU_SECRET,
     MENU_FOREST,
     MENU_CITY,
     MENU_DESERT,
@@ -147,6 +159,47 @@ enum {
     MENU_POKECENTER,
     MENU_MACHINE,
     MENU_SIMPLE,
+    // Special wallpaper entries
+    // Pokemon 1
+    MENU_SPECIAL_ZIGZAGOON,
+    MENU_SPECIAL_LUVDISC,
+    MENU_SPECIAL_TOGEPI,
+    MENU_SPECIAL_AZUMARILL,
+    MENU_SPECIAL_PIKACHU,
+    MENU_SPECIAL_DUSCLOPS,
+    // Pokemon 2
+    MENU_SPECIAL_LUDICOLO,
+    MENU_SPECIAL_WHISCASH,
+    MENU_SPECIAL_MINUN,
+    // Other
+    MENU_SPECIAL_CLASSIC1,
+    // Pokemon 2
+    MENU_SPECIAL_DIGLETT,
+    MENU_SPECIAL_PICHU,
+    // Team
+    MENU_SPECIAL_AQUA1,
+    MENU_SPECIAL_MAGMA1,
+    MENU_SPECIAL_AQUA2,
+    MENU_SPECIAL_MAGMA2,
+    // Contest
+    MENU_SPECIAL_CUTE,
+    MENU_SPECIAL_SMART,
+    MENU_SPECIAL_COOL,
+    MENU_SPECIAL_TOUGH,
+    MENU_SPECIAL_BEAUTY,
+    // Legends
+    MENU_SPECIAL_LEGENDARY,
+    MENU_SPECIAL_LATIAS,
+    MENU_SPECIAL_LATIOS,
+    // Other
+    MENU_SPECIAL_BLOCK,
+    MENU_SPECIAL_POKECENTER,
+    MENU_SPECIAL_CIRCLES,
+    // Secret
+    MENU_SPECIAL_EXCLSIOR,
+    MENU_SPECIAL_VERITAS,
+    // Other
+    MENU_SPECIAL_CLASSIC2,
 };
 #define MENU_WALLPAPER_SETS_START MENU_SCENERY_1
 #define MENU_WALLPAPERS_START MENU_FOREST
@@ -804,6 +857,7 @@ static bool32 WaitForWallpaperGfxLoad(void);
 static void DrawWallpaper(const void *, s8, u8);
 static void TrimOldWallpaper(void *);
 static void AddWallpaperSetsMenu(void);
+static void AddSpecialCategoriesMenu(void);
 static void AddWallpapersMenu(u8);
 static u8 GetBoxWallpaper(u8);
 static void SetBoxWallpaper(u8, u8);
@@ -3450,6 +3504,12 @@ static void Task_HandleWallpapers(u8 taskId)
             sStorage->wallpaperSetId -= MENU_WALLPAPER_SETS_START;
             sStorage->state++;
             break;
+        case MENU_SPECIAL:
+            // Special wallpapers submenu
+            PlaySE(SE_SELECT);
+            RemoveMenu();
+            sStorage->state = 7;
+            break;
         case MENU_FRIENDS:
             // New wallpaper from Walda.
             PlaySE(SE_SELECT);
@@ -3476,12 +3536,25 @@ static void Task_HandleWallpapers(u8 taskId)
             break;
         case MENU_B_PRESSED:
             ClearBottomWindow();
-            sStorage->state = 0;
+            // Check if we came from Special submenu (wallpaperSetId >= MENU_POKEMON_1)
+            if (sStorage->wallpaperSetId >= MENU_POKEMON_1 - MENU_WALLPAPER_SETS_START)
+                sStorage->state = 7; // Go back to Special subcategories
+            else
+                sStorage->state = 0; // Go back to main menu
             break;
         default:
             PlaySE(SE_SELECT);
             ClearBottomWindow();
-            sStorage->wallpaperId -= MENU_WALLPAPERS_START;
+            // Convert menu ID to wallpaper ID
+            if (sStorage->wallpaperId >= MENU_SPECIAL_ZIGZAGOON)
+            {
+                // Special wallpapers: add 1 to account for WALLPAPER_FRIENDS gap
+                sStorage->wallpaperId = sStorage->wallpaperId - MENU_WALLPAPERS_START + 1;
+            }
+            else
+            {
+                sStorage->wallpaperId -= MENU_WALLPAPERS_START;
+            }
             SetWallpaperForCurrentBox(sStorage->wallpaperId);
             sStorage->state++;
             break;
@@ -3499,6 +3572,43 @@ static void Task_HandleWallpapers(u8 taskId)
         {
             SetWallpaperForCurrentBox(sStorage->wallpaperId);
             sStorage->state = 5;
+        }
+        break;
+    // Special wallpaper subcategories menu
+    case 7:
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            AddSpecialCategoriesMenu();
+            PrintMessage(MSG_PICK_A_THEME);
+            sStorage->state++;
+        }
+        break;
+    case 8:
+        if (!IsMenuLoading())
+            sStorage->state++;
+        break;
+    case 9:
+        sStorage->wallpaperSetId = HandleMenuInput();
+        switch (sStorage->wallpaperSetId)
+        {
+        case MENU_NOTHING_CHOSEN:
+            break;
+        case MENU_B_PRESSED:
+            ClearBottomWindow();
+            sStorage->state = 0; // Go back to main menu
+            break;
+        case MENU_POKEMON_1:
+        case MENU_POKEMON_2:
+        case MENU_TEAM:
+        case MENU_CONTEST:
+        case MENU_LEGENDS:
+        case MENU_OTHER:
+        case MENU_SECRET:
+            PlaySE(SE_SELECT);
+            RemoveMenu();
+            sStorage->wallpaperSetId -= MENU_WALLPAPER_SETS_START;
+            sStorage->state = 3; // Go to wallpaper selection
+            break;
         }
         break;
     }
@@ -4334,8 +4444,46 @@ static void AddWallpaperSetsMenu(void)
     SetMenuText(MENU_SCENERY_2);
     SetMenuText(MENU_SCENERY_3);
     SetMenuText(MENU_ETCETERA);
+    SetMenuText(MENU_SPECIAL);
     if (IsWaldaWallpaperUnlocked())
         SetMenuText(MENU_FRIENDS);
+    AddMenu();
+}
+
+static void AddSpecialCategoriesMenu(void)
+{
+    InitMenu();
+#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+    // Debug mode: All categories unlocked
+    SetMenuText(MENU_POKEMON_1);
+    SetMenuText(MENU_POKEMON_2);
+    SetMenuText(MENU_TEAM);
+    SetMenuText(MENU_CONTEST);
+    SetMenuText(MENU_LEGENDS);
+    SetMenuText(MENU_OTHER);
+    SetMenuText(MENU_SECRET);
+#else
+    // Pokemon 1: Unlocked after catching 100 Pokemon
+    if (GetNationalPokedexCount(FLAG_GET_CAUGHT) >= 100)
+        SetMenuText(MENU_POKEMON_1);
+    // Pokemon 2: Unlocked after catching 200 Pokemon
+    if (GetNationalPokedexCount(FLAG_GET_CAUGHT) >= 200)
+        SetMenuText(MENU_POKEMON_2);
+    // Team: Unlocked after Team Aqua steals the submarine (completing Aqua Hideout)
+    if (FlagGet(FLAG_HIDE_AQUA_HIDEOUT_B2F_SUBMARINE_SHADOW))
+        SetMenuText(MENU_TEAM);
+    // Contest: Unlocked after receiving the Pokeblock Case
+    if (FlagGet(FLAG_RECEIVED_POKEBLOCK_CASE))
+        SetMenuText(MENU_CONTEST);
+    // Legends: Unlocked after catching Latias or Latios
+    if (FlagGet(FLAG_CAUGHT_LATIAS_OR_LATIOS))
+        SetMenuText(MENU_LEGENDS);
+    // Other: Always available
+    SetMenuText(MENU_OTHER);
+    // Secret: Unlocked after defeating Pokemon Trainer Exclsior
+    if (FlagGet(FLAG_DEFEATED_EXCLSIOR))
+        SetMenuText(MENU_SECRET);
+#endif
     AddMenu();
 }
 
@@ -4367,6 +4515,50 @@ static void AddWallpapersMenu(u8 wallpaperSet)
         SetMenuText(MENU_POKECENTER);
         SetMenuText(MENU_MACHINE);
         SetMenuText(MENU_SIMPLE);
+        break;
+    case MENU_POKEMON_1 - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_ZIGZAGOON);
+        SetMenuText(MENU_SPECIAL_LUVDISC);
+        SetMenuText(MENU_SPECIAL_TOGEPI);
+        SetMenuText(MENU_SPECIAL_AZUMARILL);
+        SetMenuText(MENU_SPECIAL_PIKACHU);
+        SetMenuText(MENU_SPECIAL_DUSCLOPS);
+        break;
+    case MENU_POKEMON_2 - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_LUDICOLO);
+        SetMenuText(MENU_SPECIAL_WHISCASH);
+        SetMenuText(MENU_SPECIAL_MINUN);
+        SetMenuText(MENU_SPECIAL_DIGLETT);
+        SetMenuText(MENU_SPECIAL_PICHU);
+        break;
+    case MENU_TEAM - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_AQUA1);
+        SetMenuText(MENU_SPECIAL_MAGMA1);
+        SetMenuText(MENU_SPECIAL_AQUA2);
+        SetMenuText(MENU_SPECIAL_MAGMA2);
+        break;
+    case MENU_CONTEST - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_CUTE);
+        SetMenuText(MENU_SPECIAL_SMART);
+        SetMenuText(MENU_SPECIAL_COOL);
+        SetMenuText(MENU_SPECIAL_TOUGH);
+        SetMenuText(MENU_SPECIAL_BEAUTY);
+        break;
+    case MENU_LEGENDS - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_LEGENDARY);
+        SetMenuText(MENU_SPECIAL_LATIAS);
+        SetMenuText(MENU_SPECIAL_LATIOS);
+        break;
+    case MENU_OTHER - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_BLOCK);
+        SetMenuText(MENU_SPECIAL_POKECENTER);
+        SetMenuText(MENU_SPECIAL_CIRCLES);
+        SetMenuText(MENU_SPECIAL_CLASSIC1);
+        SetMenuText(MENU_SPECIAL_CLASSIC2);
+        break;
+    case MENU_SECRET - MENU_WALLPAPER_SETS_START:
+        SetMenuText(MENU_SPECIAL_EXCLSIOR);
+        SetMenuText(MENU_SPECIAL_VERITAS);
         break;
     }
     AddMenu();
@@ -5374,21 +5566,36 @@ static void LoadWallpaperGfx(u8 boxId, s8 direction)
     }
 
     wallpaperId = GetBoxWallpaper(sStorage->wallpaperLoadBoxId);
-    if (wallpaperId != WALLPAPER_FRIENDS)
+    if (wallpaperId >= WALLPAPER_SPECIAL_START)
     {
-        wallpaper = &sWallpapers[wallpaperId];
+        // Special wallpapers (Walda-style with fixed colors)
+        const struct SpecialWallpaperConfig *config = &sSpecialWallpapers[wallpaperId - WALLPAPER_SPECIAL_START];
+        u16 specialColors[2];
+
+        specialColors[0] = config->bgColor;
+        specialColors[1] = config->fgColor;
+
+        wallpaper = &sWaldaWallpapers[config->patternId];
         LZ77UnCompWram(wallpaper->tilemap, sStorage->wallpaperTilemap);
         DrawWallpaper(sStorage->wallpaperTilemap, sStorage->wallpaperLoadDir, sStorage->wallpaperOffset);
 
+        CpuCopy16(wallpaper->palettes, sStorage->wallpaperTilemap, 0x40);
+        // Set custom colors at palette indices 1-2 for both palettes
+        CpuCopy16(specialColors, &sStorage->wallpaperTilemap[1], 4);
+        CpuCopy16(specialColors, &sStorage->wallpaperTilemap[17], 4);
+
         if (sStorage->wallpaperLoadDir != 0)
-            LoadPalette(wallpaper->palettes, BG_PLTT_ID(4) + BG_PLTT_ID(sStorage->wallpaperOffset * 2), 2 * PLTT_SIZE_4BPP);
+            LoadPalette(sStorage->wallpaperTilemap, BG_PLTT_ID(4) + BG_PLTT_ID(sStorage->wallpaperOffset * 2), 2 * PLTT_SIZE_4BPP);
         else
-            CpuCopy16(wallpaper->palettes, &gPlttBufferUnfaded[BG_PLTT_ID(4) + BG_PLTT_ID(sStorage->wallpaperOffset * 2)], 2 * PLTT_SIZE_4BPP);
+            CpuCopy16(sStorage->wallpaperTilemap, &gPlttBufferUnfaded[BG_PLTT_ID(4) + BG_PLTT_ID(sStorage->wallpaperOffset * 2)], 2 * PLTT_SIZE_4BPP);
 
         sStorage->wallpaperTiles = malloc_and_decompress(wallpaper->tiles, &tilesSize);
+        iconGfx = malloc_and_decompress(sWaldaWallpaperIcons[config->iconId], &iconSize);
+        CpuCopy32(iconGfx, sStorage->wallpaperTiles + 0x800, iconSize);
+        Free(iconGfx);
         LoadBgTiles(2, sStorage->wallpaperTiles, tilesSize, sStorage->wallpaperOffset << 8);
     }
-    else
+    else if (wallpaperId == WALLPAPER_FRIENDS)
     {
         wallpaper = &sWaldaWallpapers[GetWaldaWallpaperPatternId()];
         LZ77UnCompWram(wallpaper->tilemap, sStorage->wallpaperTilemap);
@@ -5407,6 +5614,20 @@ static void LoadWallpaperGfx(u8 boxId, s8 direction)
         iconGfx = malloc_and_decompress(sWaldaWallpaperIcons[GetWaldaWallpaperIconId()], &iconSize);
         CpuCopy32(iconGfx, sStorage->wallpaperTiles + 0x800, iconSize);
         Free(iconGfx);
+        LoadBgTiles(2, sStorage->wallpaperTiles, tilesSize, sStorage->wallpaperOffset << 8);
+    }
+    else
+    {
+        wallpaper = &sWallpapers[wallpaperId];
+        LZ77UnCompWram(wallpaper->tilemap, sStorage->wallpaperTilemap);
+        DrawWallpaper(sStorage->wallpaperTilemap, sStorage->wallpaperLoadDir, sStorage->wallpaperOffset);
+
+        if (sStorage->wallpaperLoadDir != 0)
+            LoadPalette(wallpaper->palettes, BG_PLTT_ID(4) + BG_PLTT_ID(sStorage->wallpaperOffset * 2), 2 * PLTT_SIZE_4BPP);
+        else
+            CpuCopy16(wallpaper->palettes, &gPlttBufferUnfaded[BG_PLTT_ID(4) + BG_PLTT_ID(sStorage->wallpaperOffset * 2)], 2 * PLTT_SIZE_4BPP);
+
+        sStorage->wallpaperTiles = malloc_and_decompress(wallpaper->tiles, &tilesSize);
         LoadBgTiles(2, sStorage->wallpaperTiles, tilesSize, sStorage->wallpaperOffset << 8);
     }
 
@@ -7957,7 +8178,16 @@ static const u8 *const sMenuTexts[] =
     [MENU_SCENERY_2]  = gPCText_Scenery2,
     [MENU_SCENERY_3]  = gPCText_Scenery3,
     [MENU_ETCETERA]   = gPCText_Etcetera,
+    [MENU_SPECIAL]    = gPCText_Special,
     [MENU_FRIENDS]    = gPCText_Friends,
+    // Special wallpaper categories
+    [MENU_POKEMON_1]  = gPCText_Pokemon1,
+    [MENU_POKEMON_2]  = gPCText_Pokemon2,
+    [MENU_TEAM]       = gPCText_Team,
+    [MENU_CONTEST]    = gPCText_Contest,
+    [MENU_LEGENDS]    = gPCText_Legends,
+    [MENU_OTHER]      = gPCText_Other,
+    [MENU_SECRET]     = gPCText_Secret,
     [MENU_FOREST]     = gPCText_Forest,
     [MENU_CITY]       = gPCText_City,
     [MENU_DESERT]     = gPCText_Desert,
@@ -7974,6 +8204,47 @@ static const u8 *const sMenuTexts[] =
     [MENU_POKECENTER] = gPCText_Pokecenter,
     [MENU_MACHINE]    = gPCText_Machine,
     [MENU_SIMPLE]     = gPCText_Simple,
+    // Special wallpapers
+    // Pokemon 1
+    [MENU_SPECIAL_ZIGZAGOON]     = gPCText_Zigzagoon,
+    [MENU_SPECIAL_LUVDISC]       = gPCText_Luvdisc,
+    [MENU_SPECIAL_TOGEPI]        = gPCText_Togepi,
+    [MENU_SPECIAL_AZUMARILL]     = gPCText_Azumarill,
+    [MENU_SPECIAL_PIKACHU]       = gPCText_Pikachu,
+    [MENU_SPECIAL_DUSCLOPS]      = gPCText_Dusclops,
+    // Pokemon 2
+    [MENU_SPECIAL_LUDICOLO]      = gPCText_Ludicolo,
+    [MENU_SPECIAL_WHISCASH]      = gPCText_Whiscash,
+    [MENU_SPECIAL_MINUN]         = gPCText_Minun,
+    // Other
+    [MENU_SPECIAL_CLASSIC1]      = gPCText_Classic1,
+    // Pokemon 2
+    [MENU_SPECIAL_DIGLETT]       = gPCText_Diglett,
+    [MENU_SPECIAL_PICHU]         = gPCText_Pichu,
+    // Team
+    [MENU_SPECIAL_AQUA1]         = gPCText_Aqua1,
+    [MENU_SPECIAL_MAGMA1]        = gPCText_Magma1,
+    [MENU_SPECIAL_AQUA2]         = gPCText_Aqua2,
+    [MENU_SPECIAL_MAGMA2]        = gPCText_Magma2,
+    // Contest
+    [MENU_SPECIAL_CUTE]          = gPCText_Cute,
+    [MENU_SPECIAL_SMART]         = gPCText_Smart,
+    [MENU_SPECIAL_COOL]          = gPCText_Cool,
+    [MENU_SPECIAL_TOUGH]         = gPCText_Tough,
+    [MENU_SPECIAL_BEAUTY]        = gPCText_Beauty,
+    // Legends
+    [MENU_SPECIAL_LEGENDARY]     = gPCText_Legendary,
+    [MENU_SPECIAL_LATIAS]        = gPCText_Latias,
+    [MENU_SPECIAL_LATIOS]        = gPCText_Latios,
+    // Other
+    [MENU_SPECIAL_BLOCK]         = gPCText_Block,
+    [MENU_SPECIAL_POKECENTER]    = gPCText_Pokecenter2,
+    [MENU_SPECIAL_CIRCLES]       = gPCText_Circles,
+    // Secret
+    [MENU_SPECIAL_EXCLSIOR]     = gPCText_Exclsior,
+    [MENU_SPECIAL_VERITAS]       = gPCText_Veritas,
+    // Other
+    [MENU_SPECIAL_CLASSIC2]      = gPCText_Classic2,
 };
 
 static void SetMenuText(u8 textId)

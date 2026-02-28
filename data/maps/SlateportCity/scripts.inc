@@ -637,6 +637,15 @@ SlateportCity_Pokemart_PowerTMs:
 	release
 	end
 
+SlateportCity_EventScript_HiddenPowerTypeWoman::
+	lock
+	faceplayer
+	special LeadMonHiddenPowerType
+	bufferleadmonspeciesname STR_VAR_2
+	msgbox SlateportCity_Text_HiddenPowerType, MSGBOX_DEFAULT
+	release
+	end
+
 SlateportCity_EventScript_InsenseWoman::
 	lock
 	faceplayer
@@ -1484,3 +1493,7 @@ SlateportCity_Text_TakingBattleTentChallenge:
 	.string "After all, a tough TRAINER is\n"
 	.string "the perfect fit for the BATTLE TENT!\p"
 	.string "Give it your best effort!$"
+
+SlateportCity_Text_HiddenPowerType:
+	.string "Ah your {STR_VAR_2}...\p"
+	.string "Their HIDDEN POWER is {STR_VAR_1}!$"

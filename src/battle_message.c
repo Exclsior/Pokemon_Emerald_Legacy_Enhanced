@@ -433,6 +433,12 @@ static const u8 sText_Accuracy[] = _("accuracy");
 static const u8 sText_Evasiveness[] = _("evasiveness");
 static const u8 sText_AttackBoostedByAbility[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_CURRENT_MOVE}\nwas boosted by {B_ATK_ABILITY}!\p"); // // Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
 static const u8 sText_MagmaArmorActivated[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY} reduced\nthe damage from {B_CURRENT_MOVE}!\p"); // Added new Battle result message to provide text for Magma Armor activation
+static const u8 sText_PokemonPickupText[] = _("{B_BUFF1} picked up a {B_BUFF2}!\p");
+static const u8 sText_PokemonPickupText_VowelItems[] = _("{B_BUFF1} picked up an {B_BUFF2}!\p");
+static const u8 sText_PokemonPickupMultipleText[] = _("Your party POKéMON picked up {B_BUFF1} items!\p");
+static const u8 sText_PkmnDroppedItem[] = _("Wild {B_OPPONENT_MON1_NAME} dropped an item!\p");
+static const u8 sText_AddedToBag[] = _("{B_PLAYER_NAME} put away the {B_BUFF1}\nin the {B_BUFF2} POCKET.\p");
+static const u8 sText_BagIsFull[] = _("Too bad! The BAG is full…\p");
 
 const u8 * const gStatNamesTable[NUM_BATTLE_STATS] =
 {
@@ -890,7 +896,13 @@ const u8 * const gBattleStringsTable[BATTLESTRINGS_COUNT - BATTLESTRINGS_TABLE_S
     [STRINGID_TRAINER2WINTEXT - BATTLESTRINGS_TABLE_START] = sText_Trainer2WinText,
     [STRINGID_ATTACKBOOSTEDBYABILITY - BATTLESTRINGS_TABLE_START] = sText_AttackBoostedByAbility,
     [STRINGID_MAGMAARMORACTIVATED - BATTLESTRINGS_TABLE_START] = sText_MagmaArmorActivated,
-    [STRINGID_PKMNGAINEDEXPALL - BATTLESTRINGS_TABLE_START] = sText_PkmnGainedEXPAll
+    [STRINGID_PKMNGAINEDEXPALL - BATTLESTRINGS_TABLE_START] = sText_PkmnGainedEXPAll,
+    [STRINGID_POKEMONPICKUP - BATTLESTRINGS_TABLE_START] = sText_PokemonPickupText,
+    [STRINGID_POKEMONPICKUPVOWELITEMS - BATTLESTRINGS_TABLE_START] = sText_PokemonPickupText_VowelItems,
+    [STRINGID_POKEMONPICKUPMULTIPLE - BATTLESTRINGS_TABLE_START] = sText_PokemonPickupMultipleText,
+    [STRINGID_PKMNDROPPEDITEM - BATTLESTRINGS_TABLE_START] = sText_PkmnDroppedItem,
+    [STRINGID_ADDEDTOBAG - BATTLESTRINGS_TABLE_START] = sText_AddedToBag,
+    [STRINGID_BAGISFULL - BATTLESTRINGS_TABLE_START] = sText_BagIsFull,
 };
 
 const u16 gMissStringIds[] =
@@ -2971,6 +2983,11 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
             {
                 CopyItemName(hword, dst);
             }
+            srcID += 3;
+            break;
+        case B_BUFF_POCKET:
+            hword = T1_READ_16(&src[srcID + 1]);
+            CopyPocketName(hword, dst);
             srcID += 3;
             break;
         }

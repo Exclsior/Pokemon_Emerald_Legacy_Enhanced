@@ -82,6 +82,11 @@ void CopyItemName(u16 itemId, u8 *dst)
     StringCopy(dst, ItemId_GetName(itemId));
 }
 
+void CopyPocketName(u16 itemId, u8 *dst)
+{
+    StringCopy(dst, gPocketNamesStringsTable[ItemId_GetPocket(itemId) - 1]);
+}
+
 void CopyItemNameHandlePlural(u16 itemId, u8 *dst, u32 quantity)
 {
     if (itemId == ITEM_POKE_BALL)

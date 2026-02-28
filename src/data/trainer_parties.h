@@ -11940,7 +11940,7 @@ static const struct TrainerMon sParty_Roxanne5[] = {
     .iv = 255,
     .lvl = 65,
     .species = SPECIES_AERODACTYL,
-    .heldItem = ITEM_SOFT_SAND,
+    .heldItem = ITEM_SHARP_BEAK,
     .evs = {0, 252, 0, 252, 0, 0},
     .moves = {MOVE_ROCK_SLIDE, MOVE_DOUBLE_EDGE, MOVE_SKY_ATTACK, MOVE_TAUNT}
     },

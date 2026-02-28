@@ -1,0 +1,31 @@
+Category,WallpaperName,PatternID,IconID,BackgroundColor,ForegroundColor,TitleShadow,TitleText
+Contest,Cute,5,15,#e090a8,#b95875,#515151,#FFFFFF
+Contest,Smart,5,15,#64ce6e,#609a66,#515151,#FFFFFF
+Contest,Cool,5,15,#e53d3d,#ab4b4b,#515151,#FFFFFF
+Contest,Tough,5,15,#d9ab01,#a98916,#515151,#FFFFFF
+Contest,Beauty,5,15,#1bc7e9,#357bc0,#515151,#FFFFFF
+Legends,Legendary,12,25,#5959c1,#c15959,#515151,#FFFFFF
+Legends,Latias,7,25,#ed6374,#3060c0,#515151,#FFFFFF
+Legends,Latios,7,25,#3060c0,#ed6374,#515151,#FFFFFF
+Other,Block,4,3,#ae8976,#610000,#515151,#FFFFFF
+Other,Pokecenter,6,9,#ede9ee,#ed6576,#515151,#FFFFFF
+Pokémon 1,Zigzagoon,0,11,#e0d0a8,#a87858,#515151,#FFFFFF
+Pokémon 1,Luvdisc,2,22,#4fd9ff,#f85888,#515151,#FFFFFF
+Pokémon 1,Togepi,3,28,#f8f8f8,#e0d0a0,#515151,#FFFFFF
+Pokémon 1,Azumarill,10,6,#58a8e0,#f8f8f8,#515151,#FFFFFF
+Pokémon 1,Pikachu,11,1,#d07058,#f85888,#515151,#FFFFFF
+Pokémon 1,Dusclops,13,8,#5c5270,#8e969e,#515151,#FFFFFF
+Pokémon 2,Ludicolo,14,18,#80c860,#c8c860,#515151,#FFFFFF
+Pokémon 2,Whiscash,15,12,#d0ca5d,#6878b0,#515151,#FFFFFF
+Pokémon 2,Minum,4,27,#e9ddad,#638fdd,#515151,#FFFFFF
+Other,Classic 1,4,9,#00000,#ffffff,#515151,#FFFFFF
+Pokémon 2,Diglett,7,21,#a66a42,#e0b192,#515151,#FFFFFF
+Other,Circles,9,24,#e0d0a0,#584030,#515151,#FFFFFF
+Pokémon 2,Pichu,3,20,#080700,#f6e03a,#515151,#FFFFFF
+Secret,Exclsior,6,25,#3060c0,#ed6374,#515151,#FFFFFF
+Secret,Veritas,6,0,#163e8f,#000840,#515151,#FFFFFF
+Team,Aqua 1,1,0,#a8c8f0,#3060c0,#515151,#FFFFFF
+Team,Magma 1,7,29,#c05656,#a00000,#515151,#FFFFFF
+Team,Aqua 2,10,0,#4d5d7d,#f8f8f8,#515151,#FFFFFF
+Team,Magma 2,2,29,#4d1616,#a00000,#515151,#FFFFFF
+Other,Classic 2,4,9,#b5c08c,#858f76,#515151,#FFFFFF

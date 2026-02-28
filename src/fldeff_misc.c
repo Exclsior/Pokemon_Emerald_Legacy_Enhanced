@@ -1268,7 +1268,7 @@ static void Task_WateringBerryTreeAnim_Continue(u8 taskId)
         s16 value = gTasks[taskId].data[1]++;
 
         // Continue holding watering action 10 times, then end
-        if (value < 10)
+        if (value < (FlagGet(FLAG_ENABLE_FASTWATERING) ? 2 : 10))
             ObjectEventSetHeldMovement(playerObjEvent, GetWalkInPlaceNormalMovementAction(GetPlayerFacingDirection()));
         else
             gTasks[taskId].func = Task_WateringBerryTreeAnim_End;

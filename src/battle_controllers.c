@@ -12,6 +12,7 @@
 #include "task.h"
 #include "util.h"
 #include "constants/abilities.h"
+#include "event_data.h"
 
 static EWRAM_DATA u8 sLinkSendTaskId = 0;
 static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
@@ -1512,4 +1513,53 @@ void BtlController_EmitEndLinkBattle(u8 bufferId, u8 battleOutcome)
     sBattleBuffersTransferData[3] = gSaveBlock2Ptr->frontier.disableRecordBattle;
     sBattleBuffersTransferData[5] = sBattleBuffersTransferData[4] = RecordedBattle_BufferNewBattlerData(&sBattleBuffersTransferData[6]);
     PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, sBattleBuffersTransferData[4] + 6);
+}
+
+u32 Rogue_GetBattleSpeedScale()
+{
+    u8 battleSpeed = VarGet(VAR_BATTLE_SPEED);
+    u8 battleSceneOption = gSaveBlock2Ptr->optionsBattleSceneOff;
+
+    // Hold R to slow down
+    if(JOY_HELD(R_BUTTON))
+        return 1;
+
+    // We want to speed up all anims until input selection starts
+    if(InBattleChoosingMoves())
+        gBattleStruct->hasBattleInputStarted = TRUE;
+
+    if(gBattleStruct->hasBattleInputStarted)
+    {
+        // Always run at 1x speed here
+        if(InBattleChoosingMoves())
+            return 1;
+
+        // When battle anims are turned off, it's a bit too hard to read text, so force running at normal speed
+        if(battleSceneOption == TRUE && InBattleRunningActions())
+            return 1;
+    }
+
+    switch (battleSpeed)
+    {
+    case OPTIONS_BATTLE_SCENE_1X:
+        return 1;
+
+    case OPTIONS_BATTLE_SCENE_2X:
+        return 2;
+
+    case OPTIONS_BATTLE_SCENE_3X:
+        return 3;
+
+    case OPTIONS_BATTLE_SCENE_4X:
+        return 4;
+
+    // Print text at a readable speed still - This does not appear to logically ever trigger as battleSpeed is never set higher than 3
+    case OPTIONS_BATTLE_SCENE_DISABLED:
+        if(gBattleStruct->hasBattleInputStarted)
+            return 1;
+        else
+            return 4;
+    }
+
+    return 1;
 }

@@ -1,6 +1,7 @@
 .set LOCALID_RAYQUAZA_SLEEPING, 1
 .set LOCALID_ASTER, 3
 .set LOCALID_ZINNIA, 4
+.set LOCALID_SHINY_RAYQUAZA, 5
 
 SkyPillar_Top_MapScripts::
 	map_script MAP_SCRIPT_ON_RESUME, SkyPillar_Top_OnResume
@@ -30,15 +31,29 @@ SkyPillar_Top_EventScript_SetCleanLayout::
 
 SkyPillar_Top_EventScript_TryShowRayquaza::
 	call_if_unset FLAG_DEFEATED_RAYQUAZA, SkyPillar_Top_EventScript_ShowRayquaza
+	call SkyPillar_Top_EventScript_CheckShinyRayquaza
 	return
 
 SkyPillar_Top_EventScript_ShowRayquaza::
 	clearflag FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL
+	clearflag FLAG_TEMP_HIDE_SPECIAL
 	return
 
 SkyPillar_Top_OnWarp:
 	map_script_2 VAR_SKY_PILLAR_STATE, 0, SkyPillar_Top_EventScript_RayquazaFaceDown
 	.2byte 0
+
+SkyPillar_Top_EventScript_CheckShinyRayquaza::
+	goto_if_unset FLAG_DEFEATED_RAYQUAZA, SkyPillar_Top_EventScript_HideShinyRayquaza
+	goto_if_set FLAG_DEFEATED_SHINY_RAYQUAZA, SkyPillar_Top_EventScript_HideShinyRayquaza
+	goto_if_set FLAG_CAUGHT_SHINY_RAYQUAZA, SkyPillar_Top_EventScript_HideShinyRayquaza
+	goto_if_unset FLAG_DEFEATED_ZINNIA, SkyPillar_Top_EventScript_HideShinyRayquaza
+	clearflag FLAG_TEMP_HIDE_SPECIAL
+	end
+
+SkyPillar_Top_EventScript_HideShinyRayquaza::
+	setflag FLAG_TEMP_HIDE_SPECIAL
+	end
 
 SkyPillar_Top_EventScript_RayquazaFaceDown::
 	turnobject LOCALID_RAYQUAZA_SLEEPING, DIR_SOUTH
@@ -158,11 +173,80 @@ SkyPillar_Top_EventScript_Zinnia::
 	removeobject LOCALID_ASTER
 	fadescreen FADE_FROM_BLACK
 	setflag FLAG_DEFEATED_ZINNIA
+	call SkyPillar_Top_EventScript_CheckSpawnShinyRayquaza
 	release
 	end
 
 SkyPillar_Top_EventScript_Aster::
 	msgbox SkyPillar_Top_Text_Whismur, MSGBOX_NPC
+	end
+
+SkyPillar_Top_EventScript_CheckSpawnShinyRayquaza::
+	goto_if_unset FLAG_DEFEATED_RAYQUAZA, SkyPillar_Top_EventScript_End
+	goto_if_set FLAG_DEFEATED_SHINY_RAYQUAZA, SkyPillar_Top_EventScript_End
+	goto_if_set FLAG_CAUGHT_SHINY_RAYQUAZA, SkyPillar_Top_EventScript_End
+	goto_if_set FLAG_DEFEATED_ZINNIA, SkyPillar_Top_EventScript_SpawnShinyRayquaza
+	return
+
+SkyPillar_Top_EventScript_SpawnShinyRayquaza::
+	fadescreen FADE_TO_BLACK
+	waitse
+	playmoncry SPECIES_RAYQUAZA, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	addobject LOCALID_SHINY_RAYQUAZA
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+SkyPillar_Top_EventScript_End::
+	releaseall
+	end
+
+SkyPillar_Top_EventScript_ShinyRayquaza::
+	lockall
+	waitse
+	playmoncry SPECIES_RAYQUAZA, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	setflag FLAG_SHINY_CREATION
+	setwildbattle SPECIES_RAYQUAZA, 70
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	special BattleSetup_StartLegendaryBattle
+	waitstate
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, SkyPillar_Top_EventScript_Defeated_ShinyRayquaza
+	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, SkyPillar_Top_EventScript_RanFrom_ShinyRayquaza
+	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, SkyPillar_Top_EventScript_RanFrom_ShinyRayquaza
+	setflag FLAG_CAUGHT_SHINY_RAYQUAZA
+	releaseall
+	end
+
+SkyPillar_Top_EventScript_Defeated_ShinyRayquaza::
+	setflag FLAG_DEFEATED_SHINY_RAYQUAZA
+	goto SkyPillar_Top_EventScript_Defeated_ShinyRayquaza2
+	end
+
+SkyPillar_Top_EventScript_RanFrom_ShinyRayquaza::
+	setvar VAR_0x8004, SPECIES_RAYQUAZA
+	goto SkyPillar_Top_EventScript_RanFrom_ShinyRayquaza2
+	end
+
+SkyPillar_Top_EventScript_Defeated_ShinyRayquaza2::
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreenswapbuffers FADE_FROM_BLACK
+	releaseall
+	end
+
+SkyPillar_Top_EventScript_RanFrom_ShinyRayquaza2::
+	fadescreenswapbuffers FADE_TO_BLACK
+	removeobject VAR_LAST_TALKED
+	fadescreenswapbuffers FADE_FROM_BLACK
+	bufferspeciesname STR_VAR_1, VAR_0x8004
+	msgbox gText_LegendaryFlewAway, MSGBOX_DEFAULT
+	releaseall
 	end
 
 @ Rayquaza has unusual movement frames

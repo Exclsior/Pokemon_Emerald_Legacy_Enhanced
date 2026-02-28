@@ -109,22 +109,126 @@ enum {
 
 #define MOVE_SELECTOR_SPRITES_COUNT 10
 #define TYPE_ICON_SPRITE_COUNT (MAX_MON_MOVES + 1)
+
+#define TAG_FRIENDSHIP_ICON 30007  // pick an unused tag (30005/30006 are used in your file)
+
+enum
+{
+    FRIENDSHIP_LEVEL_0,
+    FRIENDSHIP_LEVEL_1,
+    FRIENDSHIP_LEVEL_2,
+    FRIENDSHIP_LEVEL_3,
+    FRIENDSHIP_LEVEL_4,
+    FRIENDSHIP_LEVEL_5,
+    FRIENDSHIP_LEVEL_6,
+    FRIENDSHIP_LEVEL_COUNT
+};
+
 // for the spriteIds field in PokemonSummaryScreenData
 enum
 {
     SPRITE_ARR_ID_MON,
     SPRITE_ARR_ID_BALL,
     SPRITE_ARR_ID_STATUS,
-    SPRITE_ARR_ID_TYPE, // 2 for mon types, 5 for move types(4 moves and 1 to learn), used interchangeably, because mon types and move types aren't shown on the same screen
-    SPRITE_ARR_ID_MOVE_SELECTOR1 = SPRITE_ARR_ID_TYPE + TYPE_ICON_SPRITE_COUNT, // 10 sprites that make up the selector
+    SPRITE_ARR_ID_FRIENDSHIP, // NEW: friendship heart icon
+    SPRITE_ARR_ID_TYPE, // 2 for mon types, 5 for move types..., used interchangeably
+    SPRITE_ARR_ID_MOVE_SELECTOR1 = SPRITE_ARR_ID_TYPE + TYPE_ICON_SPRITE_COUNT,
     SPRITE_ARR_ID_MOVE_SELECTOR2 = SPRITE_ARR_ID_MOVE_SELECTOR1 + MOVE_SELECTOR_SPRITES_COUNT,
     SPRITE_ARR_ID_COUNT = SPRITE_ARR_ID_MOVE_SELECTOR2 + MOVE_SELECTOR_SPRITES_COUNT
 };
+
 
 #define TILE_EMPTY_APPEAL_HEART  0x1039
 #define TILE_FILLED_APPEAL_HEART 0x103A
 #define TILE_FILLED_JAM_HEART    0x103C
 #define TILE_EMPTY_JAM_HEART     0x103D
+
+// Tags — use your free slots (you told me 30006/30005 were open earlier)
+#define TAG_SHINY_STAR_TILE 30006
+#define TAG_SHINY_STAR_PAL  30005
+
+static const u16 sFriendshipLevelToThreshold[FRIENDSHIP_LEVEL_COUNT] = { 0, 42, 85, 128, 170, 212, 250 };
+static const u16 sFriendshipIcon_Pal[] = INCBIN_U16("graphics/summary_screen/heart.gbapal");    
+static const u32 sFriendshipIcon_Gfx[] = INCBIN_U32("graphics/summary_screen/heart.4bpp.lz");    
+
+static const u16 sMarkings_Pal[] = INCBIN_U16("graphics/summary_screen/markings.gbapal");
+
+// Use your shiny_icon asset. Toolchain should emit the .4bpp.lz during build.
+static const u32 sStarObjTiles[] = INCBIN_U32("graphics/summary_screen/shiny_icon.4bpp.lz");
+
+// 8x8, 4bpp OAM (small star)
+static const struct OamData sStarObjOamData =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(8x8),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(8x8),
+    .tileNum = 0,
+    .priority = 0,   // ontop of mon
+    .paletteNum = 0,
+};
+
+static const struct OamData sOamData_FriendshipIcon =
+{
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = 0,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(8x8),    // was 16x16
+    .size = SPRITE_SIZE(8x8),      // was 16x16
+    .priority = 0,   // ontop of mon
+};
+
+static const union AnimCmd sAnim_Friendship_0[] = { ANIMCMD_FRAME(0, 0), ANIMCMD_END };
+static const union AnimCmd sAnim_Friendship_1[] = { ANIMCMD_FRAME(1, 0), ANIMCMD_END };
+static const union AnimCmd sAnim_Friendship_2[] = { ANIMCMD_FRAME(2, 0), ANIMCMD_END };
+static const union AnimCmd sAnim_Friendship_3[] = { ANIMCMD_FRAME(3, 0), ANIMCMD_END };
+static const union AnimCmd sAnim_Friendship_4[] = { ANIMCMD_FRAME(4, 0), ANIMCMD_END };
+static const union AnimCmd sAnim_Friendship_5[] = { ANIMCMD_FRAME(5, 0), ANIMCMD_END };
+static const union AnimCmd sAnim_Friendship_6[] = { ANIMCMD_FRAME(6, 0), ANIMCMD_END };
+
+static const union AnimCmd *const sAnimTable_FriendshipIcon[] =
+{
+    sAnim_Friendship_0,
+    sAnim_Friendship_1,
+    sAnim_Friendship_2,
+    sAnim_Friendship_3,
+    sAnim_Friendship_4,
+    sAnim_Friendship_5,
+    sAnim_Friendship_6,
+};
+
+static const struct SpriteTemplate sSpriteTemplate_FriendshipIcon =
+{
+    .tileTag = TAG_FRIENDSHIP_ICON,
+    .paletteTag = TAG_FRIENDSHIP_ICON,
+    .oam = &sOamData_FriendshipIcon,
+    .anims = sAnimTable_FriendshipIcon,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
+
+// Single-frame anim
+static const union AnimCmd sStarObjAnim0[] = {
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END,
+};
+static const union AnimCmd *const sStarObjAnimTable[] = {
+    sStarObjAnim0,
+};
+
+// Small holder like FR
+struct ShinyStarObjData {
+    struct Sprite *sprite;
+    u16 tileTag, palTag;
+};
+static EWRAM_DATA struct ShinyStarObjData *sShinyStarObjData = NULL;
 
 static EWRAM_DATA struct PokemonSummaryScreenData
 {
@@ -273,6 +377,7 @@ static void Task_PrintSkillsPage(u8);
 static void PrintHeldItemName(void);
 static void PrintSkillsPageText(void);
 static void PrintRibbonCount(void);
+static void PrintFriendship(void);
 static void BufferLeftColumnStats(void);
 static void PrintLeftColumnStats(void);
 static void BufferRightColumnStats(void);
@@ -740,6 +845,81 @@ static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
 #define TAG_MON_STATUS 30001
 #define TAG_MOVE_TYPES 30002
 #define TAG_MON_MARKINGS 30003
+#define TAG_SPLIT_ICONS 30004
+
+static const u16 sSplitIcons_Pal[] = INCBIN_U16("graphics/interface/split_icons.gbapal");
+static const u32 sSplitIcons_Gfx[] = INCBIN_U32("graphics/interface/split_icons.4bpp.lz");
+
+static const struct OamData sOamData_SplitIcons =
+{
+    .size = SPRITE_SIZE(16x16),
+    .shape = SPRITE_SHAPE(16x16),
+    .priority = 0,
+};
+
+
+static const struct CompressedSpriteSheet sSpriteSheet_FriendshipIcon =
+{
+    .data = sFriendshipIcon_Gfx,
+    .size = 7 * 32,   // 7 tiles * 32 bytes per 8×8 4bpp tile
+    .tag = TAG_FRIENDSHIP_ICON
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SplitIcons =
+{
+    .data = sSplitIcons_Gfx,
+    .size = 16*16*3/2,
+    .tag = TAG_SPLIT_ICONS,
+};
+
+static const struct SpritePalette sSpritePal_FriendshipIcon =
+{
+    .data = sFriendshipIcon_Pal,
+    .tag = TAG_FRIENDSHIP_ICON
+};
+
+
+static const struct SpritePalette sSpritePal_SplitIcons =
+{
+    .data = sSplitIcons_Pal,
+    .tag = TAG_SPLIT_ICONS
+};
+
+static const union AnimCmd sSpriteAnim_SplitIcon0[] =
+{
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sSpriteAnim_SplitIcon1[] =
+{
+    ANIMCMD_FRAME(4, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sSpriteAnim_SplitIcon2[] =
+{
+    ANIMCMD_FRAME(8, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sSpriteAnimTable_SplitIcons[] =
+{
+    sSpriteAnim_SplitIcon0,
+    sSpriteAnim_SplitIcon1,
+    sSpriteAnim_SplitIcon2,
+};
+
+static const struct SpriteTemplate sSpriteTemplate_SplitIcons =
+{
+    .tileTag = TAG_SPLIT_ICONS,
+    .paletteTag = TAG_SPLIT_ICONS,
+    .oam = &sOamData_SplitIcons,
+    .anims = sSpriteAnimTable_SplitIcons,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy
+};
 
 static const struct OamData sOamData_MoveTypes =
 {
@@ -1081,7 +1261,6 @@ static const struct SpriteTemplate sSpriteTemplate_StatusCondition =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy
 };
-static const u16 sMarkings_Pal[] = INCBIN_U16("graphics/summary_screen/markings.gbapal");
 
 // code
 void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, void (*callback)(void))
@@ -1126,6 +1305,99 @@ void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, 
     SetMainCallback2(CB2_InitSummaryScreen);
 }
 
+// Create (FR pattern: decompress into temp buffer, then LoadSpriteSheet/Palette)
+static void CreateShinyStarObj(u16 tileTag, u16 palTag)
+{
+    void *gfxBuffer = NULL;
+
+    if (sShinyStarObjData != NULL)
+        return;
+
+    sShinyStarObjData = AllocZeroed(sizeof(*sShinyStarObjData));
+    if (sShinyStarObjData == NULL)
+        return;
+
+    // One 8x8 tile (32 bytes). Keep 0x40 (FR style) to be safe if your converter emits 2 tiles.
+    gfxBuffer = AllocZeroed(0x20 * 2);
+    if (gfxBuffer == NULL)
+        goto fail;
+
+    LZ77UnCompWram(sStarObjTiles, gfxBuffer);
+
+    struct SpriteSheet sheet = {
+        .data = gfxBuffer,
+        .size = 0x20 * 2, // safe for 1–2 tiles
+        .tag  = tileTag,
+    };
+    struct SpritePalette pal = { .data = sFriendshipIcon_Pal, .tag = palTag };
+    struct SpriteTemplate tmpl = {
+        .tileTag = tileTag,
+        .paletteTag = palTag,
+        .oam = &sStarObjOamData,
+        .anims = sStarObjAnimTable,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = SpriteCallbackDummy,
+    };
+
+    LoadSpriteSheet(&sheet);
+    LoadSpritePalette(&pal);
+
+    // Position: bottom-left, just below the Poké Ball (ball is at 16,136 in your file).
+    // Tweak a couple pixels if you want it tighter/looser.
+    u8 spriteId = CreateSprite(&tmpl, 68, 37, 0); //HnS Shiny star location
+    sShinyStarObjData->sprite = &gSprites[spriteId];
+    sShinyStarObjData->tileTag = tileTag;
+    sShinyStarObjData->palTag  = palTag;
+
+    // Start hidden; we’ll reveal if shiny.
+    sShinyStarObjData->sprite->invisible = TRUE;
+
+fail:
+    if (gfxBuffer)
+        Free(gfxBuffer);
+}
+
+static void DestroyShinyStarObj(void)
+{
+    if (sShinyStarObjData == NULL)
+        return;
+
+    if (sShinyStarObjData->sprite != NULL)
+        DestroySpriteAndFreeResources(sShinyStarObjData->sprite);
+
+    Free(sShinyStarObjData);
+    sShinyStarObjData = NULL;
+}
+
+// FR-style gate: only visible if current mon is shiny and not an egg
+static void HideShowShinyStar(bool8 invisible)
+{
+    if (sShinyStarObjData == NULL || sShinyStarObjData->sprite == NULL)
+        return;
+
+    if (IsMonShiny(&sMonSummaryScreen->currentMon))
+        sShinyStarObjData->sprite->invisible = invisible;
+    else
+        sShinyStarObjData->sprite->invisible = TRUE;
+
+    // Keep it anchored bottom-left. If you later add a page with a different layout,
+    // you can branch here like FR and move the icon.
+    sShinyStarObjData->sprite->x = 68;
+    sShinyStarObjData->sprite->y = 37;//HnS Shiny star location
+}
+
+static void ShowShinyStarObjIfMonShiny(void)
+{
+    if (sShinyStarObjData == NULL || sShinyStarObjData->sprite == NULL)
+        return;
+
+    if (IsMonShiny(&sMonSummaryScreen->currentMon) && !sMonSummaryScreen->summary.isEgg)
+        HideShowShinyStar(FALSE);
+    else
+        HideShowShinyStar(TRUE);
+}
+
 void ShowSelectMovePokemonSummaryScreen(struct Pokemon *mons, u8 monIndex, u8 maxMonIndex, void (*callback)(void), u16 newMove)
 {
     ShowPokemonSummaryScreen(SUMMARY_MODE_SELECT_MOVE, mons, monIndex, maxMonIndex, callback);
@@ -1157,6 +1429,32 @@ static void VBlank(void)
 static void CB2_InitSummaryScreen(void)
 {
     while (MenuHelpers_ShouldWaitForLinkRecv() != TRUE && LoadGraphics() != TRUE && MenuHelpers_IsLinkActive() != TRUE);
+}
+
+static void SetFriendshipSprite(void)
+{
+    u8 *spriteId = &sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_FRIENDSHIP];
+    u16 friendship = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
+    u8 level = 0;
+
+    // Map friendship (0..255) into 6 animation levels using BW thresholds.
+    // 0:[0-49], 1:[50-99], 2:[100-149], 3:[150-199], 4:[200-249], 5:[250-255]
+    while (level + 1 < FRIENDSHIP_LEVEL_COUNT
+    && friendship >= sFriendshipLevelToThreshold[level + 1])
+    {
+        level++;
+    }
+    StartSpriteAnim(&gSprites[*spriteId], level);
+    if (*spriteId == SPRITE_NONE)
+        *spriteId = CreateSprite(&sSpriteTemplate_FriendshipIcon, 68, 92, 0); //HnS Friendship heart location
+
+    StartSpriteAnim(&gSprites[*spriteId], level);
+    SetSpriteInvisibility(SPRITE_ARR_ID_FRIENDSHIP, FALSE);
+}
+
+static void TrySetInfoPageIcons(void)
+{
+     SetFriendshipSprite();
 }
 
 static bool8 LoadGraphics(void)
@@ -1240,6 +1538,7 @@ static bool8 LoadGraphics(void)
         break;
     case 17:
         sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &sMonSummaryScreen->switchCounter);
+        ShowShinyStarObjIfMonShiny();
         if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE)
         {
             sMonSummaryScreen->switchCounter = 0;
@@ -1252,6 +1551,8 @@ static bool8 LoadGraphics(void)
         break;
     case 19:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
+        CreateShinyStarObj(TAG_SHINY_STAR_TILE, TAG_SHINY_STAR_PAL);
+        ShowShinyStarObjIfMonShiny();                    // add this line
         gMain.state++;
         break;
     case 20:
@@ -1260,6 +1561,7 @@ static bool8 LoadGraphics(void)
         break;
     case 21:
         SetTypeIcons();
+        TrySetInfoPageIcons();
         gMain.state++;
         break;
     case 22:
@@ -1364,6 +1666,10 @@ static bool8 DecompressGraphics(void)
         break;
     case 12:
         LoadCompressedPalette(gMoveTypes_Pal, OBJ_PLTT_ID(13), 3 * PLTT_SIZE_4BPP);
+        LoadCompressedSpriteSheet(&sSpriteSheet_SplitIcons);
+        LoadSpritePalette(&sSpritePal_SplitIcons);
+        LoadCompressedSpriteSheet(&sSpriteSheet_FriendshipIcon);
+        LoadSpritePalette(&sSpritePal_FriendshipIcon);
         sMonSummaryScreen->switchCounter = 0;
         return TRUE;
     }
@@ -1508,6 +1814,7 @@ static void CloseSummaryScreen(u8 taskId)
         gLastViewedMonIndex = sMonSummaryScreen->curMonIndex;
         SummaryScreen_DestroyAnimDelayTask();
         ResetSpriteData();
+        DestroyShinyStarObj();
         FreeAllSpritePalettes();
         StopCryAndClearCrySongs();
         m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 0x100);
@@ -1531,31 +1838,66 @@ static void CloseSummaryScreen(u8 taskId)
 #define IVS_STATS_BLOCK     (EVS_STATS_BLOCK + 3)
 #define STATS_BLANK_BLOCK   1241
 
+#define RIBBON_CORD_X    51
+#define RIBBON_CORD_Y    99
+
+#define RIBBONS_BLOCK   153
+#define FRIEND_BLOCK    234
+
 // Update skills page tilemap
 static void ChangeSummaryState(s16 *taskData, u8 taskId)
 {
+    // Stat Swap
     FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, STATS_CORD_X + 3, STATS_CORD_Y, 1, 1, 2);
     FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, STATS_CORD_X + 4, STATS_CORD_Y, 1, 1, 2);
     FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, STATS_CORD_X + 5, STATS_CORD_Y, 1, 1, 2);
+    // Ribbon/Friendship Swap
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 3, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 4, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 5, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 6, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 7, RIBBON_CORD_Y, 1, 1, 2);
     switch (currentStat)
     {
         case STAT_STATS:
+            // IV Swap
             FillBgTilemapBufferRect(1, IVS_STATS_BLOCK, STATS_CORD_X, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, IVS_STATS_BLOCK + 1, STATS_CORD_X + 1, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, IVS_STATS_BLOCK + 2, STATS_CORD_X + 2, STATS_CORD_Y, 1, 1, 2);
+            // Friendship Swap
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK, RIBBON_CORD_X + 3, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 1, RIBBON_CORD_X + 4, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 2, RIBBON_CORD_X + 5, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 3, RIBBON_CORD_X + 6, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 4, RIBBON_CORD_X + 7, RIBBON_CORD_Y, 1, 1, 2);
+            
             taskData[3] = STAT_IVS;
             break;
         case STAT_IVS:
+            // EV Swap
             FillBgTilemapBufferRect(1, EVS_STATS_BLOCK, STATS_CORD_X, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, EVS_STATS_BLOCK + 1, STATS_CORD_X + 1, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, EVS_STATS_BLOCK + 2, STATS_CORD_X + 2, STATS_CORD_Y, 1, 1, 2);
+            // Friendship Swap
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK, RIBBON_CORD_X + 3, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 1, RIBBON_CORD_X + 4, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 2, RIBBON_CORD_X + 5, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 3, RIBBON_CORD_X + 6, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, FRIEND_BLOCK + 4, RIBBON_CORD_X + 7, RIBBON_CORD_Y, 1, 1, 2);
             taskData[3] = STAT_EVS;
             break;
         case STAT_EVS:
+            // Stat Swap
             FillBgTilemapBufferRect(1, STATS_STATS_BLOCK, STATS_CORD_X, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, STATS_STATS_BLOCK + 1, STATS_CORD_X + 1, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, STATS_STATS_BLOCK + 2, STATS_CORD_X + 2, STATS_CORD_Y, 1, 1, 2);
             FillBgTilemapBufferRect(1, STATS_STATS_BLOCK + 3, STATS_CORD_X + 3, STATS_CORD_Y, 1, 1, 2);
+            // Ribbon Swap
+            FillBgTilemapBufferRect(1, RIBBONS_BLOCK, RIBBON_CORD_X + 3, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 1, RIBBON_CORD_X + 4, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 2, RIBBON_CORD_X + 5, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 3, RIBBON_CORD_X + 6, RIBBON_CORD_Y, 1, 1, 2);
+            FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 4, RIBBON_CORD_X + 7, RIBBON_CORD_Y, 1, 1, 2);
             taskData[3] = STAT_STATS;
             break;
     }
@@ -1697,6 +2039,8 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 6:
         CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
+        CreateShinyStarObj(TAG_SHINY_STAR_TILE, TAG_SHINY_STAR_PAL);
+        ShowShinyStarObjIfMonShiny();                    // add this line
         break;
     case 7:
         if (sMonSummaryScreen->summary.ailment != AILMENT_NONE)
@@ -1706,14 +2050,17 @@ static void Task_ChangeSummaryMon(u8 taskId)
         break;
     case 8:
         sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &data[1]);
+        ShowShinyStarObjIfMonShiny();
         if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] == SPRITE_NONE)
             return;
         gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].data[2] = 1;
+        ShowShinyStarObjIfMonShiny();
         TryDrawExperienceProgressBar();
         data[1] = 0;
         break;
     case 9:
         SetTypeIcons();
+        TrySetInfoPageIcons();
         break;
     case 10:
         PrintMonInfo();
@@ -1864,6 +2211,8 @@ static void PssScrollRightEnd(u8 taskId) // display right
     DrawPagination();
     PutPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
     SetTypeIcons();
+    TrySetInfoPageIcons();
+    ShowShinyStarObjIfMonShiny();
     TryDrawExperienceProgressBar();
     SwitchTaskToFollowupFunc(taskId);
 }
@@ -1913,6 +2262,8 @@ static void PssScrollLeftEnd(u8 taskId) // display left
     DrawPagination();
     PutPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
     SetTypeIcons();
+    TrySetInfoPageIcons();
+    ShowShinyStarObjIfMonShiny();
     TryDrawExperienceProgressBar();
     SwitchTaskToFollowupFunc(taskId);
 }
@@ -3431,6 +3782,20 @@ static void PrintRibbonCount(void)
     PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_RIBBON_COUNT), text, x, 1, 0, 0);
 }
 
+static void PrintFriendship(void)
+{
+    const u8 *text;
+    u16 friendship = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
+
+    int x;
+    ConvertIntToDecimalStringN(gStringVar1, friendship, STR_CONV_MODE_RIGHT_ALIGN, 3);
+    StringExpandPlaceholders(gStringVar4, gText_FriendshipVar1);
+    text = gStringVar4;
+
+    x = GetStringCenterAlignXOffset(FONT_NORMAL, text, 70) + 6;
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_RIBBON_COUNT), text, x, 1, 0, 0);
+}
+
 static void BufferIvOrEvStats(u8 mode)
 {
     u16 hp, hp2, atk, def, spA, spD, spe;
@@ -3472,6 +3837,7 @@ static void BufferIvOrEvStats(u8 mode)
 
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_SKILLS_STATS_LEFT], 0);
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_SKILLS_STATS_RIGHT], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_SKILLS_RIBBON_COUNT], 0);
 
     switch (mode)
     {
@@ -3489,6 +3855,7 @@ static void BufferIvOrEvStats(u8 mode)
         BufferStat(gStringVar3, natureMod[STAT_SPEED - 1], spe, 2, 3);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsRightColumnLayout);
         PrintRightColumnStats();
+        PrintRibbonCount();
         break;
     case 1:
     case 2:
@@ -3503,6 +3870,7 @@ static void BufferIvOrEvStats(u8 mode)
         BufferStat(gStringVar3, 0, spe, 2, 3);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsRightColumnLayout);
         PrintRightColumnStats();
+        PrintFriendship();
         break;
     }
 
@@ -3552,6 +3920,17 @@ static void BufferRightColumnStats(void)
     FillBgTilemapBufferRect(1, STATS_STATS_BLOCK + 1, STATS_CORD_X + 1, STATS_CORD_Y, 1, 1, 2);
     FillBgTilemapBufferRect(1, STATS_STATS_BLOCK + 2, STATS_CORD_X + 2, STATS_CORD_Y, 1, 1, 2);
     FillBgTilemapBufferRect(1, STATS_STATS_BLOCK + 3, STATS_CORD_X + 3, STATS_CORD_Y, 1, 1, 2);
+    // Reset to RIBBONS graphics
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 3, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 4, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 5, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 6, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, STATS_BLANK_BLOCK, RIBBON_CORD_X + 7, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, RIBBONS_BLOCK, RIBBON_CORD_X + 3, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 1, RIBBON_CORD_X + 4, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 2, RIBBON_CORD_X + 5, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 3, RIBBON_CORD_X + 6, RIBBON_CORD_Y, 1, 1, 2);
+    FillBgTilemapBufferRect(1, RIBBONS_BLOCK + 4, RIBBON_CORD_X + 7, RIBBON_CORD_Y, 1, 1, 2);
     CopyBgTilemapBufferToVram(1);
 
     DynamicPlaceholderTextUtil_Reset();
@@ -3691,35 +4070,60 @@ static void PrintMoveNameAndPP(u8 moveIndex)
 
 static void PrintMovePowerAndAccuracy(u16 moveIndex)
 {
-    const u8 *text;
-    if (moveIndex != 0)
-    {
-        FillWindowPixelRect(PSS_LABEL_WINDOW_MOVES_POWER_ACC, PIXEL_FILL(0), 53, 0, 19, 32);
+   	struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    	u16 species = GetMonData(mon, MON_DATA_SPECIES);
+     	const u8 *text;
+     	if (moveIndex != 0)
+     	{
+         	FillWindowPixelRect(PSS_LABEL_WINDOW_MOVES_POWER_ACC, PIXEL_FILL(0), 53, 0, 19, 32);
+		
+		if (moveIndex == MOVE_HIDDEN_POWER)
+		{
+            u8 powerForHiddenPower;
+		 	u8 powerBits;
+            
+            powerBits = ((GetMonData(mon, MON_DATA_HP_IV) & 2) >> 1)
+             	 	 | ((GetMonData(mon, MON_DATA_ATK_IV) & 2) << 0)
+             	 	 | ((GetMonData(mon, MON_DATA_DEF_IV) & 2) << 1)
+              	 	 | ((GetMonData(mon, MON_DATA_SPEED_IV) & 2) << 2)
+              	 	 | ((GetMonData(mon, MON_DATA_SPATK_IV)& 2) << 3)
+             	 	 | ((GetMonData(mon, MON_DATA_SPDEF_IV) & 2) << 4);
+			  
+			if (FlagGet(FLAG_ENABLE_HIDDEN_POWER_70BP))
+                powerForHiddenPower = 70;
+            else
+                powerForHiddenPower = (40 * powerBits) / 63 + 30;
 
-        if (gBattleMoves[moveIndex].power < 2)
-        {
-            text = gText_ThreeDashes;
-        }
-        else
-        {
-            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveIndex].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
-            text = gStringVar1;
-        }
+			ConvertIntToDecimalStringN(gStringVar1, powerForHiddenPower, STR_CONV_MODE_RIGHT_ALIGN, 3);
+			text = gStringVar1;
+		}
+		else
+		{
+			if (gBattleMoves[moveIndex].power < 2)
+			{
+				text = gText_ThreeDashes;
+			}
+			else
+			{
+				ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveIndex].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+				text = gStringVar1;
+			}
+		}
+       
+         	PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 53, 1, 0, 0);
 
-        PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 53, 1, 0, 0);
+         	if (gBattleMoves[moveIndex].accuracy == 0)
+         	{
+            	  	text = gText_ThreeDashes;
+         	}
+        	else
+         	{
+             	 	ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveIndex].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+             	 	text = gStringVar1;
+         	}
 
-        if (gBattleMoves[moveIndex].accuracy == 0)
-        {
-            text = gText_ThreeDashes;
-        }
-        else
-        {
-            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveIndex].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
-            text = gStringVar1;
-        }
-
-        PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 53, 17, 0, 0);
-    }
+         	PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 53, 17, 0, 0);
+     	}
 }
 
 static void PrintContestMoves(void)
@@ -3893,15 +4297,16 @@ static void SetSpriteInvisibility(u8 spriteArrayId, bool8 invisible)
 
 static void HidePageSpecificSprites(void)
 {
-    // Keeps Pok�mon, caught ball and status sprites visible.
+    // Keeps Pokémon, caught ball, status, and friendship sprites visible.
     u8 i;
-
     for (i = SPRITE_ARR_ID_TYPE; i < ARRAY_COUNT(sMonSummaryScreen->spriteIds); i++)
     {
         if (sMonSummaryScreen->spriteIds[i] != SPRITE_NONE)
             SetSpriteInvisibility(i, TRUE);
     }
 }
+
+
 
 static void SetTypeIcons(void)
 {

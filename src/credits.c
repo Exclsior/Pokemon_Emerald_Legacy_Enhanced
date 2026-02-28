@@ -63,7 +63,7 @@ enum {
 // Each ShowMons slideshow maxes at 27 Pokémon with the final Pokémon on the right.
 // To ensure the last shown Pokémon is the starter and is shown in the center
 // multiply the number of slideshows shown in the credits by 27, and subtract by 1
-#define NUM_MON_SLIDES 107 
+#define NUM_MON_SLIDES 113 
 
 struct CreditsData
 {

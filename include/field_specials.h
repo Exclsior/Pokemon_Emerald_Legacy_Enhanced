@@ -18,6 +18,7 @@ bool32 ShouldDoScottBattleFrontierCall(void);
 bool32 ShouldDoRoxanneCall(void);
 bool32 ShouldDoRivalRayquazaCall(void);
 bool32 ShouldDoNormanRematchCall(void);
+bool32 ShouldDoExpAllUpgradedCall(void);
 bool32 ShouldUpdateGymLeaderRematches(void);
 bool32 CountSSTidalStep(u16 delta);
 u8 GetSSTidalLocation(s8 *mapGroup, s8 *mapNum, s16 *x, s16 *y);

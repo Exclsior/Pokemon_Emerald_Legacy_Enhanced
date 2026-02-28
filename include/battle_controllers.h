@@ -281,4 +281,7 @@ void SetControllerToLinkOpponent(void);
 // link partner
 void SetControllerToLinkPartner(void);
 
+// Battle Speed Up (Credit to Pokabbie)
+u32 Rogue_GetBattleSpeedScale();
+
 #endif // GUARD_BATTLE_CONTROLLERS_H

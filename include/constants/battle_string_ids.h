@@ -381,8 +381,14 @@
 #define STRINGID_ATTACKBOOSTEDBYABILITY     381 // Added new Ability Effect to provide text for Overgrow, Blaze, Torrent and Swarm
 #define STRINGID_MAGMAARMORACTIVATED        382  // Added new Battle result message to provide text for Magma Armor activation
 #define STRINGID_PKMNGAINEDEXPALL           383
+#define STRINGID_POKEMONPICKUP              384
+#define STRINGID_POKEMONPICKUPVOWELITEMS    385
+#define STRINGID_POKEMONPICKUPMULTIPLE      386
+#define STRINGID_PKMNDROPPEDITEM            387
+#define STRINGID_ADDEDTOBAG                 388
+#define STRINGID_BAGISFULL                  389
 
-#define BATTLESTRINGS_COUNT                 384
+#define BATTLESTRINGS_COUNT                 390
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,

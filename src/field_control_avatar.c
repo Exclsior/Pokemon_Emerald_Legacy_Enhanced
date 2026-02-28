@@ -348,21 +348,18 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         u8 diveSpeed = gSaveBlock2Ptr->optionsDiveSpeed;
 
         if (
-            !FlagGet(FLAG_ENABLE_AUTORUN)
-            || !FlagGet(FLAG_ENABLE_FASTSURF)
+            !FlagGet(FLAG_ENABLE_FASTMODE)
             || diveSpeed != 2
             || overworldSpeed != OPTIONS_OVERWORLD_SPEED_8X
             )
         {
-            FlagSet(FLAG_ENABLE_AUTORUN);
-            FlagSet(FLAG_ENABLE_FASTSURF);
+            FlagSet(FLAG_ENABLE_FASTMODE);
             diveSpeed = 2;
             overworldSpeed = OPTIONS_OVERWORLD_SPEED_8X;
         }
         else
         {
-            FlagClear(FLAG_ENABLE_AUTORUN);
-            FlagClear(FLAG_ENABLE_FASTSURF);
+            FlagClear(FLAG_ENABLE_FASTMODE);
             diveSpeed = 0;
             overworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
         }
@@ -808,6 +805,11 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         {
             UpdateGymLeaderRematch();
             ScriptContext_SetupScript(PetalburgCity_Gym_EventScript_NormanRematchCall);
+            return TRUE;
+        }
+        if (ShouldDoExpAllUpgradedCall() == TRUE)
+        {
+            ScriptContext_SetupScript(RustboroCity_DevonCorp_3F_EventScript_ExpAllUpgradedCall);
             return TRUE;
         }
     }

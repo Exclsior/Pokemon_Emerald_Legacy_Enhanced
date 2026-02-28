@@ -4690,10 +4690,15 @@ bool16 HasAllHoennMons(void)
 {
     u16 i;
 
-    // -2 excludes Jirachi and Deoxys
-    for (i = 0; i < HOENN_DEX_COUNT - 2; i++)
+    // -2 removed as Jirachi and Deoxys are no longer the last in the Hoenn Dex
+    for (i = 0; i < HOENN_DEX_COUNT; i++)
     {
-        if (!GetSetPokedexFlag(HoennToNationalOrder(i + 1), FLAG_GET_CAUGHT))
+        // Added specific skips for Deoxys and Jirachi as they aren't requried for Hoenn Dex completion and Houndour and Houndoom are now the last in the Hoenn Dex count.
+        if (
+            !GetSetPokedexFlag(HoennToNationalOrder(i + 1), FLAG_GET_CAUGHT)
+            && !((i + 1) == HOENN_DEX_DEOXYS)
+            && !((i + 1) == HOENN_DEX_JIRACHI)
+            )
             return FALSE;
     }
 

@@ -2004,7 +2004,10 @@ u8 getLevelCap(void){
     u8 levelCap = 0;
     u16 nextLeader, i;
     const struct TrainerMon *partyData;
-    if (!FlagGet(FLAG_HARD) || FlagGet(FLAG_IS_CHAMPION))
+    if (
+        !(FlagGet(FLAG_ENABLE_LEVEL_CAPS) || FlagGet(FLAG_HARD))
+        || FlagGet(FLAG_IS_CHAMPION)
+        )
         return 100;
     if (!FlagGet(FLAG_BADGE01_GET))
         nextLeader = TRAINER_ROXANNE_1;
@@ -2040,7 +2043,10 @@ u8 getLevelCap(void){
 
 bool8 levelCappedNuzlocke(u8 level){
     u8 levelCap = getLevelCap();
-    if (!FlagGet(FLAG_HARD) || FlagGet(FLAG_IS_CHAMPION))
+    if (
+        !(FlagGet(FLAG_ENABLE_LEVEL_CAPS) || FlagGet(FLAG_HARD))
+        || FlagGet(FLAG_IS_CHAMPION)
+        )
         return FALSE;  //Redundant since getLevelCap would already return 100 for these, but better to be explicit
     if (level >= levelCap)
         return TRUE;

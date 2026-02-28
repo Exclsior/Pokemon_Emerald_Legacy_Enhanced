@@ -100,18 +100,6 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
     gSaveBlock2Ptr->optionsBattleItemAnimation = OPTIONS_ITEM_ANIMATION_NORMAL; // Added option to change Item Use Battle animation
-    FlagSet(FLAG_ENABLE_SURFOVERWORLD); // Set the Surfing Overworld Sprites enabled by default
-    FlagSet(FLAG_ENABLE_FOLLOWER); // Set the Overworld Follower enabled by default
-    /*
-    Other Options using Flags not touched as they default to 0/FALSE and don't need to be manually cleared:
-    FLAG_SHOW_STAT_EDITOR (Also relies on FLAG_ENABLE_STAT_EDITOR unlocked in post-game)
-    FLAG_DISABLE_BIKEMUSIC
-    FLAG_DISABLE_SURFMUSIC
-    FLAG_ENABLE_AUTORUN
-    FLAG_ENABLE_FASTSURF
-    FLAG_SWAP_FONT
-    FLAG_ENABLE_FISHCANTESCAPE
-    */
 }
 
 static void ClearPokedexFlags(void)
@@ -166,8 +154,9 @@ void NewGameInitData(void)
 {
      // A function lower down here clears these, so retain it and reset it at the end
     bool8 nuzlockePrev = FlagGet(FLAG_NUZLOCKE);
-    bool8 hardPrev = FlagGet(FLAG_HARD); 
+    bool8 hardPrev = FlagGet(FLAG_HARD);
     bool8 natDexMode = FlagGet(FLAG_NATIONAL_DEX_MODE);
+    bool8 playerStyleRS = FlagGet(FLAG_PLAYER_STYLE_RS);
 
     if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
         RtcReset();
@@ -232,6 +221,7 @@ void NewGameInitData(void)
     nuzlockePrev ? FlagSet(FLAG_NUZLOCKE) : FlagClear(FLAG_NUZLOCKE);
     hardPrev ? FlagSet(FLAG_HARD) : FlagClear(FLAG_HARD);
     natDexMode ? FlagSet(FLAG_NATIONAL_DEX_MODE) : FlagClear(FLAG_NATIONAL_DEX_MODE);
+    playerStyleRS ? FlagSet(FLAG_PLAYER_STYLE_RS) : FlagClear(FLAG_PLAYER_STYLE_RS);
 
     // If National Dex Mode selected, set all wild encounters to national Dex
     if (natDexMode)
@@ -243,6 +233,18 @@ void NewGameInitData(void)
     SetPlayerSecretBaseCoords(-1, -1, WARP_ID_NONE, -1, -1);
     
     FlagSet(FLAG_HIDE_TYPE_EFFECT_BATTLE); // Set to not show Type Effectiveness by default
+    FlagSet(FLAG_ENABLE_SURFOVERWORLD); // Set the Surfing Overworld Sprites enabled by default
+    FlagSet(FLAG_ENABLE_FOLLOWER); // Set the Overworld Follower enabled by default
+    /*
+    Other Options using Flags not touched as they default to 0/FALSE and don't need to be manually cleared:
+    FLAG_SHOW_STAT_EDITOR (Also relies on FLAG_ENABLE_STAT_EDITOR unlocked in post-game)
+    FLAG_DISABLE_BIKEMUSIC
+    FLAG_DISABLE_SURFMUSIC
+    FLAG_ENABLE_AUTORUN
+    FLAG_ENABLE_FASTSURF
+    FLAG_SWAP_FONT
+    FLAG_ENABLE_FISHCANTESCAPE
+    */
 }
 
 static void ResetMiniGamesRecords(void)

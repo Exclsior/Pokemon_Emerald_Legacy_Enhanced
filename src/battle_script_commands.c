@@ -823,6 +823,13 @@ static const u16 sRarePickupItems[] =
     ITEM_RARE_CANDY,
 };
 
+static const u16 sVowelPickupItems[] =
+{
+    ITEM_ETHER,
+    ITEM_ULTRA_BALL,
+    ITEM_IRON,
+};
+
 static const u8 sPickupProbabilities[] =
 {
     30, 40, 50, 60, 70, 80, 90, 94, 98
@@ -2289,7 +2296,13 @@ static void Cmd_waitmessage(void)
         else
         {
             u16 toWait = T2_READ_16(gBattlescriptCurrInstr + 1);
-            if (++gPauseCounterBattle >= toWait || (JOY_NEW(A_BUTTON | B_BUTTON)))
+            if (!(FlagGet(FLAG_ENABLE_FAST_BATTLE) || FlagGet(FLAG_ENABLE_FASTMODE)))
+            {
+                gPauseCounterBattle = 0;
+                gBattlescriptCurrInstr += 3;
+                gBattleCommunication[MSG_DISPLAY] = 0;
+            }
+            else if (++gPauseCounterBattle >= toWait || (JOY_NEW(A_BUTTON | B_BUTTON)))
             {
                 gPauseCounterBattle = 0;
                 gBattlescriptCurrInstr += 3;
@@ -3025,31 +3038,46 @@ void SetMoveEffect(bool8 primary, u8 certain)
 
 static void Cmd_seteffectwithchance(void)
 {
+    int i;
     u32 percentChance;
+    u8 effectCount = 1;
+    // Set a specific array for Burn Flinch Effect
+    // however a generic array with lookup based on
+    // Effect definition would be more scalable
+    u8 moveEffectsBurnFlinch[2] = {MOVE_EFFECT_BURN, MOVE_EFFECT_FLINCH};
 
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
-    if (gBattleCommunication[MOVE_EFFECT_BYTE] & MOVE_EFFECT_CERTAIN
-        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+    for (i = 0; i < effectCount; i++)
     {
-        gBattleCommunication[MOVE_EFFECT_BYTE] &= ~MOVE_EFFECT_CERTAIN;
-        SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
-    }
-    else if (Random() % 100 < percentChance
-             && gBattleCommunication[MOVE_EFFECT_BYTE]
-             && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
-    {
-        if (percentChance >= 100)
+        if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN_FLINCH)
+        {
+            gBattleCommunication[MOVE_EFFECT_BYTE] = moveEffectsBurnFlinch[i];
+            effectCount = 2;
+        }
+        
+        if (gBattleCommunication[MOVE_EFFECT_BYTE] & MOVE_EFFECT_CERTAIN
+            && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+        {
+            gBattleCommunication[MOVE_EFFECT_BYTE] &= ~MOVE_EFFECT_CERTAIN;
             SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
-        else
-            SetMoveEffect(FALSE, 0);
-    }
-    else
-    {
-        gBattlescriptCurrInstr++;
+        }
+        else if (Random() % 100 < percentChance
+                && gBattleCommunication[MOVE_EFFECT_BYTE]
+                && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+        {
+            if (percentChance >= 100)
+                SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
+            else
+                SetMoveEffect(FALSE, 0);
+        }
+        else if (i == (effectCount - 1)) // Increment Instruction on last effect
+        {
+            gBattlescriptCurrInstr++;
+        }
     }
 
     gBattleCommunication[MOVE_EFFECT_BYTE] = 0;
@@ -3382,7 +3410,7 @@ static void Cmd_getexp(void)
 
     switch (gBattleScripting.getexpState)
     {
-    case 0: // check if should receive exp at all
+    case EXP_SHOULD_RECEIVE: // check if should receive exp at all
         if (GetBattlerSide(gBattlerFainted) != B_SIDE_OPPONENT || (gBattleTypeFlags &
              (BATTLE_TYPE_LINK
               | BATTLE_TYPE_RECORDED_LINK
@@ -3392,7 +3420,7 @@ static void Cmd_getexp(void)
               | BATTLE_TYPE_BATTLE_TOWER
               | BATTLE_TYPE_EREADER_TRAINER)))
         {
-            gBattleScripting.getexpState = 6; // goto last case
+            gBattleScripting.getexpState = EXP_COMPLETE; // goto last case
         }
         else
         {
@@ -3400,7 +3428,7 @@ static void Cmd_getexp(void)
             gBattleStruct->givenExpMons |= gBitTable[gBattlerPartyIndexes[gBattlerFainted]];
         }
         break;
-    case 1: // calculate experience points to redistribute
+    case EXP_CALCULATE_ALL: // calculate experience points to redistribute
         {
             u16 calculatedExp;
             s32 viaSentIn;
@@ -3450,6 +3478,10 @@ static void Cmd_getexp(void)
                     *exp = 1;
 
                 gExpShareExp = SAFE_DIV(calculatedExp / 2, viaExpShare);
+
+                if (FlagGet(FLAG_EXP_ALL_UPGRADED) && FlagGet(FLAG_EXP_ALL))
+                    gExpShareExp = SAFE_DIV(calculatedExp, 2);
+                
                 if (gExpShareExp == 0)
                     gExpShareExp = 1;
             }
@@ -3466,7 +3498,7 @@ static void Cmd_getexp(void)
             gBattleStruct->sentInPokes = sentIn;
         }
         // fall through
-    case 2: // set exp value to the poke in expgetter_id and print message
+    case EXP_CALCULATE_SINGLE: // set exp value to the poke in expgetter_id and print message
         if (gBattleControllerExecFlags == 0)
         {
             item = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HELD_ITEM);
@@ -3487,14 +3519,14 @@ static void Cmd_getexp(void)
             if (holdEffect != HOLD_EFFECT_EXP_SHARE && !FlagGet(FLAG_EXP_ALL) && !(gBattleStruct->sentInPokes & 1))
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
-                gBattleScripting.getexpState = 5;
+                gBattleScripting.getexpState = EXP_NEXT_MON;
                 gBattleMoveDamage = 0; // used for exp
             }
             else if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == MAX_LEVEL
                 || levelCappedNuzlocke(GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL)))
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
-                gBattleScripting.getexpState = 5;
+                gBattleScripting.getexpState = EXP_NEXT_MON;
                 gBattleMoveDamage = 0; // used for exp
 
                 // Added ability to gain EVs for Level 100 or Level Capped Pokemon
@@ -3570,7 +3602,7 @@ static void Cmd_getexp(void)
 
                     if ((gBattleStruct->sentInPokes & 1) || ((holdEffect == HOLD_EFFECT_EXP_SHARE) && !FlagGet(FLAG_EXP_ALL)))
                         PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
-
+                    
                     MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);
                 }
                 gBattleStruct->sentInPokes >>= 1;
@@ -3578,7 +3610,7 @@ static void Cmd_getexp(void)
             }
         }
         break;
-    case 3: // Set stats and give exp
+    case EXP_SET_STATS_AND_GIVE: // Set stats and give exp
         if (gBattleControllerExecFlags == 0)
         {
             gBattleBufferB[gBattleStruct->expGetterBattlerId][0] = 0;
@@ -3599,7 +3631,16 @@ static void Cmd_getexp(void)
             gBattleScripting.getexpState++;
         }
         break;
-    case 4: // lvl up if necessary
+    case EXP_ALL_MESSAGE: // Exp. All message before possible Level-ups
+        if (gExpAllMessCheck && FlagGet(FLAG_EXP_ALL) && gBattleStruct->expGetterMonId == 0) // Only show message on first loop
+        {
+            gExpAllMessCheck = FALSE;
+            PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gExpShareExp);
+            PrepareStringBattle(STRINGID_PKMNGAINEDEXPALL, gBattleStruct->expGetterBattlerId);
+        }
+        gBattleScripting.getexpState++;
+        break;
+    case EXP_LEVEL_UP: // lvl up if necessary
         if (gBattleControllerExecFlags == 0)
         {
             gActiveBattler = gBattleStruct->expGetterBattlerId;
@@ -3643,39 +3684,56 @@ static void Cmd_getexp(void)
                     gBattleMons[2].spDefense = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF);
                     gBattleMons[2].spAttack = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPATK);
                 }
-                gBattleScripting.getexpState = 5;
+                gBattleScripting.getexpState = EXP_NEXT_MON;
             }
             else
             {
                 gBattleMoveDamage = 0;
-                gBattleScripting.getexpState = 5;
+                gBattleScripting.getexpState = EXP_NEXT_MON;
             }
         }
         break;
-    case 5: // looper increment
+    case EXP_NEXT_MON: // looper increment
         if (gBattleMoveDamage) // there is exp to give, goto case 3 that gives exp
         {
-            gBattleScripting.getexpState = 3;
+            gBattleScripting.getexpState = EXP_SET_STATS_AND_GIVE;
         }
         else
         {
             gBattleStruct->expGetterMonId++;
             if (gBattleStruct->expGetterMonId < PARTY_SIZE)
-                gBattleScripting.getexpState = 2; // loop again
+                gBattleScripting.getexpState = EXP_CALCULATE_SINGLE; // loop again
             else
-            {                
-                if (gExpAllMessCheck && FlagGet(FLAG_EXP_ALL))
-                {
-                    gExpAllMessCheck = FALSE;
-                    gBattleStruct->expGetterMonId = 0;
-                    PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gExpShareExp);
-                    PrepareStringBattle(STRINGID_PKMNGAINEDEXPALL, gBattleStruct->expGetterBattlerId);
-                }
-                gBattleScripting.getexpState = 6; // we're done
-            }
+                gBattleScripting.getexpState = EXP_CHECK_ITEM; // we're done
         }
         break;
-    case 6: // increment instruction
+    case EXP_CHECK_ITEM: // check if wild Pokémon has a hold item after fainting
+        if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && gBattleMons[0].hp && gBattleMons[gBattlerFainted].item != ITEM_NONE && FlagGet(FLAG_ENABLE_WILD_HELD_DROP))
+        {
+            PrepareStringBattle(STRINGID_PKMNDROPPEDITEM, gBattleStruct->expGetterBattlerId);
+            gBattleScripting.getexpState = EXP_GIVE_ITEM; // add item to bag
+        }
+        else
+       {
+            gBattleScripting.getexpState = EXP_COMPLETE; // no hold item or held item dropping disabled, end battle
+        }
+        break;
+    case EXP_GIVE_ITEM: // add dropped item to bag if space available
+        if (CheckBagHasSpace(gBattleMons[gBattlerFainted].item, 1) == TRUE)
+        {
+            AddBagItem(gBattleMons[gBattlerFainted].item, 1);
+            PREPARE_ITEM_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerFainted].item);
+            PREPARE_POCKET_BUFFER(gBattleTextBuff2, gBattleMons[gBattlerFainted].item);
+            PrepareStringBattle(STRINGID_ADDEDTOBAG, gBattleStruct->expGetterBattlerId);
+            gBattleScripting.getexpState = EXP_COMPLETE;
+        }
+        else
+        {
+            PrepareStringBattle(STRINGID_BAGISFULL, gBattleStruct->expGetterBattlerId);
+            gBattleScripting.getexpState = EXP_COMPLETE;
+        }
+        break;
+    case EXP_COMPLETE: // increment instruction
         if (gBattleControllerExecFlags == 0)
         {
             // not sure why gf clears the item and ability here
@@ -4075,7 +4133,12 @@ static void Cmd_pause(void)
     if (gBattleControllerExecFlags == 0)
     {
         u16 value = T2_READ_16(gBattlescriptCurrInstr + 1);
-        if (++gPauseCounterBattle >= value || (JOY_NEW(A_BUTTON | B_BUTTON)))
+        if (!(FlagGet(FLAG_ENABLE_FAST_BATTLE) || FlagGet(FLAG_ENABLE_FASTMODE)))
+        {
+            gPauseCounterBattle = 0;
+            gBattlescriptCurrInstr += 3;
+        }
+        else if (++gPauseCounterBattle >= value || (JOY_NEW(A_BUTTON | B_BUTTON)))
         {
             gPauseCounterBattle = 0;
             gBattlescriptCurrInstr += 3;
@@ -8978,7 +9041,11 @@ static void Cmd_hiddenpowercalc(void)
                  | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
                  | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
 
-    gDynamicBasePower = (40 * powerBits) / 63 + 30;
+
+    if (FlagGet(FLAG_ENABLE_HIDDEN_POWER_70BP))
+        gDynamicBasePower = 70;
+    else
+        gDynamicBasePower = (40 * powerBits) / 63 + 30;
 
     // Subtract 3 instead of 1 below because 2 types are excluded (TYPE_NORMAL and TYPE_MYSTERY)
     // The final + 1 skips past Normal, and the following conditional skips TYPE_MYSTERY
@@ -9725,8 +9792,11 @@ static void Cmd_getsecretpowereffect(void)
 static void Cmd_pickup(void)
 {
     s32 i;
-    u16 species, heldItem;
+    u16 species, heldItem, pickedupItem;
     u8 ability;
+    u8 pickedUp = 0;
+    u8 monIdx;
+    bool8 doesItemStartWithVowel = FALSE;
 
     if (InBattlePike())
     {
@@ -9752,6 +9822,8 @@ static void Cmd_pickup(void)
             {
                 heldItem = GetBattlePyramidPickupItemId();
                 SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &heldItem);
+
+                pickedUp++;
             }
         }
     }
@@ -9783,12 +9855,26 @@ static void Cmd_pickup(void)
                 {
                     if (sPickupProbabilities[j] > rand)
                     {
-                        SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sPickupItems[lvlDivBy10 + j]);
+                        heldItem = sPickupItems[lvlDivBy10 + j];
+                        monIdx = i;
+
+                        SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &heldItem);
+
+                        pickedupItem = heldItem;
+                        pickedUp++;
+
                         break;
                     }
                     else if (rand == 99 || rand == 98)
                     {
-                        SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sRarePickupItems[lvlDivBy10 + (99 - rand)]);
+                        heldItem = sRarePickupItems[lvlDivBy10 + (99 - rand)];
+                        monIdx = i;
+
+                        SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &heldItem);
+
+                        pickedupItem = heldItem;
+                        pickedUp++;
+
                         break;
                     }
                 }
@@ -9796,7 +9882,38 @@ static void Cmd_pickup(void)
         }
     }
 
-    gBattlescriptCurrInstr++;
+    if (pickedUp > 1 && FlagGet(FLAG_ENABLE_PICKUP_TEXT))
+    {
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, pickedUp);
+
+        BattleScriptPush(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = BattleScript_PrintPickupMultipleString;
+    }
+    else if (pickedUp == 1 && FlagGet(FLAG_ENABLE_PICKUP_TEXT))
+    {
+        PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, 0, monIdx);
+        PREPARE_ITEM_BUFFER(gBattleTextBuff2, pickedupItem);
+        
+        BattleScriptPush(gBattlescriptCurrInstr + 1);
+        
+        for (i = 0; i < (int)ARRAY_COUNT(sVowelPickupItems); i++)
+        {
+            if (pickedupItem == sVowelPickupItems[i])
+            {
+                doesItemStartWithVowel = TRUE;
+                break;
+            }   
+        }
+
+        if (doesItemStartWithVowel)
+            gBattlescriptCurrInstr = BattleScript_PrintPickupStringVowelItem;
+        else
+            gBattlescriptCurrInstr = BattleScript_PrintPickupString;
+    }
+    else
+    {
+        gBattlescriptCurrInstr++;
+    }
 }
 
 static void Cmd_docastformchangeanimation(void)
