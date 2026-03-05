@@ -22,6 +22,8 @@
 #define TAG_MAY     1003
 #define TAG_FLYGON_LATIOS  1004
 #define TAG_FLYGON_LATIAS  1005
+#define TAG_BRENDAN_RS 1007
+#define TAG_MAY_RS     1008
 
 // Used for the Clouds/Trees/Houses sprites that pass by in the background
 #define TAG_MOVING_SCENERY 2000
@@ -528,6 +530,50 @@ static const struct SpriteTemplate sSpriteTemplate_MayBicycle =
     .callback = SpriteCB_Bicycle
 };
 
+static const struct SpriteTemplate sSpriteTemplate_BrendanRS =
+{
+    .tileTag = TAG_BRENDAN_RS,
+    .paletteTag = TAG_BRENDAN_RS,
+    .oam = &sOamData_Player,
+    .anims = sAnims_Player,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_Player
+};
+
+static const struct SpriteTemplate sSpriteTemplate_MayRS =
+{
+    .tileTag = TAG_MAY_RS,
+    .paletteTag = TAG_MAY_RS,
+    .oam = &sOamData_Player,
+    .anims = sAnims_Player,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_Player
+};
+
+static const struct SpriteTemplate sSpriteTemplate_BrendanRSBicycle =
+{
+    .tileTag = TAG_BICYCLE,
+    .paletteTag = TAG_BRENDAN_RS,
+    .oam = &sOamData_Bicycle,
+    .anims = sAnims_Bicycle,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_Bicycle
+};
+
+static const struct SpriteTemplate sSpriteTemplate_MayRSBicycle =
+{
+    .tileTag = TAG_BICYCLE,
+    .paletteTag = TAG_MAY_RS,
+    .oam = &sOamData_Bicycle,
+    .anims = sAnims_Bicycle,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_Bicycle
+};
+
 static const struct OamData sOamData_Flygon =
 {
     .y = DISPLAY_HEIGHT,
@@ -596,6 +642,26 @@ const struct CompressedSpriteSheet gSpriteSheet_IntroMay[] =
     {}
 };
 
+const struct CompressedSpriteSheet gSpriteSheet_IntroBrendanRS[] =
+{
+    {
+        .data = gIntroBrendanRS_Gfx,
+        .size = 0x3800,
+        .tag = TAG_BRENDAN_RS
+    },
+    {}
+};
+
+const struct CompressedSpriteSheet gSpriteSheet_IntroMayRS[] =
+{
+    {
+        .data = gIntroMayRS_Gfx,
+        .size = 0x3800,
+        .tag = TAG_MAY_RS
+    },
+    {}
+};
+
 const struct CompressedSpriteSheet gSpriteSheet_IntroBicycle[] =
 {
     {
@@ -631,6 +697,8 @@ const struct SpritePalette gSpritePalettes_IntroPlayerFlygon[] =
 {
     { .data = gIntroPlayer_Pal, .tag = TAG_BRENDAN },
     { .data = gIntroPlayer_Pal, .tag = TAG_MAY },
+    { .data = gIntroBrendanRS_Pal, .tag = TAG_BRENDAN_RS },
+    { .data = gIntroMayRS_Pal, .tag = TAG_MAY_RS },
     { .data = gIntroFlygon_Pal, .tag = TAG_FLYGON_LATIOS },
     { .data = gIntroFlygon_Pal, .tag = TAG_FLYGON_LATIAS },
     {}
@@ -692,6 +760,8 @@ const struct SpritePalette gSpritePalettes_Credits[] =
 {
     { .data = sBrendanCredits_Pal, .tag = TAG_BRENDAN },
     { .data = sMayCredits_Pal,     .tag = TAG_MAY },
+    { .data = gIntroBrendanRS_Pal, .tag = TAG_BRENDAN_RS },
+    { .data = gIntroMayRS_Pal,     .tag = TAG_MAY_RS },
     { .data = sLatios_Pal,         .tag = TAG_FLYGON_LATIOS },
     { .data = sLatias_Pal,         .tag = TAG_FLYGON_LATIAS },
     {}
@@ -1127,6 +1197,22 @@ u8 CreateIntroMaySprite(s16 x, s16 y)
 {
     u8 playerSpriteId = CreateSprite(&sSpriteTemplate_May, x, y, 2);
     u8 bicycleSpriteId = CreateSprite(&sSpriteTemplate_MayBicycle, x, y + 8, 3);
+    gSprites[bicycleSpriteId].sPlayerSpriteId = playerSpriteId;
+    return playerSpriteId;
+}
+
+u8 CreateIntroBrendanRSSprite(s16 x, s16 y)
+{
+    u8 playerSpriteId = CreateSprite(&sSpriteTemplate_BrendanRS, x, y, 2);
+    u8 bicycleSpriteId = CreateSprite(&sSpriteTemplate_BrendanRSBicycle, x, y + 8, 3);
+    gSprites[bicycleSpriteId].sPlayerSpriteId = playerSpriteId;
+    return playerSpriteId;
+}
+
+u8 CreateIntroMayRSSprite(s16 x, s16 y)
+{
+    u8 playerSpriteId = CreateSprite(&sSpriteTemplate_MayRS, x, y, 2);
+    u8 bicycleSpriteId = CreateSprite(&sSpriteTemplate_MayRSBicycle, x, y + 8, 3);
     gSprites[bicycleSpriteId].sPlayerSpriteId = playerSpriteId;
     return playerSpriteId;
 }

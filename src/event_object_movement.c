@@ -2663,7 +2663,11 @@ static void ObjectEventSetGraphics(struct ObjectEvent *objectEvent, const struct
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
     u32 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
     if (i != 0xFF)
+    {
         UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
+        if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL)
+            UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
+    }
 
     // If gfx size changes, we need to reallocate tiles
     if (LARGE_OW_SUPPORT && !OW_GFX_COMPRESS && graphicsInfo->oam->size != sprite->oam.size)
@@ -3079,8 +3083,8 @@ static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent *objectEvent, u8 e
 void UpdateObjectEventsForCameraUpdate(s16 x, s16 y)
 {
     UpdateObjectEventCoordsForCameraUpdate();
-    TrySpawnObjectEvents(x, y);
     RemoveObjectEventsOutsideView();
+    TrySpawnObjectEvents(x, y);
 }
 
 // The "CameraObject" functions below are responsible for an invisible sprite
@@ -9163,6 +9167,7 @@ u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
     u8 behavior;
     u8 index = direction;
     struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    s16 destX, destY;
 
     if (index == DIR_NONE)
         return DIR_NONE;
@@ -9172,9 +9177,22 @@ u8 GetLedgeJumpDirection(s16 x, s16 y, u8 direction)
     index--;
     behavior = MapGridGetMetatileBehaviorAt(x, y);
 
-    if (ledgeBehaviorFuncs[index](behavior) == TRUE || (gPlayerAvatar.acroBikeState == ACRO_STATE_BUNNY_HOP &&
-    MB_JUMP_EAST <= behavior && behavior <= MB_JUMP_SOUTH && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING)))
+    // Normal ledge jump: direction matches ledge orientation
+    if (ledgeBehaviorFuncs[index](behavior) == TRUE)
         return index + 1;
+
+    // Postgame bunny-hop reverse jump: any ledge direction allowed,
+    // but check that the landing tile (one past the ledge) is passable and unoccupied
+    if (gPlayerAvatar.acroBikeState == ACRO_STATE_BUNNY_HOP
+        && MB_JUMP_EAST <= behavior && behavior <= MB_JUMP_SOUTH
+        && FlagGet(FLAG_UNLOCKED_BIKE_SWITCHING))
+    {
+        destX = x;
+        destY = y;
+        MoveCoords(index + 1, &destX, &destY);
+        if (GetCollisionAtCoords(playerObjEvent, destX, destY, index + 1) == COLLISION_NONE)
+            return index + 1;
+    }
 
     return DIR_NONE;
 }

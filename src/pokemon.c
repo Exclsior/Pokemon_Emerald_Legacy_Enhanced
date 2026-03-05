@@ -7147,6 +7147,13 @@ u16 FacilityClassToPicIndex(u16 facilityClass)
 
 u16 PlayerGenderToFrontTrainerPicId(u8 playerGender)
 {
+    if (FlagGet(FLAG_PLAYER_STYLE_RS))
+    {
+        if (playerGender != MALE)
+            return FacilityClassToPicIndex(FACILITY_CLASS_RS_MAY);
+        else
+            return FacilityClassToPicIndex(FACILITY_CLASS_RS_BRENDAN);
+    }
     if (playerGender != MALE)
         return FacilityClassToPicIndex(FACILITY_CLASS_MAY);
     else

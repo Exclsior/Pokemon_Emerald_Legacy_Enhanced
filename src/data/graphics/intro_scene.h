@@ -12,6 +12,10 @@ const u32 gIntroManectric_Gfx[] = INCBIN_U32("graphics/intro/scene_2/manectric.4
 const u32 gIntroFlygon_Gfx[] = INCBIN_U32("graphics/intro/scene_2/flygon.4bpp.lz");
 const u32 gIntroBrendan_Gfx[] = INCBIN_U32("graphics/intro/scene_2/brendan.4bpp.lz");
 const u32 gIntroMay_Gfx[] = INCBIN_U32("graphics/intro/scene_2/may.4bpp.lz");
+const u32 gIntroBrendanRS_Gfx[] = INCBIN_U32("graphics/intro/rs_graphics/intro2_brendan.4bpp.lz");
+const u32 gIntroMayRS_Gfx[] = INCBIN_U32("graphics/intro/rs_graphics/intro2_may.4bpp.lz");
+const u16 gIntroBrendanRS_Pal[] = INCBIN_U16("graphics/intro/rs_graphics/intro2_brendan.gbapal");
+const u16 gIntroMayRS_Pal[] = INCBIN_U16("graphics/intro/rs_graphics/intro2_may.gbapal");
 
 const u32 gIntroGroudon_Gfx[] = INCBIN_U32("graphics/intro/scene_3/groudon.8bpp.lz");
 const u32 gIntroGroudon_Tilemap[] = INCBIN_U32("graphics/intro/scene_3/groudon.bin.lz");

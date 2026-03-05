@@ -31,6 +31,8 @@ extern const struct CompressedSpriteSheet gSpriteSheet_CreditsMay[];
 extern const struct CompressedSpriteSheet gSpriteSheet_CreditsBicycle[];
 extern const struct CompressedSpriteSheet gSpriteSheet_CreditsRivalBrendan[];
 extern const struct CompressedSpriteSheet gSpriteSheet_CreditsRivalMay[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroBrendanRS[];
+extern const struct CompressedSpriteSheet gSpriteSheet_IntroMayRS[];
 extern const struct SpritePalette gSpritePalettes_Credits[];
 
 void LoadIntroPart2Graphics(u8 scenery);
@@ -41,6 +43,8 @@ u8 CreateBicycleBgAnimationTask(u8 mode, u16 bg1Speed, u16 bg2Speed, u16 bg3Spee
 void CycleSceneryPalette(u8);
 u8 CreateIntroBrendanSprite(s16 x, s16 y);
 u8 CreateIntroMaySprite(s16 x, s16 y);
+u8 CreateIntroBrendanRSSprite(s16 x, s16 y);
+u8 CreateIntroMayRSSprite(s16 x, s16 y);
 u8 CreateIntroFlygonSprite(s16 x, s16 y);
 
 #endif // GUARD_INTRO_CREDITS_GRAPHICS_H
