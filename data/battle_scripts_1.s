@@ -4654,10 +4654,12 @@ BattleScript_PrintPlayerForfeitedLinkBattle::
 
 BattleScript_AttackBoostedByAbility::
 	printstring STRINGID_ATTACKBOOSTEDBYABILITY
+	waitmessage B_WAIT_TIME_SHORT
 	return
 
 BattleScript_MagmaArmorActivated::
 	printstring STRINGID_MAGMAARMORACTIVATED
+	waitmessage B_WAIT_TIME_SHORT
 	return
 
 BattleScript_HeldItemAnimation_Scripting::
