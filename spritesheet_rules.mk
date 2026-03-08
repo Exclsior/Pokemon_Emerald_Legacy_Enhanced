@@ -2714,3 +2714,9 @@ $(POKEMONGFXDIR)/deoxys_defense/overworld.4bpp: %.4bpp: %.png
 
 $(POKEMONGFXDIR)/deoxys_speed/overworld.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(MISCGFXDIR)/emotes.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 2
+
+# All pokeballs are 16x32
+$(OBJEVENTGFXDIR)/misc/ball_%.4bpp: $(OBJEVENTGFXDIR)/misc/ball_%.png ; $(GFX) $< $@ -mwidth 2 -mheight 4
