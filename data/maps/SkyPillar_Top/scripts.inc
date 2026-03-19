@@ -36,7 +36,7 @@ SkyPillar_Top_EventScript_TryShowRayquaza::
 
 SkyPillar_Top_EventScript_ShowRayquaza::
 	clearflag FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL
-	clearflag FLAG_TEMP_HIDE_SPECIAL
+	setflag FLAG_TEMP_HIDE_SPECIAL
 	return
 
 SkyPillar_Top_OnWarp:
@@ -45,9 +45,9 @@ SkyPillar_Top_OnWarp:
 
 SkyPillar_Top_EventScript_CheckShinyRayquaza::
 	goto_if_unset FLAG_DEFEATED_RAYQUAZA, SkyPillar_Top_EventScript_HideShinyRayquaza
+	goto_if_unset FLAG_SYS_GAME_CLEAR, SkyPillar_Top_EventScript_HideShinyRayquaza
 	goto_if_set FLAG_DEFEATED_SHINY_RAYQUAZA, SkyPillar_Top_EventScript_HideShinyRayquaza
 	goto_if_set FLAG_CAUGHT_SHINY_RAYQUAZA, SkyPillar_Top_EventScript_HideShinyRayquaza
-	goto_if_unset FLAG_DEFEATED_ZINNIA, SkyPillar_Top_EventScript_HideShinyRayquaza
 	clearflag FLAG_TEMP_HIDE_SPECIAL
 	end
 
