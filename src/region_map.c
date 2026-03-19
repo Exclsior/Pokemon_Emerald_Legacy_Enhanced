@@ -137,6 +137,10 @@ static const u16 sRegionMapPlayerIcon_BrendanRsPal[] = INCBIN_U16("graphics/poke
 static const u8 sRegionMapPlayerIcon_BrendanRsGfx[] = INCBIN_U8("graphics/pokenav/region_map/brendan_icon_rs.4bpp");
 static const u16 sRegionMapPlayerIcon_MayRsPal[] = INCBIN_U16("graphics/pokenav/region_map/may_icon_rs.gbapal");
 static const u8 sRegionMapPlayerIcon_MayRsGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_icon_rs.4bpp");
+static const u16 sRegionMapPlayerGrayscaleIcon_BrendanRsPal[] = INCBIN_U16("graphics/pokenav/region_map/brendan_grayscale_icon_rs.gbapal");
+static const u8 sRegionMapPlayerGrayscaleIcon_BrendanRsGfx[] = INCBIN_U8("graphics/pokenav/region_map/brendan_grayscale_icon_rs.4bpp");
+static const u16 sRegionMapPlayerGrayscaleIcon_MayRsPal[] = INCBIN_U16("graphics/pokenav/region_map/may_grayscale_icon_rs.gbapal");
+static const u8 sRegionMapPlayerGrayscaleIcon_MayRsGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_grayscale_icon_rs.4bpp");
 
 #include "data/region_map/region_map_layout.h"
 #include "data/region_map/region_map_entries.h"
@@ -1483,7 +1487,7 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
     // Select icon based on gender and player style (Emerald vs RS/Classic)
     if (gSaveBlock2Ptr->playerGender == FEMALE)
     {
-        if (useRsStyle)
+        if (FlagGet(FLAG_PLAYER_STYLE_RS))
         {
             sheet.data = sRegionMapPlayerIcon_MayRsGfx;
             palette.data = sRegionMapPlayerIcon_MayRsPal;
@@ -1494,7 +1498,7 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
             palette.data = sRegionMapPlayerIcon_MayPal;
         }
     }
-    else if (useRsStyle)
+    else if (FlagGet(FLAG_PLAYER_STYLE_RS))
     {
         sheet.data = sRegionMapPlayerIcon_BrendanRsGfx;
         palette.data = sRegionMapPlayerIcon_BrendanRsPal;
@@ -1531,8 +1535,21 @@ void CreateRegionMapPlayerGrayscaleIcon(u16 tileTag, u16 paletteTag)
 
     if (gSaveBlock2Ptr->playerGender == FEMALE)
     {
-        sheet.data = sRegionMapPlayerGrayscaleIcon_MayGfx;
-        palette.data = sRegionMapPlayerGrayscaleIcon_MayPal;
+        if (FlagGet(FLAG_PLAYER_STYLE_RS))
+        {
+            sheet.data = sRegionMapPlayerGrayscaleIcon_MayRsGfx;
+            palette.data = sRegionMapPlayerGrayscaleIcon_MayRsPal;
+        }
+        else
+        {
+            sheet.data = sRegionMapPlayerGrayscaleIcon_MayGfx;
+            palette.data = sRegionMapPlayerGrayscaleIcon_MayPal;
+        }
+    }
+    else if (FlagGet(FLAG_PLAYER_STYLE_RS))
+    {
+        sheet.data = sRegionMapPlayerGrayscaleIcon_BrendanRsGfx;
+        palette.data = sRegionMapPlayerGrayscaleIcon_BrendanRsPal;
     }
 
     if (

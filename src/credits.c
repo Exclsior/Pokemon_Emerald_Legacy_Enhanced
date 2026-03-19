@@ -16,6 +16,7 @@
 #include "starter_choose.h"
 #include "decompress.h"
 #include "intro_credits_graphics.h"
+#include "event_data.h"
 #include "sound.h"
 #include "trig.h"
 #include "graphics.h"
@@ -1213,37 +1214,85 @@ static bool8 LoadBikeScene(u8 scene, u8 taskId)
     case 2:
         if (gSaveBlock2Ptr->playerGender == MALE)
         {
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsBrendan);
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalMay);
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
-            LoadSpritePalettes(gSpritePalettes_Credits);
+            // Rival is ALWAYS Emerald style May
+            // Check if player chose Classic (RS) style
+            if (FlagGet(FLAG_PLAYER_STYLE_RS))
+            {
+                // Player: RS Brendan, Rival: Emerald May
+                LoadCompressedSpriteSheet(gSpriteSheet_IntroBrendanRS);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalMay);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
+                LoadSpritePalettes(gSpritePalettes_Credits);
 
-            spriteId = CreateIntroBrendanSprite(120, 46);
-            gTasks[taskId].tPlayerSpriteId = spriteId;
-            gSprites[spriteId].callback = SpriteCB_Player;
-            gSprites[spriteId].anims = sAnims_Player;
+                spriteId = CreateIntroBrendanRSSprite(120, 46);
+                gTasks[taskId].tPlayerSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Player;
+                gSprites[spriteId].anims = sAnims_Player;
 
-            spriteId = CreateIntroMaySprite(DISPLAY_WIDTH + 32, 46);
-            gTasks[taskId].tRivalSpriteId = spriteId;
-            gSprites[spriteId].callback = SpriteCB_Rival;
-            gSprites[spriteId].anims = sAnims_Rival;
+                spriteId = CreateIntroMaySprite(DISPLAY_WIDTH + 32, 46);
+                gTasks[taskId].tRivalSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Rival;
+                gSprites[spriteId].anims = sAnims_Rival;
+            }
+            else
+            {
+                // Player: Emerald Brendan, Rival: Emerald May
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsBrendan);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalMay);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
+                LoadSpritePalettes(gSpritePalettes_Credits);
+
+                spriteId = CreateIntroBrendanSprite(120, 46);
+                gTasks[taskId].tPlayerSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Player;
+                gSprites[spriteId].anims = sAnims_Player;
+
+                spriteId = CreateIntroMaySprite(DISPLAY_WIDTH + 32, 46);
+                gTasks[taskId].tRivalSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Rival;
+                gSprites[spriteId].anims = sAnims_Rival;
+            }
         }
         else
         {
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsMay);
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalBrendan);
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
-            LoadSpritePalettes(gSpritePalettes_Credits);
+            // Rival is ALWAYS Emerald style Brendan
+            // Check if player chose Classic (RS) style
+            if (FlagGet(FLAG_PLAYER_STYLE_RS))
+            {
+                // Player: RS May, Rival: Emerald Brendan
+                LoadCompressedSpriteSheet(gSpriteSheet_IntroMayRS);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalBrendan);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
+                LoadSpritePalettes(gSpritePalettes_Credits);
 
-            spriteId = CreateIntroMaySprite(120, 46);
-            gTasks[taskId].tPlayerSpriteId = spriteId;
-            gSprites[spriteId].callback = SpriteCB_Player;
-            gSprites[spriteId].anims = sAnims_Player;
+                spriteId = CreateIntroMayRSSprite(120, 46);
+                gTasks[taskId].tPlayerSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Player;
+                gSprites[spriteId].anims = sAnims_Player;
 
-            spriteId = CreateIntroBrendanSprite(DISPLAY_WIDTH + 32, 46);
-            gTasks[taskId].tRivalSpriteId = spriteId;
-            gSprites[spriteId].callback = SpriteCB_Rival;
-            gSprites[spriteId].anims = sAnims_Rival;
+                spriteId = CreateIntroBrendanSprite(DISPLAY_WIDTH + 32, 46);
+                gTasks[taskId].tRivalSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Rival;
+                gSprites[spriteId].anims = sAnims_Rival;
+            }
+            else
+            {
+                // Player: Emerald May, Rival: Emerald Brendan
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsMay);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalBrendan);
+                LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
+                LoadSpritePalettes(gSpritePalettes_Credits);
+
+                spriteId = CreateIntroMaySprite(120, 46);
+                gTasks[taskId].tPlayerSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Player;
+                gSprites[spriteId].anims = sAnims_Player;
+
+                spriteId = CreateIntroBrendanSprite(DISPLAY_WIDTH + 32, 46);
+                gTasks[taskId].tRivalSpriteId = spriteId;
+                gSprites[spriteId].callback = SpriteCB_Rival;
+                gSprites[spriteId].anims = sAnims_Rival;
+            }
         };
         gMain.state++;
         break;

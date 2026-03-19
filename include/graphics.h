@@ -4738,6 +4738,9 @@ extern const u8 gBagMenuHMIcon_Gfx[];
 extern const u32 gBagMaleTiles[];
 extern const u32 gBagFemaleTiles[];
 extern const u32 gBagPalette[];
+extern const u32 gBagRsMaleTiles[];
+extern const u32 gBagRsFemaleTiles[];
+extern const u32 gBagRsPalette[];
 extern const u32 gBerryCheckCircle_Gfx[];
 
 //intro graphics
@@ -4775,7 +4778,11 @@ extern const u32 gIntroRayquazaClouds_Tilemap[];
 extern const u16 gIntroGameFreakTextFade_Pal[];
 extern const u32 gIntroBrendan_Gfx[];
 extern const u32 gIntroMay_Gfx[];
+extern const u32 gIntroBrendanRS_Gfx[];
+extern const u32 gIntroMayRS_Gfx[];
 extern const u16 gIntroPlayer_Pal[];
+extern const u16 gIntroBrendanRS_Pal[];
+extern const u16 gIntroMayRS_Pal[];
 extern const u16 gIntroFlygon_Pal[];
 extern const u32 gIntroFlygon_Gfx[];
 extern const u32 gIntroBrendanRS_Gfx[];
