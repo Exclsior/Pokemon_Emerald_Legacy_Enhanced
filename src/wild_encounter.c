@@ -96,6 +96,33 @@ static const u16 gRoute119MetatileTable[] =
     [0x267 - 0x02C] = 0x315
 };
 
+// Validation Table created to check for whether an appropriate replacement metatile exists prior to replacing
+// Created to avoid creation of grey placeholder tiles on the map.
+// If adding new sparkling tiles, add to both tables
+static const u16 gRoute119SupportedMetatilesTable[] =
+{
+    0x02C,
+    0x034,
+    0x03C,
+    0x11D,
+    0x125,
+    0x12C,
+    0x12D,
+    0x170,
+    0x178,
+    0x179,
+    0x188,
+    0x189,
+    0x18A,
+    0x190,
+    0x193,
+    0x198,
+    0x19A,
+    0x20F,
+    0x266,
+    0x267
+};
+
 void DisableWildEncounters(bool8 disabled)
 {
     sWildEncountersDisabled = disabled;
@@ -144,9 +171,9 @@ static bool8 CheckFeebas(void)
 
         random = Random() % 100;
         // Updated 50% chance of encountering Feebas to 10% (assuming this is a Feebas spot) due to Feebas tiles visible after Devon Scope recieved
-        if (random > 49 && !FlagGet(FLAG_RECEIVED_DEVON_SCOPE)) // Normal 50% before Devon Scope to stay as Vanilla
+        if (random > 49 && !FlagGet(FLAG_RECEIVED_DEVON_SCOPE) && !FlagGet(FLAG_ENABLE_FEEBAS_SPARKLES)) // Normal 50% before Devon Scope to stay as Vanilla
             return FALSE;
-        else if (random > 9 && FlagGet(FLAG_RECEIVED_DEVON_SCOPE)) // 10% after Devon Scope
+        else if (random > 9 && FlagGet(FLAG_RECEIVED_DEVON_SCOPE) && FlagGet(FLAG_ENABLE_FEEBAS_SPARKLES)) // 10% after Devon Scope
             return FALSE;
 
         for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
@@ -218,21 +245,36 @@ void GetFeebasTiles(void)
 
 void HighlightFeebasTiles(void)
 {
-    u32 i;
+    u32 i, j, k;
+    bool8 IsFeebasSparkleMetatileAvailable;
+
     for (i = 0; i < NUM_FEEBAS_SPOTS; i++)
     {
-        // Added fix for tile below surfable overhanging tree tiles to show shoreline.
-        // This could be replaced with an upgrade to three layer metatiles and
-        // creating a new metatile with water, overhanging tree and sparkles.
-        if (MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) == OVERHANGING_TREE_METATILE)
+        IsFeebasSparkleMetatileAvailable = FALSE;
+        // Check if a Sparkle Metatile for Feebas is available
+        for (j = 0; j < sizeof(gRoute119SupportedMetatilesTable); j++)
         {
-            MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1] + 1, SHORELINE_TREE_METATILE);
-            MapGridSetMetatileImpassabilityAt(gFeebasTiles[i][0], gFeebasTiles[i][1] + 1, TRUE);
+            if (gRoute119SupportedMetatilesTable[j] == MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]))
+            {
+                IsFeebasSparkleMetatileAvailable = TRUE;
+                break;
+            }
         }
 
-        // Check whether a real metatile is returned before overriding with new metatile.
-        if (gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C] != 0x000)
-            MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1], gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C]);  
+        if (IsFeebasSparkleMetatileAvailable){
+            // Added fix for tile below surfable overhanging tree tiles to show shoreline.
+            // This could be replaced with an upgrade to three layer metatiles and
+            // creating a new metatile with water, overhanging tree and sparkles.
+            if (MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) == OVERHANGING_TREE_METATILE)
+            {
+                MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1] + 1, SHORELINE_TREE_METATILE);
+                MapGridSetMetatileImpassabilityAt(gFeebasTiles[i][0], gFeebasTiles[i][1] + 1, TRUE);
+            }
+
+            // Check whether a real metatile is returned before overriding with new metatile.
+            if (gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C] != 0x000)
+                MapGridSetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1], gRoute119MetatileTable[MapGridGetMetatileIdAt(gFeebasTiles[i][0], gFeebasTiles[i][1]) - 0x2C]);  
+        }
     }
 }
 

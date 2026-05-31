@@ -12,6 +12,7 @@ Route119_MapScripts::
 Route119_OnResume:
 	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, Route119_EventScript_TryRemoveKecleon
 	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, Route119_EventScript_TryRemoveRaikou
+	special SetRoute119Weather
 	end
 
 Route119_EventScript_TryRemoveKecleon::
@@ -37,7 +38,7 @@ Route119_OnTransition:
 	end
 
 Route119_CheckHighlightFeebas:
-	call_if_set FLAG_RECEIVED_DEVON_SCOPE, Route119_HighlightFeebas
+	goto_if_set FLAG_ENABLE_FEEBAS_SPARKLES, Route119_HighlightFeebas
 	end
 
 Route119_HighlightFeebas:

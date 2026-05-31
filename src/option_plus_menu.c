@@ -84,6 +84,7 @@ enum
     MENUITEM_WORLD_PLAYERSTYLE,
     MENUITEM_WORLD_OVERWORLDSPEED,
     MENUITEM_WORLD_IMPROVEDFISHING,
+    MENUITEM_WORLD_FEEBASTILES,
     MENUITEM_WORLD_FASTWATERING,
     MENUITEM_WORLD_CANCEL,
     MENUITEM_WORLD_COUNT,
@@ -225,6 +226,7 @@ static void DrawChoices_FastSurf(int selection, int y);
 static void DrawChoices_DiveSpeed(int selection, int y);
 static void DrawChoices_OverworldSpeed(int selection, int y);
 static void DrawChoices_ImprovedFishing(int selection, int y);
+static void DrawChoices_FeebasTiles(int selection, int y);
 static void DrawChoices_FastWatering(int selection, int y);
 static void DrawChoices_BikeMusic(int selection, int y);
 static void DrawChoices_SurfMusic(int selection, int y);
@@ -328,6 +330,7 @@ struct // MENU_WORLD
     [MENUITEM_WORLD_AUTORUN]            = {DrawChoices_AutoRun,             ProcessInput_Options_Two},
     [MENUITEM_WORLD_OVERWORLDSPEED]     = {DrawChoices_OverworldSpeed,      ProcessInput_Options_Four},
     [MENUITEM_WORLD_IMPROVEDFISHING]    = {DrawChoices_ImprovedFishing,     ProcessInput_Options_Two},
+    [MENUITEM_WORLD_FEEBASTILES]        = {DrawChoices_FeebasTiles,         ProcessInput_Options_Two},
     [MENUITEM_WORLD_FASTWATERING]       = {DrawChoices_FastWatering,        ProcessInput_Options_Two},
     [MENUITEM_WORLD_BIKEMUSIC]          = {DrawChoices_BikeMusic,           ProcessInput_Options_Two},
     [MENUITEM_WORLD_MONOVERWORLD]       = {DrawChoices_MonOverworld,        ProcessInput_Options_Two},
@@ -407,6 +410,7 @@ static const u8 sText_BikeMusic[]           = _("BIKE MUSIC");
 static const u8 sText_AutoRun[]             = _("AUTO RUN");
 static const u8 sText_OverworldSpeed[]      = _("WORLD SPEED");
 static const u8 sText_ImprovedFishing[]     = _("IMPROVED FISHING");
+static const u8 sText_FeebasTiles[]         = _("EASIER FEEBAS");
 static const u8 sText_FastWatering[]        = _("FAST WATERING");
 static const u8 sText_PlayerStyle[]         = _("PLAYER STYLE");
 static const u8 *const sOptionMenuItemsNamesWorld[MENUITEM_WORLD_COUNT] =
@@ -416,6 +420,7 @@ static const u8 *const sOptionMenuItemsNamesWorld[MENUITEM_WORLD_COUNT] =
     [MENUITEM_WORLD_AUTORUN]                = sText_AutoRun,
     [MENUITEM_WORLD_OVERWORLDSPEED]         = sText_OverworldSpeed,
     [MENUITEM_WORLD_IMPROVEDFISHING]        = sText_ImprovedFishing,
+    [MENUITEM_WORLD_FEEBASTILES]            = sText_FeebasTiles,
     [MENUITEM_WORLD_FASTWATERING]           = sText_FastWatering,
     [MENUITEM_WORLD_PLAYERSTYLE]            = sText_PlayerStyle,
     [MENUITEM_WORLD_CANCEL]                 = gText_OptionMenuSave,
@@ -541,6 +546,22 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_WORLD_AUTORUN:            return TRUE;
         case MENUITEM_WORLD_OVERWORLDSPEED:     return TRUE;
         case MENUITEM_WORLD_IMPROVEDFISHING:    return TRUE;
+        case MENUITEM_WORLD_FEEBASTILES:
+        {
+            if (!FlagGet(FLAG_RECEIVED_DEVON_SCOPE))
+            {
+                return FALSE;
+            }
+            else if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE119) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE119))
+            {
+                return FALSE;
+            }
+            else
+            {
+                return TRUE;
+            }
+
+        }
         case MENUITEM_WORLD_FASTWATERING:       return TRUE;
         case MENUITEM_WORLD_BIKEMUSIC:          return TRUE;
         case MENUITEM_WORLD_MONOVERWORLD:       return TRUE;
@@ -667,6 +688,8 @@ static const u8 sText_Desc_OverworldSpeed_4x[]          = _("4x standard player 
 static const u8 sText_Desc_OverworldSpeed_8x[]          = _("8x standard player and NPC speed.\nHold {R_BUTTON} button for standard speed.");
 static const u8 sText_Desc_ImprovedFishing_On[]         = _("Improved Fishing.\nFish are not able to escape.");
 static const u8 sText_Desc_ImprovedFishing_Off[]        = _("Fish as usual.\nFish may escape if not reeled in.");
+static const u8 sText_Desc_FeebasTiles_On[]             = _("Show Gold Stars on Route 119\nwhere Feebas can be found.");
+static const u8 sText_Desc_FeebasTiles_Off[]            = _("Original experience, unable to see\nwhere Feebas can be found.");
 static const u8 sText_Desc_FastWatering_On[]            = _("Faster BERRY Watering.\nIncrease BERRY PLANT watering speed.");
 static const u8 sText_Desc_FastWatering_Off[]           = _("Original Experience.\nWater BERRY PLANTS at normal speed.");
 static const u8 sText_Desc_BikeOff[]                    = _("Disables the BIKE music when you\nstart riding the BIKE.");
@@ -680,6 +703,7 @@ static const u8 *const sOptionMenuItemDescriptionsWorld[MENUITEM_WORLD_COUNT][4]
     [MENUITEM_WORLD_AUTORUN]            = {sText_Desc_AutoRun_On,           sText_Desc_AutoRun_Off},
     [MENUITEM_WORLD_OVERWORLDSPEED]     = {sText_Desc_OverworldSpeed_1x,    sText_Desc_OverworldSpeed_2x,   sText_Desc_OverworldSpeed_4x,   sText_Desc_OverworldSpeed_8x},
     [MENUITEM_WORLD_IMPROVEDFISHING]    = {sText_Desc_ImprovedFishing_On,   sText_Desc_ImprovedFishing_Off},
+    [MENUITEM_WORLD_FEEBASTILES]        = {sText_Desc_FeebasTiles_On,       sText_Desc_FeebasTiles_Off},
     [MENUITEM_WORLD_FASTWATERING]       = {sText_Desc_FastWatering_On,      sText_Desc_FastWatering_Off},
     [MENUITEM_WORLD_BIKEMUSIC]          = {sText_Desc_BikeOn,               sText_Desc_BikeOff},
     [MENUITEM_WORLD_MONOVERWORLD]       = {sText_Desc_MonOverworldOn,       sText_Desc_MonOverworldOff},
@@ -739,8 +763,11 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledBattSpeed[MENUITEM_BAT
 };
 
 // Disabled World
+static const u8 sText_Desc_Disabled_FeebasTiles[]       = _("Easier Feebas setting locked. Meet\nSTEVEN on Route 120 to unlock.");
+static const u8 sText_Desc_Disabled_FeebasTiles_On119[] = _("Easier Feebas setting locked.\nLeave ROUTE 119 to unlock.");
 static const u8 *const sOptionMenuItemDescriptionsDisabledWorld[MENUITEM_WORLD_COUNT] =
 {
+    [MENUITEM_WORLD_FEEBASTILES]        = sText_Desc_Disabled_FeebasTiles,
     [MENUITEM_WORLD_CANCEL]             = sText_Empty,
 };
 
@@ -772,7 +799,13 @@ static const u8 *const OptionTextDescription(void)
         return sOptionMenuItemDescriptionsBatSpeed[menuItem][selection];
     case MENU_WORLD:
         if (!CheckConditions(menuItem))
-            return sOptionMenuItemDescriptionsDisabledWorld[menuItem];
+        {
+            // Bypass for secondary Disabled Menu message if on Route 119
+            if (FlagGet(FLAG_RECEIVED_DEVON_SCOPE) && menuItem == MENUITEM_WORLD_FEEBASTILES && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE119) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE119)) 
+                return sText_Desc_Disabled_FeebasTiles_On119;
+            else
+                return sOptionMenuItemDescriptionsDisabledWorld[menuItem];
+        }
         selection = sOptions->sel_world[menuItem];
         return sOptionMenuItemDescriptionsWorld[menuItem][selection];
     case MENU_SURF:
@@ -1082,6 +1115,7 @@ void CB2_InitOptionPlusMenu(void)
         //World
         sOptions->sel_world[MENUITEM_WORLD_AUTORUN]             = !FlagGet(FLAG_ENABLE_AUTORUN);            // Used the inverse to align with ON/OFF Buttons
         sOptions->sel_world[MENUITEM_WORLD_IMPROVEDFISHING]     = !FlagGet(FLAG_ENABLE_FISHCANTESCAPE);     // Used the inverse to align with ON/OFF Buttons
+        sOptions->sel_world[MENUITEM_WORLD_FEEBASTILES]         = !FlagGet(FLAG_ENABLE_FEEBAS_SPARKLES);    // Used the inverse to align with ON/OFF Buttons
         sOptions->sel_world[MENUITEM_WORLD_FASTWATERING]        = !FlagGet(FLAG_ENABLE_FASTWATERING);       // Used the inverse to align with ON/OFF Buttons
         sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC]           = FlagGet(FLAG_DISABLE_BIKEMUSIC);
         sOptions->sel_world[MENUITEM_WORLD_MONOVERWORLD]        = !FlagGet(FLAG_ENABLE_FOLLOWER);
@@ -1409,6 +1443,7 @@ static void Task_OptionMenuSave(u8 taskId)
     //World
     sOptions->sel_world[MENUITEM_WORLD_AUTORUN]             == 0 ? FlagSet(FLAG_ENABLE_AUTORUN)         : FlagClear(FLAG_ENABLE_AUTORUN);           // Used the inverse to align with other similar options.
     sOptions->sel_world[MENUITEM_WORLD_IMPROVEDFISHING]     == 0 ? FlagSet(FLAG_ENABLE_FISHCANTESCAPE)  : FlagClear(FLAG_ENABLE_FISHCANTESCAPE);    // Used the inverse to align with other similar options.
+    sOptions->sel_world[MENUITEM_WORLD_FEEBASTILES]         == 0 ? FlagSet(FLAG_ENABLE_FEEBAS_SPARKLES) : FlagClear(FLAG_ENABLE_FEEBAS_SPARKLES);   // Used the inverse to align with other similar options.
     sOptions->sel_world[MENUITEM_WORLD_FASTWATERING]        == 0 ? FlagSet(FLAG_ENABLE_FASTWATERING)    : FlagClear(FLAG_ENABLE_FASTWATERING);      // Used the inverse to align with other similar options.
     sOptions->sel_world[MENUITEM_WORLD_BIKEMUSIC]           == 0 ? FlagClear(FLAG_DISABLE_BIKEMUSIC)    : FlagSet(FLAG_DISABLE_BIKEMUSIC);
     sOptions->sel_world[MENUITEM_WORLD_MONOVERWORLD]        == 0 ? FlagSet(FLAG_ENABLE_FOLLOWER)        : FlagClear(FLAG_ENABLE_FOLLOWER);          // Used the inverse to align with other similar options.
@@ -1963,6 +1998,15 @@ static const u8 *const sImprovedFishingStrings[] = {sText_ImprovedFishing_On, sT
 static void DrawChoices_ImprovedFishing(int selection, int y)
 {
     bool8 active = CheckConditions(MENUITEM_WORLD_IMPROVEDFISHING);
+    DrawOptionMenuChoiceStrings(selection, y, active, sImprovedFishingStrings, 2);
+}
+
+static const u8 sText_FeebasTiles_On[]   = _("ON");
+static const u8 sText_FeebasTiles_Off[]   = _("OFF");
+static const u8 *const sFeebasTilesStrings[] = {sText_FeebasTiles_On, sText_FeebasTiles_Off};
+static void DrawChoices_FeebasTiles(int selection, int y)
+{
+    bool8 active = CheckConditions(MENUITEM_WORLD_FEEBASTILES);
     DrawOptionMenuChoiceStrings(selection, y, active, sImprovedFishingStrings, 2);
 }
 

@@ -527,6 +527,9 @@ bool8 UpdateSave_v0_v4(const struct SaveSectorLocation *locations)
     FlagGet(FLAG_SYS_GAME_CLEAR)    ? FlagSet(FLAG_ENABLE_STAT_EDITOR)      : FlagClear(FLAG_ENABLE_STAT_EDITOR);
     FlagGet(FLAG_SYS_GAME_CLEAR)    ? FlagSet(FLAG_SHOW_STAT_EDITOR)        : FlagClear(FLAG_SHOW_STAT_EDITOR);
 
+    // Update Feebas Tiles Flag based on Devon Scope acquisition
+    FlagGet(FLAG_RECEIVED_DEVON_SCOPE)    ? FlagSet(FLAG_ENABLE_FEEBAS_SPARKLES)      : FlagClear(FLAG_ENABLE_FEEBAS_SPARKLES);
+
     // Check for Game Cleared to unlocked for EXP. All Upgrade unlock
     FlagGet(FLAG_SYS_GAME_CLEAR)    ? FlagSet(FLAG_ENABLE_EXP_ALL_UPGRADED_CALL)      : FlagClear(FLAG_ENABLE_EXP_ALL_UPGRADED_CALL);
     

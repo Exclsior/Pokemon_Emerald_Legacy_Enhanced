@@ -214,6 +214,7 @@ Route120_EventScript_StevenGiveDeconScope::
 	msgbox Route120_Text_StevenGiveDevonScope, MSGBOX_DEFAULT
 	giveitem ITEM_DEVON_SCOPE
 	setflag FLAG_RECEIVED_DEVON_SCOPE
+	setflag FLAG_ENABLE_FEEBAS_SPARKLES
 	msgbox Route120_Text_StevenFeebasHint, MSGBOX_DEFAULT
 	msgbox Route120_Text_StevenGoodbye, MSGBOX_DEFAULT
 	closemessage

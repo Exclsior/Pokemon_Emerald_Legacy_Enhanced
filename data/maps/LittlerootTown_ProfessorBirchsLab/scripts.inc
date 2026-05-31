@@ -894,7 +894,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile1::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon::
 	setflag FLAG_RIVAL_TRADE_1_COMPLETED
-	release
+	releaseall
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_RivalTrade2::
@@ -1082,7 +1082,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile2::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon2::
 	setflag FLAG_RIVAL_TRADE_2_COMPLETED
-	release
+	releaseall
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_RivalGiftMon3::
@@ -1218,7 +1218,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_BrendanStarterTotodile3::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_ChoseTradeMon3::
 	setflag FLAG_RIVAL_TRADE_3_COMPLETED
-	release
+	releaseall
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_RivalStarterTreecko3::
