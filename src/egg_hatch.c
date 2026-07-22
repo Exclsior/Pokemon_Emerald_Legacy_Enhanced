@@ -312,7 +312,7 @@ static const s16 sEggShardVelocities[][2] =
 static void CreateHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
 {
     u16 species;
-    u32 personality, pokerus, otId;
+    u32 personality, pokerus;
     u8 i, friendship, language, gameMet, markings, isModernFatefulEncounter;
     u16 moves[MAX_MON_MOVES];
     u32 ivs[NUM_STATS];
@@ -334,15 +334,11 @@ static void CreateHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     pokerus = GetMonData(egg, MON_DATA_POKERUS);
     isModernFatefulEncounter = GetMonData(egg, MON_DATA_MODERN_FATEFUL_ENCOUNTER);
 
-    // Pass the player's ID as a preset OT so CreateBoxMon skips the Shiny
-    // Charm re-roll at hatch: the Egg's personality (and thus shininess) was
-    // already decided when the Egg was generated. The resulting OT is
-    // identical to OT_ID_PLAYER_ID.
-    otId = gSaveBlock2Ptr->playerTrainerId[0]
-         | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
-         | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
-         | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
-    CreateMon(temp, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PRESET, otId);
+    // Hatching runs the Egg's single shiny window: the Egg's personality gets
+    // its natural shiny check (plus any Shiny Charm re-rolls) against the
+    // hatching player's ID, so traded Eggs shine for their new owner. Egg
+    // generation (daycare.c) rolls no shininess at all.
+    CreateMon(temp, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
 
     for (i = 0; i < MAX_MON_MOVES; i++)
         SetMonData(temp, MON_DATA_MOVE1 + i,  &moves[i]);
