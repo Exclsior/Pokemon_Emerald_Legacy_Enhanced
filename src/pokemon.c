@@ -2287,12 +2287,54 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
                     itemCount++;
                 } while (CheckBagHasItem(ITEM_SHINY_CHARM, itemCount));
 
-                do
+                if (hasFixedPersonality)
                 {
-                    personality = Random32();
+                    // Everstone eggs, Synchronize and Cute Charm craft this
+                    // personality to lock in nature/gender, so it must never be
+                    // discarded: the Shiny Charm only grants extra chances for
+                    // the mon to be shiny on top of it. If the crafted
+                    // personality is already shiny, keep it as-is.
                     shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
-                    rolls++;
-                } while (shinyValue >= SHINY_ODDS && rolls < maxShinyRolls);
+                    if (shinyValue >= SHINY_ODDS)
+                    {
+                        do
+                        {
+                            personality = Random32();
+                            shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
+                            rolls++;
+                        } while (shinyValue >= SHINY_ODDS && rolls < maxShinyRolls);
+
+                        if (shinyValue < SHINY_ODDS)
+                        {
+                            // A charm roll hit: rebuild a shiny personality that
+                            // still has the locked nature and gender.
+                            u8 nature = GetNatureFromPersonality(fixedPersonality);
+                            u8 gender = GetGenderFromSpeciesAndPersonality(species, fixedPersonality);
+                            u16 tid = HIHALF(value) ^ LOHALF(value);
+
+                            do
+                            {
+                                personality = Random32();
+                                personality = (((tid ^ (Random() % SHINY_ODDS)) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+                            } while (GetNatureFromPersonality(personality) != nature
+                                  || GetGenderFromSpeciesAndPersonality(species, personality) != gender);
+                        }
+                        else
+                        {
+                            // No shiny: restore the crafted personality untouched.
+                            personality = fixedPersonality;
+                        }
+                    }
+                }
+                else
+                {
+                    do
+                    {
+                        personality = Random32();
+                        shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
+                        rolls++;
+                    } while (shinyValue >= SHINY_ODDS && rolls < maxShinyRolls);
+                }
             }
 #endif
         }
