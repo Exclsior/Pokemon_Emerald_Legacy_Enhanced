@@ -334,6 +334,10 @@ static void CreateHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     pokerus = GetMonData(egg, MON_DATA_POKERUS);
     isModernFatefulEncounter = GetMonData(egg, MON_DATA_MODERN_FATEFUL_ENCOUNTER);
 
+    // Hatching runs the Egg's single shiny window: the Egg's personality gets
+    // its natural shiny check (plus any Shiny Charm re-rolls) against the
+    // hatching player's ID, so traded Eggs shine for their new owner. Egg
+    // generation (daycare.c) rolls no shininess at all.
     CreateMon(temp, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
 
     for (i = 0; i < MAX_MON_MOVES; i++)

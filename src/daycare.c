@@ -914,8 +914,16 @@ void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation)
     u8 language;
     u8 metLocation;
     u8 isEgg;
+    u32 otId;
 
-    CreateMon(mon, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
+    // Gift Eggs roll no shininess here either: like daycare Eggs, their single
+    // shiny window is at hatch (CreateHatchedMon). The OT is identical to
+    // OT_ID_PLAYER_ID.
+    otId = gSaveBlock2Ptr->playerTrainerId[0]
+         | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+         | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+         | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+    CreateMon(mon, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, FALSE, 0, OT_ID_PRESET, otId);
     metLevel = 0;
     ball = ITEM_POKE_BALL;
     language = LANGUAGE_JAPANESE;
@@ -937,12 +945,21 @@ void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation)
 static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *daycare)
 {
     u32 personality;
+    u32 otId;
     u16 ball;
     u8 metLevel;
     u8 language;
 
     personality = daycare->offspringPersonality;
-    CreateMon(mon, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
+    // Pass the player's ID as a preset OT so CreateBoxMon keeps the crafted
+    // personality untouched and grants no shiny re-rolls here: an Egg's single
+    // shiny window is at hatch (CreateHatchedMon), against the hatching
+    // player's ID. The resulting OT is identical to OT_ID_PLAYER_ID.
+    otId = gSaveBlock2Ptr->playerTrainerId[0]
+         | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+         | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+         | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+    CreateMon(mon, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PRESET, otId);
     metLevel = 0;
     ball = ITEM_POKE_BALL;
     language = LANGUAGE_JAPANESE;
