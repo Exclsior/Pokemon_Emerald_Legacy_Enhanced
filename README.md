@@ -96,21 +96,25 @@ In-game milestones for Shiny Charm acquisition (all added to Player Item PC, max
   * do not work if left or stored in the player's item PC.
 * Shiny Charms only take effect if they are in the player's bag.
 * Shiny Charms cannot be tossed.
-* Breeding Eggs from Daycare are impacted by Shiny Charm(s) as long as they're in the bag when you collect the egg.
+* Breeding Eggs from Daycare are impacted by Shiny Charm(s) as long as they're in the bag when the Egg hatches. (An Egg's shininess is decided when it hatches, against the hatching player's Trainer ID, so traded Eggs shine for their new owner.)
 * Shiny Charms can be held by Pokémon and therefore traded between different Emerald Legacy Enhanced games.
   * do not change Shiny changes if held by a Pokémon
 * If migrating a save and already completed a relevant milestone, the Shiny Charm will be added to your PC, except for the Pokédex Shiny Charms which require the above noted in-game tasks to be added to the PC.
 
 **Shiny Charm Rates:**
+
+Each shiny roll is 1/8192. With at least one Shiny Charm in the bag, the game performs (Charms + 1) × 8 rolls per Pokémon, keeping the first shiny result:
 * 0 Charms - 1/8192 (No Shiny Charms in bag) - 0.01221% - Same as original Emerald
-1. 1/1024 (Available from Start of Game) - 0.09766%
-2. 1/512  - 0.1953%
-3. 3/1024 - 0.2930% (I suspect most people will end up here by end of their main playthrough)
-4. 1/256  - 0.3906%
-5. 5/1024 - 0.4883%
-6. 3/512  - 0.5859%
-7. 7/1024 - 0.6836%
-8. 1/128  - 0.7812%
+1. 1/512  (Available from Start of Game) - 0.1953%
+2. 3/1024 - 0.2930%
+3. 1/256  - 0.3906% (I suspect most people will end up here by end of their main playthrough)
+4. 5/1024 - 0.4883%
+5. 3/512  - 0.5859%
+6. 7/1024 - 0.6836%
+7. 1/128  - 0.7812%
+8. 9/1024 - 0.8789%
+
+Daycare/gift Eggs (rolled when they hatch) and Synchronize/Cute Charm influenced encounters additionally keep their own natural 1/8192 chance on top of the charm rolls above.
 
 ### Comprehensive Implemented Changes
 
