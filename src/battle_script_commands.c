@@ -3469,6 +3469,21 @@ static void Cmd_getexp(void)
     case 2: // set exp value to the poke in expgetter_id and print message
         if (gBattleControllerExecFlags == 0)
         {
+            // Skip Eggs entirely. The !IS_EGG check further down only suppresses
+            // the exp computation but still advances to case 3, which emits an
+            // exp update for the Egg with whatever stale value gBattleMoveDamage
+            // holds - for an Egg in slot 0 with EXP. ALL on, that's the last
+            // damage dealt, so the Egg gained EXP and could even "level up",
+            // altering its hatch cycles (friendship) and moveset. Jump straight
+            // to case 5 like other skipped party members.
+            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_IS_EGG))
+            {
+                gBattleStruct->sentInPokes >>= 1;
+                gBattleScripting.getexpState = 5;
+                gBattleMoveDamage = 0;
+                break;
+            }
+
             item = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HELD_ITEM);
 
             if (item == ITEM_ENIGMA_BERRY)
