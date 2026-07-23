@@ -2152,6 +2152,16 @@ static void InitPartyMenuWindows(u8 layout)
     LoadUserWindowBorderGfx(0, 0x4F, BG_PLTT_ID(13));
     LoadPalette(GetOverworldTextboxPalettePtr(), BG_PLTT_ID(14), PLTT_SIZE_4BPP);
     LoadPalette(gStandardMenuPalette, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
+    // Pre-seed WIN_MSG's tile region with its dark interior fill. VRAM was
+    // zeroed when the menu opened, and PrintMessage() only delivers the
+    // interior via the text printer's per-frame GFX copy - a separate DMA
+    // request from the scheduled BG2 tilemap copy that maps the frame. If a
+    // deferred tilemap copy landed a VBlank before the message's first GFX
+    // copy, the box showed borders around a transparent middle for a few
+    // frames. Seeding the fill here (screen still faded) makes the interior
+    // always opaque.
+    FillWindowPixelBuffer(WIN_MSG, PIXEL_FILL(1));
+    CopyWindowToVram(WIN_MSG, COPYWIN_GFX);
 }
 
 static void CreateCancelConfirmWindows(bool8 chooseHalf)
