@@ -179,13 +179,21 @@ void GetFeebasTiles(void)
     u32 y;
     u32 i;
     FeebasSeedRng(gSaveBlock1Ptr->dewfordTrends[0].rand);
-    for (; nFeebasGenerated < NUM_FEEBAS_SPOTS; nFeebasGenerated++)
+    // Assign each Feebas spot to a random water tile, re-rolling on tiles
+    // 1-3: those are the inaccessible spots at the top of the map, so the
+    // first usable tile is 4. This matches vanilla Emerald, which likewise
+    // allows two spots to share a tile (there is no duplicate check). The
+    // original Legacy rewrite instead SKIPPED the assignment on a 1-3 roll
+    // while still advancing to the next spot, leaving that slot uninitialized
+    // (stack garbage) so the spot could vanish or land on a stale tile.
+    while (nFeebasGenerated < NUM_FEEBAS_SPOTS)
     {
         u32 randomTile = FeebasRandom() % nWaterTiles;
         if (randomTile == 0)
             randomTile = nWaterTiles;
-        if (randomTile == 0 || randomTile > 3)
-            feebasTiles[nFeebasGenerated] = randomTile;
+        if (randomTile <= 3)
+            continue;
+        feebasTiles[nFeebasGenerated++] = randomTile;
     }
     for (y = 0; y < 140; y++)
     {
