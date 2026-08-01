@@ -575,6 +575,7 @@ void InitSecretBaseDecorationSprites(void)
     u8 category;
     u8 permission;
     u8 numDecorations;
+    const u8 *script;
 
     objectEventId = 0;
     if (!CurMapIsSecretBase())
@@ -622,25 +623,20 @@ void InitSecretBaseDecorationSprites(void)
                 TrySpawnObjectEvent(gSpecialVar_Result, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
                 TryMoveObjectEventToMapCoords(gSpecialVar_Result, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, gSpecialVar_0x8006, gSpecialVar_0x8007);
                 TryOverrideObjectEventTemplateCoords(gSpecialVar_Result, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
-                if (CurMapIsSecretBase() == TRUE && VarGet(VAR_CURRENT_SECRET_BASE) != 0)
+                script = gDecorations[decorations[i]].script;
+                if (script == NULL && CurMapIsSecretBase() == TRUE && VarGet(VAR_CURRENT_SECRET_BASE) != 0)
                 {
                     if (category == DECORCAT_DOLL)
-                    {
-                        OverrideSecretBaseDecorationSpriteScript(
-                            gSpecialVar_Result,
-                            gSaveBlock1Ptr->location.mapNum,
-                            gSaveBlock1Ptr->location.mapGroup,
-                            DECORCAT_DOLL);
-                    }
+                        script = SecretBase_EventScript_DollInteract;
                     else if (category == DECORCAT_CUSHION)
-                    {
-                        OverrideSecretBaseDecorationSpriteScript(
-                            gSpecialVar_Result,
-                            gSaveBlock1Ptr->location.mapNum,
-                            gSaveBlock1Ptr->location.mapGroup,
-                            DECORCAT_CUSHION);
-                    }
+                        script = SecretBase_EventScript_CushionInteract;
                 }
+                if (script != NULL)
+                    OverrideSecretBaseDecorationSpriteScript(
+                        gSpecialVar_Result,
+                        gSaveBlock1Ptr->location.mapNum,
+                        gSaveBlock1Ptr->location.mapGroup,
+                        script);
 
                 gSpecialVar_0x8004++;
             }

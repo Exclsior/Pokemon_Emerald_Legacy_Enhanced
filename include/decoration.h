@@ -50,6 +50,7 @@ struct Decoration
     u16 price;
     const u8 *description;
     const u16 *tiles;
+    const u8 *script;
 };
 
 extern const struct Decoration gDecorations[];
