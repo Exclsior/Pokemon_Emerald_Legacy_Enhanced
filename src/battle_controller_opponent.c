@@ -21,6 +21,7 @@
 #include "pokemon.h"
 #include "random.h"
 #include "reshow_battle_screen.h"
+#include "shining_trial.h"
 #include "sound.h"
 #include "string_util.h"
 #include "task.h"
@@ -28,6 +29,7 @@
 #include "util.h"
 #include "window.h"
 #include "constants/battle_anim.h"
+#include "constants/battle_frontier.h"
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/songs.h"
@@ -1272,7 +1274,10 @@ static void OpponentHandleDrawTrainerPic(void)
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
     {
-        trainerPicId = GetEreaderTrainerFrontSpriteId();
+        if (gBattleScripting.specialTrainerBattleType == SPECIAL_BATTLE_SHINING_TRIAL)
+            trainerPicId = GetShiningTrialTrainer()->trainerPic;
+        else
+            trainerPicId = GetEreaderTrainerFrontSpriteId();
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
     {
@@ -1356,7 +1361,10 @@ static void OpponentHandleTrainerSlide(void)
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
     {
-        trainerPicId = GetEreaderTrainerFrontSpriteId();
+        if (gBattleScripting.specialTrainerBattleType == SPECIAL_BATTLE_SHINING_TRIAL)
+            trainerPicId = GetShiningTrialTrainer()->trainerPic;
+        else
+            trainerPicId = GetEreaderTrainerFrontSpriteId();
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
     {

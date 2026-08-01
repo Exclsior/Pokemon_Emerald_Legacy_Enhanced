@@ -17,6 +17,7 @@
 #include "battle_transition.h"
 #include "trainer_see.h"
 #include "new_game.h"
+#include "shining_trial.h"
 #include "string_util.h"
 #include "data.h"
 #include "link.h"
@@ -1979,6 +1980,9 @@ static void HandleSpecialTrainerBattleEnd(void)
     case SPECIAL_BATTLE_EREADER:
         CopyEReaderTrainerFarewellMessage();
         break;
+    case SPECIAL_BATTLE_SHINING_TRIAL:
+        ShiningTrial_RestoreParty();
+        break;
     }
 
     SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
@@ -2041,6 +2045,15 @@ void DoSpecialTrainerBattle(void)
         ZeroEnemyPartyMons();
         for (i = 0; i < (int)ARRAY_COUNT(gSaveBlock2Ptr->frontier.ereaderTrainer.party); i++)
             CreateBattleTowerMon(&gEnemyParty[i], &gSaveBlock2Ptr->frontier.ereaderTrainer.party[i]);
+        gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_EREADER_TRAINER;
+        gTrainerBattleOpponent_A = 0;
+        CreateTask(Task_StartBattleAfterTransition, 1);
+        PlayMapChosenOrBattleBGM(0);
+        BattleTransition_StartOnField(GetSpecialBattleTransition(B_TRANSITION_GROUP_E_READER));
+        break;
+    case SPECIAL_BATTLE_SHINING_TRIAL:
+        ZeroEnemyPartyMons();
+        ShiningTrial_CreateMirror(&gEnemyParty[0]);
         gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_EREADER_TRAINER;
         gTrainerBattleOpponent_A = 0;
         CreateTask(Task_StartBattleAfterTransition, 1);

@@ -15,12 +15,14 @@
 #include "menu.h"
 #include "palette.h"
 #include "recorded_battle.h"
+#include "shining_trial.h"
 #include "string_util.h"
 #include "strings.h"
 #include "text.h"
 #include "trainer_hill.h"
 #include "window.h"
 #include "constants/battle_dome.h"
+#include "constants/battle_frontier.h"
 #include "constants/battle_string_ids.h"
 #include "constants/frontier_util.h"
 #include "constants/items.h"
@@ -53,6 +55,7 @@ EWRAM_DATA struct BattleMsgData *gBattleMsgDataPtr = NULL;
 // todo: make some of those names less vague: attacker/target vs pkmn, etc.
 
 static const u8 sText_Trainer1LoseText[] = _("{B_TRAINER1_LOSE_TEXT}");
+static const u8 sText_ShiningTrialTrainerLoseText[] = _("Your bond shines brighter than mine.");
 static const u8 sText_PkmnGainedEXP[] = _("{B_BUFF1} gained{B_BUFF2}\n{B_BUFF3} EXP. Points!\p");
 static const u8 sText_PkmnGainedEXPAll[] = _("POKéMON in party each gained\n{B_BUFF3} EXP. Points.\p");
 static const u8 sText_EmptyString4[] = _("");
@@ -2636,7 +2639,12 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
                     toCpy = gTrainerClassNames[GetTrainerHillOpponentClass(gTrainerBattleOpponent_A)];
                 else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
-                    toCpy = gTrainerClassNames[GetEreaderTrainerClassId()];
+                {
+                    if (gBattleScripting.specialTrainerBattleType == SPECIAL_BATTLE_SHINING_TRIAL)
+                        toCpy = gTrainerClassNames[GetShiningTrialTrainer()->trainerClass];
+                    else
+                        toCpy = gTrainerClassNames[GetEreaderTrainerClassId()];
+                }
                 else
                     toCpy = gTrainerClassNames[gTrainers[gTrainerBattleOpponent_A].trainerClass];
                 break;
@@ -2670,8 +2678,13 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 }
                 else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
                 {
-                    GetEreaderTrainerName(text);
-                    toCpy = text;
+                    if (gBattleScripting.specialTrainerBattleType == SPECIAL_BATTLE_SHINING_TRIAL)
+                        toCpy = GetShiningTrialTrainer()->trainerName;
+                    else
+                    {
+                        GetEreaderTrainerName(text);
+                        toCpy = text;
+                    }
                 }
                 else
                 {
@@ -2700,7 +2713,12 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                     toCpy = gSaveBlock2Ptr->playerName;
                 break;
             case B_TXT_TRAINER1_LOSE_TEXT: // trainerA lose text
-                if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+                if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER
+                 && gBattleScripting.specialTrainerBattleType == SPECIAL_BATTLE_SHINING_TRIAL)
+                {
+                    toCpy = sText_ShiningTrialTrainerLoseText;
+                }
+                else if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
                 {
                     CopyFrontierTrainerText(FRONTIER_PLAYER_WON_TEXT, gTrainerBattleOpponent_A);
                     toCpy = gStringVar4;

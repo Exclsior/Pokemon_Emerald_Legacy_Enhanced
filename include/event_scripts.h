@@ -592,6 +592,7 @@ extern const u8 SecretBase_EventScript_SandOrnament[];
 extern const u8 SecretBase_EventScript_ShieldOrToyTV[];
 extern const u8 SecretBase_EventScript_DollInteract[];
 extern const u8 SecretBase_EventScript_CushionInteract[];
+extern const u8 SecretBase_EventScript_ShiningTrial[];
 extern const u8 SecretBase_EventScript_CheckEntrance[];
 extern const u8 SecretBase_EventScript_Enter[];
 extern const u8 SecretBase_EventScript_InitDecorations[];

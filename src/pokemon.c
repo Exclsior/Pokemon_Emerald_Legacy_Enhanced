@@ -67,6 +67,7 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
 static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 personality, u8 substructType);
 static void EncryptBoxMon(struct BoxPokemon *boxMon);
 static void DecryptBoxMon(struct BoxPokemon *boxMon);
+static void SetDecryptedBoxMonPersonality(struct BoxPokemon *boxMon, u32 personality);
 static void Task_PlayMapChosenOrBattleBGM(u8 taskId);
 static bool8 ShouldGetStatBadgeBoost(u16 flagId, u8 battlerId);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
@@ -3639,6 +3640,23 @@ static void DecryptBoxMon(struct BoxPokemon *boxMon)
     }
 }
 
+// The secure data is laid out according to personality % 24. This helper must
+// only be called while that data is decrypted; it preserves each logical
+// substructure while moving it to the ordering selected by the new PID.
+static void SetDecryptedBoxMonPersonality(struct BoxPokemon *boxMon, u32 personality)
+{
+    struct PokemonSubstruct0 substruct0 = GetSubstruct(boxMon, boxMon->personality, 0)->type0;
+    struct PokemonSubstruct1 substruct1 = GetSubstruct(boxMon, boxMon->personality, 1)->type1;
+    struct PokemonSubstruct2 substruct2 = GetSubstruct(boxMon, boxMon->personality, 2)->type2;
+    struct PokemonSubstruct3 substruct3 = GetSubstruct(boxMon, boxMon->personality, 3)->type3;
+
+    boxMon->personality = personality;
+    GetSubstruct(boxMon, personality, 0)->type0 = substruct0;
+    GetSubstruct(boxMon, personality, 1)->type1 = substruct1;
+    GetSubstruct(boxMon, personality, 2)->type2 = substruct2;
+    GetSubstruct(boxMon, personality, 3)->type3 = substruct3;
+}
+
 #define SUBSTRUCT_CASE(n, v1, v2, v3, v4)                               \
 case n:                                                                 \
     {                                                                   \
@@ -4556,7 +4574,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         }
       }
       if (pid % 24 == pidTemp % 24 || pid % 256 == pidTemp % 256)
-        boxMon->personality = pidTemp;
+        SetDecryptedBoxMonPersonality(boxMon, pidTemp);
       break;
     }
     default:
@@ -6930,6 +6948,76 @@ bool8 IsMonShiny(struct Pokemon *mon)
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
     return IsShinyOtIdPersonality(otId, personality);
+}
+
+bool8 MakeMonShinyPreservingAttributes(struct Pokemon *mon)
+{
+    struct BoxPokemon *boxMon = &mon->box;
+    u32 personality = boxMon->personality;
+    u32 otId = boxMon->otId;
+    u32 candidate = 0;
+    u32 lowHalf;
+    u16 species;
+    u8 nature;
+    u8 gender;
+    u8 shinyValue;
+    bool8 found = FALSE;
+
+    // Header fields are unencrypted, so these early exits cannot disturb a mon.
+    if (boxMon->isBadEgg || boxMon->isEgg || !boxMon->hasSpecies
+     || IsShinyOtIdPersonality(otId, personality))
+        return FALSE;
+
+    DecryptBoxMon(boxMon);
+    if (CalculateBoxMonChecksum(boxMon) != boxMon->checksum)
+    {
+        EncryptBoxMon(boxMon);
+        return FALSE;
+    }
+
+    species = GetSubstruct(boxMon, personality, 0)->type0.species;
+    nature = GetNatureFromPersonality(personality);
+    gender = GetGenderFromSpeciesAndPersonality(species, personality);
+
+    // For any chosen low half, the OT ID and desired shiny value uniquely
+    // determine the high half. Filtering these candidates preserves PID nature,
+    // gender, and parity (the traditional ability-slot constraint). The stored
+    // ability bit is inside substructure 3 and is also preserved verbatim.
+    for (lowHalf = 0; lowHalf <= 0xFFFF && !found; lowHalf++)
+    {
+        if ((lowHalf & 1) != (personality & 1))
+            continue;
+        if (GetGenderFromSpeciesAndPersonality(species, lowHalf) != gender)
+            continue;
+
+        for (shinyValue = 0; shinyValue < SHINY_ODDS; shinyValue++)
+        {
+            u32 highHalf = HIHALF(otId) ^ LOHALF(otId) ^ lowHalf ^ shinyValue;
+
+            candidate = (highHalf << 16) | lowHalf;
+            if (GetNatureFromPersonality(candidate) != nature)
+                continue;
+            // Unown's letter uses bits from all four PID bytes, so it needs an
+            // explicit constraint in addition to nature, gender, and parity.
+            if (species == SPECIES_UNOWN
+             && GET_UNOWN_LETTER(candidate) != GET_UNOWN_LETTER(personality))
+                continue;
+
+            found = TRUE;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        EncryptBoxMon(boxMon);
+        return FALSE;
+    }
+
+    SetDecryptedBoxMonPersonality(boxMon, candidate);
+    boxMon->checksum = CalculateBoxMonChecksum(boxMon);
+    EncryptBoxMon(boxMon);
+    return TRUE;
 }
 
 bool8 IsShinyOtIdPersonality(u32 otId, u32 personality)

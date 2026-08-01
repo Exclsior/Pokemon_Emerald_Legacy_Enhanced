@@ -571,3 +571,8 @@ const u8 DecorDesc_REGISTEEL_DOLL[] = _(
     "A large doll.\n"
         "Place it on a mat\n"
         "or a desk.");
+
+const u8 DecorDesc_TRIAL_TOTEM[] = _(
+    "A mysterious totem.\n"
+        "It tests a proven\n"
+        "POKéMON's bond.");
