@@ -543,3 +543,7 @@ gSpecials::
 	def_special CheckFoundAllKecleon
 	def_special CheckGotAllKantoStarters
 	def_special UpdateGymLeaderRematch
+	def_special ShiningTrial_CheckEligibility
+	def_special ShiningTrial_Begin
+	def_special ShiningTrial_Finish
+	def_special ShiningTrial_Cancel

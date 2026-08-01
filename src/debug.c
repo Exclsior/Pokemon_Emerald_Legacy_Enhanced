@@ -44,6 +44,7 @@
 #include "random.h"
 #include "region_map.h"
 #include "script.h"
+#include "shining_trial.h"
 #include "script_pokemon_util.h"
 #include "sound.h"
 #include "strings.h"
@@ -451,7 +452,7 @@ static const u8 sDebugText_Util_Script_4[] =               _("Script 4");
 static const u8 sDebugText_Util_Script_5[] =               _("Script 5");
 static const u8 sDebugText_Util_Script_6[] =               _("Script 6");
 static const u8 sDebugText_Util_Script_7[] =               _("Script 7");
-static const u8 sDebugText_Util_Script_8[] =               _("Script 8");
+static const u8 sDebugText_Util_Script_8[] =               _("Shiny PID test");
 // Util Menu
 static const u8 sDebugText_Util_HealParty[] =               _("Heal Party");
 static const u8 sDebugText_Util_Fly[] =                     _("Fly to map…{CLEAR_TO 110}{RIGHT_ARROW}");
@@ -2124,7 +2125,8 @@ static void DebugAction_Util_Script_8(u8 taskId)
 {
     Debug_DestroyMenu_Full(taskId);
     LockPlayerFieldControls();
-    ScriptContext_SetupScript(Debug_Script_8);
+    ShiningTrial_RunConversionTests();
+    ScriptContext_SetupScript(Debug_ShowFieldMessageStringVar4);
 }
 
 // *******************************

@@ -1450,5 +1450,18 @@ const struct Decoration gDecorations[] =
         .price = 10000,
         .description = DecorDesc_REGISTEEL_DOLL,
         .tiles = DecorGfx_REGISTEEL_DOLL,
+    },
+
+    [DECOR_TRIAL_TOTEM] =
+    {
+        .id = DECOR_TRIAL_TOTEM,
+        .name = _("TRIAL TOTEM"),
+        .permission = DECORPERM_SPRITE,
+        .shape = DECORSHAPE_1x1,
+        .category = DECORCAT_DOLL,
+        .price = 10000,
+        .description = DecorDesc_TRIAL_TOTEM,
+        .tiles = DecorGfx_BALTOY_DOLL,
+        .script = SecretBase_EventScript_ShiningTrial,
     }
 };
